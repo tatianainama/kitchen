@@ -1,5 +1,3 @@
-var express = require('express');
-var router = express.Router();
 const requestPromise = require('request-promise');
 const cheerio = require('cheerio');
 
@@ -11,6 +9,7 @@ const options = {
 requestPromise(options).then(($) => {
   console.log('$', $('.Heading').text());
 })
-.catch((err) => {
-  console.log(err);
-})
+  .catch((err) => {
+    console.log(err);
+  })
+;
