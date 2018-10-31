@@ -9,7 +9,13 @@ class Root {
   private init() {
     this.router.get("/", (req, res, next) => {
       res.json({
-        message: 'hello world'
+        message: 'hello recipes'
+      });
+    })
+    this.router.post("/scrape", (req, res, next) => {
+      console.log("scrape", req.body);
+      res.json({
+        message: 'thx'
       });
     })
   }

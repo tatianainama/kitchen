@@ -5,19 +5,21 @@ import logger from "morgan";
 import express from "express";
 
 import rootRouter from "./routes/root";
+import recipeRouter from "./recipes/routes";
 
 class App {
   public express: express.Application;
 
   constructor() {
     this.express = express();
-    this.routes();
     this.middleware();
+    this.routes();
     this.launchConf();
   }
 
   private routes(): void {
     this.express.use("/", rootRouter);
+    this.express.use("/recipes", recipeRouter);
   }
 
   private middleware(): void {
@@ -35,7 +37,7 @@ class App {
     console.log('port', port);
     this.express.listen(port, () => {
       console.log(
-        ("App is running at http://localhost:%d in %s mode"),
+        ("App is runnnning at http://localhost:%d in %s mode"),
         port,
         this.express.get("env")
       );
