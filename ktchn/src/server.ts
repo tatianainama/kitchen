@@ -18,8 +18,8 @@ class App {
   }
 
   private routes(): void {
-    this.express.use("/", rootRouter);
     this.express.use("/recipes", recipeRouter);
+    this.express.use("/", rootRouter);
   }
 
   private middleware(): void {

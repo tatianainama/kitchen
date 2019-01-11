@@ -1,32 +1,44 @@
 interface QtyMetric {
-  qty: Number;
-  unit: String;
+  qty: number;
+  unit: string;
 }
 
 interface Ingredient {
-  name: String;
+  name: string;
   qtyMetric: QtyMetric;
-  qtyCups: Number;
-  note: String;
+  qtyCups: number;
+  note: string;
 }
 
 interface Temperature {
-  celsius: Number;
-  farenheid: Number;
+  celsius: number;
+  farenheid: number;
 }
 
-class Recipe {
-  public name: String;
-  tags!: String[];
+export class RecipeDetails {
+  [key:string]: number
+  preparationTime: number;
+  cookingTime: number;
+  servings: number;
+
+  constructor(
+    prepTime:number|string = 0,
+    cookingTime:number|string = 0,
+    servings:number|string = 0) {
+      this.preparationTime = Number(prepTime);
+      this.cookingTime = Number(cookingTime);
+      this.servings = Number(servings);
+    }
+}
+
+export class Recipe {
+  public name: string;
+  tags!: string[];
   ingredients!: Ingredient[];
-  servings!: Number;
-  cookTime!: Number;
-  preparationTime!: Number;
-  directions!: String[];
+  details: RecipeDetails = new RecipeDetails();
+  directions!: string[];
 
   constructor(name:string) {
     this.name = name;
   }
 }
-
-export default Recipe;
