@@ -13,7 +13,6 @@ class Root {
       });
     })
     this.router.post("/scrape", (req, res, next) => {
-      console.log("scrape", req.body);
       res.json({
         message: 'thx'
       });

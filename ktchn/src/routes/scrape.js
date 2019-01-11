@@ -7,7 +7,7 @@ const options = {
 };
 
 requestPromise(options).then(($) => {
-  console.log('$', $('.Heading').text());
+  //console.log('$', $('.Heading').text());
 })
   .catch((err) => {
     console.log(err);

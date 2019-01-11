@@ -16,7 +16,7 @@ interface Temperature {
 }
 
 export class RecipeDetails {
-  [key:string]: number
+  [key:string]: number 
   preparationTime: number;
   cookingTime: number;
   servings: number;
@@ -35,10 +35,11 @@ export class Recipe {
   public name: string;
   tags!: string[];
   ingredients!: Ingredient[];
-  details: RecipeDetails = new RecipeDetails();
+  details!: RecipeDetails;
   directions!: string[];
 
-  constructor(name:string) {
+  constructor(name:string, details?:RecipeDetails) {
     this.name = name;
+    this.details = details || new RecipeDetails();
   }
 }

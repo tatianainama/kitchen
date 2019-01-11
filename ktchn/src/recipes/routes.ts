@@ -15,9 +15,7 @@ class RecipeRoutes {
       });
     })
     this.router.post("/scrape", (req, res, next) => {
-       console.log("body", req.body);
        return Scrape(req.body.url).then((x)=>{
-         console.log('xjj', x);
          res.json(x)
        });
     })

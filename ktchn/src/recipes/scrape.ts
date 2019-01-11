@@ -5,70 +5,79 @@ import { json } from "body-parser";
 import { stringify } from "querystring";
 import { UriOptions } from "request";
 import { any } from "bluebird";
+import { Transform } from "stream";
 
-const LAURA_MAP = {
-  'Preparation': {
-    key: 'preparationTime',
-    transform: (data: string) => {
-      let getHoursAsMin = (data: string) => {
-        let result = data.match(/(\d+) hours?/);
-        return result ? (parseInt(result[0])*60) : 0;
-      };
-      let getMinutes = (data: string) => {
-        let result = data.match(/(\d+) minutes?/);
-        return result ? parseInt(result[0]) : 0;
-      };
-      return getHoursAsMin(data) + getMinutes(data);
-    },
+type RegexMutator = (s: RegExpMatchArray) => number;
+
+const matchInt = (data: string, reg: RegExp, logic?: RegexMutator): number => {
+  let result = data.match(reg);
+  return logic ? 
+    (result ? logic(result) : 0) :
+    (result ? parseInt(result[0]) : 0)
+}
+
+const parseTime = (data: string) => {
+  let parsedHoursAsMin = matchInt(data, /(\d+) hours?/, result => parseInt(result[0])*60);
+  let parsedMinutes = matchInt(data, /(\d+) minutes?/);
+
+  return parsedHoursAsMin + parsedMinutes;
+};
+
+const LAURA_MAP: {
+  [index:string] : {
+    key: string,
+    transform: (data: string) => number,
+  }
+} = {
+  preparationTime: {
+    key: 'Preparation',
+    transform: parseTime,
   },
-  'Cook time': {
-    key: 'cookTime',
-    transform: (data: string) => data,
+  cookingTime: {
+    key: 'Cook time',
+    transform: parseTime,
   },
-  'Servings': {
-    key: 'servings',
-    transform: (data: string) => data,
+  servings: {
+    key: 'Servings',
+    transform: (data: string) => matchInt(data, /\d+/),
   }
 };
 
 function getIngredients($:CheerioSelector): Recipe {
   let r = new Recipe('');
   const ingredientsScrape = $('.cs-ingredients-check-list > ul').children();
-  //console.log(ingredientsScrape.length);
-
   return r;
 }
 
 function getRecipeDetails($:CheerioSelector):RecipeDetails {
   let details = new RecipeDetails();
-  const detailsMap = Object.keys(details);
+  const detailsKey = Object.keys(details);
   const data = $('.cs-recipe-details').find('div');
   let x: any = {};
   data.each((i, el) => {
     let key: string = $(el).find('span').text();
     x[key] = $(el).contents().last().text();
   });
-  console.log(LAURA_MAP.Preparation.transform(x.Preparation));
-  
-  return details;
+
+  return detailsKey.reduce((recipeDetails, key) => {
+    let _key = LAURA_MAP[key];
+    return {
+      ...recipeDetails,
+      [key]: _key.transform(x[_key.key])
+    }
+  }, details);
+}
+
+function getRecipeName($:CheerioSelector): string {
+  return $('.cs-page-title>h1').text().trim();
 }
 
 function lauraInTheKitchen($:CheerioSelector):Recipe {
-  let recipe = new Recipe($('.cs-page-title>h1').text().trim());
-  const recipeDetails = $('.cs-recipe-details').find('div');
-  
-  const recipeMap = ['preparationTime', 'cookTime', 'servings'];
-  getRecipeDetails($);
-  recipeDetails.each((i:any, el:any) => {
-    if (i > (recipeMap.length-1)) return false;
-    var x = $(el).contents().toArray();
-    //console.log($(x).text());
-    recipe = {
-      ...recipe,
-      [recipeMap[i]]: $(x).not('span').text().replace(/\D/g,''),
-    };
-  })
-  
+  let recipe = new Recipe(
+    getRecipeName($),
+    getRecipeDetails($)
+  );
+  console.log(recipe);
   getIngredients($);
   return recipe;
 }
