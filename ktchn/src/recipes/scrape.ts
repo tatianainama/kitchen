@@ -1,11 +1,12 @@
 import RequestPromise from "request-promise";
 import Cheerio from "cheerio";
-import { Recipe, RecipeDetails } from './index';
+import { Recipe, RecipeDetails, Ingredient, ComposedIngredients } from './index';
 import { json } from "body-parser";
 import { stringify } from "querystring";
 import { UriOptions } from "request";
-import { any } from "bluebird";
+import { any, reduce } from "bluebird";
 import { Transform } from "stream";
+import { access } from "fs";
 
 type RegexMutator = (s: RegExpMatchArray) => number;
 
@@ -43,10 +44,25 @@ const LAURA_MAP: {
   }
 };
 
-function getIngredients($:CheerioSelector): Recipe {
-  let r = new Recipe('');
+function getIngredients($:CheerioSelector): ComposedIngredients[] {
   const ingredientsScrape = $('.cs-ingredients-check-list > ul').children();
-  return r;
+  const isNewIngredientList = (tagName: string): boolean => tagName === 'span';
+  
+  let ingredients: ComposedIngredients[] = [{
+    name: '',
+    ingredients: [],
+  }];
+
+  return ingredientsScrape.toArray().reduce((list, rawIngredient)=>{
+    let last = list.length - 1;
+    let text = $(rawIngredient).text();
+    if (isNewIngredientList(rawIngredient.tagName)) {
+      return list.concat({name: text, ingredients: []});
+    } else {
+      list[last].ingredients = list[last].ingredients.concat(text);
+      return list;
+    }
+  }, ingredients);
 }
 
 function getRecipeDetails($:CheerioSelector):RecipeDetails {
@@ -75,10 +91,10 @@ function getRecipeName($:CheerioSelector): string {
 function lauraInTheKitchen($:CheerioSelector):Recipe {
   let recipe = new Recipe(
     getRecipeName($),
-    getRecipeDetails($)
+    getRecipeDetails($),
+    getIngredients($),
   );
-  console.log(recipe);
-  getIngredients($);
+  console.log(JSON.stringify(recipe));
   return recipe;
 }
 

@@ -3,11 +3,18 @@ interface QtyMetric {
   unit: string;
 }
 
-interface Ingredient {
+export interface Ingredient {
   name: string;
-  qtyMetric: QtyMetric;
-  qtyCups: number;
+  quantity: number;
+  unit: string;
+  state?: string;
   note: string;
+  _original: string;
+}
+
+export interface ComposedIngredients {
+  name: string;
+  ingredients: string[]; //Ingredient[]
 }
 
 interface Temperature {
@@ -25,7 +32,7 @@ export class RecipeDetails {
     prepTime:number|string = 0,
     cookingTime:number|string = 0,
     servings:number|string = 0) {
-      this.preparationTime = Number(prepTime);
+      this.preparationTime = Number( );
       this.cookingTime = Number(cookingTime);
       this.servings = Number(servings);
     }
@@ -34,12 +41,17 @@ export class RecipeDetails {
 export class Recipe {
   public name: string;
   tags!: string[];
-  ingredients!: Ingredient[];
+  ingredients!: ComposedIngredients[];
   details!: RecipeDetails;
   directions!: string[];
 
-  constructor(name:string, details?:RecipeDetails) {
+  constructor(
+    name: string,
+    details?: RecipeDetails,
+    ingredients?: ComposedIngredients[]
+  ) {
     this.name = name;
     this.details = details || new RecipeDetails();
+    this.ingredients = ingredients || [];
   }
 }
