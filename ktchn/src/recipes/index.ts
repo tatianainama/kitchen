@@ -8,13 +8,13 @@ export interface Ingredient {
   quantity: number;
   unit: string;
   state?: string;
-  note: string;
-  _original: string;
+  note?: string;
+  _original?: string;
 }
 
 export interface ComposedIngredients {
   name: string;
-  ingredients: string[]; //Ingredient[]
+  ingredients: Ingredient[];
 }
 
 interface Temperature {

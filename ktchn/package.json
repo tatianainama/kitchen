@@ -9,17 +9,23 @@
     "build:live": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server.ts"
   },
   "dependencies": {
+    "@types/chai": "^4.1.7",
     "@types/cheerio": "^0.22.9",
     "@types/cookie-parser": "^1.4.1",
     "@types/express": "^4.16.0",
+    "@types/jest": "^23.3.12",
+    "@types/natural": "^0.2.33",
     "@types/request": "^2.48.0",
     "@types/request-promise": "^4.1.42",
+    "chai": "^4.2.0",
     "cheerio": "^1.0.0-rc.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "morgan": "~1.9.0",
     "nano": "^7.1.0",
+    "natural": "^0.6.3",
+    "recipe-ingredient-parser": "file:../../recipe-parser",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   },
