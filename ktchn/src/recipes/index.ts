@@ -38,20 +38,28 @@ export class RecipeDetails {
     }
 }
 
+export interface Author {
+  name: string,
+  website?: string,
+}
+
 export class Recipe {
   public name: string;
   tags!: string[];
   ingredients!: ComposedIngredients[];
   details!: RecipeDetails;
   instructions!: string[];
+  author: Author;
 
   constructor(
     name: string,
+    author: Author,
     details?: RecipeDetails,
     ingredients?: ComposedIngredients[],
     instructions?: string[],
   ) {
     this.name = name;
+    this.author = author;
     this.details = details || new RecipeDetails();
     this.ingredients = ingredients || [];
     this.instructions = instructions || [];

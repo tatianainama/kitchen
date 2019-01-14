@@ -1,6 +1,6 @@
 import RequestPromise from "request-promise";
 import Cheerio from "cheerio";
-import { Recipe, RecipeDetails, Ingredient, ComposedIngredients } from './index';
+import { Recipe, RecipeDetails, Ingredient, ComposedIngredients, Author } from './index';
 import { parse } from "recipe-ingredient-parser";
 
 type RegexMutator = (s: RegExpMatchArray) => number;
@@ -17,6 +17,11 @@ const parseTime = (data: string) => {
   let parsedMinutes = matchInt(data, /(\d+) minutes?/);
 
   return parsedHoursAsMin + parsedMinutes;
+};
+
+const LAURA_DATA: Author = {
+  name: 'Laura in the Kitchen',
+  website: 'http://www.laurainthekitchen.com',
 };
 
 const LAURA_MAP: {
@@ -98,6 +103,7 @@ function getInstructions($:CheerioSelector): string[] {
 function lauraInTheKitchen($:CheerioSelector):Recipe {
   let recipe = new Recipe(
     getRecipeName($),
+    LAURA_DATA,
     getRecipeDetails($),
     getIngredients($),
     getInstructions($),
