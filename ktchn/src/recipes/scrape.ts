@@ -90,11 +90,17 @@ function getRecipeName($:CheerioSelector): string {
   return $('.cs-page-title>h1').text().trim();
 }
 
+function getInstructions($:CheerioSelector): string[] {
+  const data = $('#recipe-process').find('ul').text();
+  return data.split('\n').filter(s => s !== '').map(s => s.trim().replace(/^\d\)\s*/, ''));
+}
+
 function lauraInTheKitchen($:CheerioSelector):Recipe {
   let recipe = new Recipe(
     getRecipeName($),
     getRecipeDetails($),
     getIngredients($),
+    getInstructions($),
   );
   return recipe;
 }

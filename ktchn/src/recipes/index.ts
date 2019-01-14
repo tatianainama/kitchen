@@ -43,15 +43,17 @@ export class Recipe {
   tags!: string[];
   ingredients!: ComposedIngredients[];
   details!: RecipeDetails;
-  directions!: string[];
+  instructions!: string[];
 
   constructor(
     name: string,
     details?: RecipeDetails,
-    ingredients?: ComposedIngredients[]
+    ingredients?: ComposedIngredients[],
+    instructions?: string[],
   ) {
     this.name = name;
     this.details = details || new RecipeDetails();
     this.ingredients = ingredients || [];
+    this.instructions = instructions || [];
   }
 }
