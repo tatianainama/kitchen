@@ -10,6 +10,10 @@ const SELECTORS = {
   TITLE: 'h1 > span.Heading',
 }
 
+function cleanText(text: string): string {
+  return text.replace(/(\n|\t|\s{2,})/g, ' ').trim();
+}
+
 function getRecipeName($: CheerioSelector): string {
   return $(SELECTORS.TITLE).text().replace(/(.\n)?.Recipe.*/, '').trim();
 }
@@ -22,7 +26,7 @@ function getIngredients($: CheerioSelector): ComposedIngredients[] {
   let ingredients: ComposedIngredients[] = [];
   return rawData.reduce((list:any, element, index) => {
     let rawIngredient = $(element).text();
-    rawIngredient = rawIngredient.replace(/(\n|\t|\s{2,})/g, ' ').trim();
+    rawIngredient = cleanText(rawIngredient);
     let last = list.length - 1;
     if(isIngredient(element)) {
       let ingredient = parseIngredients(rawIngredient);
@@ -37,6 +41,11 @@ function getIngredients($: CheerioSelector): ComposedIngredients[] {
   }, ingredients);
 }
 
+function getInstructions($: CheerioSelector): string[] {
+  const rawData = $('td [style="border-top-style: none; border-top-width: medium"] p').toArray();
+  return rawData.map(element => cleanText($(element).text()));
+}
+
 
 const JOB_CONFIG = {
   name: 'Joy of Baking',
@@ -48,6 +57,7 @@ const JOB_CONFIG = {
       JOB_AUTHOR_DATA,
       new RecipeDetails(), // There is no way to scrape this data from JOB
       getIngredients($),
+      getInstructions($),
     ); 
   }
 }
