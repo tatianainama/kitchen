@@ -1,4 +1,5 @@
 import LITK from "./laura-in-the-kitchen";
+import JOB from './joy-of-baking';
 import { Recipe } from '../../index';
 
 export interface ScrapingSource {
@@ -10,6 +11,7 @@ export interface ScrapingSource {
 
 const Sources: ScrapingSource[] = [
   LITK,
+  JOB,
 ];
 
 export default Sources;
