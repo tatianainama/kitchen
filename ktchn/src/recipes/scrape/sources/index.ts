@@ -1,6 +1,7 @@
 import LITK from "./laura-in-the-kitchen";
 import JOB from './joy-of-baking';
 import AR from './all-recipes';
+import HCA from './home-cooking-adventure';
 import { Recipe } from '../../index';
 
 
@@ -15,6 +16,7 @@ const Sources: ScrapingSource[] = [
   LITK,
   JOB,
   AR,
+  HCA,
 ];
 
 export default Sources;
