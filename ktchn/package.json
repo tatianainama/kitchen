@@ -25,6 +25,7 @@
     "morgan": "~1.9.0",
     "nano": "^7.1.0",
     "natural": "^0.6.3",
+    "ramda": "^0.26.1",
     "recipe-ingredient-parser": "file:../../recipe-parser",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@types/morgan": "^1.7.35",
     "@types/node": "^10.12.0",
+    "@types/ramda": "github:types/npm-ramda#dist",
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
