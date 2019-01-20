@@ -1,4 +1,4 @@
-import { Recipe, RecipeDetails, Ingredient, ComposedIngredients, Author } from '../../index';
+import { Recipe, RecipeDetails, Ingredient, ComposedIngredients, Author } from '../../model';
 import { parse as parseIngredient } from "recipe-ingredient-parser";
 
 const LITK_AUTHOR_DATA: Author = {

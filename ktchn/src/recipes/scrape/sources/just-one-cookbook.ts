@@ -1,5 +1,5 @@
-import { Recipe, Ingredient } from "../..";
-import { RecipeDetails, ComposedIngredients } from '../../index';
+import { Recipe, Ingredient } from "../../model";
+import { RecipeDetails, ComposedIngredients } from '../../model';
 import { parseIngredients } from '../index';
 import R from 'ramda';
 

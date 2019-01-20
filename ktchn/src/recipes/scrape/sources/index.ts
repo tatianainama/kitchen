@@ -3,7 +3,7 @@ import JOB from './joy-of-baking';
 import AR from './all-recipes';
 import HCA from './home-cooking-adventure';
 import JOC from './just-one-cookbook';
-import { Recipe } from '../../index';
+import { Recipe } from '../../model';
 
 
 export interface ScrapingSource {

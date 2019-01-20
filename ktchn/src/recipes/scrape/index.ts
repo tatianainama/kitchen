@@ -2,7 +2,7 @@ import RequestPromise from "request-promise";
 import Cheerio from "cheerio";
 import Sources from './sources';
 import { ScrapingSource } from './sources/index';
-import { Ingredient } from '../index';
+import { Ingredient } from '../model';
 import { parse as parseIngredient } from 'recipe-ingredient-parser';
 
 function selectSource(url: string): ScrapingSource|void {

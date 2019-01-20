@@ -1,4 +1,4 @@
-import { Recipe, Author, RecipeDetails, ComposedIngredients } from '../../index';
+import { Recipe, Author, RecipeDetails, ComposedIngredients } from '../../model';
 import { parseIngredients } from '../index';
 
 const JOB_AUTHOR_DATA: Author = {
