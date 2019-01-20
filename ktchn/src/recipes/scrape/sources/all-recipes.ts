@@ -7,6 +7,8 @@ const SELECTORS = {
   SERVINGS: 'meta#metaRecipeServings',
   INGREDIENTS: 'div#polaris-app',
   INSTRUCTIONS: 'li.step',
+  SUMMARY: 'meta#metaDescription',
+  TAGS: 'meta[itemprop="recipeCategory"]',
 }
 
 function getRecipeName($: CheerioSelector): string {
@@ -52,10 +54,10 @@ function getIngredients($: CheerioSelector): ComposedIngredients[] {
 }
 
 function getInstructions($: CheerioSelector): string[] {
-  const rawData = $(SELECTORS.INSTRUCTIONS).toArray().map(element => $(element).text().trim());
-  console.log(JSON.stringify(rawData));
-  return rawData;
+  return $(SELECTORS.INSTRUCTIONS).toArray().map(element => $(element).text().trim());
 }
+
+const getTextList = (SELECTOR: string) => ($: CheerioSelector): string[] => $(SELECTOR).map((i, e) => $(e).text().trim()).get()
 
 const AR_CONFIG = {
   name: 'All Recipes',
@@ -66,7 +68,10 @@ const AR_CONFIG = {
     getAuthorData($),
     getRecipeDetails($),
     getIngredients($),
-    getInstructions($),
+    getTextList(SELECTORS.INSTRUCTIONS)($),
+    $(SELECTORS.TAGS).map((i, e) => $(e).attr('content')).get(),
+    [],
+    $(SELECTORS.SUMMARY).attr('content'),
   ),
 }
 
