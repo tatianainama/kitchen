@@ -9,6 +9,7 @@ const SELECTORS = {
   SERVINGS: 'span.ingheading',
   INGREDIENTS: 'div#ingredients_bg ul li',
   INSTRUCTIONS: 'div#preparation ol li',
+  SUMMARY: 'span[itemprop="summary"]'
 }
 
 function getRecipeName($: CheerioSelector): string {
@@ -64,6 +65,9 @@ const HCA_CONFIG = {
     getRecipeDetails($),
     getIngredients($),
     getInstructions($),
+    [],
+    [],
+    $(SELECTORS.SUMMARY).children().first().text().trim(),  
   )
 }
 
