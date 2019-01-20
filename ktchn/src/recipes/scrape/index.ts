@@ -21,17 +21,16 @@ export const parseIngredients = (rawIngredient: string): Ingredient => {
   };
 };
 
-function scrape(url:string) {
+async function scrape(url:string) {
   const options = {
     uri: url,
     transform: (body: any) => Cheerio.load(body, {
       normalizeWhitespace: true
     }),
   };
-  return RequestPromise(options).then(($) => {
-    let source = selectSource(url);
-    return source ? source.scrapeRecipe($) : new Error('source not found');
-  });
+  const $ = await RequestPromise(options);
+  let source = selectSource(url);
+  return source ? source.scrapeRecipe($) : new Error('source not found');
 
 }
 
