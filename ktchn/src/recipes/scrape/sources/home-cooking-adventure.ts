@@ -57,18 +57,14 @@ const HCA_CONFIG = {
   name: 'Home Cooking Adventure',
   domain: 'homecookingadventure',
   website: 'https://www.homecookingadventure.com',
-  scrapeRecipe: ($: CheerioSelector): Recipe => new Recipe(
-    getRecipeName($),
-    {
-      name: 'Home Cooking Adventure',
-    },
-    getRecipeDetails($),
-    getIngredients($),
-    getInstructions($),
-    [],
-    [],
-    $(SELECTORS.SUMMARY).children().first().text().trim(),  
-  )
+  scrapeRecipe: ($: CheerioSelector): Recipe => ({
+    name: getRecipeName($),
+    author: { name: 'Home Cooking Adventure' },
+    details: getRecipeDetails($),
+    ingredients: getIngredients($),
+    instructions: getInstructions($),
+    summary: $(SELECTORS.SUMMARY).children().first().text().trim(),  
+  }),
 }
 
 export default HCA_CONFIG;

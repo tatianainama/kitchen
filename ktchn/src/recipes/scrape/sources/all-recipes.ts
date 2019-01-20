@@ -63,16 +63,15 @@ const AR_CONFIG = {
   name: 'All Recipes',
   domain: 'allrecipes',
   website: 'https://www.allrecipes.com',
-  scrapeRecipe: ($: CheerioSelector): Recipe => new Recipe(
-    getRecipeName($),
-    getAuthorData($),
-    getRecipeDetails($),
-    getIngredients($),
-    getTextList(SELECTORS.INSTRUCTIONS)($),
-    $(SELECTORS.TAGS).map((i, e) => $(e).attr('content')).get(),
-    [],
-    $(SELECTORS.SUMMARY).attr('content'),
-  ),
+  scrapeRecipe: ($: CheerioSelector): Recipe => ({
+    name: getRecipeName($),
+    author: getAuthorData($),
+    details: getRecipeDetails($),
+    ingredients: getIngredients($),
+    instructions: getTextList(SELECTORS.INSTRUCTIONS)($),
+    tags: $(SELECTORS.TAGS).map((i, e) => $(e).attr('content')).get(),
+    summary: $(SELECTORS.SUMMARY).attr('content'),
+  }),
 }
 
 export default AR_CONFIG;

@@ -71,18 +71,16 @@ const JOC_CONFIG = {
   name: 'Just One Cookbook',
   domain: 'justonecookbook',
   website: 'https://www.justonecookbook.com',
-  scrapeRecipe: ($: CheerioSelector): Recipe => new Recipe(
-    getRecipeName($),
-    {
-      name: 'Nami',
-    },
-    getRecipeDetails($),
-    getIngredients($),
-    getTextList(SELECTORS.INSTRUCTIONS)($),
-    (getText(SELECTORS.TAGS)($)).split(',').map(R.trim),
-    [getText(SELECTORS.COURSE)($)],
-    getText(SELECTORS.SUMMARY)($),
-  )
+  scrapeRecipe: ($: CheerioSelector): Recipe => ({
+    name: getRecipeName($),
+    author: { name: 'Nami' },
+    details: getRecipeDetails($),
+    ingredients: getIngredients($),
+    instructions: getTextList(SELECTORS.INSTRUCTIONS)($),
+    tags: (getText(SELECTORS.TAGS)($)).split(',').map(R.trim),
+    course: [getText(SELECTORS.COURSE)($)],
+    summary: getText(SELECTORS.SUMMARY)($),
+  })
 }
 
 export default JOC_CONFIG;

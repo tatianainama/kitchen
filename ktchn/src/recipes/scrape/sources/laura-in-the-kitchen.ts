@@ -106,15 +106,13 @@ const LITK_CONFIG = {
   name: 'Laura in the Kitchen',
   domain: 'laurainthekitchen',
   website: LITK_AUTHOR_DATA.website,
-  scrapeRecipe: ($: CheerioSelector): Recipe => {
-    return new Recipe(
-      getRecipeName($),
-      LITK_AUTHOR_DATA,
-      getRecipeDetails($),
-      getIngredients($),
-      getInstructions($),
-    )
-  },
+  scrapeRecipe: ($: CheerioSelector): Recipe => ({
+    name: getRecipeName($),
+    author: LITK_AUTHOR_DATA,
+    details: getRecipeDetails($),
+    ingredients: getIngredients($),
+    instructions: getInstructions($),
+  })
 }
 
 export default LITK_CONFIG;

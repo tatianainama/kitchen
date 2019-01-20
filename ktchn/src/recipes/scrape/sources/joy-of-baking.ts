@@ -52,13 +52,13 @@ const JOB_CONFIG = {
   domain: 'joyofbaking',
   website: JOB_AUTHOR_DATA.website,
   scrapeRecipe: ($: CheerioSelector): Recipe => {
-    return new Recipe(
-      getRecipeName($),
-      JOB_AUTHOR_DATA,
-      new RecipeDetails(), // There is no way to scrape this data from JOB
-      getIngredients($),
-      getInstructions($),
-    ); 
+    return {
+      name: getRecipeName($),
+      author: JOB_AUTHOR_DATA,
+      details: new RecipeDetails(), // There is no way to scrape this data from JOB
+      ingredients: getIngredients($),
+      instructions: getInstructions($),
+    }; 
   }
 }
 

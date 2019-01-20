@@ -43,33 +43,13 @@ export interface Author {
   website?: string,
 }
 
-export class Recipe {
-  public name: string;
-  ingredients!: ComposedIngredients[];
-  details!: RecipeDetails;
-  instructions!: string[];
-  author: Author;
+export interface Recipe {
+  name: string;
+  ingredients?: ComposedIngredients[];
+  details?: RecipeDetails;
+  instructions?: string[];
+  author?: Author;
   tags?: string[];
   course?: string[];
   summary?: string;
-
-  constructor(
-    name: string,
-    author: Author,
-    details?: RecipeDetails,
-    ingredients?: ComposedIngredients[],
-    instructions?: string[],
-    tags?: string[],
-    course?: string[],
-    summary?: string,
-  ) {
-    this.name = name;
-    this.author = author;
-    this.details = details || new RecipeDetails();
-    this.ingredients = ingredients || [];
-    this.instructions = instructions || [];
-    this.tags = tags || [];
-    this.course = course || [];
-    this.summary = summary || '';
-  }
 }
