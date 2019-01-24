@@ -32,7 +32,7 @@ const getRecipeDetails = ($: CheerioSelector): RecipeDetails => {
   return {
     preparationTime: $(SELECTORS.PREP_TIME).text(),
     cookingTime: $(SELECTORS.COOK_TIME).text(),
-    servings: $(SELECTORS.SERVINGS).text(),
+    servings: Number($(SELECTORS.SERVINGS).text()),
   }
 };
 
