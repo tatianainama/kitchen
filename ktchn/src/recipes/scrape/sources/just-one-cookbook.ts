@@ -1,6 +1,7 @@
 import { Recipe, Ingredient } from "../../model";
 import { RecipeDetails, ComposedIngredients } from '../../model';
 import { parseIngredients } from '../index';
+import { getText, getTextList, rmEquivalence } from './../service';
 import R from 'ramda';
 
 const SELECTORS = {
@@ -38,8 +39,6 @@ const getRecipeDetails = ($: CheerioSelector): RecipeDetails => {
 const getIngredients = ($: CheerioSelector): ComposedIngredients[] => {
   let ingredients: ComposedIngredients[] = [{name: '', ingredients: []}];
   const rawData = $(SELECTORS.INGREDIENTS);
-  const removeEquivalence = (str: string): string => str.replace(/(\([0-9.]+ \w+\))|(\([0-9.]+ \w+\/[0-9.]+ \w+\))/, '');
-  const getString = (element: CheerioElement, selector: string): string => $(element).find(selector).text();
   const cleanName = (element: CheerioElement, not: string): string => $(element).children().not(not).toArray().map(x => $(x).text()).join(' ');
   rawData.each((i, element) => {
     const last = ingredients.length - 1;
@@ -64,22 +63,19 @@ const getIngredients = ($: CheerioSelector): ComposedIngredients[] => {
   return ingredients;
 }
 
-const getTextList = (SELECTOR: string) => ($: CheerioSelector): string[] => $(SELECTOR).map((i, e) => $(e).text()).get()
-const getText = (SELECTOR: string) => ($: CheerioSelector): string => $(SELECTOR).text().trim();
-
 const JOC_CONFIG = {
   name: 'Just One Cookbook',
   domain: 'justonecookbook',
   website: 'https://www.justonecookbook.com',
   scrapeRecipe: ($: CheerioSelector): Recipe => ({
-    name: getRecipeName($),
+    name: getText($)(SELECTORS.TITLE),
     author: { name: 'Nami' },
     details: getRecipeDetails($),
     ingredients: getIngredients($),
-    instructions: getTextList(SELECTORS.INSTRUCTIONS)($),
-    tags: (getText(SELECTORS.TAGS)($)).split(',').map(R.trim),
-    course: [getText(SELECTORS.COURSE)($)],
-    summary: getText(SELECTORS.SUMMARY)($),
+    instructions: getTextList($)(SELECTORS.INSTRUCTIONS),
+    tags: (getText($)(SELECTORS.TAGS)).split(',').map(R.trim),
+    course: [getText($)(SELECTORS.COURSE)],
+    summary: getText($)(SELECTORS.SUMMARY),
   })
 }
 

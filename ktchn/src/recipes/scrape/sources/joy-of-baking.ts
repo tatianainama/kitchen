@@ -1,5 +1,6 @@
 import { Recipe, Author, RecipeDetails, ComposedIngredients } from '../../model';
 import { parseIngredients } from '../index';
+import { rmBreakLines, getText, rmEquivalence } from './../service';
 
 const JOB_AUTHOR_DATA: Author = {
   name: 'Stephanie Jaworski',
@@ -10,29 +11,24 @@ const SELECTORS = {
   TITLE: 'h1 > span.Heading',
 }
 
-function cleanText(text: string): string {
-  return text.replace(/(\n|\t|\s{2,})/g, ' ').trim();
-}
-
 function getRecipeName($: CheerioSelector): string {
-  return $(SELECTORS.TITLE).text().replace(/(.\n)?.Recipe.*/, '').trim();
+  return getText($)(SELECTORS.TITLE).replace(/(.\n)?.Recipe.*/, '').trim();
 }
 
 function getIngredients($: CheerioSelector): ComposedIngredients[] {
   const rawData = $('td [width="249"] p').toArray();
   const isIngredient = (element: CheerioElement): boolean => $(element).hasClass('ingredient');
-  const removeEquivalence = (str: string): string => str.replace(/\([0-9.]+ \w+\) ?/, '');
 
   let ingredients: ComposedIngredients[] = [];
   return rawData.reduce((list:any, element, index) => {
     let rawIngredient = $(element).text();
-    rawIngredient = cleanText(rawIngredient);
+    rawIngredient = rmBreakLines(rawIngredient);
     let last = list.length - 1;
     if(isIngredient(element)) {
       let ingredient = parseIngredients(rawIngredient);
       list[last].ingredients = list[last].ingredients.concat([{
         ...ingredient,
-        name: removeEquivalence(ingredient.name)
+        name: rmEquivalence(ingredient.name)
       }]);
       return list;
     } else {
@@ -43,7 +39,7 @@ function getIngredients($: CheerioSelector): ComposedIngredients[] {
 
 function getInstructions($: CheerioSelector): string[] {
   const rawData = $('td [style="border-top-style: none; border-top-width: medium"] p').toArray();
-  return rawData.map(element => cleanText($(element).text()));
+  return rawData.map(element => rmBreakLines($(element).text()));
 }
 
 

@@ -1,7 +1,10 @@
 import { Recipe, Author, RecipeDetails, ComposedIngredients } from '../../model';
 import { parseIngredients } from '../index';
+import { getText, getAttr, getTextList } from './../service';
 
 const SELECTORS = {
+  TITLE: 'h1#recipe-main-content',
+  AUTHOR: 'span.submitter__name',
   PREP_TIME: 'time[itemprop="prepTime"]',
   COOK_TIME: 'time[itemprop="cookTime"]',
   SERVINGS: 'meta#metaRecipeServings',
@@ -9,23 +12,15 @@ const SELECTORS = {
   INSTRUCTIONS: 'li.step',
   SUMMARY: 'meta#metaDescription',
   TAGS: 'meta[itemprop="recipeCategory"]',
-}
-
-function getRecipeName($: CheerioSelector): string {
-  return $('h1#recipe-main-content').text();
-}
-
-function getAuthorData($: CheerioSelector): Author {
-  return {
-    name: $('span.submitter__name').text(),
-  };
+  DATETIME: 'datetime',
+  CONTENT: 'content',
 }
 
 function getRecipeDetails($: CheerioSelector): RecipeDetails {
   return {
-    preparationTime: $(SELECTORS.PREP_TIME).attr('datetime'),
-    cookingTime: $(SELECTORS.COOK_TIME).attr('datetime'),
-    servings: Number($(SELECTORS.SERVINGS).attr('content')),
+    preparationTime: getAttr($)(SELECTORS.PREP_TIME, SELECTORS.DATETIME),
+    cookingTime: getAttr($)(SELECTORS.COOK_TIME, SELECTORS.DATETIME),
+    servings: Number(getAttr($)(SELECTORS.SERVINGS, SELECTORS.CONTENT)),
   };
 }
 
@@ -53,24 +48,20 @@ function getIngredients($: CheerioSelector): ComposedIngredients[] {
   return ingredients;
 }
 
-function getInstructions($: CheerioSelector): string[] {
-  return $(SELECTORS.INSTRUCTIONS).toArray().map(element => $(element).text().trim());
-}
-
-const getTextList = (SELECTOR: string) => ($: CheerioSelector): string[] => $(SELECTOR).map((i, e) => $(e).text().trim()).get()
-
 const AR_CONFIG = {
   name: 'All Recipes',
   domain: 'allrecipes',
   website: 'https://www.allrecipes.com',
   scrapeRecipe: ($: CheerioSelector): Recipe => ({
-    name: getRecipeName($),
-    author: getAuthorData($),
+    name: getText($)(SELECTORS.TITLE),
+    author: {
+      name: getText($)(SELECTORS.AUTHOR)
+    },
     details: getRecipeDetails($),
     ingredients: getIngredients($),
-    instructions: getTextList(SELECTORS.INSTRUCTIONS)($),
+    instructions: getTextList($)(SELECTORS.INSTRUCTIONS),
     tags: $(SELECTORS.TAGS).map((i, e) => $(e).attr('content')).get(),
-    summary: $(SELECTORS.SUMMARY).attr('content'),
+    summary: getAttr($)(SELECTORS.SUMMARY, SELECTORS.CONTENT),
   }),
 }
 

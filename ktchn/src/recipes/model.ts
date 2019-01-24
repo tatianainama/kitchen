@@ -23,17 +23,16 @@ interface Temperature {
 }
 
 export class RecipeDetails {
-  [key:string]: number|string 
-  preparationTime: number|string; // TODO: Change this type to string when all scrapes get ISO8601 duration format
-  cookingTime: number|string;
-  servings: number|string;
+  preparationTime: string;
+  cookingTime: string;
+  servings: number;
 
   constructor(
-    prepTime:number|string = 0,
-    cookingTime:number|string = 0,
-    servings:number|string = 0) {
-      this.preparationTime = Number(prepTime);
-      this.cookingTime = Number(cookingTime);
+    prepTime: string = '',
+    cookingTime: string = '',
+    servings: number|string = 0) {
+      this.preparationTime = prepTime;
+      this.cookingTime = cookingTime;
       this.servings = Number(servings);
     }
 }
