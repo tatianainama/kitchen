@@ -6,8 +6,19 @@ import { Ingredient } from '../model';
 import { parse as parseIngredient } from 'recipe-ingredient-parser';
 
 function selectSource(url: string): ScrapingSource|void {
-  return Sources.find((source) => {
+  return ;
+}
+
+function selectSourceAsync(url: string): Promise<ScrapingSource> {
+  const foundSource = Sources.find((source) => {
     return url.search(source.domain) > 0;
+  });
+  return new Promise((resolve, reject) => {
+    if (foundSource) {
+      return resolve(foundSource);
+    } else {
+      reject(new Error('Source not found'))
+    }
   });
 }
 
@@ -28,10 +39,11 @@ async function scrape(url:string) {
       normalizeWhitespace: true
     }),
   };
-  const $ = await RequestPromise(options);
-  let source = selectSource(url);
-  return source ? source.scrapeRecipe($) : new Error('source not found');
-
+  return RequestPromise(options).then(
+    $ => selectSourceAsync(url).then(
+      source => source.scrapeRecipe($)
+    )
+  )
 }
 
 export default scrape;

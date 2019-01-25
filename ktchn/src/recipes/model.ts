@@ -48,6 +48,7 @@ export interface Recipe {
   details?: RecipeDetails;
   instructions?: string[];
   author?: Author;
+  website?: string;
   tags?: string[];
   course?: string[];
   summary?: string;
