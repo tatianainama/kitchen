@@ -1,4 +1,5 @@
 node_modules
-kitchn/node_modules
+ktchn/node_modules
 package-lock.json
 lib
+ktchn/.env

@@ -3,20 +3,33 @@ import cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import logger from "morgan";
 import express from "express";
-
 import rootRouter from "./routes/root";
 import recipeRouter from "./recipes/routes";
+import nano from 'nano';
+import dotenv from 'dotenv';
 
 class App {
   public express: express.Application;
+  public db: nano.DatabaseScope;
 
   constructor() {
+    this.dotENV();
     this.express = express();
     this.middleware();
     this.routes();
     this.launchConf();
+    this.db = this.couchDB();
   }
 
+  private dotENV(): void {
+    dotenv.config();
+  }
+
+  private couchDB(): nano.DatabaseScope {
+    let db = nano(process.env.COUCHDB_URL || 'http://localhost:5984/').db;
+    let recipes = db.use('recipes');
+    return db;
+  }
   private routes(): void {
     this.express.use("/recipes", recipeRouter);
     this.express.use("/", rootRouter);
