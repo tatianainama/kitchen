@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 
 class App {
   public express: express.Application;
-  public db: nano.DatabaseScope;
+  //public db: nano.DatabaseScope;
 
   constructor() {
     this.dotENV();
@@ -18,7 +18,7 @@ class App {
     this.middleware();
     this.routes();
     this.launchConf();
-    this.db = this.couchDB();
+    //this.db = this.couchDB();
   }
 
   private dotENV(): void {
@@ -26,10 +26,9 @@ class App {
   }
 
   private couchDB(): nano.DatabaseScope {
-    let db = nano(process.env.COUCHDB_URL || 'http://localhost:5984/').db;
-    let recipes = db.use('recipes');
-    return db;
+    return nano(process.env.COUCHDB_URL || 'http://localhost:5984/').db;
   }
+  
   private routes(): void {
     this.express.use("/recipes", recipeRouter);
     this.express.use("/", rootRouter);
