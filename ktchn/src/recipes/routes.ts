@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
 import Scrape from "./scrape";
-import { saveRecipe } from "./controller";
-import nano = require("nano");
+import { Recipe } from './model';
 
 class RecipeRoutes {
   public router: Router;
@@ -17,15 +16,10 @@ class RecipeRoutes {
       });
     })
     this.router.post("/", (req, res, next) => {
-      return saveRecipe(req.body).then((x)=>{
-        res.json(x)
-      }).catch((error: any) => { // TODO: Reserch on CouchDB responses types
-        res.status(error.headers.statusCode).send(
-          {
-            name: error.error,
-            message: error.message,
-          }
-        )
+      const recipe = req.body as Recipe;
+      console.log(req.app.locals.db);
+      res.json({
+        message: 'k'
       });
     })
     this.router.post("/scrape", (req, res, next) => {
