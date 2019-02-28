@@ -1,27 +1,25 @@
-import { Request, Response, Router } from "express";
+import { Request, Response, Router, NextFunction } from "express";
 import Scrape from "./scrape";
 import { Recipe } from './model';
+import { validateRecipe } from './controller';
+import { storeRecipe } from './data';
+import MongoClient from 'mongodb';
 
 class RecipeRoutes {
   public router: Router;
-  public constructor() {
+
+  public constructor(db: MongoClient.Db) {
     this.router = Router();
-    this.init();
+    this.init(db);
   }
 
-  private init() {
+  private init(db: MongoClient.Db) {
     this.router.get("/", (req, res, next) => {
       res.json({
         message: 'hey recipes bb'
       });
     })
-    this.router.post("/", (req, res, next) => {
-      const recipe = req.body as Recipe;
-      console.log(req.app.locals.db);
-      res.json({
-        message: 'k'
-      });
-    })
+    this.router.post("/", validateRecipe, storeRecipe(db), this.logData)
     this.router.post("/scrape", (req, res, next) => {
        return Scrape(req.body.url).then((x)=>{
          res.json(x)
@@ -33,7 +31,11 @@ class RecipeRoutes {
       ));
     })
   }
+
+  private logData(req:Request, res:Response, next: NextFunction): void {
+    console.log(`data: ${res.locals.savedData}`);
+    next();
+  }
 }
 
-const recipeRoutes = new RecipeRoutes();
-export default recipeRoutes.router;
+export default RecipeRoutes;

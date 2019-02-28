@@ -1,3 +1,5 @@
+import { ObjectID } from 'mongodb';
+
 interface QtyMetric {
   qty: number;
   unit: string;
@@ -52,4 +54,8 @@ export interface Recipe {
   tags?: string[];
   course?: string[];
   summary?: string;
+}
+
+export interface RecipeDB extends Recipe {
+  _id: ObjectID;
 }
