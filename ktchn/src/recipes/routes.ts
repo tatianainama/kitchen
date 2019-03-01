@@ -1,25 +1,27 @@
 import { Request, Response, Router, NextFunction } from "express";
 import Scrape from "./scrape";
 import { Recipe } from './model';
-import { validateRecipe } from './controller';
-import { storeRecipe } from './data';
+import { saveRecipe } from './controller';
 import MongoClient from 'mongodb';
+import { mongoService, IMongoService } from '../mongo';
 
 class RecipeRoutes {
   public router: Router;
+  private RecipeDB: IMongoService;
 
   public constructor(db: MongoClient.Db) {
     this.router = Router();
-    this.init(db);
+    this.RecipeDB = mongoService(db)('recipes');
+    this.init();
   }
 
-  private init(db: MongoClient.Db) {
+  private init() {
     this.router.get("/", (req, res, next) => {
       res.json({
         message: 'hey recipes bb'
       });
     })
-    this.router.post("/", validateRecipe, storeRecipe(db), this.logData)
+    this.router.post("/", saveRecipe(this.RecipeDB))
     this.router.post("/scrape", (req, res, next) => {
        return Scrape(req.body.url).then((x)=>{
          res.json(x)

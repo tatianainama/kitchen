@@ -1,21 +1,22 @@
 import { Request, Response, NextFunction } from 'express'
 import { Recipe } from './model';
+import { IMongoService } from '../mongo';
 
 function isValidRecipe(data: any): data is Recipe {
   return data.name !== undefined;
 }
 
-function validateRecipe({ body }:Request, res:Response, next:NextFunction) {
+const saveRecipe = (db: IMongoService) => ({ body }: Request, res: Response, next: NextFunction): void => {
   if (isValidRecipe(body)) {
-    res.locals = {
-      data: body as Recipe
-    };
-    next();
+    db.insertOne(body).then(DBRecipe => {
+      res.json(DBRecipe);
+      next();
+    })
   } else {
-    next(new Error('Missing recipe information: name'));
+    next(new Error('Missing recipe information'));
   }
 }
 
 export {
-  validateRecipe,
+  saveRecipe,
 }

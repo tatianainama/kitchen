@@ -1,13 +1,19 @@
-import { Db, connect, MongoClient, InsertOneWriteOpResult, Collection } from 'mongodb';
-import { Request, Response, NextFunction } from 'express';
+import { Db, connect, MongoClient, InsertOneWriteOpResult, Collection, ObjectID } from 'mongodb';
 
-export default (db: Db) => (col: string) => {
+export interface IDBObject<T extends {}> {
+  _id: ObjectID
+}
+
+export interface IMongoService {
+  insertOne<T>(data: T): Promise<IDBObject<T>>,
+}
+
+export const mongoService = (db: Db) => (col: string) => {
   const collection:Collection = db.collection(col);
 
   return {
-    insertOne: (data: any):Promise<InsertOneWriteOpResult> => {
-      return collection.insertOne(data);
-    }
+    insertOne: <T>(data: T): Promise<IDBObject<T>> => collection.insertOne(data).then(insertOneResult => insertOneResult.ops[0])
   }
 };
 
+export default mongoService;
