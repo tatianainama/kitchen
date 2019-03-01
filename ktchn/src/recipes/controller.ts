@@ -11,7 +11,7 @@ const saveRecipe = (db: IMongoService) => ({ body }: Request, res: Response, nex
     db.insertOne(body).then(DBRecipe => {
       res.json(DBRecipe);
       next();
-    })
+    }).catch(error => { next(error) })
   } else {
     next(new Error('Missing recipe information'));
   }
