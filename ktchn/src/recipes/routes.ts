@@ -1,7 +1,7 @@
 import { Request, Response, Router, NextFunction } from "express";
 import Scrape from "./scrape";
 import { Recipe } from './model';
-import { save } from './controller';
+import { save, get, getById } from './controller';
 import MongoClient from 'mongodb';
 import { mongoService, IMongoService } from '../mongo';
 import piddleware from '../promise-all-middleware';
@@ -17,8 +17,9 @@ class RecipeRoutes {
   }
 
   private init() {
-    // this.router.get("/", (req, res, next) => )
-    this.router.post('/', piddleware([save(this.RecipeDB)]))
+    this.router.get("/", piddleware([get(this.RecipeDB)]))
+    this.router.get("/:id", piddleware([getById(this.RecipeDB)]))
+    this.router.post("/", piddleware([save(this.RecipeDB)]))
     this.router.post("/scrape", (req, res, next) => {
        return Scrape(req.body.url).then((x)=>{
          res.json(x)

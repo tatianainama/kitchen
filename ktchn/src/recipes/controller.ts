@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import { Recipe } from './model';
 import { IMongoService } from '../mongo';
+import { ObjectId } from 'bson';
+import { json } from 'body-parser';
 
 function isValidRecipe(data: any): data is Recipe {
   return data.name !== undefined;
@@ -19,6 +21,16 @@ const save = (db: IMongoService) => ({ body }: Request, res: Response, next: Nex
   ));
 };
 
+const get = (db: IMongoService) => ({ query }: Request, res: Response, next: NextFunction) => {
+  return db.findOne<Recipe>(query).then(result => res.json(result));
+}
+
+const getById = (db: IMongoService) => ({ params }: Request, res: Response, next: NextFunction) => {
+  return db.findOneById<Recipe>(params.id).then(recipe => res.json(recipe));
+}
+
 export {
   save,
+  getById,
+  get,
 }
