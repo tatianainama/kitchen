@@ -6,17 +6,19 @@ function isValidRecipe(data: any): data is Recipe {
   return data.name !== undefined;
 }
 
-const saveRecipe = (db: IMongoService) => ({ body }: Request, res: Response, next: NextFunction): void => {
-  if (isValidRecipe(body)) {
-    db.insertOne(body).then(DBRecipe => {
-      res.json(DBRecipe);
-      next();
-    }).catch(error => { next(error) })
-  } else {
-    next(new Error('Missing recipe information'));
-  }
+function validRecipe(data: any): Promise<Recipe> {
+  return new Promise(function(resolve, reject) {
+    return data.name !== undefined ? resolve(data) : reject('Missing data');
+  })
 }
 
+const save = (db: IMongoService) => ({ body }: Request, res: Response, next: NextFunction): Promise<any> => {
+  return validRecipe(body).then(
+    recipe => db.insertOne(recipe).then(
+      dbRecipe => res.json(dbRecipe)
+  ));
+};
+
 export {
-  saveRecipe,
+  save,
 }
