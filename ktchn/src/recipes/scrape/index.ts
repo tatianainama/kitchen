@@ -5,10 +5,6 @@ import { ScrapingSource } from './sources/index';
 import { Ingredient } from '../model';
 import { parse as parseIngredient } from 'recipe-ingredient-parser';
 
-function selectSource(url: string): ScrapingSource|void {
-  return ;
-}
-
 function selectSourceAsync(url: string): Promise<ScrapingSource> {
   const foundSource = Sources.find((source) => {
     return url.search(source.domain) > 0;

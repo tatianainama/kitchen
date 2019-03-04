@@ -38,11 +38,11 @@ function getIngredients($: CheerioSelector): ComposedIngredients[] {
   const ingredientsScrape = $(SELECTORS.INGREDIENTS).children();
   const isNewIngredientList = (tagName: string): boolean => tagName === 'span';
   
-  let ingredients: ComposedIngredients[] = [];
-
+  let ingredients: ComposedIngredients[] = [{name: '', ingredients: []}];
   return ingredientsScrape.toArray().reduce((list, rawIngredient)=>{
     let last = list.length - 1;
     let text = $(rawIngredient).text();
+
     if (isNewIngredientList(rawIngredient.tagName)) {
       return list.concat([{name: text, ingredients: []}]);
     } else {
