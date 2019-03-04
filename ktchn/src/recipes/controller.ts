@@ -4,10 +4,6 @@ import { IMongoService } from '../mongo';
 import { ObjectId } from 'bson';
 import { json } from 'body-parser';
 
-function isValidRecipe(data: any): data is Recipe {
-  return data.name !== undefined;
-}
-
 function validRecipe(data: any): Promise<Recipe> {
   return new Promise(function(resolve, reject) {
     return data.name !== undefined ? resolve(data) : reject('Missing data');
@@ -29,8 +25,13 @@ const getById = (db: IMongoService) => ({ params }: Request, res: Response, next
   return db.findOneById<Recipe>(params.id).then(recipe => res.json(recipe));
 }
 
+const getAll = (db: IMongoService) => ({ query }: Request, res: Response, next: NextFunction) => {
+  return db.find<Recipe>(query).then(recipes => res.json(recipes));
+}
+
 export {
   save,
   getById,
   get,
+  getAll,
 }
