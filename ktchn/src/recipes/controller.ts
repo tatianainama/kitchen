@@ -11,35 +11,6 @@ function validRecipe(data: any): Promise<Recipe> {
   })
 }
 
-//{ $or: [{"ingredients.ingredients.name": { "$regex": "beef", "$options": "i"}}, {"ingredients.ingredients.name": { "$regex": "cheese", "$options": "i"}}, {"ingredients.ingredients.name": { "$regex": "mix", "$options": "i"}}]}
-
-
-const queryKeys: {[s: string]: (q: string) => {}} = {
-  'ing': (query: string) => {
-    return {
-      '$or': query.split(',').map(x => {
-        return {
-          'ingredients.ingredients.name': {
-            '$regex': x,
-            '$options': 'i'
-          }
-        };
-      })
-    }    
-  }
-}
-
-function queryParser(query: any): FilterQuery<any> {
-  let q = {};
-  for (const key of Object.keys(query)) {
-    q = {
-      ...q,
-      ...queryKeys[key](query[key]),
-    }
-  }
-  return q;
-}
-
 const save = (db: IMongoService) => ({ body }: Request, res: Response, next: NextFunction): Promise<any> => {
   return validRecipe(body).then(
     recipe => db.insertOne(recipe).then(
@@ -60,7 +31,16 @@ const getAll = (db: IMongoService) => ({ query }: Request, res: Response, next: 
 }
 
 const getByIngredients = (db: IMongoService) => ({ query, params }: Request, res: Response, next: NextFunction) => {
-  return db.find<Recipe>(queryParser(query)).then(recipes => res.json(recipes))
+  const ingredients: string[] = query.ingredients.split(',');
+  const builtQuery = {
+    '$or': ingredients.map((ing) => ({
+      'ingredients.ingredients.name': {
+        '$regex': ing,
+        '$options': 'i'        
+      }
+    }))
+  };
+  return db.find<Recipe>(builtQuery).then(recipes => res.json(recipes))
 }
 
 export {
