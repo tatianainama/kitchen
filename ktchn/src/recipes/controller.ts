@@ -30,17 +30,34 @@ const getAll = (db: IMongoService) => ({ query }: Request, res: Response, next: 
   return db.find<Recipe>(query).then(recipes => res.json(recipes));
 }
 
+async function buildQuery(tryQuery:()=>FilterQuery<any>): Promise<FilterQuery<any>> {
+  try {
+    return Promise.resolve(tryQuery());
+  } catch(error) {
+    return Promise.reject(error);
+  }
+} 
 const getByIngredients = (db: IMongoService) => ({ query, params }: Request, res: Response, next: NextFunction) => {
-  const ingredients: string[] = query.ingredients.split(',');
-  const builtQuery = {
-    '$or': ingredients.map((ing) => ({
-      'ingredients.ingredients.name': {
-        '$regex': ing,
-        '$options': 'i'        
-      }
-    }))
-  };
-  return db.find<Recipe>(builtQuery).then(recipes => res.json(recipes))
+  const ingredientsQuery = (query: FilterQuery<any>) => () => {
+    if(query.ingredients) {
+      const ingredients: string[] = query.ingredients.split(',');
+      return {
+        '$or': ingredients.map((ing) => ({
+          'ingredients.ingredients.name': {
+            '$regex': ing,
+            '$options': 'i'        
+          }
+        }))
+      };  
+    } else {
+      throw new Error('Invalid query key');
+    }
+  }
+  return buildQuery(ingredientsQuery(query)).then(
+    builtQuery => db.find<Recipe>(builtQuery).then(
+      recipes => res.json(recipes)
+    )
+  )
 }
 
 export {
