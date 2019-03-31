@@ -56,6 +56,11 @@ class App {
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(cookieParser());
     this.app.use(express.static(path.join(__dirname, "public")));
+    this.app.use((req, res, next)=> {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      next();
+    })
   }
 
   private connectDB(): Promise<MongoClient.Db> {
@@ -66,7 +71,7 @@ class App {
     this.connectDB().then(db => {
       this.routes(db);
       const port = this.app.get("port");
-      this.app.listen(port, () => {
+      this.app.listen(port, '0.0.0.0', () => {
         console.log(
           ("App is runnnning at http://localhost:%d in %s mode"),
           port,
