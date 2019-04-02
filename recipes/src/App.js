@@ -22,7 +22,7 @@ class Recipes extends Component {
   }
 
   componentDidMount(){
-    axios.get('http://localhost:3000/recipes/ingredients/?ingredients=beef,bacon').then(response => {
+    axios.get('http://recipes.davidventura.com.ar/recipes/ingredients/?ingredients=beef,bacon').then(response => {
       console.log('response', response.data);
       this.setState({
         isLoaded: true,
