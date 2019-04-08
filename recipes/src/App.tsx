@@ -45,15 +45,15 @@ class Recipes extends Component {
 }
 
 class App extends Component {
-  navbarItems: { title: string, path: string }[]
+  navbarItems: { title: string, path: string, active: boolean }[]
 
   constructor(props: any) {
     super(props);
     this.navbarItems = [
-      { title: 'home', path: '/' },
-      { title: 'recipes', path: '/recipes' },
-      { title: 'planner', path: '/planner' },
-      { title: 'shoplist', path: '/shoplist' },
+      { title: 'home', path: '/', active: false },
+      { title: 'recipes', path: '/recipes', active: false },
+      { title: 'planner', path: '/planner', active: false },
+      { title: 'shoplist', path: '/shoplist', active: false },
     ];
   }
 
