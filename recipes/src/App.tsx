@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import React, { Component } from 'react';
+import React, { Component, Props } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -12,7 +12,7 @@ function Users() {
 }
 
 class Recipes extends Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       error: null,
@@ -22,7 +22,7 @@ class Recipes extends Component {
   }
 
   componentDidMount(){
-    axios.get('http://recipes.davidventura.com.ar/recipes/ingredients/?ingredients=beef,bacon').then(response => {
+    axios.get('https://recipes.davidventura.com.ar/recipes/ingredients/?ingredients=beef,bacon').then(response => {
       console.log('response', response.data);
       this.setState({
         isLoaded: true,
