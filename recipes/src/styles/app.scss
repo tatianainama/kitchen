@@ -1,0 +1,30 @@
+@import './_index.scss';
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-family-text;
+  font-size: $font-size-regular;
+  color: $grey-900;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+}
+
+h1 {
+  font-family: $font-family-display;
+  text-transform: uppercase;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-xx-large;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}

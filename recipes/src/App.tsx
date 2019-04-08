@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import React, { Component, Props } from 'react';
 import axios from 'axios';
-import './App.css';
+import Navbar from './components/Navbar';
 
 function Index() {
   return <h2>Home</h2>;
@@ -45,23 +45,23 @@ class Recipes extends Component {
 }
 
 class App extends Component {
+  navbarItems: { title: string, path: string }[]
+
+  constructor(props: any) {
+    super(props);
+    this.navbarItems = [
+      { title: 'home', path: '/' },
+      { title: 'recipes', path: '/recipes' },
+      { title: 'planner', path: '/planner' },
+      { title: 'shoplist', path: '/shoplist' },
+    ];
+  }
+
   render() {
     return (
       <Router>
         <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/recipes/">Recipes</Link>
-              </li>
-              <li>
-                <Link to="/users/">Users</Link>
-              </li>
-            </ul>
-          </nav>
+          <Navbar items={this.navbarItems}></Navbar>
 
           <Route path="/" exact component={Index} />
           <Route path="/recipes/" component={Recipes} />
