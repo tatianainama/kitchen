@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material/react-drawer": "^0.11.0",
+    "@material/react-list": "^0.11.0",
     "@types/jest": "^24.0.11",
-    "@types/muicss": "^0.9.1",
     "@types/node": "^11.13.0",
     "@types/react": "^16.8.12",
     "@types/react-dom": "^16.8.3",
@@ -13,7 +14,6 @@
     "@types/storybook__addon-links": "^3.3.4",
     "@types/storybook__react": "^4.0.1",
     "axios": "^0.18.0",
-    "muicss": "^0.9.41",
     "node-sass": "^4.11.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",

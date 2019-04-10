@@ -1,4 +1,5 @@
-@import './_index.scss';
+@import './_variables.scss';
+
 
 body {
   margin: 0;
@@ -8,6 +9,7 @@ body {
   color: $grey-900;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: $grey-100;
 }
 
 ul {
@@ -27,4 +29,9 @@ h1 {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+#root {
+  display: flex;
+  height: 100vh;
 }

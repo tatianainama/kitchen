@@ -21,6 +21,7 @@
   },
   "include": [
     "src",
-    ".storybook/button.stories.js"
+    ".storybook/button.stories.js",
+    "src/components/Card/.stories.js"
   ]
 }

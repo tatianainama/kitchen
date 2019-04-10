@@ -1,0 +1,42 @@
+@import '../../styles/variables';
+
+.cbk-drawer {
+  background-color: #BDBDBD;
+  padding-top: $spacing-xx-large;
+  text-align: center;
+  font-family: $font-family-display;
+  color: $white;
+  
+  .mdc-drawer__title {
+    text-transform: uppercase;
+    color: $white;
+    font-family: $font-family-display;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.075em;
+    font-size: $font-size-xx-large
+  }
+
+  .mdc-list-item {
+    justify-content: center;
+
+    a {
+      color: white;
+      text-decoration: none;
+      font-family: $font-family-display;
+      font-size: $font-size-x-large;
+      letter-spacing: 0.075em;
+      font-weight: $font-weight-bold;
+    }
+
+    a:hover::after {
+      content: "";
+      display: block;
+      margin: 0 auto;
+      width: 56px;
+      opacity: 50%;
+      margin-top: -10px;
+      border-bottom: 10px solid;
+      border-bottom-color: $grey-500;
+    }
+  }
+}
