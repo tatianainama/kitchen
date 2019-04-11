@@ -7,6 +7,12 @@
   font-family: $font-family-display;
   color: $white;
   
+  .cbk-icon {
+    svg > g path {
+      fill: $white;
+    }
+  }
+
   .mdc-drawer__title {
     text-transform: uppercase;
     color: $white;
