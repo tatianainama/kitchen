@@ -2,22 +2,18 @@ import React from 'react';
 import Card, {
   CardActions,
   CardActionButtons,
-  CardActionIcons,
   CardPrimaryContent,
   CardMedia,
 } from "@material/react-card";
 import Button from "@material/react-button";
-
 import '@material/react-card/dist/card.min.css';
 import '@material/react-button/dist/button.min.css';
+
 import './styles.scss';
 import sample_img from "./sample.png";
-import IRecipe from 'types/recipes';
-import { ReactNodeArray } from 'react';
 
 type CBKCardProps = {
   withImg?: boolean,
-  withActions?: boolean,
   title: string,
   summary?: string,
   img?: string,
@@ -25,10 +21,9 @@ type CBKCardProps = {
     label: string,
     handler: (event: React.MouseEvent) => void,
   }[],
-  recipe?: any,
   onClick: (event: React.MouseEvent) => void,
 }
-  
+
 function CBKCard(props: CBKCardProps){
   const {onClick, img, title, summary, actions} = props;
   return(

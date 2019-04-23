@@ -15,7 +15,7 @@ type RecipesContainerProps = {
   selectedRecipe: any | undefined,
   fetchRecipes: (query: any) => undefined,
   receiveRecipes: (recipes: IRecipe[]) => undefined,
-  selectRecipe: (recipe: any) => undefined,
+  selectRecipe: (recipe: IRecipe) => undefined,
 };
 
 class Recipes extends Component<RecipesContainerProps> {
@@ -30,7 +30,6 @@ class Recipes extends Component<RecipesContainerProps> {
 
   componentDidUpdate(prevProps: any) {
     const { data, receiveRecipes, isFetching } = this.props;
-    console.log('update');
     if (isFetching === false && data.length !== prevProps.data.length) {
       receiveRecipes(data);
     }
@@ -65,7 +64,6 @@ class Recipes extends Component<RecipesContainerProps> {
                     <Cell columns={10}>
                       <Card
                         title={recipe.name}
-                        recipe={recipe}
                         onClick={this.handleRecipeSelection(recipe)}
                         summary={recipe.summary}
                         actions={actions}
