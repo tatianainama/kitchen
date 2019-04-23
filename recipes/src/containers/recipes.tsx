@@ -7,13 +7,14 @@ import {
 import { connect } from "react-redux";
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Card from 'components/Card';
+import IRecipe from 'types/recipes';
 
 type RecipesContainerProps = {
-  data: [],
+  data: IRecipe[],
   isFetching: boolean,
-  selectedRecipe: {} | undefined,
+  selectedRecipe: any | undefined,
   fetchRecipes: (query: any) => undefined,
-  receiveRecipes: (recipes: []) => undefined,
+  receiveRecipes: (recipes: IRecipe[]) => undefined,
   selectRecipe: (recipe: any) => undefined,
 };
 
@@ -29,31 +30,61 @@ class Recipes extends Component<RecipesContainerProps> {
 
   componentDidUpdate(prevProps: any) {
     const { data, receiveRecipes, isFetching } = this.props;
-
+    console.log('update');
     if (isFetching === false && data.length !== prevProps.data.length) {
       receiveRecipes(data);
     }
   }
 
+  handleRecipeSelection(recipe: any) {
+    return (event: React.MouseEvent) => this.props.selectRecipe(recipe);
+  }
+
+  handler(event: React.MouseEvent) {
+    console.log('click');
+  }
+
   render() {
+    const {data, selectedRecipe, selectRecipe} = this.props;
+    const actions = [{
+      label: 'edit',
+      handler: this.handler,
+    }, {
+      label: 'shopping',
+      handler: this.handler
+    }];
+
     return(
-      <Cell columns={6}>
-        {
-          this.props.data.map((recipe: any, i: number) => {
-            return (
-              <Row key={i}>
-                <Cell columns={10}>
-                  <Card
-                    title={recipe.name}
-                    recipe={recipe}
-                    onClick={() => this.props.selectRecipe(recipe)}
-                  />
-                </Cell>
-              </Row>
-            )
-          })
-        }
-      </Cell>
+      <Grid>
+        <Row>
+          <Cell columns={6}>
+            {
+              data.map((recipe: any, i: number) => {
+                return (
+                  <Row key={i}>
+                    <Cell columns={10}>
+                      <Card
+                        title={recipe.name}
+                        recipe={recipe}
+                        onClick={this.handleRecipeSelection(recipe)}
+                        summary={recipe.summary}
+                        actions={actions}
+                      />
+                    </Cell>
+                  </Row>
+                )
+              })
+            }
+          </Cell>
+          <Cell columns={6}>
+            { selectedRecipe !== undefined && 
+              <section>
+                <h3>{selectedRecipe.name}</h3>
+              </section>
+            }
+          </Cell>
+        </Row>
+      </Grid>
     )
   }
 }
@@ -67,10 +98,10 @@ const mapDispatchToProps = (dispatch: any) => {
     fetchRecipes: (query: any) => {
       dispatch(fetch(query))
     },
-    receiveRecipes: (recipes: []) => {
+    receiveRecipes: (recipes: IRecipe[]) => {
       dispatch(receive(recipes))
     },
-    selectRecipe: (recipe: any) => {
+    selectRecipe: (recipe: IRecipe) => {
       dispatch(select(recipe))
     }
   }

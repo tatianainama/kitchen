@@ -46,16 +46,14 @@ class App extends Component<{}, {}> {
               ))
             }
           </CBKDrawer>
-          <Grid className="cbk-grid">
-            <Row>
-              <Route path="/recipes" component={Recipes}>
-              </Route>
-              <Route path="/planner">
-              </Route>
-              <Route path="/planner">
-              </Route>
-            </Row>
-          </Grid>
+          <div className="cbk-main">
+            <Route path="/recipes" component={Recipes}>
+            </Route>
+            <Route path="/planner">
+            </Route>
+            <Route path="/planner">
+            </Route>
+          </div>
         </Router>
       </Provider>
     )
