@@ -1,43 +1,52 @@
 import React, { Component } from "react";
 import {
-  fetchRecipes,
-  receiveRecipes,
+  fetchIfNeeded as fetch,
+  receiveRecipes as receive,
+  selectRecipe as select,
 } from "store/recipes/actions";
 import { connect } from "react-redux";
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Card from 'components/Card';
 
-class Recipes extends Component<any, any> {
+type RecipesContainerProps = {
+  data: [],
+  isFetching: boolean,
+  selectedRecipe: {} | undefined,
+  fetchRecipes: (query: any) => undefined,
+  receiveRecipes: (recipes: []) => undefined,
+  selectRecipe: (recipe: any) => undefined,
+};
+
+class Recipes extends Component<RecipesContainerProps> {
   constructor(props: any) {
     super(props);
-    console.log('props', props);
   }
 
   componentDidMount() {
-    console.log('props', this.props)
-    const { dispatch } = this.props;
-    dispatch(fetchRecipes({}));
+    const { fetchRecipes } = this.props;
+    fetchRecipes({});
   }
 
   componentDidUpdate(prevProps: any) {
-    const { dispatch, recipes } = this.props;
-    dispatch(receiveRecipes(recipes));
+    const { data, receiveRecipes, isFetching } = this.props;
+
+    if (isFetching === false && data.length !== prevProps.data.length) {
+      receiveRecipes(data);
+    }
   }
 
   render() {
-    console.log(this.props.data);
-
     return(
       <Cell columns={6}>
         {
           this.props.data.map((recipe: any, i: number) => {
-            console.log("card");
             return (
-              <Row>
+              <Row key={i}>
                 <Cell columns={10}>
                   <Card
-                    key="i"
                     title={recipe.name}
+                    recipe={recipe}
+                    onClick={() => this.props.selectRecipe(recipe)}
                   />
                 </Cell>
               </Row>
@@ -49,9 +58,25 @@ class Recipes extends Component<any, any> {
   }
 }
 
-function mapStateToProps(state: any) {
-  const { recipes } = state;
-  return state.recipes;
+const mapStateToProps = ({ recipes }: any, ownProps: any) => {
+  return recipes;
 }
 
-export default  connect(mapStateToProps)(Recipes);
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    fetchRecipes: (query: any) => {
+      dispatch(fetch(query))
+    },
+    receiveRecipes: (recipes: []) => {
+      dispatch(receive(recipes))
+    },
+    selectRecipe: (recipe: any) => {
+      dispatch(select(recipe))
+    }
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Recipes);

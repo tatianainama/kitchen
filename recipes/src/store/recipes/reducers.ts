@@ -2,6 +2,7 @@ const initialState = {
   recipes: {
     isFetching: false,
     data: [],
+    selectedRecipe: undefined,
   }
 };
 
@@ -9,7 +10,6 @@ export const recipesReducer = (
   state = initialState,
   action: any
 ) => {
-  console.log("action", action)
   switch (action.type) {
     case 'REQUEST_RECIPES': 
       return {
@@ -26,6 +26,14 @@ export const recipesReducer = (
           ...state.recipes,
           isFetching: action.isFetching,
           data: action.payload || state.recipes.data,
+        }
+      }
+    case 'SELECT_RECIPE':
+      return {
+        ...state,
+        recipes: {
+          ...state.recipes,
+          selectedRecipe: action.payload
         }
       }
     default:
