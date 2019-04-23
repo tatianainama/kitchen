@@ -38,7 +38,6 @@ class Recipes extends Component<{}, RecipeState> {
   render() {
     return (
       <div>
-        <Card></Card>
         {/* {
           this.state.recipes.map((_recipe) => (
             <RecipeCard recipe={_recipe} key={_recipe._id}/>

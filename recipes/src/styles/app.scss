@@ -26,6 +26,11 @@ h1 {
   font-size: $font-size-xx-large;
 }
 
+h6 {
+  font-family: $font-family-display;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-x-large;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -34,4 +39,13 @@ code {
 #root {
   display: flex;
   height: 100vh;
+}
+
+.cbk-grid {
+  display: flex;
+  width: 100%;
+
+  .mdc-layout-grid__inner {
+    width: 100%;
+  }
 }
