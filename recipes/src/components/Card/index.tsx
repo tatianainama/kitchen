@@ -34,7 +34,7 @@ function CBKCard(props: CBKCardProps){
           <h6 className='cbk-card__main__title'>{props.title}</h6>
           {
             summary ? 
-              <div className='cbk-card__main__summary'>{summary}</div> :
+              <p className='cbk-card__main__summary'>{summary}</p> :
               null
           }
         </div>

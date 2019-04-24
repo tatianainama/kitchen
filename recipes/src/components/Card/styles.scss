@@ -1,10 +1,8 @@
 @import 'styles/_variables.scss';
 
 .cbk-card {
-  //flex-direction: row;
   border-radius: 0px;
   border: 0px;
-  margin: 8px 0;
   .mdc-card__media {
     width: 168px;
   }
@@ -30,4 +28,8 @@
       -webkit-box-orient: vertical;
     }
   }
+}
+
+.cbk-card:not(:last-child) {
+  margin-bottom: 16px;
 }

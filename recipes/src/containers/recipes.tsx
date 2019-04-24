@@ -7,6 +7,7 @@ import {
 import { connect } from "react-redux";
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Card from 'components/Card';
+import RecipeCard from 'components/RecipeCard';
 import IRecipe from 'types/recipes';
 
 type RecipesContainerProps = {
@@ -60,25 +61,21 @@ class Recipes extends Component<RecipesContainerProps> {
             {
               data.map((recipe: any, i: number) => {
                 return (
-                  <Row key={i}>
-                    <Cell columns={10}>
-                      <Card
-                        title={recipe.name}
-                        onClick={this.handleRecipeSelection(recipe)}
-                        summary={recipe.summary}
-                        actions={actions}
-                      />
-                    </Cell>
-                  </Row>
+                  <Card
+                    title={recipe.name}
+                    onClick={this.handleRecipeSelection(recipe)}
+                    summary={recipe.summary}
+                    actions={actions}
+                  />
                 )
               })
             }
           </Cell>
           <Cell columns={6}>
             { selectedRecipe !== undefined && 
-              <section>
-                <h3>{selectedRecipe.name}</h3>
-              </section>
+              <RecipeCard 
+                recipe={selectedRecipe}
+              />
             }
           </Cell>
         </Row>
