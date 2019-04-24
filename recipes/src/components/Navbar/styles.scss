@@ -1,0 +1,11 @@
+@import 'styles/_variables.scss';
+
+.cbk-navbar {
+  background-color: white;
+  min-height: 128px;
+  margin-top: $spacing-regular;
+  padding: $spacing-regular;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

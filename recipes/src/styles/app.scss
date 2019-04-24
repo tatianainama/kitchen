@@ -31,6 +31,25 @@ h6 {
   font-weight: $font-weight-bold;
   font-size: $font-size-x-large;
 }
+
+h4 {
+  margin: 0;
+  font-family: $font-family-display;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-xx-large;
+}
+
+h4:after {
+  content: "";
+  display: block;
+  margin: 0 auto;
+  width: 50px;
+  margin-top: -20px;
+  border-bottom: 16px solid;
+  border-bottom-color: $grey-300;
+  margin-left: -4px;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

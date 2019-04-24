@@ -29,7 +29,7 @@ function CBKRecipeCard(props: RecipeCardProps) {
       <div className='cbk-recipe-card__primary'>
         <CardMedia square imageUrl={sample_img} className='cbk-recipe-card__primary__image'/>
         <div className='cbk-recipe-card__primary__title'>
-          <h6>{recipe.name}</h6>
+          <h4>{recipe.name}</h4>
           <p>{recipe.summary}</p>
           <ul>
             <li>
@@ -54,8 +54,8 @@ function CBKRecipeCard(props: RecipeCardProps) {
         <div className='cbk-recipe-card__content__instructions'>
           <ol>
             {
-              recipe.instructions.map((step, i) => (
-                <li key={i}>{step}</li>
+              recipe.instructions.map((instruction, i) => (
+                <li key={i}>{instruction}</li>
               ))
             }            
           </ol>

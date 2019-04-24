@@ -9,6 +9,7 @@ import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Card from 'components/Card';
 import RecipeCard from 'components/RecipeCard';
 import IRecipe from 'types/recipes';
+import Navbar from 'components/Navbar';
 
 type RecipesContainerProps = {
   data: IRecipe[],
@@ -53,34 +54,44 @@ class Recipes extends Component<RecipesContainerProps> {
       label: 'shopping',
       handler: this.handler
     }];
+    const navbarActions = [{
+      label: 'create recipe',
+      onClick: () => {}
+    }];
 
     return(
-      <Grid>
-        <Row>
-          <Cell columns={6}>
-            {
-              data.map((recipe: any, i: number) => {
-                return (
-                  <Card
-                    key={i}
-                    title={recipe.name}
-                    onClick={this.handleRecipeSelection(recipe)}
-                    summary={recipe.summary}
-                    actions={actions}
-                  />
-                )
-              })
-            }
-          </Cell>
-          <Cell columns={6}>
-            { selectedRecipe !== undefined && 
-              <RecipeCard 
-                recipe={selectedRecipe}
-              />
-            }
-          </Cell>
-        </Row>
-      </Grid>
+      <div>
+        <Navbar
+          title="Recipes"
+          actions={navbarActions}
+        />
+        <Grid>
+          <Row>
+            <Cell columns={6}>
+              {
+                data.map((recipe: any, i: number) => {
+                  return (
+                    <Card
+                      key={i}
+                      title={recipe.name}
+                      onClick={this.handleRecipeSelection(recipe)}
+                      summary={recipe.summary}
+                      actions={actions}
+                    />
+                  )
+                })
+              }
+            </Cell>
+            <Cell columns={6}>
+              { selectedRecipe !== undefined && 
+                <RecipeCard 
+                  recipe={selectedRecipe}
+                />
+              }
+            </Cell>
+          </Row>
+        </Grid>
+      </div>
     )
   }
 }
