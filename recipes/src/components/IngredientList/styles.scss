@@ -1,0 +1,42 @@
+@import 'styles/_variables.scss';
+
+.cbk-ingredient-list {
+  font-family: $font-family-display;
+  font-size: $font-size-large;
+  color: $grey-700;
+
+  &__sub-recipe {
+    font-weight: $font-weight-bold;
+  }
+
+  &__ingredient {
+    display: table;
+    span {
+      display: table-cell;
+    }
+
+    span:first-child {
+      position: relative;
+      overflow: hidden;
+    }
+
+    span:first-child:after {
+      content: '';
+      position: absolute;
+      bottom: 0.2em;
+      margin-left: 0.5em;
+      width: 100%;
+      border-bottom: 2px dotted $grey-400;
+    }
+    span + span {
+      text-align: right;
+      width: 1%;
+      vertical-align: bottom;
+      padding-left: 0.5em;
+    }
+  }
+
+  &__ingredient:last-child {
+    margin-bottom: $spacing-small;
+  }
+}

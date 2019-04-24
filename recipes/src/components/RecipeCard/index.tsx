@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import IRecipe, { IIngComponent, IIngredient } from '../../types/recipes';
+import IRecipe, { ISubRecipe, IIngredient } from '../../types/recipes';
 import Card, {
-  CardActions,
-  CardActionButtons,
-  CardPrimaryContent,
   CardMedia,
 } from "@material/react-card";
 import Icon from 'components/Icon';
+import Ingredients from 'components/IngredientList';
 import moment from 'moment';
 
 import sample_img from "components/Card/sample.png";
@@ -15,41 +13,6 @@ import { ReactComponent as Cooking } from 'svgs/cooking.svg';
 import { ReactComponent as Servings } from 'svgs/servings.svg';
 
 import './styles.scss';
-
-
-type ShowIngredientsProps = {
-  ingredients: IIngComponent[]
-};
-
-function ShowIngredients(props: ShowIngredientsProps) {
-  const { ingredients } = props;
-  return (
-    <div className="cbk-ingredient-list">
-      {
-        ingredients.map((item, i) => (
-          <ul key={i}>
-            {
-              item.name ? 
-                <li className="section-name">
-                  {item.name}
-                </li>
-                : null
-            }
-            {
-              item.ingredients.map((ing, j) => (
-                <li className='ingredient' key={j}>
-                  <span>{ing.name}</span>
-                  <span>{ing.quantity + ing.unit}</span>
-                </li>
-              ))
-            }
-          </ul>
-        ))
-      }
-    </div>
-  )
-}
-
 
 type RecipeCardProps = {
   recipe: IRecipe,
@@ -86,13 +49,13 @@ function CBKRecipeCard(props: RecipeCardProps) {
       </div>
       <div className='cbk-recipe-card__content'>
         <div className='cbk-recipe-card__content__ingredients'>
-          <ShowIngredients ingredients={recipe.ingredients} />
+          <Ingredients ingredients={recipe.ingredients} />
         </div>
         <div className='cbk-recipe-card__content__instructions'>
           <ol>
             {
-              recipe.instructions.map((instruction, i) => (
-                <li key={i}>{instruction}</li>
+              recipe.instructions.map((step, i) => (
+                <li key={i}>{step}</li>
               ))
             }            
           </ol>

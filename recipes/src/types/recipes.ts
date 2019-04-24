@@ -4,7 +4,7 @@ export interface IIngredient {
   unit: string,
   _original: string,
 }
-export interface IIngComponent {
+export interface ISubRecipe {
   name: string,
   ingredients: IIngredient[]
 }
@@ -19,7 +19,7 @@ export default interface IRecipe {
     cookingTime: string,
     servings: number
   },
-  ingredients: IIngComponent[],
+  ingredients: ISubRecipe[],
   instructions: string[],
   name: string,
   summary: string,
