@@ -1,5 +1,46 @@
 @import 'styles/_variables.scss';
 
+.cbk-ingredient-list {
+  font-family: $font-family-display;
+  font-size: $font-size-large;
+  color: $grey-700;
+
+  li.section-name {
+    font-weight: $font-weight-bold;
+  }
+
+  li.ingredient {
+    display: table;
+    span {
+      display: table-cell;
+    }
+
+    span:first-child {
+      position: relative;
+      overflow: hidden;
+    }
+
+    span:first-child:after {
+      content: '';
+      position: absolute;
+      bottom: 0.2em;
+      margin-left: 0.5em;
+      width: 100%;
+      border-bottom: 2px dotted $grey-400;
+    }
+    span + span {
+      text-align: right;
+      width: 1%;
+      vertical-align: bottom;
+      padding-left: 0.5em;
+    }
+  }
+
+  li.ingredient:last-child {
+    margin-bottom: $spacing-small;
+  }
+}
+
 .cbk-recipe-card {
   border: 0px;
   padding: $spacing-large;
@@ -32,7 +73,6 @@
         display: block;
         margin: 0 auto;
         width: 50px;
-        /* height: 50%; */
         margin-top: -20px;
         border-bottom: 16px solid;
         border-bottom-color: $grey-300;

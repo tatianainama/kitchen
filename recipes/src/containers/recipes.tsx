@@ -62,6 +62,7 @@ class Recipes extends Component<RecipesContainerProps> {
               data.map((recipe: any, i: number) => {
                 return (
                   <Card
+                    key={i}
                     title={recipe.name}
                     onClick={this.handleRecipeSelection(recipe)}
                     summary={recipe.summary}

@@ -1,3 +1,14 @@
+export interface IIngredient { 
+  name: string,
+  quantity: number,
+  unit: string,
+  _original: string,
+}
+export interface IIngComponent {
+  name: string,
+  ingredients: IIngredient[]
+}
+
 export default interface IRecipe {
   _id: string,
   author: {
@@ -8,15 +19,7 @@ export default interface IRecipe {
     cookingTime: string,
     servings: number
   },
-  ingredients: {
-    name: string,
-    ingredients: {
-      name: string,
-      quantity: number,
-      unit: string,
-      _original: string,
-    }[]
-  }[],
+  ingredients: IIngComponent[],
   instructions: string[],
   name: string,
   summary: string,
