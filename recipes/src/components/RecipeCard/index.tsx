@@ -33,15 +33,15 @@ function CBKRecipeCard(props: RecipeCardProps) {
           <p>{recipe.summary}</p>
           <ul>
             <li>
-              <Icon width={32} height={32}><Preparation/></Icon>
+              <Icon width={32} height={32} icon='preparation' />
               <label>{prepTime}</label>
             </li>
             <li>
-              <Icon width={32} height={32}><Cooking/></Icon>
+              <Icon width={32} height={32} icon='cooking' />
               <label>{cookTime}</label>
             </li>
             <li>
-              <Icon width={32} height={32}><Servings/></Icon>
+              <Icon width={32} height={32} icon='servings' />
               <label>{servings}</label>
             </li>
           </ul>

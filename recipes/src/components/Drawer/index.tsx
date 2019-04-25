@@ -1,4 +1,5 @@
-import React, { ReactNode, ReactChildren } from 'react';
+import React, { ReactNode, ReactChildren, createElement } from 'react';
+import ReactDOMServer from 'react-dom/server';
 import Drawer, {
   DrawerHeader,
   DrawerTitle,
@@ -7,8 +8,9 @@ import Drawer, {
 import List, { ListItem } from '@material/react-list';
 import { ReactComponent as Logo } from 'svgs/logo.svg';
 import { ReactNodeArray } from 'prop-types';
-
 import Icon from 'components/Icon';
+import Svgs from 'svgs';
+import ReactSVG from 'react-svg';
 
 import '@material/react-drawer/dist/drawer.min.css';
 import '@material/react-list/dist/list.min.css';
@@ -23,9 +25,7 @@ function CBKDrawer(props: CBKDrawerProps) {
   return (
     <Drawer className='cbk-drawer'>
       <DrawerHeader>
-        <Icon width={64}>
-          <Logo />
-        </Icon>
+        <Icon icon='logo' />
         <DrawerTitle tag='h1'>
           cookbook
         </DrawerTitle>

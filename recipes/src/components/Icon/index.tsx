@@ -1,26 +1,30 @@
-import React, { FunctionComponent, ReactElement, SVGProps } from 'react';
+import React from 'react';
+import Svgs from 'svgs';
+import ReactSVG from 'react-svg';
 
 export type IconProps = {
-  children: any, // ReactElement throws error wtf
-  className?: string|undefined,
-  height?: number,
+  icon: string,
+  className?: string,
+  fill?: string,
   width?: number,
-  color?: string,
+  height?: number,
 }
 
-function Icon({ color, children, width, height, className }: IconProps) {
+export function Icon(props: IconProps) {
+  const styles = {
+    width: props.width || 64,
+    height: props.height || 'auto',
+    fill: props.fill,
+  };
+
   return (
-    <div className='cbk-icon'>
-      {
-        React.cloneElement(children, {
-          viewBox: '0 0 100 100',
-          className,
-          fill: color,
-          width,
-          height,
-        })
-      }
-    </div>
+    <ReactSVG
+      // @ts-ignore
+      src={Svgs[props.icon]}
+      className='cbk-icon'
+      svgClassName={props.className}
+      svgStyle={styles}
+    />
   )
 }
 
