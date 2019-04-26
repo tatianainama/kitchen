@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '@material/react-button';
 import './styles.scss';
 
 type NavbarProps = {
@@ -19,7 +20,7 @@ export default function Navbar(props: NavbarProps){
           <div>
             {
               props.actions.map((action, i) => (
-                <button key={i} onClick={action.onClick}>{action.label}</button>
+                <Button unelevated key={i} onClick={action.onClick}>{action.label}</Button>
               ))
             }
           </div>
