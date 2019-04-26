@@ -8,6 +8,7 @@ import configureStore from 'store/configureStore';
 import Recipes from "containers/recipes";
 import './styles/app.scss';
 import "@material/react-layout-grid/dist/layout-grid.min.css";
+import Routes, { RouteWithSubRoutes } from 'route.config';
 
 function Index() {
   return <h2>Home</h2>;
@@ -47,12 +48,17 @@ class App extends Component<{}, {}> {
             }
           </CBKDrawer>
           <div className="cbk-main">
-            <Route path="/recipes" component={Recipes}>
+            {
+              Routes.map((route, i) => (
+                <RouteWithSubRoutes key={i} {...route} />
+              ))
+            }
+            {/* <Route path="/recipes" component={Recipes}>
             </Route>
             <Route path="/planner">
             </Route>
             <Route path="/planner">
-            </Route>
+            </Route> */}
           </div>
         </Router>
       </Provider>
