@@ -5,7 +5,6 @@ import CBKDrawer from './components/Drawer';
 import { Grid, Row } from '@material/react-layout-grid';
 import List, { ListItem, ListItemText } from '@material/react-list';
 import configureStore from 'store/configureStore';
-import Recipes from "containers/recipes";
 import './styles/app.scss';
 import "@material/react-layout-grid/dist/layout-grid.min.css";
 import Routes, { RouteWithSubRoutes } from 'route.config';
@@ -53,12 +52,6 @@ class App extends Component<{}, {}> {
                 <RouteWithSubRoutes key={i} {...route} />
               ))
             }
-            {/* <Route path="/recipes" component={Recipes}>
-            </Route>
-            <Route path="/planner">
-            </Route>
-            <Route path="/planner">
-            </Route> */}
           </div>
         </Router>
       </Provider>

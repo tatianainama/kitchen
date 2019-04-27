@@ -1,5 +1,5 @@
 import React from 'react';
-import RecipesContainer from 'containers/recipes';
+import RecipesContainer from 'containers/Recipes';
 import { Route } from 'react-router';
 
 const emptyRoute = (title: string) => () => (<h1>{title}</h1>);

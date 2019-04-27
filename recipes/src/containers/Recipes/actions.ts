@@ -1,6 +1,6 @@
-// import { Dispatch } from "react";
 import axios from 'axios';
 import IRecipe from 'types/recipes';
+import { getRecipes } from './services';
 
 export const RECEIVE_RECIPES = 'RECEIVE_RECIPES';
 export const REQUEST_RECIPES = 'REQUEST_RECIPES';
@@ -25,12 +25,8 @@ export const selectRecipe = (recipe: IRecipe) => ({
 export function fetchRecipes(query: any) {
   return (dispatch: any) => {
     dispatch(requestRecipes(query))
-    return axios.get('http://localhost:3000/recipes/all')
-    .then(response => {
-      console.log('response', response.data);
-      return response.data
-    })
-    .then(json => dispatch(receiveRecipes(json)))
+    return getRecipes({})
+    .then(data => dispatch(receiveRecipes(data)))
     .catch(error => {
       console.log('error', error);
     })
