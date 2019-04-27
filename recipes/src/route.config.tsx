@@ -1,8 +1,11 @@
 import React from 'react';
-import RecipesContainer from 'containers/Recipes';
 import { Route } from 'react-router';
+import RecipesContainer from 'containers/Recipes';
 
-const emptyRoute = (title: string) => () => (<h1>{title}</h1>);
+const emptyRoute = (title: string) => () => {
+  debugger;
+  return (<h1>{title}</h1>);
+};
 
 const routes = [
   {
@@ -19,6 +22,10 @@ const routes = [
   }, {
     path: '/planner',
     component: emptyRoute('planner'),
+    routes: [{
+      path: '/planner/lala',
+      component: emptyRoute('planner lala'),
+    }]
   }, {
     path: '/shoplist',
     component: emptyRoute('shopping list'),
@@ -29,7 +36,7 @@ export const RouteWithSubRoutes = (route: any) => (
   <Route
     path={route.path}
     render={props => (
-      <route.component {...props} routes={route.routes} />
+      <route.component location={props.location} routes={route.routes} {...props} />
     )}
   />
 );
