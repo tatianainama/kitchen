@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import Button from '@material/react-button';
 import './styles.scss';
 
@@ -7,7 +7,8 @@ type NavbarProps = {
   actions?: {
     label: string,
     onClick: () => void,
-  }[]
+  }[],
+  children?: ReactElement,
 }
 export default function Navbar(props: NavbarProps){
   return (
@@ -25,6 +26,9 @@ export default function Navbar(props: NavbarProps){
             }
           </div>
         ) : null
+      }
+      {
+        props.children
       }
     </div>
   );
