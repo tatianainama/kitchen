@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material/react-button": "^0.11.0",
+    "@material/react-card": "^0.11.0",
     "@material/react-drawer": "^0.11.0",
+    "@material/react-layout-grid": "^0.11.0",
     "@material/react-list": "^0.11.0",
     "@types/jest": "^24.0.11",
     "@types/node": "^11.13.0",
@@ -23,11 +26,12 @@
     "react-scripts": "2.1.8",
     "react-svg": "^9.0.2",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "typescript": "^3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3006 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
