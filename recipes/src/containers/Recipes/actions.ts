@@ -39,6 +39,7 @@ function shouldFetch(recipes: IRecipe[]) {
 
 export function fetchIfNeeded(query: any) {
   return (dispatch: any, getState: any) => {
+    console.log("fetch");
     if(shouldFetch(getState())) {
       return dispatch(fetchRecipes(query))
     } else {

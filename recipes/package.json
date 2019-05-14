@@ -8,6 +8,7 @@
     "@material/react-drawer": "^0.11.0",
     "@material/react-layout-grid": "^0.11.0",
     "@material/react-list": "^0.11.0",
+    "@material/react-text-field": "^0.11.0",
     "@types/jest": "^24.0.11",
     "@types/node": "^11.13.0",
     "@types/react": "^16.8.12",

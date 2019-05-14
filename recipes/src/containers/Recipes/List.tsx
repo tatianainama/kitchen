@@ -6,6 +6,7 @@ import {
 } from "containers/Recipes/actions";
 import { connect } from "react-redux";
 import { Grid, Row, Cell } from "@material/react-layout-grid";
+import { Button } from "@material/react-button";
 import Card from 'components/Card';
 import RecipeCard from 'components/RecipeCard';
 import IRecipe from 'types/recipes';
@@ -65,7 +66,9 @@ class RecipeList extends Component<RecipeListProps> {
         <Navbar
           title="Recipes"
         >
-          <Link to='/recipes/create'>Create Recipe</Link>
+          <Button unelevated>
+            <Link to='/recipes/create'>Create Recipe</Link>
+          </Button>
         </Navbar>
 
         <Grid>

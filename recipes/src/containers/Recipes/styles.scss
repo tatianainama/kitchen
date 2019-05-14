@@ -1,0 +1,11 @@
+@import 'styles/_variables.scss';
+
+.cbk-create-recipe {
+    margin: $spacing-large;
+    padding: $spacing-small;
+    background-color: white;
+
+    .mdc-text-field {
+        width: 100%;
+    }
+}

@@ -8,7 +8,7 @@ type NavbarProps = {
     label: string,
     onClick: () => void,
   }[],
-  children?: ReactElement,
+  children?: ReactElement|never[],
 }
 export default function Navbar(props: NavbarProps){
   return (

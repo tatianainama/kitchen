@@ -64,6 +64,7 @@ code {
   width: 100%;
   .mdc-layout-grid {
     display: flex;
+    flex-direction: column;
     width: 100%;
     
     .mdc-layout-grid__inner {
