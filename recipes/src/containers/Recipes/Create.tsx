@@ -3,6 +3,8 @@ import  Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 
 import Input from 'components/Input';
+import TagInput from 'components/TagInput';
+
 import './styles.scss';
 
 import sample_img from "../../sample.png";
@@ -120,12 +122,14 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 />
               </Cell>
               <Cell columns={3}>
-                <Input
-                  label='Tags'
-                  value={this.state.form.preparationTime}
-                  onChange={this.updateField('preparationTime')}
+              </Cell>
+              <Cell columns={12}>
+                <TagInput
+                  onNewTag={(tag) => { console.log(tag) }}
                 />
               </Cell>
+            </Row>
+            <Row>
             </Row>
           </Grid>
         </div>

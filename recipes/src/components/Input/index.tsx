@@ -10,19 +10,20 @@ type InputProps = {
 	value: string|number,
 	onChange: (e: any) => void,
 	textarea?: boolean,
+	onKeyDown? : (e: any) => void,
 };
 
 const Input = (props: InputProps) => (
 	<TextField
 		label={props.label}
-		helperText={<HelperText>{props.helperText || ''}</HelperText>}
-		style={{ width: '100%' }}
+		helperText={props.helperText ? (<HelperText>{props.helperText || ''}</HelperText>) : undefined}
 		textarea={props.textarea}
 	>
 		<Field
 			value={props.value}
 			//@ts-ignore
 			onChange={props.onChange}
+			onKeyDown={props.onKeyDown}
 		/>
 	</TextField>
 );

@@ -1,0 +1,9 @@
+.cbk-tag-input {
+  display: flex;
+  flex-direction: row;
+  
+  .mdc-text-field {
+    grid-column-end: span 3;
+    width: auto!important;
+  }
+}
