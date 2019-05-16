@@ -20,7 +20,7 @@ type CreateRecipeState = {
     summary: string,
     preparationTime: string,
     cookingTime: string,
-    servings: number,
+    servings: string|number,
   }
 
 };
@@ -48,7 +48,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
         summary: '',
         preparationTime: '',
         cookingTime: '',
-        servings: 0,
+        servings: '',
       }
     }
   }
@@ -109,16 +109,17 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
               </Cell>
               <Cell columns={3}>
                 <Input
-                  label='Preparation time'
+                  label='Cooking time'
                   value={this.state.form.cookingTime}
                   onChange={this.updateField('cookingTime')}
                 />
               </Cell>
               <Cell columns={3}>
                 <Input
-                  label='Preparation time'
+                  label='servings'
                   value={this.state.form.servings}
                   onChange={this.updateField('servings')}
+                  type='number'
                 />
               </Cell>
               <Cell columns={3}>

@@ -11,19 +11,22 @@ type InputProps = {
 	onChange: (e: any) => void,
 	textarea?: boolean,
 	onKeyDown? : (e: any) => void,
+	type?: "text"|"number"
 };
 
-const Input = (props: InputProps) => (
+const Input = ({label, helperText, textarea, value, onChange, onKeyDown, type = "text"}: InputProps) => (
 	<TextField
-		label={props.label}
-		helperText={props.helperText ? (<HelperText>{props.helperText || ''}</HelperText>) : undefined}
-		textarea={props.textarea}
+		label={label}
+		helperText={helperText ? (<HelperText>{helperText || ''}</HelperText>) : undefined}
+		textarea={textarea}
 	>
 		<Field
-			value={props.value}
+			value={value}
 			//@ts-ignore
-			onChange={props.onChange}
-			onKeyDown={props.onKeyDown}
+			onChange={onChange}
+			onKeyDown={onKeyDown}
+			type={type}
+			min={0}
 		/>
 	</TextField>
 );
