@@ -60,6 +60,7 @@ class TagInput extends Component<TagInputProps, TagInputState> {
           label={this.props.label || 'Tags'}
           onChange={(e) => this.setState({newTag: e.currentTarget.value})}
           onKeyDown={this.handleKeyDown}
+          icon='waiter'
         />
         <ChipSet
           input
