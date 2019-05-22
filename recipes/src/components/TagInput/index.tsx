@@ -26,8 +26,9 @@ class TagInput extends Component<TagInputProps, TagInputState> {
   
   constructor(props: TagInputProps) {
     super(props);
+    const tags = props.initialValues ? props.initialValues.map(this.mkTag) : [];
     this.state = {
-      tags: [],
+      tags: tags,
       newTag: '',
     }
   }

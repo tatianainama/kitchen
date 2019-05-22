@@ -36,7 +36,9 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
   constructor(props: any) {
     super(props);
     this.state = {
-      form: { ..._recipe }
+      form: { 
+        ..._recipe,
+      }
     }
   }
 
@@ -140,7 +142,13 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
               </Cell>
               <Cell columns={12}>
                 <TagInput
-                  onNewTag={(tag) => { console.log(tag) }}
+                  initialValues={form.tags}
+                  onNewTag={(tags) => { this.setState({
+                    form: {
+                      ...this.state.form,
+                      tags,
+                    }
+                  })}}
                 />
               </Cell>
             </Row>
