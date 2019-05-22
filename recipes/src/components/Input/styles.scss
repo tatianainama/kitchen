@@ -1,3 +1,36 @@
-.mdc-text-field {
+@import 'styles/_variables.scss';
+
+.cbk-input.mdc-text-field {
   width: 100%;
+  background-color: white;
+  label,
+  ::placeholder {
+    text-transform: capitalize;
+  }
+}
+
+.cbk-input--prefilled label.mdc-floating-label {
+  transform: translateY(-50%) scale(0.75);
+}
+
+.cbk-input {
+  &-display {
+    input
+     {
+      font-family: $font-family-display;
+      font-size: $font-size-xx-large;
+      font-weight: $font-weight-bold;
+      border-bottom: 0;
+    }
+  }
+}
+
+.cbk-input.mdc-text-field--focused,
+.cbk-input.mdc-text-field:hover,
+.mdc-text-field__input:hover {
+  background-color: white;
+}
+
+.mdc-text-field:hover::before {
+  opacity: 0;
 }

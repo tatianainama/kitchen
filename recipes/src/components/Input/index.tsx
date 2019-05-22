@@ -1,5 +1,6 @@
 import React from 'react';
 import TextField, { HelperText, Input as Field } from '@material/react-text-field';
+import classNames from 'classnames';
 
 import '@material/react-text-field/dist/text-field.css';
 import './styles.scss';
@@ -11,14 +12,37 @@ type InputProps = {
 	onChange: (e: any) => void,
 	textarea?: boolean,
 	onKeyDown? : (e: any) => void,
-	type?: "text"|"number"
+	type?: 'text'|'number',
+	style?: 'display'|'regular',
+	icon?: string,
 };
 
-const Input = ({label, helperText, textarea, value, onChange, onKeyDown, type = "text"}: InputProps) => (
+const Input = ({
+	label,
+	helperText,
+	textarea,
+	value,
+	onChange,
+	onKeyDown,
+	type = 'text',
+	style = 'regular',
+	icon,
+}: InputProps) => {
+	const fieldClasses = classNames(
+		'cbk-input',
+		{
+			'cbk-input--prefilled': value!=='',
+			[`cbk-input-${style}`]: true,
+			'mdc-text-field--no-label': style === 'display',
+		}
+	);
+	return (
 	<TextField
 		label={label}
 		helperText={helperText ? (<HelperText>{helperText || ''}</HelperText>) : undefined}
 		textarea={textarea}
+		className={fieldClasses}
+		fullWidth={style==='display'}
 	>
 		<Field
 			value={value}
@@ -27,8 +51,10 @@ const Input = ({label, helperText, textarea, value, onChange, onKeyDown, type = 
 			onKeyDown={onKeyDown}
 			type={type}
 			min={0}
+			rows={1}
+			placeholder={style === 'display' ? label : ''}
 		/>
 	</TextField>
-);
+)};
 
 export default Input;

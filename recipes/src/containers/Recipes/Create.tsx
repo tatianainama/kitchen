@@ -70,9 +70,9 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
               <Cell columns={10}>
                 <Input 
                   label='name'
-                  helperText='Recipe name'
                   value={form.name}
                   onChange={this.updateField(['name'])}
+                  style='display'
                 />
 
                 <Input
