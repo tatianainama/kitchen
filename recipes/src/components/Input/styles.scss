@@ -1,5 +1,13 @@
 @import 'styles/_variables.scss';
 
+.cbk-input-container { 
+  display: flex;
+
+  .cbk-icon {
+    align-self: flex-end;
+    fill: $grey-400;
+  }
+}
 .cbk-input.mdc-text-field {
   width: 100%;
   background-color: white;

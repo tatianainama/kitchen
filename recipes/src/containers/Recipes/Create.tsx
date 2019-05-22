@@ -110,6 +110,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                   label='Preparation time'
                   value={form.details.preparationTime}
                   onChange={this.updateField(['details', 'preparationTime'])}
+                  icon='preparation'
                 />
               </Cell>
               <Cell columns={3}>
@@ -117,6 +118,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                   label='Cooking time'
                   value={form.details.cookingTime}
                   onChange={this.updateField(['details', 'cookingTime'])}
+                  icon='cooking'
                 />
               </Cell>
               <Cell columns={3}>
@@ -125,6 +127,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                   value={form.details.servings}
                   onChange={this.updateField(['details', 'servings'])}
                   type='number'
+                  icon='servings'
                 />
               </Cell>
               <Cell columns={3}>
@@ -132,6 +135,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                   label='recipe url'
                   value={form.details.url || ''}
                   onChange={this.updateField(['details', 'url'])}
+                  icon='recipe'
                 />
               </Cell>
               <Cell columns={12}>

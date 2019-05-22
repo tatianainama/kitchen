@@ -1,6 +1,7 @@
 import React from 'react';
 import TextField, { HelperText, Input as Field } from '@material/react-text-field';
 import classNames from 'classnames';
+import Icon from '../Icon';
 
 import '@material/react-text-field/dist/text-field.css';
 import './styles.scss';
@@ -36,25 +37,36 @@ const Input = ({
 			'mdc-text-field--no-label': style === 'display',
 		}
 	);
+
 	return (
-	<TextField
-		label={label}
-		helperText={helperText ? (<HelperText>{helperText || ''}</HelperText>) : undefined}
-		textarea={textarea}
-		className={fieldClasses}
-		fullWidth={style==='display'}
-	>
-		<Field
-			value={value}
-			//@ts-ignore
-			onChange={onChange}
-			onKeyDown={onKeyDown}
-			type={type}
-			min={0}
-			rows={1}
-			placeholder={style === 'display' ? label : ''}
-		/>
-	</TextField>
+		<div className='cbk-input-container'>
+			{
+				icon && 
+				<Icon
+					icon={icon}
+					width={46}
+					fill='#9E9E9E'
+				></Icon>
+			}
+			<TextField
+				label={label}
+				helperText={helperText ? (<HelperText>{helperText || ''}</HelperText>) : undefined}
+				textarea={textarea}
+				className={fieldClasses}
+				fullWidth={style === 'display'}
+			>
+				<Field
+					value={value}
+					//@ts-ignore
+					onChange={onChange}
+					onKeyDown={onKeyDown}
+					type={type}
+					min={0}
+					rows={1}
+					placeholder={style === 'display' ? label : ''}
+				/>
+			</TextField>
+		</div>
 )};
 
 export default Input;
