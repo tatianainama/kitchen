@@ -3,9 +3,14 @@
 .cbk-input.mdc-text-field {
   width: 100%;
   background-color: white;
+  
   label,
   ::placeholder {
     text-transform: capitalize;
+  }
+
+  &.mdc-text-field--textarea {
+    border-color: rgba(0, 0, 0, 0.42)
   }
 }
 
