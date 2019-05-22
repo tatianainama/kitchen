@@ -1,4 +1,5 @@
 import React from 'react';
+import { assocPath } from 'ramda';
 import  Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 
@@ -8,21 +9,13 @@ import TagInput from 'components/TagInput';
 import './styles.scss';
 
 import sample_img from "../../sample.png";
-import { ISubRecipe } from 'src/types/recipes';
-import { string } from 'prop-types';
+import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, IIngredient } from 'types/recipes';
 
 type CreateRecipeProps = {
 };
 
 type CreateRecipeState = {
-  form: {
-    name: string,
-    summary: string,
-    preparationTime: string,
-    cookingTime: string,
-    servings: string|number,
-  }
-
+  form: IRecipe
 };
 
 // author?: {
@@ -37,28 +30,21 @@ type CreateRecipeState = {
 // instructions?: string[],
 // tags?: string[],
 
-type FormKeys = keyof CreateRecipeState['form'];
+type FormKeys = keyof IRecipe | keyof ISubRecipe | keyof IIngredient | keyof IAuthor | keyof IDetails | number;
 
 class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      form: {
-        name: '',
-        summary: '',
-        preparationTime: '',
-        cookingTime: '',
-        servings: '',
-      }
+      form: { ..._recipe }
     }
   }
 
-  updateField(key: FormKeys) {
+  updateField(key: FormKeys[]) {
     return (e: any) => {
+      const newValue = e.currentTarget.value;
       this.setState({
-        form: {
-          [key]: e.currentTarget.value
-        }
+        form: assocPath(key, newValue, this.state.form)
       } as Pick<CreateRecipeState, keyof CreateRecipeState>)
     }
   }
@@ -68,6 +54,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
   }
 
   render() {
+    const { form } = this.state; 
     return (
       <div>
         <Navbar
@@ -84,16 +71,34 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 <Input 
                   label='name'
                   helperText='Recipe name'
-                  value={this.state.form.name}
-                  onChange={this.updateField('name')}
+                  value={form.name}
+                  onChange={this.updateField(['name'])}
                 />
 
                 <Input
                   label='summary'
                   helperText='Recipe description'
-                  value={this.state.form.summary}
-                  onChange={this.updateField('summary')}
+                  value={form.summary}
+                  onChange={this.updateField(['summary'])}
                   textarea
+                />
+              </Cell>
+            </Row>
+            
+            <h5>Author Information</h5>
+            <Row>
+              <Cell columns={3}>
+                <Input
+                  label='name'
+                  value={form.author.name}
+                  onChange={this.updateField(['author', 'name'])}
+                />
+              </Cell>
+              <Cell columns={3}>
+                <Input
+                  label='website'
+                  value={form.author.website}
+                  onChange={this.updateField(['author', 'website'])}
                 />
               </Cell>
             </Row>
@@ -103,26 +108,31 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
               <Cell columns={3}>
                 <Input
                   label='Preparation time'
-                  value={this.state.form.preparationTime}
-                  onChange={this.updateField('preparationTime')}
+                  value={form.details.preparationTime}
+                  onChange={this.updateField(['details', 'preparationTime'])}
                 />
               </Cell>
               <Cell columns={3}>
                 <Input
                   label='Cooking time'
-                  value={this.state.form.cookingTime}
-                  onChange={this.updateField('cookingTime')}
+                  value={form.details.cookingTime}
+                  onChange={this.updateField(['details', 'cookingTime'])}
                 />
               </Cell>
               <Cell columns={3}>
                 <Input
                   label='servings'
-                  value={this.state.form.servings}
-                  onChange={this.updateField('servings')}
+                  value={form.details.servings}
+                  onChange={this.updateField(['details', 'servings'])}
                   type='number'
                 />
               </Cell>
               <Cell columns={3}>
+                <Input
+                  label='recipe url'
+                  value={form.details.url || ''}
+                  onChange={this.updateField(['details', 'url'])}
+                />
               </Cell>
               <Cell columns={12}>
                 <TagInput
@@ -130,8 +140,57 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 />
               </Cell>
             </Row>
-            <Row>
-            </Row>
+
+            <h5>Ingredients</h5>
+            {
+              form.ingredients.map((group, i) => (
+                <div key={i}>
+                  <Row>
+                    <Cell columns={3}>
+                      <Input
+                        label='group name'
+                        value={group.name}
+                        onChange={this.updateField(['ingredients', i, 'name'])}
+                      />
+                    </Cell>
+                  </Row>
+                  {
+                    group.ingredients.map((ingredient, j) => (
+                      <Row key={j}>
+                        <Cell columns={3}>
+                          <Input
+                            label="ingredient"
+                            value={ingredient.name}
+                            onChange={this.updateField(['ingredients', i, 'ingredients', j, 'name'])}
+                          />
+                        </Cell>
+                        <Cell columns={3}>
+                          <Input
+                            label="quantity"
+                            value={ingredient.quantity}
+                            onChange={this.updateField(['ingredients', i, 'ingredients', j, 'quantity'])}
+                          />
+                        </Cell>
+                        <Cell columns={3}>
+                          <Input
+                            label="unit"
+                            value={ingredient.unit}
+                            onChange={this.updateField(['ingredients', i, 'ingredients', j, 'unit'])}
+                          />
+                        </Cell>
+                        <Cell columns={3}>
+                          <Input
+                            label="original/notes"
+                            value={ingredient._original}
+                            onChange={this.updateField(['ingredients', i, 'ingredients', j, '_original'])}
+                          />
+                        </Cell>
+                      </Row>
+                    ))
+                  }
+                </div>
+              ))
+            }
           </Grid>
         </div>
 

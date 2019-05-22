@@ -4,21 +4,55 @@ export interface IIngredient {
   unit: string,
   _original: string,
 }
+
 export interface ISubRecipe {
   name: string,
   ingredients: IIngredient[]
 }
 
-export default interface IRecipe {
-  _id: string,
+export interface IAuthor {
+  name: string,
+  website: string,
+}
+
+export interface IDetails {
+  url?: string,
+  preparationTime: string,
+  cookingTime: string,
+  servings: number
+}
+
+export const _recipe: IRecipe = {
+  _id: '',
   author: {
-    name: string,
+    name: '',
+    website: '',
   },
   details: {
-    preparationTime: string,
-    cookingTime: string,
-    servings: number
+    url: '',
+    preparationTime: '',
+    cookingTime: '',
+    servings: 0
   },
+  ingredients: [{
+    name: '',
+    ingredients: [{
+      name: '',
+      quantity: 0,
+      unit: '',
+      _original: ''
+    }]
+  }],
+  instructions: [],
+  name: '',
+  summary: '',
+  tags: []
+}
+
+export default interface IRecipe {
+  _id: string,
+  author: IAuthor,
+  details: IDetails,
   ingredients: ISubRecipe[],
   instructions: string[],
   name: string,
