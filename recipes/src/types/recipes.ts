@@ -22,6 +22,18 @@ export interface IDetails {
   servings: number
 }
 
+export const _ingredient: IIngredient = {
+  name: '',
+  quantity: 0,
+  unit: '',
+  _original: ''
+};
+
+export const _subRecipe: ISubRecipe = {
+  name: '',
+  ingredients: [_ingredient]
+};
+
 export const _recipe: IRecipe = {
   _id: '',
   author: {
@@ -34,15 +46,7 @@ export const _recipe: IRecipe = {
     cookingTime: '',
     servings: 0
   },
-  ingredients: [{
-    name: '',
-    ingredients: [{
-      name: '',
-      quantity: 0,
-      unit: '',
-      _original: ''
-    }]
-  }],
+  ingredients: [_subRecipe],
   instructions: [],
   name: '',
   summary: '',

@@ -9,7 +9,7 @@ import TagInput from 'components/TagInput';
 import './styles.scss';
 
 import sample_img from "../../sample.png";
-import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, IIngredient } from 'types/recipes';
+import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, _subRecipe, _ingredient, IIngredient } from 'types/recipes';
 
 type CreateRecipeProps = {
 };
@@ -51,9 +51,28 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     }
   }
 
-  componentDidUpdate() {
+  addIngredient(subrecipe: number, last: number) {
+    return () => {
+      const { ingredients } = this.state.form;
+      if (ingredients[subrecipe].ingredients[last].name) {
+        const newIngredients = ingredients[subrecipe].ingredients.concat([_ingredient]);
 
+        this.setState({
+          form: {
+            ...this.state.form,
+            ingredients: assocPath([subrecipe, 'ingredients'], newIngredients, this.state.form.ingredients)
+          }
+        })
+      }
+    }
   }
+
+  addButton(subrecipe: number, index: number) {
+    return this.state.form.ingredients[subrecipe].ingredients.length === index +1 ?
+      { icon: 'add', onClick: this.addIngredient(subrecipe, index) } :
+      { icon: 'trash', onClick: () => {}};
+  }
+
 
   render() {
     const { form } = this.state; 
@@ -195,6 +214,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                             label="original/notes"
                             value={ingredient._original}
                             onChange={this.updateField(['ingredients', i, 'ingredients', j, '_original'])}
+                            button={this.addButton(i, j)}
                           />
                         </Cell>
                       </Row>

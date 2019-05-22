@@ -1,6 +1,7 @@
 import React from 'react';
 import TextField, { HelperText, Input as Field } from '@material/react-text-field';
 import classNames from 'classnames';
+import Button from '@material/react-button';
 import Icon from '../Icon';
 
 import '@material/react-text-field/dist/text-field.css';
@@ -16,6 +17,10 @@ type InputProps = {
 	type?: 'text'|'number',
 	style?: 'display'|'regular',
 	icon?: string,
+	button?: {
+		icon: string,
+		onClick: () => void,
+	}
 };
 
 const Input = ({
@@ -28,6 +33,7 @@ const Input = ({
 	type = 'text',
 	style = 'regular',
 	icon,
+	button
 }: InputProps) => {
 	const fieldClasses = classNames(
 		'cbk-input',
@@ -37,16 +43,19 @@ const Input = ({
 			'mdc-text-field--no-label': style === 'display',
 		}
 	);
+	const containerClasses = classNames({
+		'cbk-input-container': !!icon || !!button,
+	})
 
 	return (
-		<div className='cbk-input-container'>
+		<div className={containerClasses}>
 			{
 				icon && 
 				<Icon
 					icon={icon}
 					width={46}
 					fill='#9E9E9E'
-				></Icon>
+				/>
 			}
 			<TextField
 				label={label}
@@ -66,6 +75,16 @@ const Input = ({
 					placeholder={style === 'display' ? label : ''}
 				/>
 			</TextField>
+			{
+				button && 
+				<Button className='cbk-input-button' onClick={button.onClick}>
+					<Icon
+						icon={button.icon}
+						width={24}
+						fill='#9E9E9E'
+					/>
+				</Button>
+			}
 		</div>
 )};
 

@@ -3,11 +3,12 @@
 .cbk-input-container { 
   display: flex;
 
-  .cbk-icon {
+  .cbk-icon,
+  .cbk-input-button {
     align-self: flex-end;
-    fill: $grey-400;
   }
 }
+
 .cbk-input.mdc-text-field {
   width: 100%;
   background-color: white;
