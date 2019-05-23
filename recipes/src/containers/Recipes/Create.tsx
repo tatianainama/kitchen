@@ -1,5 +1,5 @@
 import React from 'react';
-import { assocPath } from 'ramda';
+import { assocPath, remove } from 'ramda';
 import  Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import Btn from 'components/Button';
@@ -68,10 +68,26 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     }
   }
 
+  removeIngredient(subrecipe: number, index: number) {
+    return () => {
+      const { ingredients } = this.state.form;
+      this.setState({
+        form: {
+          ...this.state.form,
+          ingredients: assocPath(
+            [subrecipe, 'ingredients'],
+            remove(index, 1, ingredients[subrecipe].ingredients),
+            this.state.form.ingredients
+          )
+        }
+      })
+    }
+  }
+
   addButton(subrecipe: number, index: number) {
     return this.state.form.ingredients[subrecipe].ingredients.length === index +1 ?
       { icon: 'add_circle_outline', onClick: this.addIngredient(subrecipe, index) } :
-      { icon: 'remove_circle_outline', onClick: () => {}};
+      { icon: 'remove_circle_outline', onClick: this.removeIngredient(subrecipe, index)};
   }
 
 
