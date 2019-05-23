@@ -2,6 +2,7 @@ import React from 'react';
 import { assocPath } from 'ramda';
 import  Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
+import Btn from 'components/Button';
 
 import Input from 'components/Input';
 import TagInput from 'components/TagInput';
@@ -69,8 +70,8 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
 
   addButton(subrecipe: number, index: number) {
     return this.state.form.ingredients[subrecipe].ingredients.length === index +1 ?
-      { icon: 'add', onClick: this.addIngredient(subrecipe, index) } :
-      { icon: 'trash', onClick: () => {}};
+      { icon: 'add_circle_outline', onClick: this.addIngredient(subrecipe, index) } :
+      { icon: 'remove_circle_outline', onClick: () => {}};
   }
 
 

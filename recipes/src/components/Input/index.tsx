@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField, { HelperText, Input as Field } from '@material/react-text-field';
 import classNames from 'classnames';
-import Button from '@material/react-button';
+import Button from 'components/Button';
 import Icon from '../Icon';
 
 import '@material/react-text-field/dist/text-field.css';
@@ -77,13 +77,7 @@ const Input = ({
 			</TextField>
 			{
 				button && 
-				<Button className='cbk-input-button' onClick={button.onClick}>
-					<Icon
-						icon={button.icon}
-						width={24}
-						fill='#9E9E9E'
-					/>
-				</Button>
+				<Button className='cbk-input-button' onClick={button.onClick} icon={button.icon} />
 			}
 		</div>
 )};
