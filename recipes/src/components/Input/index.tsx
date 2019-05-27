@@ -55,7 +55,7 @@ const Input = ({
 					fill='#9E9E9E'
 				/>
 			}
-			<div>
+			<div className="cbk-input-box">
 				<TextField
 					label={label}
 					textarea={textarea}

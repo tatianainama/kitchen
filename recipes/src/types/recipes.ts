@@ -47,7 +47,7 @@ export const _recipe: IRecipe = {
     servings: 0
   },
   ingredients: [_subRecipe],
-  instructions: [],
+  instructions: [ '' ],
   name: '',
   summary: '',
   tags: []

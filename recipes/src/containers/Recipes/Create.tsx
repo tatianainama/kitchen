@@ -84,6 +84,25 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     }
   }
 
+  addInstruction = () => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        instructions: this.state.form.instructions.concat([''])
+      }
+    })
+  }
+
+  removeInstruction = (index: number) => {
+    return () => {
+      this.setState({
+        form: {
+          ...this.state.form,
+          instructions: remove(index, 1, this.state.form.instructions)
+        }
+      })
+    }
+  }
 
   actionButton = (path: any[], index: number, AddFc: () => void, RemoveFc: () => void) => {
     const isLast = (xs: any[], i: number) => xs.length === i + 1;
@@ -264,6 +283,22 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                     ))
                   }
                 </div>
+              ))
+            }
+
+            <h5>Instructions</h5>
+            {
+              form.instructions.map((instruction, i) => (
+                <Row key={i}>
+                  <Cell columns={12}>
+                    <Input
+                      label={`Step ${i+1}`}
+                      value={instruction}
+                      onChange={this.updateField(['instructions', i])}
+                      button={this.actionButton(form.instructions, i, this.addInstruction, this.removeInstruction(i))}
+                    />
+                  </Cell>
+                </Row>
               ))
             }
           </Grid>
