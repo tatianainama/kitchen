@@ -16,20 +16,9 @@ type CreateRecipeProps = {
 };
 
 type CreateRecipeState = {
-  form: IRecipe
+  form: IRecipe,
+  scrapeUrl: string,
 };
-
-// author?: {
-//   name: string,
-// },
-// details?: {
-//   preparationTime: string,
-//   cookingTime: string,
-//   servings: number
-// },
-// ingredients?: ISubRecipe[],
-// instructions?: string[],
-// tags?: string[],
 
 type FormKeys = keyof IRecipe | keyof ISubRecipe | keyof IIngredient | keyof IAuthor | keyof IDetails | number;
 
@@ -39,7 +28,8 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     this.state = {
       form: { 
         ..._recipe,
-      }
+      },
+      scrapeUrl: '',
     }
   }
 
@@ -137,12 +127,22 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
   }
   
   render() {
-    const { form } = this.state; 
+    const { form, scrapeUrl } = this.state; 
     return (
       <div>
         <Navbar
           title="Create a recipe"
-        />
+        >
+          <Input
+            label='scrape recipe'
+            value={scrapeUrl}
+            onChange={()=>{}}
+            button={{
+              icon: 'format_shapes',
+              onClick: ()=>{}
+            }}
+          />
+        </Navbar>
         
         <div className="cbk-create-recipe">
           <Grid>
@@ -168,142 +168,154 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
             </Row>
             
             <h5>Author Information</h5>
-            <Row>
-              <Cell columns={3}>
-                <Input
-                  label='name'
-                  value={form.author.name}
-                  onChange={this.updateField(['author', 'name'])}
-                />
-              </Cell>
-              <Cell columns={3}>
-                <Input
-                  label='website'
-                  value={form.author.website}
-                  onChange={this.updateField(['author', 'website'])}
-                />
-              </Cell>
-            </Row>
+            <section>
+              <Row>
+                <Cell columns={3}>
+                  <Input
+                    label='name'
+                    value={form.author.name}
+                    onChange={this.updateField(['author', 'name'])}
+                  />
+                </Cell>
+                <Cell columns={3}>
+                  <Input
+                    label='website'
+                    value={form.author.website}
+                    onChange={this.updateField(['author', 'website'])}
+                  />
+                </Cell>
+              </Row>
+            </section>
 
             <h5>Recipe Information</h5>
-            <Row>
-              <Cell columns={3}>
-                <Input
-                  label='Preparation time'
-                  value={form.details.preparationTime}
-                  onChange={this.updateField(['details', 'preparationTime'])}
-                  icon='preparation'
-                />
-              </Cell>
-              <Cell columns={3}>
-                <Input
-                  label='Cooking time'
-                  value={form.details.cookingTime}
-                  onChange={this.updateField(['details', 'cookingTime'])}
-                  icon='cooking'
-                />
-              </Cell>
-              <Cell columns={3}>
-                <Input
-                  label='servings'
-                  value={form.details.servings}
-                  onChange={this.updateField(['details', 'servings'])}
-                  type='number'
-                  icon='servings'
-                />
-              </Cell>
-              <Cell columns={3}>
-                <Input
-                  label='recipe url'
-                  value={form.details.url || ''}
-                  onChange={this.updateField(['details', 'url'])}
-                  icon='recipe'
-                />
-              </Cell>
-              <Cell columns={12}>
-                <TagInput
-                  initialValues={form.tags}
-                  onNewTag={(tags) => { this.setState({
-                    form: {
-                      ...this.state.form,
-                      tags,
-                    }
-                  })}}
-                />
-              </Cell>
-            </Row>
+            <section>
+              <Row>
+                <Cell columns={3}>
+                  <Input
+                    label='Preparation time'
+                    value={form.details.preparationTime}
+                    onChange={this.updateField(['details', 'preparationTime'])}
+                    icon='preparation'
+                  />
+                </Cell>
+                <Cell columns={3}>
+                  <Input
+                    label='Cooking time'
+                    value={form.details.cookingTime}
+                    onChange={this.updateField(['details', 'cookingTime'])}
+                    icon='cooking'
+                  />
+                </Cell>
+                <Cell columns={3}>
+                  <Input
+                    label='servings'
+                    value={form.details.servings}
+                    onChange={this.updateField(['details', 'servings'])}
+                    type='number'
+                    icon='servings'
+                  />
+                </Cell>
+                <Cell columns={3}>
+                  <Input
+                    label='recipe url'
+                    value={form.details.url || ''}
+                    onChange={this.updateField(['details', 'url'])}
+                    icon='recipe'
+                  />
+                </Cell>
+                <Cell columns={12}>
+                  <TagInput
+                    initialValues={form.tags}
+                    onNewTag={(tags) => { this.setState({
+                      form: {
+                        ...this.state.form,
+                        tags,
+                      }
+                    })}}
+                  />
+                </Cell>
+              </Row>
+            </section>
 
             <h5>Ingredients</h5>
-            {
-              form.ingredients.map((group, i) => (
-                <div key={i}>
-                  <Row>
-                    <Cell columns={3}>
+            <section>  
+              {
+                form.ingredients.map((group, i) => (
+                  <div key={i}>
+                    <Row>
+                      <Cell columns={3}>
+                        <Input
+                          label='group name'
+                          value={group.name}
+                          onChange={this.updateField(['ingredients', i, 'name'])}
+                          button={this.actionButton(form.ingredients, i, this.addSubrecipe, this.removeSubrecipe(i))}
+                        />
+                      </Cell>
+                    </Row>
+                    {
+                      group.ingredients.map((ingredient, j) => (
+                        <Row key={j}>
+                          <Cell columns={3}>
+                            <Input
+                              label="ingredient"
+                              value={ingredient.name}
+                              onChange={this.updateField(['ingredients', i, 'ingredients', j, 'name'])}
+                            />
+                          </Cell>
+                          <Cell columns={3}>
+                            <Input
+                              label="quantity"
+                              value={ingredient.quantity}
+                              onChange={this.updateField(['ingredients', i, 'ingredients', j, 'quantity'])}
+                            />
+                          </Cell>
+                          <Cell columns={3}>
+                            <Input
+                              label="unit"
+                              value={ingredient.unit}
+                              onChange={this.updateField(['ingredients', i, 'ingredients', j, 'unit'])}
+                            />
+                          </Cell>
+                          <Cell columns={3}>
+                            <Input
+                              label="original/notes"
+                              value={ingredient._original}
+                              onChange={this.updateField(['ingredients', i, 'ingredients', j, '_original'])}
+                              button={this.actionButton(form.ingredients[i].ingredients, j, this.addIngredient(i, j), this.removeIngredient(i, j))}
+                            />
+                          </Cell>
+                        </Row>
+                      ))
+                    }
+                  </div>
+                ))
+              }
+            </section>
+
+            <h5>Instructions</h5>
+            <section>
+              {
+                form.instructions.map((instruction, i) => (
+                  <Row key={i}>
+                    <Cell columns={12}>
                       <Input
-                        label='group name'
-                        value={group.name}
-                        onChange={this.updateField(['ingredients', i, 'name'])}
-                        button={this.actionButton(form.ingredients, i, this.addSubrecipe, this.removeSubrecipe(i))}
+                        label={`Step ${i+1}`}
+                        value={instruction}
+                        onChange={this.updateField(['instructions', i])}
+                        button={this.actionButton(form.instructions, i, this.addInstruction, this.removeInstruction(i))}
                       />
                     </Cell>
                   </Row>
-                  {
-                    group.ingredients.map((ingredient, j) => (
-                      <Row key={j}>
-                        <Cell columns={3}>
-                          <Input
-                            label="ingredient"
-                            value={ingredient.name}
-                            onChange={this.updateField(['ingredients', i, 'ingredients', j, 'name'])}
-                          />
-                        </Cell>
-                        <Cell columns={3}>
-                          <Input
-                            label="quantity"
-                            value={ingredient.quantity}
-                            onChange={this.updateField(['ingredients', i, 'ingredients', j, 'quantity'])}
-                          />
-                        </Cell>
-                        <Cell columns={3}>
-                          <Input
-                            label="unit"
-                            value={ingredient.unit}
-                            onChange={this.updateField(['ingredients', i, 'ingredients', j, 'unit'])}
-                          />
-                        </Cell>
-                        <Cell columns={3}>
-                          <Input
-                            label="original/notes"
-                            value={ingredient._original}
-                            onChange={this.updateField(['ingredients', i, 'ingredients', j, '_original'])}
-                            button={this.actionButton(form.ingredients[i].ingredients, j, this.addIngredient(i, j), this.removeIngredient(i, j))}
-                          />
-                        </Cell>
-                      </Row>
-                    ))
-                  }
-                </div>
-              ))
-            }
-
-            <h5>Instructions</h5>
-            {
-              form.instructions.map((instruction, i) => (
-                <Row key={i}>
-                  <Cell columns={12}>
-                    <Input
-                      label={`Step ${i+1}`}
-                      value={instruction}
-                      onChange={this.updateField(['instructions', i])}
-                      button={this.actionButton(form.instructions, i, this.addInstruction, this.removeInstruction(i))}
-                    />
-                  </Cell>
-                </Row>
-              ))
-            }
+                ))
+              }
+            </section>
+            <Row>
+              <Cell columns={12} className='cbk-create-recipe-actions'>
+                <Btn raised unelevated>Create</Btn>
+              </Cell>
+            </Row>
           </Grid>
         </div>
-
       </div>
     )
   }
