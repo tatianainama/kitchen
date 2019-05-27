@@ -10,6 +10,8 @@ import Select from 'components/Select';
 
 import './styles.scss';
 
+import { scrapeRecipe } from './services';
+
 import sample_img from "../../sample.png";
 import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, _subRecipe, _ingredient, IIngredient } from 'types/recipes';
 
@@ -32,6 +34,20 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
       },
       scrapeUrl: '',
     }
+  }
+
+  scrapeRecipe = () => {
+    scrapeRecipe(this.state.scrapeUrl).then(recipe => {
+      this.setState({
+        form: {
+          ...recipe,
+          details: {
+            url: this.state.scrapeUrl,
+            ...recipe.details,
+          }
+        }
+      })
+    })
   }
 
   updateField = (key: FormKeys[]) => {
@@ -137,10 +153,12 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
           <Input
             label='scrape recipe'
             value={scrapeUrl}
-            onChange={()=>{}}
+            onChange={(e: any)=>{ 
+              console.log('data', e.currentTarget.value);
+              this.setState({scrapeUrl: e.currentTarget.value})}}
             button={{
               icon: 'format_shapes',
-              onClick: ()=>{}
+              onClick: this.scrapeRecipe
             }}
           />
         </Navbar>
@@ -244,7 +262,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 form.ingredients.map((group, i) => (
                   <div key={i}>
                     <Row>
-                      <Cell columns={3}>
+                      <Cell columns={4}>
                         <Input
                           label='group name'
                           value={group.name}
@@ -256,26 +274,21 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                     {
                       group.ingredients.map((ingredient, j) => (
                         <Row key={j}>
-                          <Cell columns={3}>
+                          <Cell columns={4}>
                             <Input
                               label="ingredient"
                               value={ingredient.name}
                               onChange={this.updateField(['ingredients', i, 'ingredients', j, 'name'])}
                             />
                           </Cell>
-                          <Cell columns={3}>
+                          <Cell columns={2}>
                             <Input
                               label="quantity"
                               value={ingredient.quantity}
                               onChange={this.updateField(['ingredients', i, 'ingredients', j, 'quantity'])}
                             />
                           </Cell>
-                          <Cell columns={3}>
-                            {/* <Input
-                              label="unit"
-                              value={ingredient.unit}
-                              onChange={this.updateField(['ingredients', i, 'ingredients', j, 'unit'])}
-                            /> */}
+                          <Cell columns={2}>
                             <Select
                               label='unit'
                               options={[
@@ -286,7 +299,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                               onChange={(x) => {console.log('selected', x)}}
                             />
                           </Cell>
-                          <Cell columns={3}>
+                          <Cell columns={4}>
                             <Input
                               label="original/notes"
                               value={ingredient._original}
