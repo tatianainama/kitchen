@@ -84,20 +84,37 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     }
   }
 
-  addButton = (subrecipe: number, index: number) => {
-    return this.state.form.ingredients[subrecipe].ingredients.length === index +1 ?
-      { icon: 'add_circle_outline', onClick: this.addIngredient(subrecipe, index) } :
-      { icon: 'remove_circle_outline', onClick: this.removeIngredient(subrecipe, index)};
+
+  actionButton = (path: any[], index: number, AddFc: () => void, RemoveFc: () => void) => {
+    const isLast = (xs: any[], i: number) => xs.length === i + 1;
+    return isLast(path, index) ? 
+    {
+      icon: 'add_circle_outline',
+      onClick: AddFc
+    } : {
+      icon: 'remove_circle_outline',
+      onClick: RemoveFc
+    }
   }
 
   addSubrecipe = () => {
-    console.log("new", this.state.form)
-    // this.setState({
-    //   form: {
-    //     ...this.state.form,
-    //     ingredients: this.state.form.ingredients.concat([_subRecipe]),
-    //   }
-    // })
+    this.setState({
+      form: {
+        ...this.state.form,
+        ingredients: this.state.form.ingredients.concat([_subRecipe]),
+      }
+    })
+  }
+
+  removeSubrecipe = (index: number) => {
+    return () => {
+      this.setState({
+        form: {
+          ...this.state.form,
+          ingredients: remove(index, 1, this.state.form.ingredients)
+        }
+      })
+    }
   }
   
   render() {
@@ -207,7 +224,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                         label='group name'
                         value={group.name}
                         onChange={this.updateField(['ingredients', i, 'name'])}
-                        button={{ icon: 'add_circle_outline', onClick: this.addSubrecipe }}
+                        button={this.actionButton(form.ingredients, i, this.addSubrecipe, this.removeSubrecipe(i))}
                       />
                     </Cell>
                   </Row>
@@ -240,7 +257,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                             label="original/notes"
                             value={ingredient._original}
                             onChange={this.updateField(['ingredients', i, 'ingredients', j, '_original'])}
-                            button={this.addButton(i, j)}
+                            button={this.actionButton(form.ingredients[i].ingredients, j, this.addIngredient(i, j), this.removeIngredient(i, j))}
                           />
                         </Cell>
                       </Row>
