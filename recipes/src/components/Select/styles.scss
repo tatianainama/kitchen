@@ -1,0 +1,20 @@
+@import 'styles/_variables.scss';
+
+.cbk-select.mdc-select {
+  width: 100%;
+  
+  label,
+  ::placeholder {
+    text-transform: capitalize;
+  }
+}
+
+.cbk-select.mdc-select--focused,
+.cbk-select.mdc-select:not(.mdc-select--disabled),
+.cbk-select.mdc-select:hover,
+.cbk-select.mdc-select__selected-text,
+.cbk-select.mdc-select__selected-text:hover,
+.mdc-select:before,
+.mdc-select:after {
+  background-color: white;
+}

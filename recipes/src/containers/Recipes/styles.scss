@@ -5,7 +5,8 @@
     padding: $spacing-small;
     background-color: white;
 
-    .mdc-text-field {
+    .mdc-text-field,
+    .mdc-select {
         width: 100%;
     }
 

@@ -6,6 +6,7 @@ import Btn from 'components/Button';
 
 import Input from 'components/Input';
 import TagInput from 'components/TagInput';
+import Select from 'components/Select';
 
 import './styles.scss';
 
@@ -270,10 +271,19 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                             />
                           </Cell>
                           <Cell columns={3}>
-                            <Input
+                            {/* <Input
                               label="unit"
                               value={ingredient.unit}
                               onChange={this.updateField(['ingredients', i, 'ingredients', j, 'unit'])}
+                            /> */}
+                            <Select
+                              label='unit'
+                              options={[
+                                {label: 'grams', value: 'gr'},
+                                {label: 'cups', value: 'cup'},
+                                {label: 'mililiters', value: 'ml'},
+                              ]}
+                              onChange={(x) => {console.log('selected', x)}}
                             />
                           </Cell>
                           <Cell columns={3}>
