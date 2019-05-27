@@ -43,7 +43,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     }
   }
 
-  updateField(key: FormKeys[]) {
+  updateField = (key: FormKeys[]) => {
     return (e: any) => {
       const newValue = e.currentTarget.value;
       this.setState({
@@ -52,7 +52,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     }
   }
 
-  addIngredient(subrecipe: number, last: number) {
+  addIngredient = (subrecipe: number, last: number) => {
     return () => {
       const { ingredients } = this.state.form;
       if (ingredients[subrecipe].ingredients[last].name) {
@@ -68,7 +68,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     }
   }
 
-  removeIngredient(subrecipe: number, index: number) {
+  removeIngredient = (subrecipe: number, index: number) => {
     return () => {
       const { ingredients } = this.state.form;
       this.setState({
@@ -84,13 +84,22 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     }
   }
 
-  addButton(subrecipe: number, index: number) {
+  addButton = (subrecipe: number, index: number) => {
     return this.state.form.ingredients[subrecipe].ingredients.length === index +1 ?
       { icon: 'add_circle_outline', onClick: this.addIngredient(subrecipe, index) } :
       { icon: 'remove_circle_outline', onClick: this.removeIngredient(subrecipe, index)};
   }
 
-
+  addSubrecipe = () => {
+    console.log("new", this.state.form)
+    // this.setState({
+    //   form: {
+    //     ...this.state.form,
+    //     ingredients: this.state.form.ingredients.concat([_subRecipe]),
+    //   }
+    // })
+  }
+  
   render() {
     const { form } = this.state; 
     return (
@@ -115,7 +124,6 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
 
                 <Input
                   label='summary'
-                  helperText='Recipe description'
                   value={form.summary}
                   onChange={this.updateField(['summary'])}
                   textarea
@@ -199,6 +207,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                         label='group name'
                         value={group.name}
                         onChange={this.updateField(['ingredients', i, 'name'])}
+                        button={{ icon: 'add_circle_outline', onClick: this.addSubrecipe }}
                       />
                     </Cell>
                   </Row>
