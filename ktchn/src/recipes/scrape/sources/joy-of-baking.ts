@@ -16,14 +16,14 @@ function getRecipeName($: CheerioSelector): string {
 }
 
 function getIngredients($: CheerioSelector): ComposedIngredients[] {
-  const rawData = $('td [width="249"] p').toArray();
+  const rawData = $('td [width="252"] p').toArray();
   const isIngredient = (element: CheerioElement): boolean => $(element).hasClass('ingredient');
-
-  let ingredients: ComposedIngredients[] = [];
+  let ingredients: ComposedIngredients[] = [{name: '', ingredients: []}];
   return rawData.reduce((list:any, element, index) => {
     let rawIngredient = $(element).text();
     rawIngredient = rmBreakLines(rawIngredient);
-    let last = list.length - 1;
+    let last = list.length ? list.length - 1 : 0;
+
     if(isIngredient(element)) {
       let ingredient = parseIngredients(rawIngredient);
       list[last].ingredients = list[last].ingredients.concat([{
