@@ -5,7 +5,7 @@ import logger from "morgan";
 import express, { Application } from "express";
 import rootRouter from "./routes/root";
 import recipeRouter from "./recipes/routes";
-import nano from 'nano';
+import ingredientsRouter from './ingredients/routes';
 import dotenv from 'dotenv';
 import MongoClient from 'mongodb';
 import { Response } from 'express';
@@ -45,6 +45,7 @@ class App {
   
   private routes(db: MongoClient.Db): void {
     this.app.use("/recipes", new recipeRouter(db).router);
+    this.app.use("/ingredients", new ingredientsRouter(db).router);
     this.app.use("/", rootRouter);
   }
 
