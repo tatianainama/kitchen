@@ -24,32 +24,20 @@ const getPossibleValues = (db: IMongoService) => async function(ingredient: IIng
 
 const scrape: Controller<void|ScrapedRecipe> = (db) => (req: any, res, next) => {
   return Scrape(req.body.url)
-    .then(scrapedRecipe => {
-      const ingredients = scrapedRecipe.ingredients.map(subGroup => {
-        return {
+    .then(async scrapedRecipe => {
+      const recipeIngredients = await Promise.all(scrapedRecipe.ingredients.map(async subGroup => {
+        const subgroupIngredients = await Promise.all(subGroup.ingredients.map(getPossibleValues(db)));
+        return ({
           name: subGroup.name,
-          ingredients: subGroup.ingredients.map(getPossibleValues(db))
-        }
-      });
-      return {
+          ingredients: subgroupIngredients
+        });
+      }));
+      res.json({
         ...scrapedRecipe,
-        ingredients,
-      }
+        ingredients: recipeIngredients
+      })
     })
-    .then(scrapedRecipe => {
-      return Promise.all(
-        scrapedRecipe.ingredients.map(subGroup => Promise.all(subGroup.ingredients).then(ingredients => ({
-          name: subGroup.name,
-          ingredients,
-        })))
-      ).then(subgroups => {
-        res.json({
-          ...scrapedRecipe,
-          ingredients: subgroups
-        })
-      });
-    }
-    ).catch(error => console.log(error));
+    .catch(error => console.log(error));
 }
 
 const save = (db: IMongoService) => ({ body }: Request, res: Response, next: NextFunction): Promise<any> => {
