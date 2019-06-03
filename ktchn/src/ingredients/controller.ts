@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 const create = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => {
   const ingredients: Ingredient[] = [{
     name: 'all purpose flour',
+    variants: ['plain flour', 'all purpose flour', 'regular flour'],
     equivalences: {
       cup: 1,
       gr: 125,
@@ -18,6 +19,7 @@ const create = (db: IMongoService) => (req: Request, res: Response, next: NextFu
     }
   }, {
     name: 'bread flour',
+    variants: ['bread flour'],
     equivalences: {
       cup: 1,
       gr: 127,
@@ -31,6 +33,7 @@ const create = (db: IMongoService) => (req: Request, res: Response, next: NextFu
     }
   }, {
     name: 'pastry flour',
+    variants: ['pastry flour'],
     equivalences: {
       cup: 1,
       gr: 114,
@@ -107,6 +110,7 @@ const create = (db: IMongoService) => (req: Request, res: Response, next: NextFu
     prefferedUnit: 'gr',
   }, {
     name: 'short rice',
+    variants: ['sushi rice'],
     equivalences: {
       cup: 1,
       gr: 200,
@@ -127,7 +131,7 @@ const create = (db: IMongoService) => (req: Request, res: Response, next: NextFu
     prefferedUnit: 'gr',
   }, {
     name: 'granulated sugar',
-    variants: ['sugar'],
+    variants: ['sugar', 'plain sugar'],
     equivalences: {
       cup: 1,
       gr: 200,

@@ -1,14 +1,55 @@
 import { Request, Response, NextFunction } from 'express'
-import { Recipe } from './model';
+import { Recipe, IIngredient, IIngredientHelper } from './model';
 import { IMongoService } from '../mongo';
-import { ObjectId } from 'bson';
-import { json } from 'body-parser';
 import { FilterQuery } from 'mongodb';
+import Scrape from './scrape/index';
+import { ISubRecipe, ScrapedRecipe } from './model';
+import Ingredient from '../ingredients/model';
 
 function validRecipe(data: any): Promise<Recipe> {
   return new Promise(function(resolve, reject) {
     return data.name !== undefined ? resolve(data) : reject('Missing data');
   })
+}
+
+type Controller<T> = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => Promise<T>;
+
+const getPossibleValues = (db: IMongoService) => async function(ingredient: IIngredient): Promise<IIngredientHelper> {
+  const possibleValues = await db.find<Ingredient>({$text: {$search: ingredient.name}}, { score: { $meta: "textScore" } });
+  return {
+    ...ingredient,
+    possibleValues: possibleValues,
+  }
+}
+
+const scrape: Controller<void|ScrapedRecipe> = (db) => (req: any, res, next) => {
+  return Scrape(req.body.url)
+    .then(scrapedRecipe => {
+      const ingredients = scrapedRecipe.ingredients.map(subGroup => {
+        return {
+          name: subGroup.name,
+          ingredients: subGroup.ingredients.map(getPossibleValues(db))
+        }
+      });
+      return {
+        ...scrapedRecipe,
+        ingredients,
+      }
+    })
+    .then(scrapedRecipe => {
+      return Promise.all(
+        scrapedRecipe.ingredients.map(subGroup => Promise.all(subGroup.ingredients).then(ingredients => ({
+          name: subGroup.name,
+          ingredients,
+        })))
+      ).then(subgroups => {
+        res.json({
+          ...scrapedRecipe,
+          ingredients: subgroups
+        })
+      });
+    }
+    ).catch(error => console.log(error));
 }
 
 const save = (db: IMongoService) => ({ body }: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -62,6 +103,7 @@ const getByIngredients = (db: IMongoService) => ({ query, params }: Request, res
 
 export {
   save,
+  scrape,
   getById,
   get,
   getAll,

@@ -1,5 +1,5 @@
 import { Recipe } from "../../model";
-import { RecipeDetails, ComposedIngredients } from '../../model';
+import { RecipeDetails, ISubRecipe } from '../../model';
 import { parseIngredients } from '../index';
 
 const SELECTORS = {
@@ -24,9 +24,9 @@ function getRecipeDetails($: CheerioSelector): RecipeDetails {
   }
 }
 
-function getIngredients($: CheerioSelector): ComposedIngredients[] {
+function getIngredients($: CheerioSelector): ISubRecipe[] {
   const rawData = $(SELECTORS.INGREDIENTS);
-  let ingredients: ComposedIngredients[] = [{name: '', ingredients: []}];
+  let ingredients: ISubRecipe[] = [{name: '', ingredients: []}];
   const isSubtitle = (element: Cheerio) => element.find('span').hasClass('ingheading');
   const removeEquivalence = (str: string): string => str.replace(/\([0-9.]+\w+\) ?/, '');
 

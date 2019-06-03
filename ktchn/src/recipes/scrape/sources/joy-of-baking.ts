@@ -1,4 +1,4 @@
-import { Recipe, Author, RecipeDetails, ComposedIngredients } from '../../model';
+import { Recipe, Author, RecipeDetails, ISubRecipe } from '../../model';
 import { parseIngredients } from '../index';
 import { rmBreakLines, getText, rmEquivalence } from './../service';
 
@@ -15,10 +15,10 @@ function getRecipeName($: CheerioSelector): string {
   return getText($)(SELECTORS.TITLE).replace(/(.\n)?.Recipe.*/, '').trim();
 }
 
-function getIngredients($: CheerioSelector): ComposedIngredients[] {
+function getIngredients($: CheerioSelector): ISubRecipe[] {
   const rawData = $('td [width="252"] p').toArray();
   const isIngredient = (element: CheerioElement): boolean => $(element).hasClass('ingredient');
-  let ingredients: ComposedIngredients[] = [{name: '', ingredients: []}];
+  let ingredients: ISubRecipe[] = [{name: '', ingredients: []}];
   return rawData.reduce((list:any, element, index) => {
     let rawIngredient = $(element).text();
     rawIngredient = rmBreakLines(rawIngredient);

@@ -1,11 +1,12 @@
 import { ObjectID } from 'mongodb';
+import Ingredient from '../ingredients/model';
 
 interface QtyMetric {
   qty: number;
   unit: string;
 }
 
-export interface Ingredient {
+export interface IIngredient {
   name: string;
   quantity: number;
   unit: string;
@@ -14,9 +15,13 @@ export interface Ingredient {
   _original?: string;
 }
 
-export interface ComposedIngredients {
+export interface IIngredientHelper extends IIngredient { 
+  possibleValues: Ingredient[],
+}
+
+export interface ISubRecipe {
   name: string;
-  ingredients: Ingredient[];
+  ingredients: IIngredient[];
 }
 
 interface Temperature {
@@ -46,7 +51,22 @@ export interface Author {
 
 export interface Recipe {
   name: string;
-  ingredients?: ComposedIngredients[];
+  ingredients: ISubRecipe[];
+  details?: RecipeDetails;
+  instructions?: string[];
+  author?: Author;
+  website?: string;
+  tags?: string[];
+  course?: string[];
+  summary?: string;
+}
+
+export interface ScrapedRecipe {
+  name: string;
+  ingredients: {
+    name: string,
+    ingredients: IIngredientHelper[]
+  }[];
   details?: RecipeDetails;
   instructions?: string[];
   author?: Author;

@@ -1,4 +1,4 @@
-import { Recipe, Author, RecipeDetails, ComposedIngredients } from '../../model';
+import { Recipe, Author, RecipeDetails, ISubRecipe } from '../../model';
 import { parseIngredients } from '../index';
 import { getText, getAttr, getTextList } from './../service';
 
@@ -24,10 +24,10 @@ function getRecipeDetails($: CheerioSelector): RecipeDetails {
   };
 }
 
-function getIngredients($: CheerioSelector): ComposedIngredients[] {
+function getIngredients($: CheerioSelector): ISubRecipe[] {
   const rawData = $(SELECTORS.INGREDIENTS).find('li.checkList__line');
   const isSubtitle = (element: Cheerio) => element.find('input').data('id') === 0;
-  let ingredients: ComposedIngredients[] = [{
+  let ingredients: ISubRecipe[] = [{
     name: '',
     ingredients: [],
   }];

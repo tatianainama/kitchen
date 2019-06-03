@@ -12,6 +12,7 @@ type Equivalences = {
 };
 
 export interface Ingredient {
+  _id?: ObjectID,
   name: string,
   variants?: string[],
   equivalences: Equivalences,

@@ -1,4 +1,4 @@
-import { Recipe, RecipeDetails, Ingredient, ComposedIngredients, Author } from '../../model';
+import { Recipe, RecipeDetails, IIngredient, ISubRecipe, Author } from '../../model';
 import { parse as parseIngredient } from "recipe-ingredient-parser";
 import { getText, getTextList, getAttr } from "./../service";
 
@@ -25,8 +25,8 @@ function getRecipeDetails($: CheerioSelector): RecipeDetails {
   );
 }
 
-function getIngredients($: CheerioSelector): ComposedIngredients[] {
-  const parseIngredients = (rawIngredient: string): Ingredient => {
+function getIngredients($: CheerioSelector): ISubRecipe[] {
+  const parseIngredients = (rawIngredient: string): IIngredient => {
     let parsed = parseIngredient(rawIngredient);
     return {
       name: parsed.ingredient,
@@ -38,7 +38,7 @@ function getIngredients($: CheerioSelector): ComposedIngredients[] {
   const ingredientsScrape = $(SELECTORS.INGREDIENTS).children();
   const isNewIngredientList = (tagName: string): boolean => tagName === 'span';
   
-  let ingredients: ComposedIngredients[] = [{name: '', ingredients: []}];
+  let ingredients: ISubRecipe[] = [{name: '', ingredients: []}];
   return ingredientsScrape.toArray().reduce((list, rawIngredient)=>{
     let last = list.length - 1;
     let text = $(rawIngredient).text();

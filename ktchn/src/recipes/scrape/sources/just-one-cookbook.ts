@@ -1,5 +1,5 @@
-import { Recipe, Ingredient } from "../../model";
-import { RecipeDetails, ComposedIngredients } from '../../model';
+import { Recipe, IIngredient } from "../../model";
+import { RecipeDetails, ISubRecipe } from '../../model';
 import { parseIngredients } from '../index';
 import { getText, getTextList, rmEquivalence } from './../service';
 import R from 'ramda';
@@ -36,13 +36,13 @@ const getRecipeDetails = ($: CheerioSelector): RecipeDetails => {
   }
 };
 
-const getIngredients = ($: CheerioSelector): ComposedIngredients[] => {
-  let ingredients: ComposedIngredients[] = [{name: '', ingredients: []}];
+const getIngredients = ($: CheerioSelector): ISubRecipe[] => {
+  let ingredients: ISubRecipe[] = [{name: '', ingredients: []}];
   const rawData = $(SELECTORS.INGREDIENTS);
   const cleanName = (element: CheerioElement, not: string): string => $(element).children().not(not).toArray().map(x => $(x).text()).join(' ');
   rawData.each((i, element) => {
     const last = ingredients.length - 1;
-    const getIngredients = (li: Cheerio): Ingredient[] => li.toArray().map(el => ({
+    const getIngredients = (li: Cheerio): IIngredient[] => li.toArray().map(el => ({
       ...parseIngredients(cleanName(el, SELECTORS.ING.NOTE)),
       note: $(el).find(SELECTORS.ING.NOTE).text(),
       _original: $(el).text().trim(),

@@ -2,7 +2,7 @@ import RequestPromise from "request-promise";
 import Cheerio from "cheerio";
 import Sources from './sources';
 import { ScrapingSource } from './sources/index';
-import { Ingredient } from '../model';
+import { IIngredient } from '../model';
 import { parse as parseIngredient } from 'recipe-ingredient-parser';
 
 function selectSourceAsync(url: string): Promise<ScrapingSource> {
@@ -18,7 +18,7 @@ function selectSourceAsync(url: string): Promise<ScrapingSource> {
   });
 }
 
-export const parseIngredients = (rawIngredient: string): Ingredient => {
+export const parseIngredients = (rawIngredient: string): IIngredient => {
   let parsed = parseIngredient(rawIngredient);
   return {
     name: parsed.ingredient,

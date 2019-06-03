@@ -1,15 +1,17 @@
 import { Db, Cursor, MongoClient, InsertOneWriteOpResult, Collection, ObjectID, FilterQuery, ObjectId } from 'mongodb';
 
-export interface IDBDocument<T extends {}> {
+export interface IDDocument {
   _id: ObjectID
 }
+
+export type IDBDocument<T> = IDDocument & T;
 
 export interface IMongoService {
   insertOne<T>(data: T): Promise<IDBDocument<T>>,
   insertMany<T>(data: T[]): Promise<IDBDocument<T>[]|any[]>,
   findOne<T>(query: FilterQuery<T>): Promise<IDBDocument<T>>,
   findOneById<T>(idParam: string): Promise<IDBDocument<T>>,
-  find<T>(query: FilterQuery<T>): Promise<IDBDocument<T>[]>,
+  find<T>(query: FilterQuery<T>, optionalQuery?: FilterQuery<T>): Promise<IDBDocument<T>[]>,
 }
 
 export const mongoService = (db: Db) => (col: string) => {
@@ -20,7 +22,7 @@ export const mongoService = (db: Db) => (col: string) => {
     insertMany: <T>(data: T[]): Promise<any[]|IDBDocument<T>[]> => collection.insertMany(data).then(insertManyResult => insertManyResult.ops),
     findOne: <T>(query: FilterQuery<T>) => collection.findOne(query),
     findOneById: (idParam: string) => collection.findOne({ _id: new ObjectId(idParam) }),
-    find: <T>(query: FilterQuery<T>): Promise<IDBDocument<T>[]> => collection.find(query).toArray(),
+    find: <T>(query: FilterQuery<T>, optionalQuery: FilterQuery<T> = {} ): Promise<IDBDocument<T>[]> => collection.find(query, optionalQuery).toArray(),
   }
 };
 
