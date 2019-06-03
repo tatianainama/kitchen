@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { Recipe, IIngredient, IIngredientHelper } from './model';
+import { Recipe, IIngredient, IngredientSuggestion } from './model';
 import { IMongoService } from '../mongo';
 import { FilterQuery } from 'mongodb';
 import Scrape from './scrape/index';
@@ -14,11 +14,11 @@ function validRecipe(data: any): Promise<Recipe> {
 
 type Controller<T> = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => Promise<T>;
 
-const getPossibleValues = (db: IMongoService) => async function(ingredient: IIngredient): Promise<IIngredientHelper> {
-  const possibleValues = await db.find<Ingredient>({$text: {$search: ingredient.name}}, { score: { $meta: "textScore" } });
+const getSuggestions = (db: IMongoService) => async function(ingredient: IIngredient): Promise<IngredientSuggestion> {
+  const suggestions = await db.find<Ingredient>({$text: {$search: ingredient.name}}, { score: { $meta: "textScore" } });
   return {
     ...ingredient,
-    possibleValues: possibleValues,
+    suggestions,
   }
 }
 
@@ -26,7 +26,7 @@ const scrape: Controller<void|ScrapedRecipe> = (db) => (req: any, res, next) => 
   return Scrape(req.body.url)
     .then(async scrapedRecipe => {
       const recipeIngredients = await Promise.all(scrapedRecipe.ingredients.map(async subGroup => {
-        const subgroupIngredients = await Promise.all(subGroup.ingredients.map(getPossibleValues(db)));
+        const subgroupIngredients = await Promise.all(subGroup.ingredients.map(getSuggestions(db)));
         return ({
           name: subGroup.name,
           ingredients: subgroupIngredients

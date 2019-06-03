@@ -15,8 +15,8 @@ export interface IIngredient {
   _original?: string;
 }
 
-export interface IIngredientHelper extends IIngredient { 
-  possibleValues: Ingredient[],
+export interface IngredientSuggestion extends IIngredient { 
+  suggestions: Ingredient[],
 }
 
 export interface ISubRecipe {
@@ -65,7 +65,7 @@ export interface ScrapedRecipe {
   name: string;
   ingredients: {
     name: string,
-    ingredients: IIngredientHelper[]
+    ingredients: IngredientSuggestion[]
   }[];
   details?: RecipeDetails;
   instructions?: string[];
