@@ -9,12 +9,12 @@ export type IDBDocument<T> = IDDocument & T;
 export interface IMongoService {
   insertOne<T>(data: T): Promise<IDBDocument<T>>,
   insertMany<T>(data: T[]): Promise<IDBDocument<T>[]|any[]>,
-  findOne<T>(query: FilterQuery<T>): Promise<IDBDocument<T>>,
-  findOneById<T>(idParam: string): Promise<IDBDocument<T>>,
+  findOne<T>(query: FilterQuery<T>): Promise<IDBDocument<T>|null>,
+  findOneById<T>(idParam: string): Promise<IDBDocument<T>|null>,
   find<T>(query: FilterQuery<T>, optionalQuery?: FilterQuery<T>): Promise<IDBDocument<T>[]>,
 }
 
-export const mongoService = (db: Db) => (col: string) => {
+export const mongoService = (db: Db) => (col: string): IMongoService => {
   const collection:Collection = db.collection(col);
 
   return {
