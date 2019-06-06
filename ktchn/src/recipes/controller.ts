@@ -3,7 +3,7 @@ import { Recipe, IIngredient, IngredientSuggestion } from './model';
 import { IMongoService } from '../mongo';
 import { FilterQuery } from 'mongodb';
 import Scrape from './scrape/index';
-import { ISubRecipe, ScrapedRecipe } from './model';
+import { ScrapedRecipe } from './model';
 import Ingredient from '../ingredients/model';
 
 function validRecipe(data: any): Promise<Recipe> {
@@ -14,6 +14,8 @@ function validRecipe(data: any): Promise<Recipe> {
 
 type Controller<T> = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => Promise<T>;
 
+type ChainedController<T, U> = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => (result: T) => Promise<U>;
+
 const getSuggestions = (db: IMongoService) => async function(ingredient: IIngredient): Promise<IngredientSuggestion> {
   const suggestions = await db.find<Ingredient>({$text: {$search: ingredient.name}}, { score: { $meta: "textScore" } });
   return {
@@ -22,7 +24,7 @@ const getSuggestions = (db: IMongoService) => async function(ingredient: IIngred
   }
 }
 
-const scrape: Controller<void|ScrapedRecipe> = (db) => (req: any, res, next) => {
+const scrapeRecipe: ChainedController<void, ScrapedRecipe> = (db) => (req) => () => {
   return Scrape(req.body.url)
     .then(async scrapedRecipe => {
       const recipeIngredients = await Promise.all(scrapedRecipe.ingredients.map(async subGroup => {
@@ -32,12 +34,11 @@ const scrape: Controller<void|ScrapedRecipe> = (db) => (req: any, res, next) => 
           ingredients: subgroupIngredients
         });
       }));
-      res.json({
+      return {
         ...scrapedRecipe,
         ingredients: recipeIngredients
-      })
+      }
     })
-    .catch(error => console.log(error));
 }
 
 const save = (db: IMongoService) => ({ body }: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -91,7 +92,7 @@ const getByIngredients = (db: IMongoService) => ({ query, params }: Request, res
 
 export {
   save,
-  scrape,
+  scrapeRecipe,
   getById,
   get,
   getAll,
