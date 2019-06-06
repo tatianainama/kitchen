@@ -14,7 +14,7 @@ function validRecipe(data: any): Promise<Recipe> {
 
 type Controller = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => Promise<void|Response>;
 
-type ChainPController<T, U> = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => (result: T) => Promise<U>;
+type ChainPController<T, U> = (req: Request, res: Response, next: NextFunction) => (result: T) => Promise<U>;
 
 const getSuggestions = (db: IMongoService) => async function(ingredient: IIngredient): Promise<IngredientSuggestion> {
   const suggestions = await db.find<Ingredient>({$text: {$search: ingredient.name}}, { score: { $meta: "textScore" } });
@@ -24,7 +24,7 @@ const getSuggestions = (db: IMongoService) => async function(ingredient: IIngred
   }
 }
 
-const scrapeRecipe: ChainPController<void, ScrapedRecipe> = (db) => (req) => () => {
+const scrapeRecipe: (db: IMongoService) => ChainPController<void, ScrapedRecipe> = (db) => (req) => () => {
   return Scrape(req.body.url)
     .then(async scrapedRecipe => {
       const recipeIngredients = await Promise.all(scrapedRecipe.ingredients.map(async subGroup => {
