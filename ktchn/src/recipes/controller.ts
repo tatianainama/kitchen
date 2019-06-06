@@ -12,9 +12,9 @@ function validRecipe(data: any): Promise<Recipe> {
   })
 }
 
-type Controller<T> = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => Promise<T>;
+type Controller = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => Promise<void|Response>;
 
-type ChainedController<T, U> = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => (result: T) => Promise<U>;
+type ChainPController<T, U> = (db: IMongoService) => (req: Request, res: Response, next: NextFunction) => (result: T) => Promise<U>;
 
 const getSuggestions = (db: IMongoService) => async function(ingredient: IIngredient): Promise<IngredientSuggestion> {
   const suggestions = await db.find<Ingredient>({$text: {$search: ingredient.name}}, { score: { $meta: "textScore" } });
@@ -24,7 +24,7 @@ const getSuggestions = (db: IMongoService) => async function(ingredient: IIngred
   }
 }
 
-const scrapeRecipe: ChainedController<void, ScrapedRecipe> = (db) => (req) => () => {
+const scrapeRecipe: ChainPController<void, ScrapedRecipe> = (db) => (req) => () => {
   return Scrape(req.body.url)
     .then(async scrapedRecipe => {
       const recipeIngredients = await Promise.all(scrapedRecipe.ingredients.map(async subGroup => {
@@ -41,22 +41,22 @@ const scrapeRecipe: ChainedController<void, ScrapedRecipe> = (db) => (req) => ()
     })
 }
 
-const save = (db: IMongoService) => ({ body }: Request, res: Response, next: NextFunction): Promise<any> => {
+const save: Controller = (db) => ({ body }, res) => {
   return validRecipe(body).then(
     recipe => db.insertOne(recipe).then(
       dbRecipe => res.json(dbRecipe)
   ));
 };
 
-const get = (db: IMongoService) => ({ query }: Request, res: Response, next: NextFunction) => {
+const get: Controller = (db) => ({ query }, res) => {
   return db.findOne<Recipe>(query).then(result => res.json(result));
 }
 
-const getById = (db: IMongoService) => ({ params }: Request, res: Response, next: NextFunction) => {
+const getById: Controller = (db) => ({ params }, res) => {
   return db.findOneById<Recipe>(params.id).then(recipe => res.json(recipe));
 }
 
-const getAll = (db: IMongoService) => ({ query }: Request, res: Response, next: NextFunction) => {
+const getAll: Controller = (db) => ({ query }, res) => {
   return db.find<Recipe>(query).then(recipes => res.json(recipes));
 }
 
@@ -67,7 +67,7 @@ async function buildQuery(tryQuery:()=>FilterQuery<any>): Promise<FilterQuery<an
     return Promise.reject(error);
   }
 } 
-const getByIngredients = (db: IMongoService) => ({ query, params }: Request, res: Response, next: NextFunction) => {
+const getByIngredients: Controller = (db) => ({ query }, res) => {
   const ingredientsQuery = (query: FilterQuery<any>) => () => {
     if(query.ingredients) {
       const ingredients: string[] = query.ingredients.split(',');
