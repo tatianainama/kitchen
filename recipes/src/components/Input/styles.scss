@@ -20,13 +20,18 @@
   width: 100%;
   background-color: white;
   
+  input {
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.2)!important;
+  }
+
   label,
   ::placeholder {
     text-transform: capitalize;
   }
 
+  &,
   &.mdc-text-field--textarea {
-    border-color: rgba(0, 0, 0, 0.42)
+    border-color: rgba(0, 0, 0, 0.12)
   }
 }
 
@@ -36,12 +41,12 @@
 
 .cbk-input {
   &-display {
-    input
+    input.mdc-text-field__input
      {
       font-family: $font-family-display;
       font-size: $font-size-xx-large;
       font-weight: $font-weight-bold;
-      border-bottom: 0;
+      border-bottom: 0px!important;
     }
   }
 }
