@@ -3,17 +3,17 @@ import { assocPath, remove } from 'ramda';
 import  Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import Btn from 'components/Button';
-
 import Input from 'components/Input';
 import TagInput from 'components/TagInput';
 import Select from 'components/Select';
+import IngredientForm from 'components/IngredientForm';
 
 import './styles.scss';
 
 import { scrapeRecipe } from './services';
 
 import sample_img from "../../sample.png";
-import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, _subRecipe, _ingredient, IIngredient } from 'types/recipes';
+import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, _subRecipe, _ingredient, IIngredient, ISuggestion } from 'types/recipes';
 
 type CreateRecipeProps = {
 };
@@ -24,6 +24,16 @@ type CreateRecipeState = {
 };
 
 type FormKeys = keyof IRecipe | keyof ISubRecipe | keyof IIngredient | keyof IAuthor | keyof IDetails | number;
+
+const Suggestions = (suggestions: ISuggestion[] = []) => (
+  <div>
+    {
+      suggestions.map(suggestion => (
+        <Btn>{suggestion.name}</Btn>
+      ))
+    }
+  </div>
+)
 
 class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState> {
   constructor(props: any) {
@@ -257,8 +267,12 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
             </section>
 
             <h5>Ingredients</h5>
-            <section>  
-              {
+            <section>
+              <IngredientForm
+                components={form.ingredients}
+                updateField={this.updateField}
+              />
+              {/* {
                 form.ingredients.map((group, i) => (
                   <div key={i}>
                     <Row>
@@ -271,6 +285,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                         />
                       </Cell>
                     </Row>
+                    <div>
                     {
                       group.ingredients.map((ingredient, j) => (
                         <Row key={j}>
@@ -307,12 +322,17 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                               button={this.actionButton(form.ingredients[i].ingredients, j, this.addIngredient(i, j), this.removeIngredient(i, j))}
                             />
                           </Cell>
+                          <Cell columns={12}>
+                            { Suggestions(ingredient.suggestions) }
+                          </Cell>
                         </Row>
                       ))
                     }
+                    </div>
+                    
                   </div>
                 ))
-              }
+              } */}
             </section>
 
             <h5>Instructions</h5>

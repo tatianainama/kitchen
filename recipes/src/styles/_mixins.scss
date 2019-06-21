@@ -1,0 +1,14 @@
+@mixin ripple($color, $active-color) {
+  background-position: center;
+  transition: background 0.5s;
+
+  &:hover { 
+    background: $color radial-gradient(circle, transparent 1%, $color 1%) center/15000%;
+  }
+
+  &:active { 
+    background-color: $active-color;
+    background-size: 100%;
+    transition: background 0s;
+  }
+}

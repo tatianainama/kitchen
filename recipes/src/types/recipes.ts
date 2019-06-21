@@ -3,6 +3,7 @@ export interface IIngredient {
   quantity: number,
   unit: string,
   _original: string,
+  suggestions?: ISuggestion[]
 }
 
 export interface ISubRecipe {
@@ -51,6 +52,31 @@ export const _recipe: IRecipe = {
   name: '',
   summary: '',
   tags: []
+}
+
+export interface IEquivalences {
+  cup?: number,
+  tbsp?: number,
+  tsp?: number,
+  stick?: number,
+  gr?: number,
+  ml?: number,
+  oz?: number,
+  lb?: number,
+}
+
+export interface ISuggestion {
+  _id?: string,
+  name: string,
+  variants?: string[],
+  equivalences: IEquivalences,
+  prefferedUnit: keyof IEquivalences,
+  referenceUnit: keyof IEquivalences,
+  translation?: {
+    english?: string,
+    dutch?: string,
+    spanish?: string
+  }
 }
 
 export default interface IRecipe {

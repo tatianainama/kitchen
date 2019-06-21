@@ -18,7 +18,7 @@
 
 .cbk-input.mdc-text-field {
   width: 100%;
-  background-color: white;
+  background-color: rgba(0,0,0,0);
   
   input {
     border-bottom: 1px dashed rgba(0, 0, 0, 0.2)!important;
@@ -54,7 +54,7 @@
 .cbk-input.mdc-text-field--focused,
 .cbk-input.mdc-text-field:hover,
 .mdc-text-field__input:hover {
-  background-color: white;
+  background-color: rgba(0,0,0,0);
 }
 
 .mdc-text-field:hover::before {

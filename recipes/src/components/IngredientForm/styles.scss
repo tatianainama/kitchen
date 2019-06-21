@@ -1,0 +1,22 @@
+.cbk-ingredient-form {
+  .cbk-ingredients-subrecipe-list {
+    display: flex;
+    border: 1px dashed rgba(0,0,0,0.20);
+  }
+  .cbk-ingredients-component {
+    border: 1px dashed rgba(0,0,0,0.20);
+    &-header {
+      display: flex;
+      .cbk-title {
+        flex: 1;
+        align-self: center;
+      }
+    }
+    &-item {
+      display: flex;
+      div {
+        flex: 1;
+      }
+    }  
+  }
+}
