@@ -2,23 +2,20 @@ import React from 'react';
 import Input from 'components/Input';
 import Select from 'components/Select';
 import List, {ListItem, ListItemText} from '@material/react-list';
-import Tab from '@material/react-tab';
-import TabBar from '@material/react-tab-bar';
+import { TabBar } from 'components/TabBar';
 
 import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, _subRecipe, _ingredient, IIngredient, ISuggestion } from 'types/recipes';
 
 import '@material/react-list/dist/list.min.css';
-import '@material/react-tab-bar/dist/tab-bar.css';
-import '@material/react-tab-scroller/dist/tab-scroller.css';
-import '@material/react-tab/dist/tab.css';
-import '@material/react-tab-indicator/dist/tab-indicator.css';
 import './styles.scss';
 import MaterialIcon from '@material/react-material-icon';
 
 type IngredientFormProps = {
   components: ISubRecipe[],
   updateField: (key: any[]) => (e: any) => void,
-
+  addSubrecipe: () => void,
+  updateSubrecipeName: (subrecipe: number, newValue: string) => void,
+  removeSubrecipe: (index: number) => void,
 };
 
 class IngredientForm extends React.Component<IngredientFormProps, { activeGroup: number }>{
@@ -36,34 +33,25 @@ class IngredientForm extends React.Component<IngredientFormProps, { activeGroup:
     console.log('change', event);
   }
 
-  render() {
-    const {updateField, components} = this.props;
+  addTag = () => {
+    this.setState({
 
+    })
+  }
+  render() {
+    const {updateField, components, addSubrecipe, updateSubrecipeName, removeSubrecipe} = this.props;
+    const tabs = components.map(group => group.name);
     return (
       <div className='cbk-ingredient-form'>
         <div className='cbk-ingredients-subrecipe-list'>
-          <TabBar>
-          {
-            components.map((group, groupIdx) => (
-              // <div>
-              //   <Input
-              //     label='sub recipe name'
-              //     value={group.name}
-              //     style='display'
-              //     onChange={updateField(['ingredients', groupIdx, 'name'])}
-              //   />
-              // </div>
-              <Tab key={groupIdx}>
-                <Input
-                   label='sub recipe name'
-                   value={group.name}
-                   style='display'
-                   onChange={updateField(['ingredients', groupIdx, 'name'])}
-                />
-              </Tab>
-            ))
-          }
-          </TabBar>
+          <TabBar
+            tabs={tabs}
+            onAddTab={addSubrecipe}
+            onUpdateTab={updateSubrecipeName}
+            onDeleteTab={removeSubrecipe}
+            onSelectTab={this.handleActiveIndexUpdate}
+            activeIndex={this.state.activeGroup}
+          />
         </div>
         {
           components.map((group, groupIdx) => (
