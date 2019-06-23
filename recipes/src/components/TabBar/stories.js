@@ -12,4 +12,4 @@ const tabs = [
 ]
 
 storiesOf('TabBar', module)
-  .add('eee', () => <TabBar tabs={tabs} onClickText={action('text-click')} onClickTab={action('tab-click')}/>)
+  .add('To be implemented', () => <div></div>)

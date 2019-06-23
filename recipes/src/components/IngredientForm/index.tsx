@@ -2,7 +2,7 @@ import React from 'react';
 import Input from 'components/Input';
 import Select from 'components/Select';
 import List, {ListItem, ListItemText} from '@material/react-list';
-import { TabBar } from 'components/TabBar';
+import TabBar from 'components/TabBar';
 
 import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, _subRecipe, _ingredient, IIngredient, ISuggestion } from 'types/recipes';
 
@@ -56,11 +56,6 @@ class IngredientForm extends React.Component<IngredientFormProps, { activeGroup:
         {
           components.map((group, groupIdx) => (
             <div key={groupIdx} className='cbk-ingredients-component'>
-              {/* <Input
-                label='group name'
-                value={group.name}
-                onChange={updateField(['ingredients', groupIdx, 'name'])}
-              /> */}
               <div className='cbk-ingredients-component-list'>
                 <div className='cbk-ingredients-component-header'>
                   <div className='cbk-title'>Ingredient Name</div>
