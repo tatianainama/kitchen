@@ -341,6 +341,13 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     } as Pick<CreateRecipeState, keyof CreateRecipeState>)
   }
 
+  updateIngredientUnit = (key: Array<string | number | symbol>, newValue: string) => {
+    console.log('change', key, newValue)
+    this.setState({
+      form: assocPath(key, newValue, this.state.form)
+    })
+  }
+
   addIngredient = (subrecipe: number, last: number) => {
     return () => {
       const { ingredients } = this.state.form;
@@ -544,6 +551,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 addSubrecipe={this.addSubrecipe}
                 updateSubrecipeName={this.updateSubrecipeName}
                 removeSubrecipe={this.removeSubrecipe}
+                updateIngredientUnit={this.updateIngredientUnit}
               />
               {/* {
                 form.ingredients.map((group, i) => (

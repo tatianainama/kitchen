@@ -13,21 +13,14 @@ type CBKSelectProps = {
     disabled?: boolean,
   }[],
   disabled?: boolean,
-  onChange?: (x: any) => void
+  onChange: (x: any) => void
 }
 class CBKSelect extends React.Component<CBKSelectProps> {
   state = {
     value: this.props.value || ''
   }
 
-  onChange = (index:number) => {
-    this.setState({
-      value: this.props.options[index].value
-    })
-    if (this.props.onChange) {
-      this.props.onChange(this.props.options[index]);
-    }
-  }
+  onChange = (index:number) => this.props.onChange(this.props.options[index])
 
   render() {
     return (
@@ -36,7 +29,7 @@ class CBKSelect extends React.Component<CBKSelectProps> {
         enhanced
         disabled={this.props.disabled}
         label={this.props.label}
-        value={this.state.value}
+        value={this.props.value}
         onEnhancedChange={this.onChange}
         options={this.props.options}
       >
