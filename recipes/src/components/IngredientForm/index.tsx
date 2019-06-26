@@ -40,6 +40,7 @@ class IngredientForm extends React.Component<IngredientFormProps, { activeGroup:
   }
   render() {
     const {updateField, components, addSubrecipe, updateSubrecipeName, removeSubrecipe} = this.props;
+    const {activeGroup} = this.state;
     const tabs = components.map(group => group.name);
     return (
       <div className='cbk-ingredient-form'>
@@ -53,56 +54,50 @@ class IngredientForm extends React.Component<IngredientFormProps, { activeGroup:
             activeIndex={this.state.activeGroup}
           />
         </div>
-        {
-          components.map((group, groupIdx) => (
-            <div key={groupIdx} className='cbk-ingredients-component'>
-              <div className='cbk-ingredients-component-list'>
-                <div className='cbk-ingredients-component-header'>
-                  <div className='cbk-title'>Ingredient Name</div>
-                  <div className='cbk-title'>Quantity</div>
-                  <div className='cbk-title'>Unit</div>
-                  <div className='cbk-title'>Notes</div>
-                  <div className='cbk-title'>Original</div>
-                </div>
-                {
-                  group.ingredients.map((ingredient, ingredientIdx) => (
-                    <div className='cbk-ingredients-component-item' key={ingredientIdx}>
-                      <Input
-                        label=''
-                        value={ingredient.name}
-                        onChange={updateField(['ingredients', groupIdx, 'ingredients', ingredientIdx, 'name'])}
-                      />
-                      <Input
-                        label=''
-                        value={ingredient.quantity}
-                        onChange={updateField(['ingredients', groupIdx, 'ingredients', ingredientIdx, 'quantity'])}
-                      />
-                      <Select
-                        label=''
-                        options={[
-                          {label: 'grams', value: 'gr'},
-                          {label: 'cups', value: 'cup'},
-                          {label: 'mililiters', value: 'ml'},
-                        ]}
-                        onChange={(x) => {console.log('selected', x)}}
-                      />
-                      <Input
-                        label=''
-                        value={''}
-                        onChange={updateField(['ingredients', groupIdx, 'ingredients', ingredientIdx, '_original'])}
-                      />
-                      <Input
-                        label=''
-                        value={ingredient._original}
-                        onChange={updateField(['ingredients', groupIdx, 'ingredients', ingredientIdx, '_original'])}
-                      />
-                    </div>
-                  ))
-                }
+        <div className='cbk-ingredients-component'>
+          <div className='cbk-ingredients-component-header'>
+            <div>Ingredient Name</div>
+            <div>Quantity</div>
+            <div>Unit</div>
+            <div>Notes</div>
+            <div>Original</div>
+          </div>
+          {
+            components[activeGroup].ingredients.map((ingredient, index) => (
+              <div className='cbk-ingredients-component-item' key={index}>
+                <Input
+                  label=''
+                  value={ingredient.name}
+                  onChange={updateField(['ingredients', activeGroup, 'ingredients', index, 'name'])}
+                />
+                <Input
+                  label=''
+                  value={ingredient.quantity}
+                  onChange={updateField(['ingredients', activeGroup, 'ingredients', index, 'quantity'])}
+                />
+                <Select
+                  label=''
+                  options={[
+                    {label: 'grams', value: 'gr'},
+                    {label: 'cups', value: 'cup'},
+                    {label: 'mililiters', value: 'ml'},
+                  ]}
+                  onChange={(x) => {console.log('selected', x)}}
+                />
+                <Input
+                  label=''
+                  value={''}
+                  onChange={updateField(['ingredients', activeGroup, 'ingredients', index, '_original'])}
+                />
+                <Input
+                  label=''
+                  value={ingredient._original}
+                  onChange={updateField(['ingredients', activeGroup, 'ingredients', index, '_original'])}
+                />
               </div>
-            </div>
-          ))
-        }
+            ))
+          }
+        </div>
       </div>
     )
   }

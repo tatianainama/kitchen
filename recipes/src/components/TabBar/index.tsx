@@ -28,6 +28,7 @@ const TabBar = ({tabs, onUpdateTab, onDeleteTab, onSelectTab, onAddTab, activeIn
           'cbk-tab': true,
           'cbk-tab--active': index === activeIndex
         })}
+        key={index}
         onClick={(e: any) => onSelectTab(index)}>
         <div className='cbk-tab__content'> 
           <Input
