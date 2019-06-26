@@ -1,6 +1,9 @@
 import React from 'react';
 import Svgs from 'svgs';
 import ReactSVG from 'react-svg';
+import MaterialIcon from '@material/react-material-icon';
+
+import '@material/react-material-icon/dist/material-icon.css';
 
 export type IconProps = {
   icon: string,
@@ -8,21 +11,24 @@ export type IconProps = {
   fill?: string,
   width?: number,
   height?: number,
+  material?: boolean,
 }
 
-export function Icon(props: IconProps) {
+export function Icon({ width, height, fill, icon, className, material }: IconProps) {
   const styles = {
-    width: props.width || 64,
-    height: props.height || 'auto',
-    fill: props.fill,
+    width: width || 64,
+    height: height || 'auto',
+    fill: fill,
   };
 
-  return (
+  return material ? (
+    <MaterialIcon icon={icon} />
+  ) : (
     <ReactSVG
       // @ts-ignore
-      src={Svgs[props.icon]}
+      src={Svgs[icon]}
       className='cbk-icon'
-      svgClassName={props.className}
+      svgClassName={className}
       svgStyle={styles}
     />
   )
