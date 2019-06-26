@@ -6,26 +6,26 @@ import Btn from 'components/Button';
 import Input from 'components/Input';
 import TagInput from 'components/TagInput';
 import Select from 'components/Select';
-import IngredientForm from 'components/IngredientForm';
+import { Form as IngredientForm } from 'components/Ingredient';
 
 import './styles.scss';
 
 import { scrapeRecipe } from './services';
 
 import sample_img from "../../sample.png";
-import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, _subRecipe, _ingredient, IIngredient, ISuggestion } from 'types/recipes';
+import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient, Suggestion } from 'types/recipes';
 
 type CreateRecipeProps = {
 };
 
 type CreateRecipeState = {
-  form: IRecipe,
+  form: Recipe,
   scrapeUrl: string,
 };
 
-type FormKeys = keyof IRecipe | keyof ISubRecipe | keyof IIngredient | keyof IAuthor | keyof IDetails | number;
+type FormKeys = keyof Recipe | keyof SubRecipe | keyof Ingredient | keyof Author | keyof Details | number;
 
-const Suggestions = (suggestions: ISuggestion[] = []) => (
+const Suggestions = (suggestions: Suggestion[] = []) => (
   <div>
     {
       suggestions.map(suggestion => (

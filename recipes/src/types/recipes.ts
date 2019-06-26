@@ -1,41 +1,41 @@
-export interface IIngredient { 
+export interface Ingredient { 
   name: string,
   quantity: number,
   unit: string,
   _original: string,
-  suggestions?: ISuggestion[]
+  suggestions?: Suggestion[]
 }
 
-export interface ISubRecipe {
+export interface SubRecipe {
   name: string,
-  ingredients: IIngredient[]
+  ingredients: Ingredient[]
 }
 
-export interface IAuthor {
+export interface Author {
   name: string,
   website: string,
 }
 
-export interface IDetails {
+export interface Details {
   url?: string,
   preparationTime: string,
   cookingTime: string,
   servings: number
 }
 
-export const _ingredient: IIngredient = {
+export const _ingredient: Ingredient = {
   name: '',
   quantity: 0,
   unit: '',
   _original: ''
 };
 
-export const _subRecipe: ISubRecipe = {
+export const _subRecipe: SubRecipe = {
   name: '',
   ingredients: [_ingredient]
 };
 
-export const _recipe: IRecipe = {
+export const _recipe: Recipe = {
   _id: '',
   author: {
     name: '',
@@ -54,7 +54,7 @@ export const _recipe: IRecipe = {
   tags: []
 }
 
-export interface IEquivalences {
+export interface Equivalences {
   cup?: number,
   tbsp?: number,
   tsp?: number,
@@ -65,13 +65,13 @@ export interface IEquivalences {
   lb?: number,
 }
 
-export interface ISuggestion {
+export interface Suggestion {
   _id?: string,
   name: string,
   variants?: string[],
-  equivalences: IEquivalences,
-  prefferedUnit: keyof IEquivalences,
-  referenceUnit: keyof IEquivalences,
+  equivalences: Equivalences,
+  prefferedUnit: keyof Equivalences,
+  referenceUnit: keyof Equivalences,
   translation?: {
     english?: string,
     dutch?: string,
@@ -79,11 +79,11 @@ export interface ISuggestion {
   }
 }
 
-export default interface IRecipe {
+export default interface Recipe {
   _id: string,
-  author: IAuthor,
-  details: IDetails,
-  ingredients: ISubRecipe[],
+  author: Author,
+  details: Details,
+  ingredients: SubRecipe[],
   instructions: string[],
   name: string,
   summary: string,

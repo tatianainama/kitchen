@@ -9,17 +9,17 @@ import { Grid, Row, Cell } from "@material/react-layout-grid";
 import { Button } from "@material/react-button";
 import Card from 'components/Card';
 import RecipeCard from 'components/RecipeCard';
-import IRecipe from 'types/recipes';
+import Recipe from 'types/recipes';
 import Navbar from 'components/Navbar';
 import { Link } from 'react-router-dom';
 
 type RecipeListProps = {
-  data: IRecipe[],
+  data: Recipe[],
   isFetching: boolean,
   selectedRecipe: any | undefined,
   fetchRecipes: (query: any) => undefined,
-  receiveRecipes: (recipes: IRecipe[]) => undefined,
-  selectRecipe: (recipe: IRecipe) => undefined,
+  receiveRecipes: (recipes: Recipe[]) => undefined,
+  selectRecipe: (recipe: Recipe) => undefined,
 };
 
 class RecipeList extends Component<RecipeListProps> {
@@ -111,10 +111,10 @@ const mapDispatchToProps = (dispatch: any) => {
     fetchRecipes: (query: any) => {
       dispatch(fetch(query))
     },
-    receiveRecipes: (recipes: IRecipe[]) => {
+    receiveRecipes: (recipes: Recipe[]) => {
       dispatch(receive(recipes))
     },
-    selectRecipe: (recipe: IRecipe) => {
+    selectRecipe: (recipe: Recipe) => {
       dispatch(select(recipe))
     }
   }

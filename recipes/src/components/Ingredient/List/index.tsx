@@ -1,10 +1,10 @@
 import React from 'react';
-import { ISubRecipe } from 'src/types/recipes';
+import { SubRecipe } from 'types/recipes';
 
 import './styles.scss';
 
 type ShowIngredientsProps = {
-  ingredients: ISubRecipe[],
+  ingredients: SubRecipe[],
   className?: string,
 };
 

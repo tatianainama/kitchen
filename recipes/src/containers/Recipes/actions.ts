@@ -1,5 +1,5 @@
 import axios from 'axios';
-import IRecipe from 'types/recipes';
+import Recipe from 'types/recipes';
 import { getRecipes } from './services';
 
 export const RECEIVE_RECIPES = 'RECEIVE_RECIPES';
@@ -11,13 +11,13 @@ export const requestRecipes = (query: {}) => ({
   isFetching: true,
 });
 
-export const receiveRecipes = (json: IRecipe[]) => ({
+export const receiveRecipes = (json: Recipe[]) => ({
   type: RECEIVE_RECIPES,
   isFetching: false,
   payload: json,
 });
 
-export const selectRecipe = (recipe: IRecipe) => ({
+export const selectRecipe = (recipe: Recipe) => ({
   type: SELECT_RECIPE,
   payload: recipe,
 });
@@ -33,7 +33,7 @@ export function fetchRecipes(query: any) {
   }
 }
 
-function shouldFetch(recipes: IRecipe[]) {
+function shouldFetch(recipes: Recipe[]) {
   return recipes.length ? false : true;
 }
 

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import IRecipe, { ISubRecipe, IIngredient } from '../../types/recipes';
+import Recipe, { SubRecipe, Ingredient } from '../../types/recipes';
 import Card, {
   CardMedia,
 } from "@material/react-card";
 import Icon from 'components/Icon';
-import Ingredients from 'components/IngredientList';
+import { List as Ingredients } from 'components/Ingredient';
 import moment from 'moment';
 
 import sample_img from "components/Card/sample.png";
@@ -15,7 +15,7 @@ import { ReactComponent as Servings } from 'svgs/servings.svg';
 import './styles.scss';
 
 type RecipeCardProps = {
-  recipe: IRecipe,
+  recipe: Recipe,
 }
 
 function CBKRecipeCard(props: RecipeCardProps) {

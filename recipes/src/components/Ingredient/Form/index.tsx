@@ -3,12 +3,12 @@ import Input from 'components/Input';
 import Select from 'components/Select';
 import TabBar from 'components/TabBar';
 
-import { ISubRecipe, _recipe, _subRecipe, _ingredient } from 'types/recipes';
+import { SubRecipe, _recipe, _subRecipe, _ingredient } from 'types/recipes';
 
 import './styles.scss';
 
 type IngredientFormProps = {
-  components: ISubRecipe[],
+  components: SubRecipe[],
   updateField: (key: any[]) => (e: any) => void,
   addSubrecipe: () => void,
   updateSubrecipeName: (subrecipe: number, newValue: string) => void,
