@@ -1,14 +1,11 @@
 import React from 'react';
 import Input from 'components/Input';
 import Select from 'components/Select';
-import List, {ListItem, ListItemText} from '@material/react-list';
 import TabBar from 'components/TabBar';
 
-import IRecipe, { ISubRecipe, IAuthor, IDetails, _recipe, _subRecipe, _ingredient, IIngredient, ISuggestion } from 'types/recipes';
+import { ISubRecipe, _recipe, _subRecipe, _ingredient } from 'types/recipes';
 
-import '@material/react-list/dist/list.min.css';
 import './styles.scss';
-import MaterialIcon from '@material/react-material-icon';
 
 type IngredientFormProps = {
   components: ISubRecipe[],
@@ -29,15 +26,6 @@ class IngredientForm extends React.Component<IngredientFormProps, { activeGroup:
 
   handleActiveIndexUpdate = (activeGroup: number) => this.setState({ activeGroup })
 
-  changeTabName = (event: any) => {
-    console.log('change', event);
-  }
-
-  addTag = () => {
-    this.setState({
-
-    })
-  }
   render() {
     const {updateField, components, addSubrecipe, updateSubrecipeName, removeSubrecipe} = this.props;
     const {activeGroup} = this.state;
@@ -56,11 +44,11 @@ class IngredientForm extends React.Component<IngredientFormProps, { activeGroup:
         </div>
         <div className='cbk-ingredients-component'>
           <div className='cbk-ingredients-component-header'>
-            <div>Ingredient Name</div>
-            <div>Quantity</div>
-            <div>Unit</div>
-            <div>Notes</div>
-            <div>Original</div>
+            <span>Ingredient Name</span>
+            <span>Quantity</span>
+            <span>Unit</span>
+            <span>Notes</span>
+            <span>Original</span>
           </div>
           {
             components[activeGroup].ingredients.map((ingredient, index) => (

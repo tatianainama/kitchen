@@ -8,9 +8,11 @@
   .cbk-ingredients-component {
     &-header {
       display: flex;
+      padding: $spacing-small;
       & > * {
         flex: 1;
         align-self: center;
+        @include button();
       }
     }
     &-item {
