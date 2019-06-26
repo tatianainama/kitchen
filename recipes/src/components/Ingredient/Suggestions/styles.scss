@@ -1,0 +1,14 @@
+@import 'styles/_variables.scss';
+
+.cbk-suggestions {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  i.material-icons {
+    color: $grey-500;
+  }
+  .mdc-button {
+    font-size: 12px;
+    height: 24px;
+  }
+}

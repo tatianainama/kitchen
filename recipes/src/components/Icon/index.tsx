@@ -22,7 +22,7 @@ export function Icon({ width, height, fill, icon, className, material }: IconPro
   };
 
   return material ? (
-    <MaterialIcon icon={icon} />
+    <MaterialIcon icon={icon} className='material-icons-outlined' />
   ) : (
     <ReactSVG
       // @ts-ignore
