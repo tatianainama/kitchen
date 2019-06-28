@@ -7,10 +7,11 @@ import './styles.scss';
 
 type SuggestionsProps = {
   suggestions?: Suggestion[],
-  onSelect: (index: number) => void  
+  onSelect: (index: number) => void,
+  onNew: () => void,
 }
 
-const Suggestions = ({ suggestions, onSelect }: SuggestionsProps) => {
+const Suggestions = ({ suggestions, onSelect, onNew }: SuggestionsProps) => {
   return suggestions && suggestions.length > 1 ? (
     <div className='cbk-suggestions'>
       <Icon material icon={'wb_incandescent'} />
@@ -19,6 +20,7 @@ const Suggestions = ({ suggestions, onSelect }: SuggestionsProps) => {
           <Button onClick={() => onSelect(index)} key={index}>{suggestion.name}</Button>
         ))
       }
+      <Button onClick={() => onNew()}>Add new</Button>
     </div>
   ) : null
 };

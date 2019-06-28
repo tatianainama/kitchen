@@ -55,6 +55,7 @@ export const _recipe: Recipe = {
 }
 
 export interface Equivalences {
+  [key:string]: number | undefined,
   cup?: number,
   tbsp?: number,
   tsp?: number,

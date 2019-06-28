@@ -119,6 +119,7 @@ class IngredientForm extends React.Component<IngredientFormProps, IngredientForm
                 <Suggestions
                   suggestions={ingredient.suggestions}
                   onSelect={(idx) => console.log('selected', idx)}
+                  onNew={()=>{}}
                 />
               </div>
             ))
