@@ -1,23 +1,35 @@
 import  { ObjectID } from 'mongodb';
 
-type Equivalences = {
-  cup?: number,
-  tbsp?: number,
-  tsp?: number,
-  stick?: number,
-  gr?: number,
-  ml?: number,
-  oz?: number,
-  lb?: number,
+enum Measures {
+  mass,
+  volume,
+  hybrid,
 };
+
+type Units = 
+  "cup" |
+  "tbsp" |
+  "tsp" |
+  "stick" |
+  "gr" |
+  "ml" |
+  "oz" |
+  "lb" |
+  "pint" |
+  "gal" |
+  "unit" |
+  "pinch" |
+  "to taste"
+;
 
 export interface Ingredient {
   _id?: ObjectID,
   name: string,
   variants?: string[],
-  equivalences: Equivalences,
-  prefferedUnit: keyof Equivalences,
-  referenceUnit: keyof Equivalences,
+  equivalence?: number,
+  prefferedUnit: Units,
+  referenceUnit: Units,
+  measure: Measures,
   translation?: {
     english?: string,
     dutch?: string,
