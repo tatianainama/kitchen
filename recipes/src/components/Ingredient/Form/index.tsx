@@ -3,7 +3,7 @@ import Input from 'components/Input';
 import Select from 'components/Select';
 import TabBar from 'components/TabBar';
 import Suggestions from 'components/Ingredient/Suggestions';
-
+import { MeasuresTypes } from 'services/measurements';
 import { SubRecipe, _recipe, _subRecipe, _ingredient } from 'types/recipes';
 
 import './styles.scss';
@@ -102,7 +102,7 @@ class IngredientForm extends React.Component<IngredientFormProps, IngredientForm
                   <Select
                     label=''
                     value={this.normalizeUnits(ingredient.unit)}
-                    options={unitOptions}
+                    options={MeasuresTypes().map(m => ({label: m, value: m}))}
                     onChange={this.onChangeUnit(['ingredients', activeGroup, 'ingredients', index, 'unit'])}
                   />
                   <Input

@@ -78,14 +78,10 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                     "variants": [
                       "cocoa"
                     ],
-                    "equivalences": {
-                      "cup": 1,
-                      "gr": 118,
-                      "tbsp": 16,
-                      "tsp": 48
-                    },
+                    "equivalence": 118,
                     "referenceUnit": "cup",
-                    "prefferedUnit": "gr"
+                    "prefferedUnit": "gr",
+                    "measure": 2
                   },
                   {
                     "_id": "5cf1397d72cd19452443503c",
@@ -94,16 +90,10 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                       "confectioner sugar",
                       "powdered sugar"
                     ],
-                    "equivalences": {
-                      "cup": 1,
-                      "gr": 125,
-                      "oz": 0.27,
-                      "tbsp": 15,
-                      "tsp": 45,
-                      "lb": 0.27
-                    },
+                    "equivalence": 125,
                     "referenceUnit": "cup",
-                    "prefferedUnit": "gr"
+                    "prefferedUnit": "gr",
+                    "measure": 2
                   }
                 ]
               },
@@ -141,16 +131,10 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                       "sugar",
                       "plain sugar"
                     ],
-                    "equivalences": {
-                      "cup": 1,
-                      "gr": 200,
-                      "oz": 7.1,
-                      "tbsp": 14,
-                      "tsp": 42,
-                      "lb": 0.4
-                    },
+                    "equivalence": 200,
                     "referenceUnit": "cup",
-                    "prefferedUnit": "gr"
+                    "prefferedUnit": "gr",
+                    "measure": 2
                   }
                 ]
               },
@@ -178,15 +162,10 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                     "variants": [
                       "plain yogurt"
                     ],
-                    "equivalences": {
-                      "cup": 1,
-                      "gr": 245,
-                      "oz": 8.64,
-                      "tbsp": 16,
-                      "tsp": 48
-                    },
+                    "equivalence": 245,
                     "referenceUnit": "cup",
-                    "prefferedUnit": "gr"
+                    "prefferedUnit": "gr",
+                    "measure": 2
                   },
                   {
                     "_id": "5cf1397d72cd19452443503b",
@@ -195,16 +174,10 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                       "sugar",
                       "plain sugar"
                     ],
-                    "equivalences": {
-                      "cup": 1,
-                      "gr": 200,
-                      "oz": 7.1,
-                      "tbsp": 14,
-                      "tsp": 42,
-                      "lb": 0.4
-                    },
+                    "equivalence": 200,
                     "referenceUnit": "cup",
-                    "prefferedUnit": "gr"
+                    "prefferedUnit": "gr",
+                    "measure": 2
                   },
                   {
                     "_id": "5cf1397d72cd194524435030",
@@ -215,17 +188,13 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                       "regular flour",
                       "flour"
                     ],
-                    "equivalences": {
-                      "cup": 1,
-                      "gr": 125,
-                      "tbsp": 15.5,
-                      "tsp": 47
-                    },
+                    "equivalence": 125,
                     "referenceUnit": "cup",
                     "prefferedUnit": "gr",
                     "translation": {
                       "dutch": "patentbloem"
-                    }
+                    },
+                    "measure": 2
                   }
                 ]
               },

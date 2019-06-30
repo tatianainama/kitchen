@@ -9,7 +9,7 @@ const data: Ingredient[] = [{
   translation: {
     dutch: 'patentbloem'
   },
-  measure: 0
+  measure: 2
 }, {
   name: 'bread flour',
   variants: ['bread flour'],
@@ -19,7 +19,7 @@ const data: Ingredient[] = [{
   translation: {
     dutch: 'tarwebloem'
   },
-  measure: 0
+  measure: 2
 }, {
   name: 'pastry flour',
   variants: ['pastry flour'],
@@ -29,89 +29,89 @@ const data: Ingredient[] = [{
   translation: {
     dutch: 'zeeuwsebloem'
   },
-  measure: 0
+  measure: 2
 }, {
   name: 'almond flour',
   equivalence: 96,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'cornflour',
   equivalence: 150,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'self raising flour',
   equivalence: 125,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'honey',
   equivalence: 340,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'semolina',
   equivalence: 167,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'long rice',
   equivalence: 185,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'short rice',
   variants: ['sushi rice'],
   equivalence: 200,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'basmati rice',
   equivalence: 195,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'granulated sugar',
   variants: ['sugar', 'plain sugar'],
   equivalence: 200,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'icing sugar',
   variants: ['confectioner sugar', 'powdered sugar'],
   equivalence: 125,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'caster sugar',
   variants: ['fine sugar'],
   equivalence: 225,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'brown sugar',
   equivalence: 200,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'yeast',
   equivalence: 2.83,
   referenceUnit: 'tsp',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'yogurt',
   variants: ['plain yogurt'],
@@ -125,7 +125,7 @@ const data: Ingredient[] = [{
   equivalence: 118,
   referenceUnit: 'cup',
   prefferedUnit: 'gr',
-  measure: 0
+  measure: 2
 }, {
   name: 'chicken breast',
   variants: ['chicken', 'skinless chicken'],

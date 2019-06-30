@@ -66,13 +66,36 @@ export interface Equivalences {
   lb?: number,
 }
 
+type Units = 
+  "cup" |
+  "tbsp" |
+  "tsp" |
+  "stick" |
+  "gr" |
+  "ml" |
+  "oz" |
+  "lb" |
+  "pint" |
+  "gal" |
+  "unit" |
+  "pinch" |
+  "to taste"
+;
+
+enum Measures {
+  mass,
+  volume,
+  hybrid,
+};
+
 export interface Suggestion {
   _id?: string,
   name: string,
   variants?: string[],
-  equivalences: Equivalences,
-  prefferedUnit: keyof Equivalences,
-  referenceUnit: keyof Equivalences,
+  equivalence?: number,
+  prefferedUnit: Units,
+  referenceUnit: Units,
+  measure: Measures,
   translation?: {
     english?: string,
     dutch?: string,
