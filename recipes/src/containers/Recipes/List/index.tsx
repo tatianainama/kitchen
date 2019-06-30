@@ -103,7 +103,7 @@ class RecipeList extends Component<RecipeListProps> {
 }
 
 const mapStateToProps = ({ recipes }: any, ownProps: any) => {
-  return recipes;
+  return recipes.list;
 }
 
 const mapDispatchToProps = (dispatch: any) => {

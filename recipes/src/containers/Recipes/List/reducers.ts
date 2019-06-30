@@ -1,9 +1,7 @@
 const initialState = {
-  recipes: {
-    isFetching: false,
-    data: [],
-    selectedRecipe: undefined,
-  }
+  isFetching: false,
+  data: [],
+  selectedRecipe: undefined,
 };
 
 export const recipesReducer = (
@@ -14,27 +12,18 @@ export const recipesReducer = (
     case 'REQUEST_RECIPES': 
       return {
         ...state,
-        recipes: {
-          ...state.recipes,
-          isFetching: action.isFetching,
-        }
+        isFetching: action.isFetching,
       }
     case 'RECEIVE_RECIPES':
       return {
         ...state,
-        recipes: {
-          ...state.recipes,
-          isFetching: action.isFetching,
-          data: action.payload || state.recipes.data,
-        }
+        isFetching: action.isFetching,
+        data: action.payload || state.data,
       }
     case 'SELECT_RECIPE':
       return {
         ...state,
-        recipes: {
-          ...state.recipes,
-          selectedRecipe: action.payload
-        }
+        selectedRecipe: action.payload
       }
     default:
       return state;

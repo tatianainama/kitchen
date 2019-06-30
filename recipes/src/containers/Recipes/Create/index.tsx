@@ -10,9 +10,9 @@ import { Form as IngredientForm } from 'components/Ingredient';
 
 import './styles.scss';
 
-import { scrapeRecipe } from './services';
+import { scrapeRecipe } from './../services';
 
-import sample_img from "../../sample.png";
+import sample_img from "../../../sample.png";
 import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient, Suggestion } from 'types/recipes';
 
 type CreateRecipeProps = {
