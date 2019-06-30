@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { recipesReducer } from 'containers/Recipes/reducers';
+import { recipesReducer } from 'containers/Recipes/List/reducers';
 
 const composeEnhancers = composeWithDevTools({});
 

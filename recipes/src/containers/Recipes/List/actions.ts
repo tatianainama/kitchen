@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Recipe from 'types/recipes';
-import { getRecipes } from './services';
+import { getRecipes } from '../services';
 
 export const RECEIVE_RECIPES = 'RECEIVE_RECIPES';
 export const REQUEST_RECIPES = 'REQUEST_RECIPES';

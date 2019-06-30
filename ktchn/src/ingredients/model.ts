@@ -22,6 +22,17 @@ type Units =
   "to taste"
 ;
 
+
+interface Pure {
+  measure: Measures.mass | Measures.volume,
+}
+
+interface Mixed {
+  measure: Measures.hybrid,
+  refenceUnit: Units,
+  equivalence: number,
+}
+
 export interface Ingredient {
   _id?: ObjectID,
   name: string,

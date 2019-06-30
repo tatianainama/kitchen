@@ -3,7 +3,7 @@ import {
   fetchIfNeeded as fetch,
   receiveRecipes as receive,
   selectRecipe as select,
-} from "containers/Recipes/actions";
+} from "containers/Recipes/List/actions";
 import { connect } from "react-redux";
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import { Button } from "@material/react-button";
