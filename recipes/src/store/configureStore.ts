@@ -22,4 +22,5 @@ const configureStore = () => {
   )
 }
 
+export type AppState = ReturnType<typeof rootReducer>
 export default configureStore;

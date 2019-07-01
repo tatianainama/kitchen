@@ -1,12 +1,14 @@
 import React from 'react';
-import { assocPath, remove } from 'ramda';
+import { assocPath, remove, any } from 'ramda';
 import  Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import Btn from 'components/Button';
 import Input from 'components/Input';
 import TagInput from 'components/TagInput';
-import Select from 'components/Select';
 import { Form as IngredientForm } from 'components/Ingredient';
+import CreateFormActions, { fetchScrape } from './actions';
+import { connect } from 'react-redux';
+import { CreateState } from './types';
 
 import './styles.scss';
 
@@ -14,8 +16,11 @@ import { scrapeRecipe } from './../services';
 
 import sample_img from "../../../sample.png";
 import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient, Suggestion } from 'types/recipes';
+import { AppState } from 'src/store/configureStore';
 
-type CreateRecipeProps = {
+interface CreateRecipeProps {
+  createForm: CreateState,
+  fetchScrape: typeof fetchScrape
 };
 
 type CreateRecipeState = {
@@ -36,8 +41,9 @@ const Suggestions = (suggestions: Suggestion[] = []) => (
 )
 
 class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState> {
-  constructor(props: any) {
+  constructor(props: CreateRecipeProps) {
     super(props);
+    console.log("props", props);
     this.state = {
       form: { 
         ..._recipe,
@@ -282,17 +288,18 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
   }
 
   scrapeRecipe = () => {
-    scrapeRecipe(this.state.scrapeUrl).then(recipe => {
-      this.setState({
-        form: {
-          ...recipe,
-          details: {
-            url: this.state.scrapeUrl,
-            ...recipe.details,
-          }
-        }
-      })
-    })
+    this.props.fetchScrape(this.state.scrapeUrl)
+    // scrapeRecipe(this.state.scrapeUrl).then(recipe => {
+    //   this.setState({
+    //     form: {
+    //       ...recipe,
+    //       details: {
+    //         url: this.state.scrapeUrl,
+    //         ...recipe.details,
+    //       }
+    //     }
+    //   })
+    // })
   }
 
   updateField = (key: FormKeys[]) => {
@@ -614,4 +621,16 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
   }
 }
 
-export default CreateRecipe;
+const mapStateToProps = ({ recipes }: AppState, ownProps: any) => {
+  return {
+    createForm: recipes.create
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    fetchScrape: (url: string) => dispatch(fetchScrape(url))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateRecipe);

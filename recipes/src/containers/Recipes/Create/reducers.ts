@@ -1,6 +1,6 @@
-import { FormState, FormActionTypes, SCRAPE_RECIPE, RECEIVE_SCRAPE, INVALID_SCRAPE } from './types';
+import { CreateState, CreateActionTypes, SCRAPE_RECIPE, RECEIVE_SCRAPE, INVALID_SCRAPE } from './types';
 
-const initialState: FormState = {
+const initialState: CreateState = {
   data: {},
   initialState: {},
   fromScrape: false,
@@ -10,8 +10,8 @@ const initialState: FormState = {
 
 export const createReducer = (
   state = initialState,
-  action: FormActionTypes
-): FormState => {
+  action: CreateActionTypes
+): CreateState => {
   switch (action.type) {
     case SCRAPE_RECIPE:
       return {

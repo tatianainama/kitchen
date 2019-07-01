@@ -1,6 +1,7 @@
 import Recipe from 'types/recipes';
 import { scrapeRecipe as Scrape } from '../services';
 import { SCRAPE_RECIPE, RECEIVE_SCRAPE, INVALID_SCRAPE } from './types';
+import { bindActionCreators } from 'redux';
 
 const scrapeRecipe = (url: string) => ({
   type: SCRAPE_RECIPE,
@@ -26,19 +27,18 @@ const invalidateScrape = (error: any) => ({
   error,
 });
 
-const fetchScrape = (url: string) => (dispatch: any) => {
+export const fetchScrape = (url: string) => (dispatch: any) => {
+  console.log("fetching");
   dispatch(scrapeRecipe(url));
   return Scrape(url)
     .then(data => dispatch(receiveScrape(data)))
-    .catch(error => invalidateScrape(error))
+    .catch(error => dispatch(invalidateScrape(error)))
 }
 
-export {
-  SCRAPE_RECIPE,
-  RECEIVE_SCRAPE,
-  INVALID_SCRAPE,
-  scrapeRecipe,
-  receiveScrape,
-  invalidateScrape,
-  fetchScrape,
+const CreateFormActions = {
+  fetchScrape
 }
+
+export default CreateFormActions;
+
+export type CreateFormActionsType = typeof CreateFormActions;

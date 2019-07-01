@@ -33,7 +33,7 @@ interface InvalidScrapeAction {
   invalidScrape: boolean,
 }
 
-export interface FormState {
+export interface CreateState {
   data: Recipe|{},
   initialState: Recipe|{},
   fromScrape: boolean,
@@ -41,4 +41,4 @@ export interface FormState {
   invalidScrape: boolean
 }
 
-export type FormActionTypes = ScrapeRecipeAction | ReceiveScrapeAction | InvalidScrapeAction;
+export type CreateActionTypes = ScrapeRecipeAction | ReceiveScrapeAction | InvalidScrapeAction;
