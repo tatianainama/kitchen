@@ -33,16 +33,7 @@ class IngredientForm extends React.Component<IngredientFormProps, IngredientForm
   constructor(props: IngredientFormProps) {
     super(props);
     this.state = {
-      unitOptions: [
-        { label: 'gr', value: 'gr'},
-        { label: 'cup', value: 'cup'},
-        { label: 'tbsp', value: 'tbsp'},
-        { label: 'tsp', value: 'tsp'},
-        { label: 'stick', value: 'stick'},
-        { label: 'ml', value: 'ml'},
-        { label: 'oz', value: 'oz'},
-        { label: 'lb', value: 'lb'},
-      ],
+      unitOptions: MeasuresTypes().map(m => ({label: m, value: m})),
       activeGroup: 0,
       normalizeUnits: {
         tablespoon: 'tbsp',
@@ -102,7 +93,7 @@ class IngredientForm extends React.Component<IngredientFormProps, IngredientForm
                   <Select
                     label=''
                     value={this.normalizeUnits(ingredient.unit)}
-                    options={MeasuresTypes().map(m => ({label: m, value: m}))}
+                    options={this.state.unitOptions}
                     onChange={this.onChangeUnit(['ingredients', activeGroup, 'ingredients', index, 'unit'])}
                   />
                   <Input

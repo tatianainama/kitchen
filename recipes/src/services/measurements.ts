@@ -9,7 +9,6 @@ const measureValues: { [key:string]: string[] } = {
   temperature: ['C', 'F'],
 } 
 const MeasuresTypes = (measure?: Measure) => {
-  console.log(convert(1).from('cup').to('ml'));
   return measure ?
   measureValues[measure] :
   [ ...measureValues.mass, ...measureValues.volume, ...measureValues.misc ]

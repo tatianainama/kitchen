@@ -17,8 +17,7 @@ import { scrapeRecipe } from '../services';
 interface CreateRecipeProps {
 };
 
-type CreateRecipeState = {
-  form: Recipe,
+interface CreateRecipeState extends Recipe {
   scrapeUrl: string,
 };
 
@@ -27,245 +26,243 @@ type FormKeys = keyof Recipe | keyof SubRecipe | keyof Ingredient | keyof Author
 class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState> {
   constructor(props: CreateRecipeProps) {
     super(props);
-    this.state = {
-      form: { 
-        ..._recipe,
-        ingredients: [
-          {
-            "name": "For the Chicken:",
-            "ingredients": [
-              {
-                "name": "thin boneless skinless chicken breast",
-                "quantity": 1.5,
-                "unit": "pound",
-                "_original": "1-1/2 lb of Thin Boneless Skinless Chicken Breast",
-                "suggestions": []
-              },
-              {
-                "name": "olive oil",
-                "quantity": 2,
-                "unit": "tablespoon",
-                "_original": "2 Tbsp of Olive Oil",
-                "suggestions": []
-              },
-              {
-                "name": "juice of  lime",
-                "quantity": 1,
-                "unit": "",
-                "_original": "Juice of 1 Lime",
-                "suggestions": []
-              },
-              {
-                "name": "chili powder",
-                "quantity": 0.5,
-                "unit": "teaspoon",
-                "_original": "1/2 tsp of Chili Powder",
-                "suggestions": [
-                  {
-                    "_id": "5cf1397d72cd194524435041",
-                    "name": "cocoa powder",
-                    "variants": [
-                      "cocoa"
-                    ],
-                    "equivalence": 118,
-                    "referenceUnit": "cup",
-                    "prefferedUnit": "gr",
-                    "measure": 2
+    this.state = { 
+      ..._recipe,
+      ingredients: [
+        {
+          "name": "For the Chicken:",
+          "ingredients": [
+            {
+              "name": "thin boneless skinless chicken breast",
+              "quantity": 1.5,
+              "unit": "pound",
+              "_original": "1-1/2 lb of Thin Boneless Skinless Chicken Breast",
+              "suggestions": []
+            },
+            {
+              "name": "olive oil",
+              "quantity": 2,
+              "unit": "tablespoon",
+              "_original": "2 Tbsp of Olive Oil",
+              "suggestions": []
+            },
+            {
+              "name": "juice of  lime",
+              "quantity": 1,
+              "unit": "",
+              "_original": "Juice of 1 Lime",
+              "suggestions": []
+            },
+            {
+              "name": "chili powder",
+              "quantity": 0.5,
+              "unit": "teaspoon",
+              "_original": "1/2 tsp of Chili Powder",
+              "suggestions": [
+                {
+                  "_id": "5cf1397d72cd194524435041",
+                  "name": "cocoa powder",
+                  "variants": [
+                    "cocoa"
+                  ],
+                  "equivalence": 118,
+                  "referenceUnit": "cup",
+                  "prefferedUnit": "gr",
+                  "measure": 2
+                },
+                {
+                  "_id": "5cf1397d72cd19452443503c",
+                  "name": "icing sugar",
+                  "variants": [
+                    "confectioner sugar",
+                    "powdered sugar"
+                  ],
+                  "equivalence": 125,
+                  "referenceUnit": "cup",
+                  "prefferedUnit": "gr",
+                  "measure": 2
+                }
+              ]
+            },
+            {
+              "name": "oregano",
+              "quantity": 0.5,
+              "unit": "teaspoon",
+              "_original": "1/2 tsp of Oregano",
+              "suggestions": []
+            },
+            {
+              "name": "cumin",
+              "quantity": 0.5,
+              "unit": "teaspoon",
+              "_original": "1/2 tsp of Cumin",
+              "suggestions": []
+            },
+            {
+              "name": "paprika",
+              "quantity": 0.5,
+              "unit": "teaspoon",
+              "_original": "1/2 tsp of Paprika",
+              "suggestions": []
+            },
+            {
+              "name": "granulated garlic",
+              "quantity": 0.5,
+              "unit": "teaspoon",
+              "_original": "1/2 tsp of Granulated Garlic",
+              "suggestions": [
+                {
+                  "_id": "5cf1397d72cd19452443503b",
+                  "name": "granulated sugar",
+                  "variants": [
+                    "sugar",
+                    "plain sugar"
+                  ],
+                  "equivalence": 200,
+                  "referenceUnit": "cup",
+                  "prefferedUnit": "gr",
+                  "measure": 2
+                }
+              ]
+            },
+            {
+              "name": "salt, to taste",
+              "quantity": 0,
+              "unit": "",
+              "_original": "Salt, to taste",
+              "suggestions": []
+            }
+          ]
+        },
+        {
+          "name": "For the Dressing:",
+          "ingredients": [
+            {
+              "name": "plain greek yogurt",
+              "quantity": 0.5,
+              "unit": "cup",
+              "_original": "1/2 cup of Plain Greek Yogurt",
+              "suggestions": [
+                {
+                  "_id": "5cf1397d72cd194524435040",
+                  "name": "yogurt",
+                  "variants": [
+                    "plain yogurt"
+                  ],
+                  "equivalence": 245,
+                  "referenceUnit": "cup",
+                  "prefferedUnit": "gr",
+                  "measure": 2
+                },
+                {
+                  "_id": "5cf1397d72cd19452443503b",
+                  "name": "granulated sugar",
+                  "variants": [
+                    "sugar",
+                    "plain sugar"
+                  ],
+                  "equivalence": 200,
+                  "referenceUnit": "cup",
+                  "prefferedUnit": "gr",
+                  "measure": 2
+                },
+                {
+                  "_id": "5cf1397d72cd194524435030",
+                  "name": "all purpose flour",
+                  "variants": [
+                    "plain flour",
+                    "all purpose flour",
+                    "regular flour",
+                    "flour"
+                  ],
+                  "equivalence": 125,
+                  "referenceUnit": "cup",
+                  "prefferedUnit": "gr",
+                  "translation": {
+                    "dutch": "patentbloem"
                   },
-                  {
-                    "_id": "5cf1397d72cd19452443503c",
-                    "name": "icing sugar",
-                    "variants": [
-                      "confectioner sugar",
-                      "powdered sugar"
-                    ],
-                    "equivalence": 125,
-                    "referenceUnit": "cup",
-                    "prefferedUnit": "gr",
-                    "measure": 2
-                  }
-                ]
-              },
-              {
-                "name": "oregano",
-                "quantity": 0.5,
-                "unit": "teaspoon",
-                "_original": "1/2 tsp of Oregano",
-                "suggestions": []
-              },
-              {
-                "name": "cumin",
-                "quantity": 0.5,
-                "unit": "teaspoon",
-                "_original": "1/2 tsp of Cumin",
-                "suggestions": []
-              },
-              {
-                "name": "paprika",
-                "quantity": 0.5,
-                "unit": "teaspoon",
-                "_original": "1/2 tsp of Paprika",
-                "suggestions": []
-              },
-              {
-                "name": "granulated garlic",
-                "quantity": 0.5,
-                "unit": "teaspoon",
-                "_original": "1/2 tsp of Granulated Garlic",
-                "suggestions": [
-                  {
-                    "_id": "5cf1397d72cd19452443503b",
-                    "name": "granulated sugar",
-                    "variants": [
-                      "sugar",
-                      "plain sugar"
-                    ],
-                    "equivalence": 200,
-                    "referenceUnit": "cup",
-                    "prefferedUnit": "gr",
-                    "measure": 2
-                  }
-                ]
-              },
-              {
-                "name": "salt, to taste",
-                "quantity": 0,
-                "unit": "",
-                "_original": "Salt, to taste",
-                "suggestions": []
-              }
-            ]
-          },
-          {
-            "name": "For the Dressing:",
-            "ingredients": [
-              {
-                "name": "plain greek yogurt",
-                "quantity": 0.5,
-                "unit": "cup",
-                "_original": "1/2 cup of Plain Greek Yogurt",
-                "suggestions": [
-                  {
-                    "_id": "5cf1397d72cd194524435040",
-                    "name": "yogurt",
-                    "variants": [
-                      "plain yogurt"
-                    ],
-                    "equivalence": 245,
-                    "referenceUnit": "cup",
-                    "prefferedUnit": "gr",
-                    "measure": 2
-                  },
-                  {
-                    "_id": "5cf1397d72cd19452443503b",
-                    "name": "granulated sugar",
-                    "variants": [
-                      "sugar",
-                      "plain sugar"
-                    ],
-                    "equivalence": 200,
-                    "referenceUnit": "cup",
-                    "prefferedUnit": "gr",
-                    "measure": 2
-                  },
-                  {
-                    "_id": "5cf1397d72cd194524435030",
-                    "name": "all purpose flour",
-                    "variants": [
-                      "plain flour",
-                      "all purpose flour",
-                      "regular flour",
-                      "flour"
-                    ],
-                    "equivalence": 125,
-                    "referenceUnit": "cup",
-                    "prefferedUnit": "gr",
-                    "translation": {
-                      "dutch": "patentbloem"
-                    },
-                    "measure": 2
-                  }
-                ]
-              },
-              {
-                "name": "fresh cilantro",
-                "quantity": 1,
-                "unit": "cup",
-                "_original": "1 cup of Fresh Cilantro",
-                "suggestions": []
-              },
-              {
-                "name": "scallions, roughly chopped",
-                "quantity": 2,
-                "unit": "",
-                "_original": "2 Scallions, roughly chopped",
-                "suggestions": []
-              },
-              {
-                "name": "juice of  lime or more, according to taste",
-                "quantity": 1,
-                "unit": "",
-                "_original": "Juice of 1 Lime or more, according to taste",
-                "suggestions": []
-              },
-              {
-                "name": "olive oil",
-                "quantity": 1,
-                "unit": "tablespoon",
-                "_original": "1 Tbsp of Olive Oil",
-                "suggestions": []
-              },
-              {
-                "name": "salt, to taste",
-                "quantity": 0,
-                "unit": "",
-                "_original": "Salt, to taste",
-                "suggestions": []
-              }
-            ]
-          },
-          {
-            "name": "For the rest of the salad:",
-            "ingredients": [
-              {
-                "name": "fresh lettuce of your choice",
-                "quantity": 0,
-                "unit": "",
-                "_original": "Fresh Lettuce of your choice",
-                "suggestions": []
-              },
-              {
-                "name": "bell peppers, halved and seeded",
-                "quantity": 2,
-                "unit": "",
-                "_original": "2 Bell Peppers, halved and seeded",
-                "suggestions": []
-              },
-              {
-                "name": "scallions or red onion, sliced",
-                "quantity": 0,
-                "unit": "",
-                "_original": "Scallions or REd Onion, sliced",
-                "suggestions": []
-              },
-              {
-                "name": "pico de gallo salsa",
-                "quantity": 0.5,
-                "unit": "cup",
-                "_original": "1/2 cup of Pico De Gallo Salsa",
-                "suggestions": []
-              },
-              {
-                "name": "avocado, sliced",
-                "quantity": 1,
-                "unit": "",
-                "_original": "1 Avocado, sliced",
-                "suggestions": []
-              }
-            ]
-          }
-        ],
-      },
+                  "measure": 2
+                }
+              ]
+            },
+            {
+              "name": "fresh cilantro",
+              "quantity": 1,
+              "unit": "cup",
+              "_original": "1 cup of Fresh Cilantro",
+              "suggestions": []
+            },
+            {
+              "name": "scallions, roughly chopped",
+              "quantity": 2,
+              "unit": "",
+              "_original": "2 Scallions, roughly chopped",
+              "suggestions": []
+            },
+            {
+              "name": "juice of  lime or more, according to taste",
+              "quantity": 1,
+              "unit": "",
+              "_original": "Juice of 1 Lime or more, according to taste",
+              "suggestions": []
+            },
+            {
+              "name": "olive oil",
+              "quantity": 1,
+              "unit": "tablespoon",
+              "_original": "1 Tbsp of Olive Oil",
+              "suggestions": []
+            },
+            {
+              "name": "salt, to taste",
+              "quantity": 0,
+              "unit": "",
+              "_original": "Salt, to taste",
+              "suggestions": []
+            }
+          ]
+        },
+        {
+          "name": "For the rest of the salad:",
+          "ingredients": [
+            {
+              "name": "fresh lettuce of your choice",
+              "quantity": 0,
+              "unit": "",
+              "_original": "Fresh Lettuce of your choice",
+              "suggestions": []
+            },
+            {
+              "name": "bell peppers, halved and seeded",
+              "quantity": 2,
+              "unit": "",
+              "_original": "2 Bell Peppers, halved and seeded",
+              "suggestions": []
+            },
+            {
+              "name": "scallions or red onion, sliced",
+              "quantity": 0,
+              "unit": "",
+              "_original": "Scallions or REd Onion, sliced",
+              "suggestions": []
+            },
+            {
+              "name": "pico de gallo salsa",
+              "quantity": 0.5,
+              "unit": "cup",
+              "_original": "1/2 cup of Pico De Gallo Salsa",
+              "suggestions": []
+            },
+            {
+              "name": "avocado, sliced",
+              "quantity": 1,
+              "unit": "",
+              "_original": "1 Avocado, sliced",
+              "suggestions": []
+            }
+          ]
+        }
+      ],
       scrapeUrl: '',
     }
   }
@@ -273,86 +270,55 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
   scrapeRecipe = () => {
     scrapeRecipe(this.state.scrapeUrl).then(recipe => {
       this.setState({
-        form: {
-          ...recipe,
-          details: {
-            url: this.state.scrapeUrl,
-            ...recipe.details,
-          }
+        ...recipe,
+        details: {
+          url: this.state.scrapeUrl,
+          ...recipe.details,
         }
       })
     })
   }
 
-  setData = (key: FormKeys[]) => (newValue: string|number) => {
-    this.setState({
-      form: assocPath(key, newValue, this.state.form)
-    } as Pick<CreateRecipeState, keyof CreateRecipeState>)
-  }
-
-  updateField = (key: FormKeys[]) => ({ currentTarget }: any) => this.setData(key)(currentTarget.value);
+  updateField = (key: FormKeys[]) => ({ currentTarget }: any) => {
+    this.setState(prevState => assocPath(key, currentTarget.value, prevState))
+  };
 
   updateSubrecipeName = (subrecipe: number, newValue: string) => {
-    this.setState({
-      form: assocPath(['ingredients', subrecipe, 'name'], newValue, this.state.form),
-    } as Pick<CreateRecipeState, keyof CreateRecipeState>)
+    this.setState(assocPath(['ingredients', subrecipe, 'name'], newValue, this.state))
   }
 
   updateIngredientUnit = (key: Array<string | number | symbol>, newValue: string) => {
-    console.log('change', key, newValue)
-    this.setState({
-      form: assocPath(key, newValue, this.state.form)
-    })
+    this.setState(assocPath(key, newValue, this.state))
   }
 
-  addIngredient = (subrecipe: number, last: number) => {
+  addIngredient = () => {
     return () => {
-      const { ingredients } = this.state.form;
-      if (ingredients[subrecipe].ingredients[last].name) {
-        const newIngredients = ingredients[subrecipe].ingredients.concat([_ingredient]);
-
-        this.setState({
-          form: {
-            ...this.state.form,
-            ingredients: assocPath([subrecipe, 'ingredients'], newIngredients, this.state.form.ingredients)
-          }
-        })
-      }
     }
   }
 
   removeIngredient = (subrecipe: number, index: number) => {
     return () => {
-      const { ingredients } = this.state.form;
+      const { ingredients } = this.state;
       this.setState({
-        form: {
-          ...this.state.form,
-          ingredients: assocPath(
-            [subrecipe, 'ingredients'],
-            remove(index, 1, ingredients[subrecipe].ingredients),
-            this.state.form.ingredients
-          )
-        }
+        ingredients: assocPath(
+          [subrecipe, 'ingredients'],
+          remove(index, 1, ingredients[subrecipe].ingredients),
+          this.state.ingredients
+        )
       })
     }
   }
 
   addInstruction = () => {
     this.setState({
-      form: {
-        ...this.state.form,
-        instructions: this.state.form.instructions.concat([''])
-      }
+      instructions: this.state.instructions.concat([''])
     })
   }
 
   removeInstruction = (index: number) => {
     return () => {
       this.setState({
-        form: {
-          ...this.state.form,
-          instructions: remove(index, 1, this.state.form.instructions)
-        }
+        instructions: remove(index, 1, this.state.instructions)
       })
     }
   }
@@ -371,24 +337,18 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
 
   addSubrecipe = () => {
     this.setState({
-      form: {
-        ...this.state.form,
-        ingredients: this.state.form.ingredients.concat([_subRecipe]),
-      }
+      ingredients: this.state.ingredients.concat([_subRecipe]),
     })
   }
 
   removeSubrecipe = (index: number) => {
     this.setState({
-      form: {
-        ...this.state.form,
-        ingredients: remove(index, 1, this.state.form.ingredients)
-      }
+      ingredients: remove(index, 1, this.state.ingredients)
     })
   }
   
   render() {
-    const { form, scrapeUrl } = this.state; 
+    const { scrapeUrl } = this.state; 
     return (
       <div>
         <Navbar
@@ -398,7 +358,6 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
             label='scrape recipe'
             value={scrapeUrl}
             onChange={(e: any)=>{ 
-              console.log('data', e.currentTarget.value);
               this.setState({scrapeUrl: e.currentTarget.value})}}
             button={{
               icon: 'format_shapes',
@@ -416,14 +375,14 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
               <Cell columns={10}>
                 <Input 
                   label='name'
-                  value={form.name}
+                  value={this.state.name}
                   onChange={this.updateField(['name'])}
                   style='display'
                 />
 
                 <Input
                   label='summary'
-                  value={form.summary}
+                  value={this.state.summary}
                   onChange={this.updateField(['summary'])}
                   textarea
                 />
@@ -436,14 +395,14 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 <Cell columns={3}>
                   <Input
                     label='name'
-                    value={form.author.name}
+                    value={this.state.author.name}
                     onChange={this.updateField(['author', 'name'])}
                   />
                 </Cell>
                 <Cell columns={3}>
                   <Input
                     label='website'
-                    value={form.author.website}
+                    value={this.state.author.website}
                     onChange={this.updateField(['author', 'website'])}
                   />
                 </Cell>
@@ -456,7 +415,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 <Cell columns={3}>
                   <Input
                     label='Preparation time'
-                    value={form.details.preparationTime}
+                    value={this.state.details.preparationTime}
                     onChange={this.updateField(['details', 'preparationTime'])}
                     icon='preparation'
                   />
@@ -464,7 +423,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 <Cell columns={3}>
                   <Input
                     label='Cooking time'
-                    value={form.details.cookingTime}
+                    value={this.state.details.cookingTime}
                     onChange={this.updateField(['details', 'cookingTime'])}
                     icon='cooking'
                   />
@@ -472,7 +431,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 <Cell columns={3}>
                   <Input
                     label='servings'
-                    value={form.details.servings}
+                    value={this.state.details.servings}
                     onChange={this.updateField(['details', 'servings'])}
                     type='number'
                     icon='servings'
@@ -481,19 +440,16 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 <Cell columns={3}>
                   <Input
                     label='recipe url'
-                    value={form.details.url || ''}
+                    value={this.state.details.url || ''}
                     onChange={this.updateField(['details', 'url'])}
                     icon='recipe'
                   />
                 </Cell>
                 <Cell columns={12}>
                   <TagInput
-                    initialValues={form.tags}
+                    initialValues={this.state.tags}
                     onNewTag={(tags) => { this.setState({
-                      form: {
-                        ...this.state.form,
-                        tags,
-                      }
+                      tags
                     })}}
                   />
                 </Cell>
@@ -503,7 +459,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
             <h5>Ingredients</h5>
             <section>
               <IngredientForm
-                components={form.ingredients}
+                components={this.state.ingredients}
                 updateField={this.updateField}
                 addSubrecipe={this.addSubrecipe}
                 updateSubrecipeName={this.updateSubrecipeName}
@@ -515,14 +471,14 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
             <h5>Instructions</h5>
             <section>
               {
-                form.instructions.map((instruction, i) => (
+                this.state.instructions.map((instruction, i) => (
                   <Row key={i}>
                     <Cell columns={12}>
                       <Input
                         label={`Step ${i+1}`}
                         value={instruction}
                         onChange={this.updateField(['instructions', i])}
-                        button={this.actionButton(form.instructions, i, this.addInstruction, this.removeInstruction(i))}
+                        button={this.actionButton(this.state.instructions, i, this.addInstruction, this.removeInstruction(i))}
                       />
                     </Cell>
                   </Row>
