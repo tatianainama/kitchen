@@ -6,7 +6,7 @@ import Btn from 'components/Button';
 import Input from 'components/Input';
 import TagInput from 'components/TagInput';
 import { Form as IngredientForm } from 'components/Ingredient';
-import CreateFormActions, { fetchScrape } from './actions';
+import { fetchScrape } from './actions';
 import { connect } from 'react-redux';
 import { CreateState } from './types';
 

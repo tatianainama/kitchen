@@ -4,6 +4,7 @@ const initialState: CreateState = {
   data: {},
   initialState: {},
   fromScrape: false,
+  scrapeUrl: null,
   fetchingScrape: false,
   invalidScrape: false,
 };
@@ -19,6 +20,7 @@ export const createReducer = (
         fromScrape: true,
         fetchingScrape: true,
         invalidScrape: false,
+        scrapeUrl: action.url,
       }
     case RECEIVE_SCRAPE:
       return {
@@ -33,7 +35,7 @@ export const createReducer = (
         ...state,
         fetchingScrape: false,
         invalidScrape: true,
-        fromScrape: false
+        fromScrape: false,
       }
     default:
       return state

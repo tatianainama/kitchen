@@ -13,30 +13,24 @@ export const SELECT_SUGGESTION = 'SELECT_SUGGESTION';
 
 interface ScrapeRecipeAction {
   type: typeof SCRAPE_RECIPE,
-  scrape: string,
-  fromScrape: boolean,
-  fetchingScrape: boolean,
-  invalidScrape: boolean,
+  url: string
 }
 
 interface ReceiveScrapeAction {
   type: typeof RECEIVE_SCRAPE,
-  fetchingScrape: boolean,
-  invalidScrape: boolean,
-  initialState: Recipe,
   data: Recipe,
 }
 
 interface InvalidScrapeAction {
   type: typeof INVALID_SCRAPE,
-  fetchingScrape: boolean,
-  invalidScrape: boolean,
+  error: any
 }
 
 export interface CreateState {
   data: Recipe|{},
   initialState: Recipe|{},
   fromScrape: boolean,
+  scrapeUrl: string|null,
   fetchingScrape: boolean,
   invalidScrape: boolean
 }
