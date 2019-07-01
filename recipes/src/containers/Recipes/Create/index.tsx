@@ -1,26 +1,20 @@
 import React from 'react';
-import { assocPath, remove, any } from 'ramda';
+import { assocPath, remove } from 'ramda';
 import  Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import Btn from 'components/Button';
 import Input from 'components/Input';
 import TagInput from 'components/TagInput';
 import { Form as IngredientForm } from 'components/Ingredient';
-import { fetchScrape } from './actions';
-import { connect } from 'react-redux';
-import { CreateState } from './types';
 
 import './styles.scss';
 
-import { scrapeRecipe } from './../services';
-
 import sample_img from "../../../sample.png";
-import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient, Suggestion } from 'types/recipes';
-import { AppState } from 'src/store/configureStore';
+
+import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient } from 'types/recipes';
+import { scrapeRecipe } from '../services';
 
 interface CreateRecipeProps {
-  createForm: CreateState,
-  fetchScrape: typeof fetchScrape
 };
 
 type CreateRecipeState = {
@@ -30,20 +24,9 @@ type CreateRecipeState = {
 
 type FormKeys = keyof Recipe | keyof SubRecipe | keyof Ingredient | keyof Author | keyof Details | number;
 
-const Suggestions = (suggestions: Suggestion[] = []) => (
-  <div>
-    {
-      suggestions.map(suggestion => (
-        <Btn>{suggestion.name}</Btn>
-      ))
-    }
-  </div>
-)
-
 class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState> {
   constructor(props: CreateRecipeProps) {
     super(props);
-    console.log("props", props);
     this.state = {
       form: { 
         ..._recipe,
@@ -288,28 +271,26 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
   }
 
   scrapeRecipe = () => {
-    this.props.fetchScrape(this.state.scrapeUrl)
-    // scrapeRecipe(this.state.scrapeUrl).then(recipe => {
-    //   this.setState({
-    //     form: {
-    //       ...recipe,
-    //       details: {
-    //         url: this.state.scrapeUrl,
-    //         ...recipe.details,
-    //       }
-    //     }
-    //   })
-    // })
+    scrapeRecipe(this.state.scrapeUrl).then(recipe => {
+      this.setState({
+        form: {
+          ...recipe,
+          details: {
+            url: this.state.scrapeUrl,
+            ...recipe.details,
+          }
+        }
+      })
+    })
   }
 
-  updateField = (key: FormKeys[]) => {
-    return (e: any) => {
-      const newValue = e.currentTarget.value;
-      this.setState({
-        form: assocPath(key, newValue, this.state.form)
-      } as Pick<CreateRecipeState, keyof CreateRecipeState>)
-    }
+  setData = (key: FormKeys[]) => (newValue: string|number) => {
+    this.setState({
+      form: assocPath(key, newValue, this.state.form)
+    } as Pick<CreateRecipeState, keyof CreateRecipeState>)
   }
+
+  updateField = (key: FormKeys[]) => ({ currentTarget }: any) => this.setData(key)(currentTarget.value);
 
   updateSubrecipeName = (subrecipe: number, newValue: string) => {
     this.setState({
@@ -529,67 +510,6 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 removeSubrecipe={this.removeSubrecipe}
                 updateIngredientUnit={this.updateIngredientUnit}
               />
-              {/* {
-                form.ingredients.map((group, i) => (
-                  <div key={i}>
-                    <Row>
-                      <Cell columns={4}>
-                        <Input
-                          label='group name'
-                          value={group.name}
-                          onChange={this.updateField(['ingredients', i, 'name'])}
-                          button={this.actionButton(form.ingredients, i, this.addSubrecipe, this.removeSubrecipe(i))}
-                        />
-                      </Cell>
-                    </Row>
-                    <div>
-                    {
-                      group.ingredients.map((ingredient, j) => (
-                        <Row key={j}>
-                          <Cell columns={4}>
-                            <Input
-                              label="ingredient"
-                              value={ingredient.name}
-                              onChange={this.updateField(['ingredients', i, 'ingredients', j, 'name'])}
-                            />
-                          </Cell>
-                          <Cell columns={2}>
-                            <Input
-                              label="quantity"
-                              value={ingredient.quantity}
-                              onChange={this.updateField(['ingredients', i, 'ingredients', j, 'quantity'])}
-                            />
-                          </Cell>
-                          <Cell columns={2}>
-                            <Select
-                              label='unit'
-                              options={[
-                                {label: 'grams', value: 'gr'},
-                                {label: 'cups', value: 'cup'},
-                                {label: 'mililiters', value: 'ml'},
-                              ]}
-                              onChange={(x) => {console.log('selected', x)}}
-                            />
-                          </Cell>
-                          <Cell columns={4}>
-                            <Input
-                              label="original/notes"
-                              value={ingredient._original}
-                              onChange={this.updateField(['ingredients', i, 'ingredients', j, '_original'])}
-                              button={this.actionButton(form.ingredients[i].ingredients, j, this.addIngredient(i, j), this.removeIngredient(i, j))}
-                            />
-                          </Cell>
-                          <Cell columns={12}>
-                            { Suggestions(ingredient.suggestions) }
-                          </Cell>
-                        </Row>
-                      ))
-                    }
-                    </div>
-                    
-                  </div>
-                ))
-              } */}
             </section>
 
             <h5>Instructions</h5>
@@ -621,16 +541,4 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
   }
 }
 
-const mapStateToProps = ({ recipes }: AppState, ownProps: any) => {
-  return {
-    createForm: recipes.create
-  };
-};
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    fetchScrape: (url: string) => dispatch(fetchScrape(url))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateRecipe);
+export default CreateRecipe;
