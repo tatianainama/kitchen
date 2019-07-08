@@ -1,0 +1,43 @@
+.cbk-recipe-form {
+  width: 100%;
+
+  input,
+  textarea {
+    width: 100%;
+    border: 0;
+    padding: 4px 0;
+    border-bottom: 1px solid #ccc;
+    background-color: transparent;
+  }
+
+  .ingredient-tabs {
+    
+    ul.tab-header {
+      display: flex;
+      width: 100%;
+      justify-content: space-evenly;
+
+      .tab {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        align-self: center;
+        
+        &__content {
+          padding: 20px;
+          flex-basis: 90%;
+        }
+
+        &--add {
+          flex-basis: 0;
+        }
+
+        button {
+          margin: 20px;
+        }
+      }
+    }
+    
+  }
+}

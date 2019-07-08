@@ -19,7 +19,8 @@ type InputProps = {
 	button?: {
 		icon: string,
 		onClick: () => void,
-	}
+	},
+	field?: any,
 };
 
 const Input = ({
@@ -31,7 +32,8 @@ const Input = ({
 	type = 'text',
 	style = 'regular',
 	icon,
-	button
+	button,
+	field = { name: '', value: '', onBlur: ()=>{}, onChange: ()=>{}}
 }: InputProps) => {
 	const fieldClasses = classNames(
 		'cbk-input',
@@ -57,20 +59,21 @@ const Input = ({
 			}
 			<div className="cbk-input-box">
 				<TextField
-					label={label}
+					label={field.name || label}
 					textarea={textarea}
 					className={fieldClasses}
 					fullWidth={style === 'display'}
 				>
 					<Field
-						value={value}
+						value={field.value}
+						onBlur={field.onBlur}
 						//@ts-ignore
-						onChange={onChange}
-						onKeyDown={onKeyDown}
+						onChange={field.onChange}
 						type={type}
 						min={0}
 						rows={1}
 						placeholder={style === 'display' ? label : ''}
+						name={field.name}
 					/>
 				</TextField>
 			</div>

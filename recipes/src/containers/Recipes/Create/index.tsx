@@ -6,6 +6,7 @@ import Btn from 'components/Button';
 import Input from 'components/Input';
 import TagInput from 'components/TagInput';
 import { Form as IngredientForm } from 'components/Ingredient';
+import RecipeForm from 'components/RecipeForm';
 
 import './styles.scss';
 
@@ -19,6 +20,7 @@ interface CreateRecipeProps {
 
 interface CreateRecipeState extends Recipe {
   scrapeUrl: string,
+  form: Recipe,
 };
 
 type FormKeys = keyof Recipe | keyof SubRecipe | keyof Ingredient | keyof Author | keyof Details | number;
@@ -28,241 +30,244 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
     super(props);
     this.state = { 
       ..._recipe,
-      ingredients: [
-        {
-          "name": "For the Chicken:",
-          "ingredients": [
-            {
-              "name": "thin boneless skinless chicken breast",
-              "quantity": 1.5,
-              "unit": "pound",
-              "_original": "1-1/2 lb of Thin Boneless Skinless Chicken Breast",
-              "suggestions": []
-            },
-            {
-              "name": "olive oil",
-              "quantity": 2,
-              "unit": "tablespoon",
-              "_original": "2 Tbsp of Olive Oil",
-              "suggestions": []
-            },
-            {
-              "name": "juice of  lime",
-              "quantity": 1,
-              "unit": "",
-              "_original": "Juice of 1 Lime",
-              "suggestions": []
-            },
-            {
-              "name": "chili powder",
-              "quantity": 0.5,
-              "unit": "teaspoon",
-              "_original": "1/2 tsp of Chili Powder",
-              "suggestions": [
-                {
-                  "_id": "5cf1397d72cd194524435041",
-                  "name": "cocoa powder",
-                  "variants": [
-                    "cocoa"
-                  ],
-                  "equivalence": 118,
-                  "referenceUnit": "cup",
-                  "prefferedUnit": "gr",
-                  "measure": 2
-                },
-                {
-                  "_id": "5cf1397d72cd19452443503c",
-                  "name": "icing sugar",
-                  "variants": [
-                    "confectioner sugar",
-                    "powdered sugar"
-                  ],
-                  "equivalence": 125,
-                  "referenceUnit": "cup",
-                  "prefferedUnit": "gr",
-                  "measure": 2
-                }
-              ]
-            },
-            {
-              "name": "oregano",
-              "quantity": 0.5,
-              "unit": "teaspoon",
-              "_original": "1/2 tsp of Oregano",
-              "suggestions": []
-            },
-            {
-              "name": "cumin",
-              "quantity": 0.5,
-              "unit": "teaspoon",
-              "_original": "1/2 tsp of Cumin",
-              "suggestions": []
-            },
-            {
-              "name": "paprika",
-              "quantity": 0.5,
-              "unit": "teaspoon",
-              "_original": "1/2 tsp of Paprika",
-              "suggestions": []
-            },
-            {
-              "name": "granulated garlic",
-              "quantity": 0.5,
-              "unit": "teaspoon",
-              "_original": "1/2 tsp of Granulated Garlic",
-              "suggestions": [
-                {
-                  "_id": "5cf1397d72cd19452443503b",
-                  "name": "granulated sugar",
-                  "variants": [
-                    "sugar",
-                    "plain sugar"
-                  ],
-                  "equivalence": 200,
-                  "referenceUnit": "cup",
-                  "prefferedUnit": "gr",
-                  "measure": 2
-                }
-              ]
-            },
-            {
-              "name": "salt, to taste",
-              "quantity": 0,
-              "unit": "",
-              "_original": "Salt, to taste",
-              "suggestions": []
-            }
-          ]
-        },
-        {
-          "name": "For the Dressing:",
-          "ingredients": [
-            {
-              "name": "plain greek yogurt",
-              "quantity": 0.5,
-              "unit": "cup",
-              "_original": "1/2 cup of Plain Greek Yogurt",
-              "suggestions": [
-                {
-                  "_id": "5cf1397d72cd194524435040",
-                  "name": "yogurt",
-                  "variants": [
-                    "plain yogurt"
-                  ],
-                  "equivalence": 245,
-                  "referenceUnit": "cup",
-                  "prefferedUnit": "gr",
-                  "measure": 2
-                },
-                {
-                  "_id": "5cf1397d72cd19452443503b",
-                  "name": "granulated sugar",
-                  "variants": [
-                    "sugar",
-                    "plain sugar"
-                  ],
-                  "equivalence": 200,
-                  "referenceUnit": "cup",
-                  "prefferedUnit": "gr",
-                  "measure": 2
-                },
-                {
-                  "_id": "5cf1397d72cd194524435030",
-                  "name": "all purpose flour",
-                  "variants": [
-                    "plain flour",
-                    "all purpose flour",
-                    "regular flour",
-                    "flour"
-                  ],
-                  "equivalence": 125,
-                  "referenceUnit": "cup",
-                  "prefferedUnit": "gr",
-                  "translation": {
-                    "dutch": "patentbloem"
+      form: {
+        ..._recipe,
+        ingredients: [
+          {
+            "name": "For the Chicken:",
+            "ingredients": [
+              {
+                "name": "thin boneless skinless chicken breast",
+                "quantity": 1.5,
+                "unit": "pound",
+                "_original": "1-1/2 lb of Thin Boneless Skinless Chicken Breast",
+                "suggestions": []
+              },
+              {
+                "name": "olive oil",
+                "quantity": 2,
+                "unit": "tablespoon",
+                "_original": "2 Tbsp of Olive Oil",
+                "suggestions": []
+              },
+              {
+                "name": "juice of  lime",
+                "quantity": 1,
+                "unit": "",
+                "_original": "Juice of 1 Lime",
+                "suggestions": []
+              },
+              {
+                "name": "chili powder",
+                "quantity": 0.5,
+                "unit": "teaspoon",
+                "_original": "1/2 tsp of Chili Powder",
+                "suggestions": [
+                  {
+                    "_id": "5cf1397d72cd194524435041",
+                    "name": "cocoa powder",
+                    "variants": [
+                      "cocoa"
+                    ],
+                    "equivalence": 118,
+                    "referenceUnit": "cup",
+                    "prefferedUnit": "gr",
+                    "measure": 2
                   },
-                  "measure": 2
-                }
-              ]
-            },
-            {
-              "name": "fresh cilantro",
-              "quantity": 1,
-              "unit": "cup",
-              "_original": "1 cup of Fresh Cilantro",
-              "suggestions": []
-            },
-            {
-              "name": "scallions, roughly chopped",
-              "quantity": 2,
-              "unit": "",
-              "_original": "2 Scallions, roughly chopped",
-              "suggestions": []
-            },
-            {
-              "name": "juice of  lime or more, according to taste",
-              "quantity": 1,
-              "unit": "",
-              "_original": "Juice of 1 Lime or more, according to taste",
-              "suggestions": []
-            },
-            {
-              "name": "olive oil",
-              "quantity": 1,
-              "unit": "tablespoon",
-              "_original": "1 Tbsp of Olive Oil",
-              "suggestions": []
-            },
-            {
-              "name": "salt, to taste",
-              "quantity": 0,
-              "unit": "",
-              "_original": "Salt, to taste",
-              "suggestions": []
-            }
-          ]
-        },
-        {
-          "name": "For the rest of the salad:",
-          "ingredients": [
-            {
-              "name": "fresh lettuce of your choice",
-              "quantity": 0,
-              "unit": "",
-              "_original": "Fresh Lettuce of your choice",
-              "suggestions": []
-            },
-            {
-              "name": "bell peppers, halved and seeded",
-              "quantity": 2,
-              "unit": "",
-              "_original": "2 Bell Peppers, halved and seeded",
-              "suggestions": []
-            },
-            {
-              "name": "scallions or red onion, sliced",
-              "quantity": 0,
-              "unit": "",
-              "_original": "Scallions or REd Onion, sliced",
-              "suggestions": []
-            },
-            {
-              "name": "pico de gallo salsa",
-              "quantity": 0.5,
-              "unit": "cup",
-              "_original": "1/2 cup of Pico De Gallo Salsa",
-              "suggestions": []
-            },
-            {
-              "name": "avocado, sliced",
-              "quantity": 1,
-              "unit": "",
-              "_original": "1 Avocado, sliced",
-              "suggestions": []
-            }
-          ]
-        }
-      ],
+                  {
+                    "_id": "5cf1397d72cd19452443503c",
+                    "name": "icing sugar",
+                    "variants": [
+                      "confectioner sugar",
+                      "powdered sugar"
+                    ],
+                    "equivalence": 125,
+                    "referenceUnit": "cup",
+                    "prefferedUnit": "gr",
+                    "measure": 2
+                  }
+                ]
+              },
+              {
+                "name": "oregano",
+                "quantity": 0.5,
+                "unit": "teaspoon",
+                "_original": "1/2 tsp of Oregano",
+                "suggestions": []
+              },
+              {
+                "name": "cumin",
+                "quantity": 0.5,
+                "unit": "teaspoon",
+                "_original": "1/2 tsp of Cumin",
+                "suggestions": []
+              },
+              {
+                "name": "paprika",
+                "quantity": 0.5,
+                "unit": "teaspoon",
+                "_original": "1/2 tsp of Paprika",
+                "suggestions": []
+              },
+              {
+                "name": "granulated garlic",
+                "quantity": 0.5,
+                "unit": "teaspoon",
+                "_original": "1/2 tsp of Granulated Garlic",
+                "suggestions": [
+                  {
+                    "_id": "5cf1397d72cd19452443503b",
+                    "name": "granulated sugar",
+                    "variants": [
+                      "sugar",
+                      "plain sugar"
+                    ],
+                    "equivalence": 200,
+                    "referenceUnit": "cup",
+                    "prefferedUnit": "gr",
+                    "measure": 2
+                  }
+                ]
+              },
+              {
+                "name": "salt, to taste",
+                "quantity": 0,
+                "unit": "",
+                "_original": "Salt, to taste",
+                "suggestions": []
+              }
+            ]
+          },
+          {
+            "name": "For the Dressing:",
+            "ingredients": [
+              {
+                "name": "plain greek yogurt",
+                "quantity": 0.5,
+                "unit": "cup",
+                "_original": "1/2 cup of Plain Greek Yogurt",
+                "suggestions": [
+                  {
+                    "_id": "5cf1397d72cd194524435040",
+                    "name": "yogurt",
+                    "variants": [
+                      "plain yogurt"
+                    ],
+                    "equivalence": 245,
+                    "referenceUnit": "cup",
+                    "prefferedUnit": "gr",
+                    "measure": 2
+                  },
+                  {
+                    "_id": "5cf1397d72cd19452443503b",
+                    "name": "granulated sugar",
+                    "variants": [
+                      "sugar",
+                      "plain sugar"
+                    ],
+                    "equivalence": 200,
+                    "referenceUnit": "cup",
+                    "prefferedUnit": "gr",
+                    "measure": 2
+                  },
+                  {
+                    "_id": "5cf1397d72cd194524435030",
+                    "name": "all purpose flour",
+                    "variants": [
+                      "plain flour",
+                      "all purpose flour",
+                      "regular flour",
+                      "flour"
+                    ],
+                    "equivalence": 125,
+                    "referenceUnit": "cup",
+                    "prefferedUnit": "gr",
+                    "translation": {
+                      "dutch": "patentbloem"
+                    },
+                    "measure": 2
+                  }
+                ]
+              },
+              {
+                "name": "fresh cilantro",
+                "quantity": 1,
+                "unit": "cup",
+                "_original": "1 cup of Fresh Cilantro",
+                "suggestions": []
+              },
+              {
+                "name": "scallions, roughly chopped",
+                "quantity": 2,
+                "unit": "",
+                "_original": "2 Scallions, roughly chopped",
+                "suggestions": []
+              },
+              {
+                "name": "juice of  lime or more, according to taste",
+                "quantity": 1,
+                "unit": "",
+                "_original": "Juice of 1 Lime or more, according to taste",
+                "suggestions": []
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tablespoon",
+                "_original": "1 Tbsp of Olive Oil",
+                "suggestions": []
+              },
+              {
+                "name": "salt, to taste",
+                "quantity": 0,
+                "unit": "",
+                "_original": "Salt, to taste",
+                "suggestions": []
+              }
+            ]
+          },
+          {
+            "name": "For the rest of the salad:",
+            "ingredients": [
+              {
+                "name": "fresh lettuce of your choice",
+                "quantity": 0,
+                "unit": "",
+                "_original": "Fresh Lettuce of your choice",
+                "suggestions": []
+              },
+              {
+                "name": "bell peppers, halved and seeded",
+                "quantity": 2,
+                "unit": "",
+                "_original": "2 Bell Peppers, halved and seeded",
+                "suggestions": []
+              },
+              {
+                "name": "scallions or red onion, sliced",
+                "quantity": 0,
+                "unit": "",
+                "_original": "Scallions or REd Onion, sliced",
+                "suggestions": []
+              },
+              {
+                "name": "pico de gallo salsa",
+                "quantity": 0.5,
+                "unit": "cup",
+                "_original": "1/2 cup of Pico De Gallo Salsa",
+                "suggestions": []
+              },
+              {
+                "name": "avocado, sliced",
+                "quantity": 1,
+                "unit": "",
+                "_original": "1 Avocado, sliced",
+                "suggestions": []
+              }
+            ]
+          }
+        ],
+      },
       scrapeUrl: '',
     }
   }
@@ -367,7 +372,10 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
         </Navbar>
         
         <div className="cbk-create-recipe">
-          <Grid>
+          <RecipeForm
+            initialValues={this.state.form}
+          />
+          {/* <Grid>
             <Row>
               <Cell columns={2}>
                 <img src={sample_img} style={{ width: '100%' }}/>
@@ -490,7 +498,7 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                 <Btn raised unelevated>Create</Btn>
               </Cell>
             </Row>
-          </Grid>
+          </Grid> */}
         </div>
       </div>
     )
