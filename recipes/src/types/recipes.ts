@@ -3,7 +3,13 @@ export interface Ingredient {
   quantity: number,
   unit: string,
   _original: string,
-  suggestions?: Suggestion[]
+  suggestions?: Suggestion[],
+  convertion?: {
+    measure: Measures,
+    equivalence?: number,
+    referenceUnit: Units,
+    prefferedUnit: Units,
+  }
 }
 
 export interface SubRecipe {
@@ -27,7 +33,7 @@ export const _ingredient: Ingredient = {
   name: '',
   quantity: 0,
   unit: '',
-  _original: ''
+  _original: '',
 };
 
 export const _subRecipe: SubRecipe = {

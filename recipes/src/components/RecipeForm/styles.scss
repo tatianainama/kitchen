@@ -10,7 +10,7 @@
     background-color: transparent;
   }
 
-  .ingredient-tabs {
+  .subrecipe-tabs {
     
     ul.tab-header {
       display: flex;
@@ -23,7 +23,7 @@
         justify-content: space-between;
         cursor: pointer;
         align-self: center;
-        
+
         &__content {
           padding: 20px;
           flex-basis: 90%;
@@ -39,5 +39,17 @@
       }
     }
     
+  }
+
+  .ingredients-form {
+    &-header {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px
+    }
+
+    &-item {
+      display: flex;
+    }
   }
 }
