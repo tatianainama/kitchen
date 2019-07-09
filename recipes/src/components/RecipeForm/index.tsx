@@ -4,6 +4,7 @@ import Recipe, { Ingredient, SubRecipe } from 'src/types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
 import sample_image from 'sample.png';
+import { GetMeasure, MeasuresTypes } from 'services/measurements';
 
 type IngredientsListProps = {
   ingredients: SubRecipe[],
@@ -63,11 +64,17 @@ const SubrecipeForm = ({form, remove, push}: any) => {
                 <Field name={`ingredients[${selectedTab}].ingredients[${index}].name`} />
                 <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
                 <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
-                  <option value='gr'>gr</option>
+                  {
+                    MeasuresTypes().map((measure, i) => (
+                      <option key={i} value={measure}>{measure}</option>    
+                    ))
+                  }
+                  <option value=''></option>
+                  {/* <option value='gr'>gr</option>
                   <option value='cup'>cup</option>
                   <option value='ml'>ml</option>
                   <option value='tablespoon'>tbsp</option>
-                  <option value='teaspoon'>tsp</option>
+                  <option value='teaspoon'>tsp</option> */}
                 </Field>
                 <Field name={`ingredients[${selectedTab}].ingredients[${index}].notes`} />
                 <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`}/>

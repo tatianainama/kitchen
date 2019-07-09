@@ -4,12 +4,6 @@ export interface Ingredient {
   unit: string,
   _original: string,
   suggestions?: Suggestion[],
-  convertion?: {
-    measure: Measures,
-    equivalence?: number,
-    referenceUnit: Units,
-    prefferedUnit: Units,
-  }
 }
 
 export interface SubRecipe {
@@ -66,26 +60,30 @@ export interface Equivalences {
   tbsp?: number,
   tsp?: number,
   stick?: number,
-  gr?: number,
+  g?: number,
   ml?: number,
   oz?: number,
   lb?: number,
 }
 
-type Units = 
-  "cup" |
-  "tbsp" |
-  "tsp" |
-  "stick" |
-  "gr" |
-  "ml" |
-  "oz" |
-  "lb" |
-  "pint" |
-  "gal" |
-  "unit" |
-  "pinch" |
-  "to taste"
+type Units =
+'cup' |
+'gal' |
+'oz' |
+'pt' |
+'lb' |
+'qt' |
+'tbsp' |
+'tsp' |
+'g' |
+'kg' |
+'l' |
+'mg' |
+'ml' |
+'pkg' |
+'sticks' |
+'pinch' |
+'to taste'
 ;
 
 enum Measures {
