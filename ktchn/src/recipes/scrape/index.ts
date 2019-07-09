@@ -4,6 +4,7 @@ import Sources from './sources';
 import { ScrapingSource } from './sources/index';
 import { IIngredient } from '../model';
 import { parse as parseIngredient } from 'recipe-ingredient-parser';
+import { units } from './service';
 
 function selectSourceAsync(url: string): Promise<ScrapingSource> {
   const foundSource = Sources.find((source) => {
@@ -23,7 +24,7 @@ export const parseIngredients = (rawIngredient: string): IIngredient => {
   return {
     name: parsed.ingredient,
     quantity: Number(parsed.quantity) || 0,
-    unit: parsed.unit || '',
+    unit: units(parsed.unit),
     _original: rawIngredient,
   };
 };

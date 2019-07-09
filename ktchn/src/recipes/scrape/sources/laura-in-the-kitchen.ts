@@ -1,5 +1,5 @@
 import { Recipe, RecipeDetails, IIngredient, ISubRecipe, Author } from '../../model';
-import { parse as parseIngredient } from "recipe-ingredient-parser";
+import { parseIngredients } from '../index';
 import { getText, getTextList, getAttr } from "./../service";
 
 const LITK_AUTHOR_DATA: Author = {
@@ -26,15 +26,6 @@ function getRecipeDetails($: CheerioSelector): RecipeDetails {
 }
 
 function getIngredients($: CheerioSelector): ISubRecipe[] {
-  const parseIngredients = (rawIngredient: string): IIngredient => {
-    let parsed = parseIngredient(rawIngredient);
-    return {
-      name: parsed.ingredient,
-      quantity: Number(parsed.quantity) || 0,
-      unit: parsed.unit || '',
-      _original: rawIngredient,
-    };
-  };
   const ingredientsScrape = $(SELECTORS.INGREDIENTS).children();
   const isNewIngredientList = (tagName: string): boolean => tagName === 'span';
   
