@@ -42,18 +42,54 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                       "unit": "lb",
                       "_original": "1-1/2 lb of Thin Boneless Skinless Chicken Breast",
                       "suggestions": [
-                          {
-                              "_id": "5d1659a3dae0822ea455db18",
-                              "name": "chicken breast",
-                              "variants": [
-                                  "chicken",
-                                  "skinless chicken"
-                              ],
-                              "referenceUnit": "lb",
-                              "prefferedUnit": "g",
-                              "measure": 0
-                          }
                       ]
+                  },
+                  {
+                    "name": "plain greek yogurt",
+                    "quantity": 0.5,
+                    "unit": "cup",
+                    "_original": "1/2 cup of Plain Greek Yogurt",
+                    "suggestions": [
+                        {
+                            "_id": "5d1659a3dae0822ea455db16",
+                            "name": "yogurt",
+                            "variants": [
+                                "plain yogurt"
+                            ],
+                            "equivalence": 245,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db11",
+                            "name": "granulated sugar",
+                            "variants": [
+                                "sugar",
+                                "plain sugar"
+                            ],
+                            "equivalence": 200,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db06",
+                            "name": "all purpose flour",
+                            "variants": [
+                                "plain flour",
+                                "all purpose flour",
+                                "regular flour"
+                            ],
+                            "equivalence": 125,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "translation": {
+                                "dutch": "patentbloem"
+                            },
+                            "measure": 2
+                        }
+                    ]
                   },
                   {
                       "name": "olive oil",
@@ -61,14 +97,6 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                       "unit": "tbsp",
                       "_original": "2 Tbsp of Olive Oil",
                       "suggestions": [
-                          {
-                              "_id": "5d1659a3dae0822ea455db19",
-                              "name": "olive oil",
-                              "variants": [],
-                              "referenceUnit": "tbsp",
-                              "prefferedUnit": "tbsp",
-                              "measure": 1
-                          }
                       ]
                   },
                   {
@@ -163,53 +191,6 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
               "name": "For the Dressing:",
               "ingredients": [
                   {
-                      "name": "plain greek yogurt",
-                      "quantity": 0.5,
-                      "unit": "cup",
-                      "_original": "1/2 cup of Plain Greek Yogurt",
-                      "suggestions": [
-                          {
-                              "_id": "5d1659a3dae0822ea455db16",
-                              "name": "yogurt",
-                              "variants": [
-                                  "plain yogurt"
-                              ],
-                              "equivalence": 245,
-                              "referenceUnit": "cup",
-                              "prefferedUnit": "g",
-                              "measure": 2
-                          },
-                          {
-                              "_id": "5d1659a3dae0822ea455db11",
-                              "name": "granulated sugar",
-                              "variants": [
-                                  "sugar",
-                                  "plain sugar"
-                              ],
-                              "equivalence": 200,
-                              "referenceUnit": "cup",
-                              "prefferedUnit": "g",
-                              "measure": 2
-                          },
-                          {
-                              "_id": "5d1659a3dae0822ea455db06",
-                              "name": "all purpose flour",
-                              "variants": [
-                                  "plain flour",
-                                  "all purpose flour",
-                                  "regular flour"
-                              ],
-                              "equivalence": 125,
-                              "referenceUnit": "cup",
-                              "prefferedUnit": "g",
-                              "translation": {
-                                  "dutch": "patentbloem"
-                              },
-                              "measure": 2
-                          }
-                      ]
-                  },
-                  {
                       "name": "fresh cilantro",
                       "quantity": 1,
                       "unit": "cup",
@@ -236,14 +217,6 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                       "unit": "tbsp",
                       "_original": "1 Tbsp of Olive Oil",
                       "suggestions": [
-                          {
-                              "_id": "5d1659a3dae0822ea455db19",
-                              "name": "olive oil",
-                              "variants": [],
-                              "referenceUnit": "tbsp",
-                              "prefferedUnit": "tbsp",
-                              "measure": 1
-                          }
                       ]
                   },
                   {

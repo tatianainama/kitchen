@@ -96,7 +96,7 @@ export interface Suggestion {
   _id?: string,
   name: string,
   variants?: string[],
-  equivalence?: number,
+  equivalence: number,
   prefferedUnit: Units,
   referenceUnit: Units,
   measure: Measures,

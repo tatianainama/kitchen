@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Formik, Field, FieldArray, FormikActions, FormikProps, FieldArrayRenderProps } from 'formik';
-import Recipe, { Ingredient, SubRecipe } from 'src/types/recipes';
+import Recipe, { Ingredient, SubRecipe, Suggestion } from 'src/types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
 import sample_image from 'sample.png';
-import { GetMeasure, MeasuresTypes } from 'services/measurements';
+import { MeasuresTypes } from 'services/measurements';
 
 type IngredientsListProps = {
   ingredients: SubRecipe[],
@@ -26,6 +26,17 @@ const custom = (label: string, component = 'text') => ({field}: any) => (
     }
   </span>
 );
+
+const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingredient => {
+  if (ingredient.unit === suggestion.referenceUnit) {
+    return {
+      ...ingredient,
+      unit: suggestion.prefferedUnit,
+      quantity: suggestion.equivalence * ingredient.quantity
+    }
+  }
+  return ingredient;
+}
 
 const SubrecipeForm = ({form, remove, push}: any) => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -70,22 +81,24 @@ const SubrecipeForm = ({form, remove, push}: any) => {
                     ))
                   }
                   <option value=''></option>
-                  {/* <option value='gr'>gr</option>
-                  <option value='cup'>cup</option>
-                  <option value='ml'>ml</option>
-                  <option value='tablespoon'>tbsp</option>
-                  <option value='teaspoon'>tsp</option> */}
                 </Field>
-                <Field name={`ingredients[${selectedTab}].ingredients[${index}].notes`} />
-                <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`}/>
+                <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
               </div>
               <div className='ingredients-form-suggestions'>
                 {
-                  ingredient.suggestions && ingredient.suggestions.map((suggestion, index) => (
-                    <button type='button' key={index}>{suggestion.name}</button>
+                  ingredient.suggestions && ingredient.suggestions.map((suggestion, sugIndex) => (
+                    <button
+                      type='button'
+                      key={sugIndex}
+                      onClick={() => {
+                        form.setFieldValue(
+                          `ingredients[${selectedTab}].ingredients[${index}]`,
+                          convertIngredient(ingredient, suggestion)
+                        )
+                      }}
+                    >{suggestion.name}</button>
                   ))
                 }
-                <button type='button'>Add convertion</button>
               </div>
             </div>
           ))
