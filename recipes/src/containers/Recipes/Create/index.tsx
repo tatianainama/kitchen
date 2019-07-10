@@ -34,29 +34,227 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
         ..._recipe,
         "ingredients": [
           {
-              "name": "For the Chicken:",
-              "ingredients": [
-                  {
-                      "name": "thin boneless skinless chicken breast",
-                      "quantity": 1.5,
-                      "unit": "lb",
-                      "_original": "1-1/2 lb of Thin Boneless Skinless Chicken Breast",
-                      "suggestions": [
-                      ]
-                  },
-                  {
-                    "name": "plain greek yogurt",
-                    "quantity": 0.5,
+            "name": "For the batter:",
+            "ingredients": [
+                {
+                    "name": "all purpose flour",
+                    "quantity": 1.5,
                     "unit": "cup",
-                    "_original": "1/2 cup of Plain Greek Yogurt",
+                    "_original": "1-1/2 cups of All Purpose Flour",
                     "suggestions": [
                         {
-                            "_id": "5d1659a3dae0822ea455db16",
-                            "name": "yogurt",
+                            "_id": "5d1659a3dae0822ea455db06",
+                            "name": "all purpose flour",
                             "variants": [
-                                "plain yogurt"
+                                "plain flour",
+                                "all purpose flour",
+                                "regular flour"
                             ],
-                            "equivalence": 245,
+                            "equivalence": 125,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "translation": {
+                                "dutch": "patentbloem"
+                            },
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db08",
+                            "name": "pastry flour",
+                            "variants": [
+                                "pastry flour"
+                            ],
+                            "equivalence": 114,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "translation": {
+                                "dutch": "zeeuwsebloem"
+                            },
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db07",
+                            "name": "bread flour",
+                            "variants": [
+                                "bread flour"
+                            ],
+                            "equivalence": 127,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "translation": {
+                                "dutch": "tarwebloem"
+                            },
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db09",
+                            "name": "almond flour",
+                            "equivalence": 96,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db0b",
+                            "name": "self raising flour",
+                            "equivalence": 125,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "baking powder",
+                    "quantity": 2,
+                    "unit": "tsp",
+                    "_original": "2 tsp of Baking Powder",
+                    "suggestions": [
+                        {
+                            "_id": "5d1659a3dae0822ea455db17",
+                            "name": "cocoa powder",
+                            "variants": [
+                                "cocoa"
+                            ],
+                            "equivalence": 118,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db12",
+                            "name": "icing sugar",
+                            "variants": [
+                                "confectioner sugar",
+                                "powdered sugar"
+                            ],
+                            "equivalence": 125,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "salt",
+                    "quantity": 0.5,
+                    "unit": "tsp",
+                    "_original": "1/2 tsp of Salt",
+                    "suggestions": []
+                },
+                {
+                    "name": "granulated sugar",
+                    "quantity": 0.5,
+                    "unit": "cup",
+                    "_original": "1/2 cup of Granulated Sugar",
+                    "suggestions": [
+                        {
+                            "_id": "5d1659a3dae0822ea455db11",
+                            "name": "granulated sugar",
+                            "variants": [
+                                "sugar",
+                                "plain sugar"
+                            ],
+                            "equivalence": 200,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db12",
+                            "name": "icing sugar",
+                            "variants": [
+                                "confectioner sugar",
+                                "powdered sugar"
+                            ],
+                            "equivalence": 125,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db13",
+                            "name": "caster sugar",
+                            "variants": [
+                                "fine sugar"
+                            ],
+                            "equivalence": 225,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db14",
+                            "name": "brown sugar",
+                            "equivalence": 200,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "unsalted butter, softened at room temperature",
+                    "quantity": 0.5,
+                    "unit": "cup",
+                    "_original": "1/2 cup Unsalted Butter, softened at room temperature",
+                    "suggestions": []
+                },
+                {
+                    "name": "eggs",
+                    "quantity": 2,
+                    "unit": "",
+                    "_original": "2 Eggs",
+                    "suggestions": []
+                },
+                {
+                    "name": "(you might need a bit more if the mixture is too thick) of milk",
+                    "quantity": 0.666,
+                    "unit": "cup",
+                    "_original": "2/3 cup of Milk (you might need a bit more if the mixture is too thick)",
+                    "suggestions": []
+                },
+                {
+                    "name": "vanilla extract",
+                    "quantity": 2,
+                    "unit": "tsp",
+                    "_original": "2 tsp of Vanilla Extract",
+                    "suggestions": []
+                }
+            ]
+        },
+        {
+            "name": "For the Filling:",
+            "ingredients": [
+                {
+                    "name": "( i use honeycrisp) medium apples  peeled and diced",
+                    "quantity": 2,
+                    "unit": "",
+                    "_original": "2 Medium apples ( I use Honeycrisp) peeled and diced",
+                    "suggestions": []
+                },
+                {
+                    "name": "apple butter",
+                    "quantity": 0.333,
+                    "unit": "cup",
+                    "_original": "1/3 cup of Apple Butter",
+                    "suggestions": []
+                }
+            ]
+        },
+        {
+            "name": "For the Topping:",
+            "ingredients": [
+                {
+                    "name": "brown sugar",
+                    "quantity": 0.25,
+                    "unit": "cup",
+                    "_original": "1/4 cup of Brown sugar",
+                    "suggestions": [
+                        {
+                            "_id": "5d1659a3dae0822ea455db14",
+                            "name": "brown sugar",
+                            "equivalence": 200,
                             "referenceUnit": "cup",
                             "prefferedUnit": "g",
                             "measure": 2
@@ -74,6 +272,37 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                             "measure": 2
                         },
                         {
+                            "_id": "5d1659a3dae0822ea455db12",
+                            "name": "icing sugar",
+                            "variants": [
+                                "confectioner sugar",
+                                "powdered sugar"
+                            ],
+                            "equivalence": 125,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db13",
+                            "name": "caster sugar",
+                            "variants": [
+                                "fine sugar"
+                            ],
+                            "equivalence": 225,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "all purpose flour",
+                    "quantity": 2,
+                    "unit": "tbsp",
+                    "_original": "2 Tbsp of All Purpose Flour",
+                    "suggestions": [
+                        {
                             "_id": "5d1659a3dae0822ea455db06",
                             "name": "all purpose flour",
                             "variants": [
@@ -88,186 +317,69 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
                                 "dutch": "patentbloem"
                             },
                             "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db08",
+                            "name": "pastry flour",
+                            "variants": [
+                                "pastry flour"
+                            ],
+                            "equivalence": 114,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "translation": {
+                                "dutch": "zeeuwsebloem"
+                            },
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db07",
+                            "name": "bread flour",
+                            "variants": [
+                                "bread flour"
+                            ],
+                            "equivalence": 127,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "translation": {
+                                "dutch": "tarwebloem"
+                            },
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db09",
+                            "name": "almond flour",
+                            "equivalence": 96,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
+                        },
+                        {
+                            "_id": "5d1659a3dae0822ea455db0b",
+                            "name": "self raising flour",
+                            "equivalence": 125,
+                            "referenceUnit": "cup",
+                            "prefferedUnit": "g",
+                            "measure": 2
                         }
                     ]
-                  },
-                  {
-                      "name": "olive oil",
-                      "quantity": 2,
-                      "unit": "tbsp",
-                      "_original": "2 Tbsp of Olive Oil",
-                      "suggestions": [
-                      ]
-                  },
-                  {
-                      "name": "juice of  lime",
-                      "quantity": 1,
-                      "unit": "",
-                      "_original": "Juice of 1 Lime",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "chili powder",
-                      "quantity": 0.5,
-                      "unit": "tsp",
-                      "_original": "1/2 tsp of Chili Powder",
-                      "suggestions": [
-                          {
-                              "_id": "5d1659a3dae0822ea455db17",
-                              "name": "cocoa powder",
-                              "variants": [
-                                  "cocoa"
-                              ],
-                              "equivalence": 118,
-                              "referenceUnit": "cup",
-                              "prefferedUnit": "g",
-                              "measure": 2
-                          },
-                          {
-                              "_id": "5d1659a3dae0822ea455db12",
-                              "name": "icing sugar",
-                              "variants": [
-                                  "confectioner sugar",
-                                  "powdered sugar"
-                              ],
-                              "equivalence": 125,
-                              "referenceUnit": "cup",
-                              "prefferedUnit": "g",
-                              "measure": 2
-                          }
-                      ]
-                  },
-                  {
-                      "name": "oregano",
-                      "quantity": 0.5,
-                      "unit": "tsp",
-                      "_original": "1/2 tsp of Oregano",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "cumin",
-                      "quantity": 0.5,
-                      "unit": "tsp",
-                      "_original": "1/2 tsp of Cumin",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "paprika",
-                      "quantity": 0.5,
-                      "unit": "tsp",
-                      "_original": "1/2 tsp of Paprika",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "granulated garlic",
-                      "quantity": 0.5,
-                      "unit": "tsp",
-                      "_original": "1/2 tsp of Granulated Garlic",
-                      "suggestions": [
-                          {
-                              "_id": "5d1659a3dae0822ea455db11",
-                              "name": "granulated sugar",
-                              "variants": [
-                                  "sugar",
-                                  "plain sugar"
-                              ],
-                              "equivalence": 200,
-                              "referenceUnit": "cup",
-                              "prefferedUnit": "g",
-                              "measure": 2
-                          }
-                      ]
-                  },
-                  {
-                      "name": "salt, to taste",
-                      "quantity": 0,
-                      "unit": "",
-                      "_original": "Salt, to taste",
-                      "suggestions": []
-                  }
-              ]
-          },
-          {
-              "name": "For the Dressing:",
-              "ingredients": [
-                  {
-                      "name": "fresh cilantro",
-                      "quantity": 1,
-                      "unit": "cup",
-                      "_original": "1 cup of Fresh Cilantro",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "scallions, roughly chopped",
-                      "quantity": 2,
-                      "unit": "",
-                      "_original": "2 Scallions, roughly chopped",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "juice of  lime or more, according to taste",
-                      "quantity": 1,
-                      "unit": "",
-                      "_original": "Juice of 1 Lime or more, according to taste",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "olive oil",
-                      "quantity": 1,
-                      "unit": "tbsp",
-                      "_original": "1 Tbsp of Olive Oil",
-                      "suggestions": [
-                      ]
-                  },
-                  {
-                      "name": "salt, to taste",
-                      "quantity": 0,
-                      "unit": "",
-                      "_original": "Salt, to taste",
-                      "suggestions": []
-                  }
-              ]
-          },
-          {
-              "name": "For the rest of the salad:",
-              "ingredients": [
-                  {
-                      "name": "fresh lettuce of your choice",
-                      "quantity": 0,
-                      "unit": "",
-                      "_original": "Fresh Lettuce of your choice",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "bell peppers, halved and seeded",
-                      "quantity": 2,
-                      "unit": "",
-                      "_original": "2 Bell Peppers, halved and seeded",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "scallions or red onion, sliced",
-                      "quantity": 0,
-                      "unit": "",
-                      "_original": "Scallions or REd Onion, sliced",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "pico de gallo salsa",
-                      "quantity": 0.5,
-                      "unit": "cup",
-                      "_original": "1/2 cup of Pico De Gallo Salsa",
-                      "suggestions": []
-                  },
-                  {
-                      "name": "avocado, sliced",
-                      "quantity": 1,
-                      "unit": "",
-                      "_original": "1 Avocado, sliced",
-                      "suggestions": []
-                  }
-              ]
-          }
+                },
+                {
+                    "name": "cold unsalted butter, cut into small pieces",
+                    "quantity": 2,
+                    "unit": "tbsp",
+                    "_original": "2 Tbsp of Cold Unsalted Butter, cut into small pieces",
+                    "suggestions": []
+                },
+                {
+                    "name": "cinnamon",
+                    "quantity": 1,
+                    "unit": "tsp",
+                    "_original": "1 tsp of Cinnamon",
+                    "suggestions": []
+                }
+            ]
+        }
       ],
       },
       scrapeUrl: '',

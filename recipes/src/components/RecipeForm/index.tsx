@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Formik, Field, FieldArray, FormikActions, FormikProps, FieldArrayRenderProps } from 'formik';
-import Recipe, { Ingredient, SubRecipe, Suggestion } from 'src/types/recipes';
+import Recipe, { Ingredient, SubRecipe, Suggestion, _ingredient } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
 import sample_image from 'sample.png';
@@ -38,21 +38,26 @@ const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingr
   return ingredient;
 }
 
-const SubrecipeForm = ({form, remove, push}: any) => {
+
+const SubrecipeForm = (props: any) => {
+  console.log(props);
+  const {form, remove, push} = props;
+  const subrecipes = form.values.ingredients;
   const [selectedTab, setSelectedTab] = useState(0);
+  const measurements = MeasuresTypes();
   return (
     <div className='subrecipe-tabs'>
       <ul className='tab-header'>
         {
-          form.values.ingredients.map((subrecipe: any, i: number) => (
+          subrecipes.map((subrecipe: any, subrecipeIdx: number) => (
             <li
-              className={`tab${selectedTab === i ? ' tab--selected' : ''}`}
-              key={i}
+              className={`tab${selectedTab === subrecipeIdx ? ' tab--selected' : ''}`}
+              key={subrecipeIdx}
             >
-              <div className='tab__content' onClick={()=> setSelectedTab(i)}> 
-                <Field name={`ingredients[${i}].name`}/>
+              <div className='tab__content' onClick={()=> setSelectedTab(subrecipeIdx)}> 
+                <Field name={`ingredients[${subrecipeIdx}].name`}/>
               </div>
-              <button type='button' onClick={()=> remove(i)}>X</button>
+              <button type='button' onClick={()=> remove(subrecipeIdx)}>X</button>
             </li>
           ))
         }
@@ -68,41 +73,53 @@ const SubrecipeForm = ({form, remove, push}: any) => {
           <span>Notes</span>
           <span>Original</span>
         </div>
-        {
-          form.values.ingredients[selectedTab].ingredients.map((ingredient: Ingredient, index: number) => (
-            <div key={index}>
-              <div className='ingredients-form-item'>
-                <Field name={`ingredients[${selectedTab}].ingredients[${index}].name`} />
-                <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
-                <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
-                  {
-                    MeasuresTypes().map((measure, i) => (
-                      <option key={i} value={measure}>{measure}</option>    
-                    ))
-                  }
-                  <option value=''></option>
-                </Field>
-                <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
-              </div>
-              <div className='ingredients-form-suggestions'>
+        <FieldArray
+          name={`ingredients[${selectedTab}].ingredients`}
+          render={ (ingredientHelpers: any) => {
+            return (
+              <div>
                 {
-                  ingredient.suggestions && ingredient.suggestions.map((suggestion, sugIndex) => (
-                    <button
-                      type='button'
-                      key={sugIndex}
-                      onClick={() => {
-                        form.setFieldValue(
-                          `ingredients[${selectedTab}].ingredients[${index}]`,
-                          convertIngredient(ingredient, suggestion)
-                        )
-                      }}
-                    >{suggestion.name}</button>
+                  form.values.ingredients[selectedTab].ingredients.map((ingredient: Ingredient, index: number) => (
+                    <div key={index}>
+                      <div className='ingredients-form-item'>
+                        <Field name={`ingredients[${selectedTab}].ingredients[${index}].name`} />
+                        <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
+                        <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
+                          {
+                            measurements.map((measure, measureIdx) => (
+                              <option key={measureIdx} value={measure}>{measure}</option>    
+                            ))
+                          }
+                          <option value=''></option>
+                        </Field>
+                        <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
+                        <button type='button' onClick={() => ingredientHelpers.remove(index)}>x</button>
+                      </div>
+                      <div className='ingredients-form-suggestions'>
+                        {
+                          ingredient.suggestions && ingredient.suggestions.map((suggestion, sugIdx) => (
+                            <button
+                              type='button'
+                              key={sugIdx}
+                              onClick={() => {
+                                form.setFieldValue(
+                                  `ingredients[${selectedTab}].ingredients[${index}]`,
+                                  convertIngredient(ingredient, suggestion)
+                                )
+                              }}
+                            >{suggestion.name}</button>
+                          ))
+                        }
+                      </div>
+                    </div>
                   ))
                 }
+                <button type='button' onClick={() => ingredientHelpers.push({ ..._ingredient })}>add ingredient</button>
               </div>
-            </div>
-          ))
-        }
+            )
+          }}
+        />
+        
       </div>
     </div>
   )
