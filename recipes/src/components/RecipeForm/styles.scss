@@ -1,8 +1,9 @@
+@import 'styles/_variables.scss';
+
 .cbk-recipe-form {
   width: 100%;
-
-  input,
-  textarea {
+  
+  input {
     width: 100%;
     border: 0;
     padding: 4px 0;
@@ -11,30 +12,93 @@
   }
 
   .subrecipe-tabs {
-    
     ul.tab-header {
       display: flex;
       width: 100%;
       justify-content: space-evenly;
 
       .tab {
+        padding: 0 $spacing-small;
         width: 100%;
         display: flex;
         justify-content: space-between;
         cursor: pointer;
         align-self: center;
+        position: relative;
+        
+        &:hover {
+          background-color: rgb(248, 248, 248);
+          cursor: pointer;
+        }
+    
+        &--selected {
+          background-color: rgb(248, 248, 248);
+        }
+
+        &--selected.tab span::before {
+          width: 100%;
+        }
+
+        span {
+          position: absolute;
+          display: block;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+        }
+
+        span::before {
+          content: "";
+          display: block;
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 0;
+          height: 2px;
+        
+          -webkit-transition: all 0.4s;
+          -o-transition: all 0.4s;
+          -moz-transition: all 0.4s;
+          transition: all 0.4s;
+        
+          background: #7f7f7f;
+        }
+
+        input {
+          @include button();
+          font-family: 'Roboto';
+          border-bottom: 0;
+        }
 
         &__content {
-          padding: 20px;
           flex-basis: 90%;
+          width: 100;
+          cursor: pointer;
         }
 
         &--add {
           flex-basis: 0;
         }
 
-        button {
-          margin: 20px;
+        &--add:hover {
+          background: transparent;
+        }
+
+        button.remove {
+          align-self: center;
+          --mdc-ripple-fg-size: 14px;
+          --mdc-ripple-left: 5px;
+          --mdc-ripple-top: 5px;
+          width: 24px;
+          height: 24px;
+          padding: 6px;
+          font-size: 12px;
+  
+          .material-icons {
+            font-size: 12px;
+          }
         }
       }
     }
@@ -42,10 +106,16 @@
   }
 
   .ingredients-form {
+    min-height: 400px;
+    
     &-header {
       display: flex;
-      justify-content: space-around;
-      padding: 10px
+      color: $grey-600;
+      & > * {
+        flex: 1;
+        align-self: center;
+        @include button();
+      }
     }
 
     &-item {

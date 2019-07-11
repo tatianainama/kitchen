@@ -60,3 +60,8 @@
 .mdc-text-field:hover::before {
   opacity: 0;
 }
+
+
+.cbk-light-input {
+  @include lightInput();
+}

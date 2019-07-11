@@ -3,7 +3,7 @@ import TextField, { HelperText, Input as Field } from '@material/react-text-fiel
 import classNames from 'classnames';
 import Button from 'components/Button';
 import Icon from '../Icon';
-
+import {FieldProps} from 'Formik';
 import '@material/react-text-field/dist/text-field.css';
 import './styles.scss';
 
@@ -83,5 +83,34 @@ const Input = ({
 			}
 		</div>
 )};
+
+interface LightInputProps extends FieldProps {
+	label?: string,
+	type?: 'textarea' | 'text' | 'number',
+};
+
+export const LightInput = (label?: string, type = 'text') => ({ field }: FieldProps) => {
+	const Tag = type === 'textarea' ? 'textarea' : 'input';
+
+	return (
+		<div className="cbk-light-input">
+			{ label && (<label>{label}</label>)}
+			<Tag
+				className={field.value ? 'has-value': ''}
+				type={type}
+				onChange={field.onChange}
+				name={field.name}
+				onBlur={field.onBlur} 
+			/>
+			{/* {
+				type === 'text' ?
+				(<input className={field.value ? 'has-value': ''} type="text" onChange={field.onChange} name={field.name} onBlur={field.onBlur} />) :
+				(<textarea className={field.value ? 'has-value': ''} onChange={field.onChange} name={field.name} onBlur={field.onBlur} />)
+			} */}
+			
+			<span></span>
+		</div>
+	);
+};
 
 export default Input;

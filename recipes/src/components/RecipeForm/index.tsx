@@ -1,31 +1,16 @@
 import React, { useState } from 'react';
-import { Formik, Field, FieldArray, FormikActions, FormikProps, FieldArrayRenderProps } from 'formik';
+import { Formik, Field, FieldArray, FormikActions, FormikProps, FieldProps } from 'formik';
 import Recipe, { Ingredient, SubRecipe, Suggestion, _ingredient } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
 import sample_image from 'sample.png';
 import { MeasuresTypes } from 'services/measurements';
-
-type IngredientsListProps = {
-  ingredients: SubRecipe[],
-}
+import { LightInput as Input } from 'components/Input';
+import Button from 'components/Button';
 
 type RecipeFormProps = {
   initialValues: Recipe
 }
-
-const custom = (label: string, component = 'text') => ({field}: any) => (
-  <span>
-    <label>
-      {label}
-    </label>
-    {
-      component === 'text' ? 
-        <input {...field}/> :
-        <textarea {...field}/>
-    }
-  </span>
-);
 
 const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingredient => {
   if (ingredient.unit === suggestion.referenceUnit) {
@@ -57,21 +42,22 @@ const SubrecipeForm = (props: any) => {
               <div className='tab__content' onClick={()=> setSelectedTab(subrecipeIdx)}> 
                 <Field name={`ingredients[${subrecipeIdx}].name`}/>
               </div>
-              <button type='button' onClick={()=> remove(subrecipeIdx)}>X</button>
+              <Button className='remove' type='button' icon='clear' onClick={() => remove(subrecipeIdx)}></Button>
+              <span></span>
             </li>
           ))
         }
         <li className='tab tab--add'>
-          <button type='button' onClick={()=> push({name: '', ingredients: []})}>+</button>
+          <Button type='button' icon='add' onClick={() => push({name: '', ingredients: []})}></Button>
         </li>
       </ul>
       <div className='ingredients-form'>
         <div className='ingredients-form-header'>
-          <span>Ingredient Name</span>
-          <span>Quantity</span>
-          <span>Unit</span>
-          <span>Notes</span>
-          <span>Original</span>
+          <div>Ingredient Name</div>
+          <div>Quantity</div>
+          <div>Unit</div>
+          <div>Notes</div>
+          <div>Original</div>
         </div>
         <FieldArray
           name={`ingredients[${selectedTab}].ingredients`}
@@ -82,7 +68,7 @@ const SubrecipeForm = (props: any) => {
                   form.values.ingredients[selectedTab].ingredients.map((ingredient: Ingredient, index: number) => (
                     <div key={index}>
                       <div className='ingredients-form-item'>
-                        <Field name={`ingredients[${selectedTab}].ingredients[${index}].name`} />
+                        <Field name={`ingredients[${selectedTab}].ingredients[${index}].name`}/>
                         <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
                         <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
                           {
@@ -92,6 +78,7 @@ const SubrecipeForm = (props: any) => {
                           }
                           <option value=''></option>
                         </Field>
+                        <Field name={`ingredients[${selectedTab}].ingredients[${index}].notes`}/>
                         <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
                         <button type='button' onClick={() => ingredientHelpers.remove(index)}>x</button>
                       </div>
@@ -138,9 +125,9 @@ const RenderForm = ({
           <img src={sample_image} style={{ width: '100%' }}/>
         </Cell>
         <Cell columns={10}>
-          <Field name='name' render={custom('name')}/>
+          <Field name='name' render={Input('name')}/>
   
-          <Field name='summary' render={custom('summary', 'textarea')}/>
+          <Field name='summary' render={Input('summary', 'textarea')}/>
         </Cell>
       </Row>
       
@@ -148,10 +135,10 @@ const RenderForm = ({
       <section>
         <Row>
           <Cell columns={3}>
-            <Field name='author.name'/>
+            <Field name='author.name' render={Input('name')}/>
           </Cell>
           <Cell columns={3}>
-            <Field name='author.website'/>
+            <Field name='author.website' render={Input('website')}/>
           </Cell>
         </Row>
       </section>
@@ -160,18 +147,16 @@ const RenderForm = ({
       <section>
         <Row>
           <Cell columns={3}>
-            <Field name='details.preparationTime'/>
+            <Field name='details.preparationTime' render={Input('preparation time')}/>
           </Cell>
           <Cell columns={3}>
-            <Field name='details.cookingTime'/>
+            <Field name='details.cookingTime' render={Input('cooking time')}/>
           </Cell>
           <Cell columns={3}>
-            <Field name='details.servings' type='number'/>
+            <Field name='details.servings' render={Input('servings', 'number')}/>
           </Cell>
           <Cell columns={3}>
-            <Field name='details.url'/>
-          </Cell>
-          <Cell columns={12}>
+            <Field name='details.url' render={Input('recipe url')}/>
           </Cell>
         </Row>
       </section>

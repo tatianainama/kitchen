@@ -1,1 +1,53 @@
 $box-shadow: 0 2px 2px 0 rgba(0,0,0,.16), 0 0 2px 0 rgba(0,0,0,.12);
+
+@mixin lightInput() {
+  width: 100%;
+  position: relative;
+  margin-bottom: $spacing-regular;
+
+  input,
+  textarea {
+    width: 100%;
+    border: 0;
+    padding: 4px 0;
+    border-bottom: 1px solid #ccc;
+    background-color: transparent;
+  }
+
+  span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+  
+  span::before {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+  
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+  
+    background: #7f7f7f;
+  }
+  
+  input:focus + span::before,
+  textarea:focus + span::before {
+    width: 100%;
+  }
+  
+  input.has-value + span::before,
+  textarea.has-value + span::before {
+    width: 100%;
+  }
+}
