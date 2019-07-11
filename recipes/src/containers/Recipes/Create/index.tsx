@@ -381,7 +381,12 @@ class CreateRecipe extends React.Component<CreateRecipeProps, CreateRecipeState>
             ]
         }
       ],
-      },
+        "instructions": [
+          "cut",
+          "cook",
+          "mix"
+        ]  
+    },
       scrapeUrl: '',
     }
   }

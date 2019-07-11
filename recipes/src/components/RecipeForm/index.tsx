@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Formik, Field, FieldArray, FormikActions, FormikProps, FieldProps } from 'formik';
+import React, { useState, Component } from 'react';
+import { Formik, Field, FieldArray, FormikActions, FormikProps, FieldProps, FieldArrayRenderProps, ArrayHelpers } from 'formik';
 import Recipe, { Ingredient, SubRecipe, Suggestion, _ingredient } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
@@ -14,10 +14,15 @@ type RecipeFormProps = {
 
 const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingredient => {
   if (ingredient.unit === suggestion.referenceUnit) {
+    console.log("changee", ingredient, suggestion)
     return {
       ...ingredient,
       unit: suggestion.prefferedUnit,
       quantity: suggestion.equivalence * ingredient.quantity
+    }
+  } else {
+    if (ingredient.unit === suggestion.prefferedUnit) {
+      alert('Reset values to original plox')
     }
   }
   return ingredient;
@@ -25,7 +30,6 @@ const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingr
 
 
 const SubrecipeForm = (props: any) => {
-  console.log(props);
   const {form, remove, push} = props;
   const subrecipes = form.values.ingredients;
   const [selectedTab, setSelectedTab] = useState(0);
@@ -195,22 +199,28 @@ const RenderForm = ({
   
       <h5>Instructions</h5>
       <section>
-        {
-          values.instructions.map((instruction: any, i: number) => (
-            <Row key={i}>
-              <Cell columns={12}>
-                <input
-                  type='text'
-                  id={`instructions[${i}]`}
-                  value={instruction}
-                  onChange={handleChange}
-                />
-              </Cell>
-            </Row>
-          ))
-        }
+        <FieldArray
+          name='instructions'
+          render={({remove, push}:ArrayHelpers) => (
+            <div>
+              {
+                values.instructions.map((instruction: string, instructionIdx: number) => (
+                  <Row key={instructionIdx}>
+                    <Cell columns={11}>
+                      <Field name={`instructions[${instructionIdx}]`}/>
+                    </Cell>
+                    <Cell columns={1}>
+                      <Button icon='clear' className='remove' onClick={() => remove(instructionIdx)}></Button>
+                    </Cell>
+                  </Row>
+                ))
+              }
+              <Button onClick={() => push('')}>Add instruction</Button>
+            </div>
+          )}
+        />
       </section>
-      <button type='submit'>Submit</button>    
+      <Button type='submit' raised unelevated>Submit</Button>
       </form>
     </Grid>
     

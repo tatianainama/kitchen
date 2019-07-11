@@ -146,20 +146,20 @@
         }
 
       }
-      button.remove {
-        align-self: center;
-        --mdc-ripple-fg-size: 14px;
-        --mdc-ripple-left: 5px;
-        --mdc-ripple-top: 5px;
-        width: 24px;
-        height: 24px;
-        padding: 6px;
-        font-size: 12px;
+    }
+  }
+  button.remove {
+    align-self: center;
+    --mdc-ripple-fg-size: 14px;
+    --mdc-ripple-left: 5px;
+    --mdc-ripple-top: 5px;
+    width: 24px;
+    height: 24px;
+    padding: 6px;
+    font-size: 12px;
 
-        .material-icons {
-          font-size: 12px;
-        }
-      }
+    .material-icons {
+      font-size: 12px;
     }
   }
 }
