@@ -1,6 +1,6 @@
 import React, { useState, Component } from 'react';
-import { Formik, Field, FieldArray, FormikActions, FormikProps, FieldProps, FieldArrayRenderProps, ArrayHelpers } from 'formik';
-import Recipe, { Ingredient, SubRecipe, Suggestion, _ingredient } from 'types/recipes';
+import { Formik, Field, FieldArray,  FormikProps, ArrayHelpers } from 'formik';
+import Recipe, { Ingredient, Suggestion, _ingredient } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
 import sample_image from 'sample.png';
