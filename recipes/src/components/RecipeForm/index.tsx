@@ -52,13 +52,23 @@ const SubrecipeForm = (props: any) => {
         </li>
       </ul>
       <div className='ingredients-form'>
-        <div className='ingredients-form-header'>
-          <div>Ingredient Name</div>
-          <div>Quantity</div>
-          <div>Unit</div>
-          <div>Notes</div>
-          <div>Original</div>
-        </div>
+        <Row className='ingredients-form-header'>
+          <Cell columns={4}>
+            Ingredient Name
+          </Cell>
+          <Cell columns={1}>
+            Quantity
+          </Cell>
+          <Cell columns={1}>
+            Unit
+          </Cell>
+          <Cell columns={2}>
+            Notes
+          </Cell>
+          <Cell columns={3}>
+            Original
+          </Cell>
+        </Row>
         <FieldArray
           name={`ingredients[${selectedTab}].ingredients`}
           render={ (ingredientHelpers: any) => {
@@ -66,26 +76,39 @@ const SubrecipeForm = (props: any) => {
               <div>
                 {
                   form.values.ingredients[selectedTab].ingredients.map((ingredient: Ingredient, index: number) => (
-                    <div key={index}>
-                      <div className='ingredients-form-item'>
-                        <Field name={`ingredients[${selectedTab}].ingredients[${index}].name`}/>
-                        <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
-                        <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
-                          {
-                            measurements.map((measure, measureIdx) => (
-                              <option key={measureIdx} value={measure}>{measure}</option>    
-                            ))
-                          }
-                          <option value=''></option>
-                        </Field>
-                        <Field name={`ingredients[${selectedTab}].ingredients[${index}].notes`}/>
-                        <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
-                        <button type='button' onClick={() => ingredientHelpers.remove(index)}>x</button>
-                      </div>
-                      <div className='ingredients-form-suggestions'>
+                    <div key={index} className='ingredients-form-item'>
+                      <Row className='ingredient-detail'>
+                        <Cell columns={4}>
+                          <Field name={`ingredients[${selectedTab}].ingredients[${index}].name`}/>
+                        </Cell>
+                        <Cell columns={1}>
+                          <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
+                        </Cell>
+                        <Cell columns={1}>
+                          <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
+                            {
+                              measurements.map((measure, measureIdx) => (
+                                <option key={measureIdx} value={measure}>{measure}</option>    
+                              ))
+                            }
+                            <option value=''></option>
+                          </Field>  
+                        </Cell>
+                        <Cell columns={2}>
+                          <Field name={`ingredients[${selectedTab}].ingredients[${index}].notes`}/>
+                        </Cell>
+                        <Cell columns={3}>
+                          <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
+                        </Cell>
+                        <Cell columns={1}>  
+                          <Button type='button' icon='clear' className='remove' onClick={() => ingredientHelpers.remove(index)}></Button>
+                        </Cell>
+                      </Row>
+                      <div className='ingredient-suggestions'>
                         {
                           ingredient.suggestions && ingredient.suggestions.map((suggestion, sugIdx) => (
                             <button
+                              className='suggestion'
                               type='button'
                               key={sugIdx}
                               onClick={() => {
@@ -101,7 +124,7 @@ const SubrecipeForm = (props: any) => {
                     </div>
                   ))
                 }
-                <button type='button' onClick={() => ingredientHelpers.push({ ..._ingredient })}>add ingredient</button>
+                <Button type='button' onClick={() => ingredientHelpers.push({ ..._ingredient })}>add ingredient</Button>
               </div>
             )
           }}

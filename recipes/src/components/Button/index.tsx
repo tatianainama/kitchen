@@ -19,7 +19,7 @@ type CBKButtonProps = {
 export default function CBKButton(props: any) {
   if (props.icon) {
     return (
-      <IconButton onClick={props.onClick} {...props}>
+      <IconButton onClick={props.onClick} {...props} >
         <Icon material icon={props.icon}/>
       </IconButton>
     );

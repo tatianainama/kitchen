@@ -1,5 +1,15 @@
 $box-shadow: 0 2px 2px 0 rgba(0,0,0,.16), 0 0 2px 0 rgba(0,0,0,.12);
 
+@mixin button-reset {
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+  box-shadow: 0;
+  outline: 0;
+}
+
 @mixin lightInput() {
   width: 100%;
   position: relative;
