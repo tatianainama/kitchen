@@ -8,6 +8,9 @@ export const getRecipes = (query: any): Promise<Recipe[]> =>
   axios.get(`${API}/all`)
   .then(response => response.data);
 
+  export const saveRecipe = (recipe: Recipe): Promise<any> => 
+    axios.post(`${API}`, recipe)
+
 export const scrapeRecipe = (url: string): Promise<Recipe> => 
   axios.post(
     `${API}/scrape`,
@@ -17,4 +20,5 @@ export const scrapeRecipe = (url: string): Promise<Recipe> =>
 export default {
   getRecipes,
   scrapeRecipe,
+  saveRecipe
 }

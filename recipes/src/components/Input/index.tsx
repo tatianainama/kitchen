@@ -65,15 +65,13 @@ const Input = ({
 					fullWidth={style === 'display'}
 				>
 					<Field
-						value={field.value}
-						onBlur={field.onBlur}
+						value={value}
 						//@ts-ignore
-						onChange={field.onChange}
+						onChange={onChange}
 						type={type}
 						min={0}
 						rows={1}
 						placeholder={style === 'display' ? label : ''}
-						name={field.name}
 					/>
 				</TextField>
 			</div>
@@ -98,9 +96,8 @@ export const LightInput = (label?: string, type = 'text') => ({ field }: FieldPr
 			<Tag
 				className={field.value ? 'has-value': ''}
 				type={type}
-				onChange={field.onChange}
-				name={field.name}
-				onBlur={field.onBlur} 
+				{...field}
+
 			/>
 			{/* {
 				type === 'text' ?

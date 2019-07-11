@@ -9,12 +9,12 @@ import { LightInput as Input } from 'components/Input';
 import Button from 'components/Button';
 
 type RecipeFormProps = {
-  initialValues: Recipe
+  initialValues: Recipe,
+  onSubmit: (recipe: Recipe) => void
 }
 
 const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingredient => {
   if (ingredient.unit === suggestion.referenceUnit) {
-    console.log("changee", ingredient, suggestion)
     return {
       ...ingredient,
       unit: suggestion.prefferedUnit,
@@ -228,12 +228,11 @@ const RenderForm = ({
   );
 }
 
-const RecipeForm = ({ initialValues }: RecipeFormProps) => (
+const RecipeForm = ({ initialValues, onSubmit }: RecipeFormProps) => (
   <Formik
+    enableReinitialize
     initialValues={initialValues}
-    onSubmit={(values: any, actions:any) => {
-      console.log('submit', values, actions)
-    }}
+    onSubmit={(values: any, actions:any) => onSubmit(values)}
     render={RenderForm}
   />
 );
