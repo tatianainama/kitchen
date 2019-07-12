@@ -38,7 +38,16 @@ async function scrape(url:string) {
   };
   return RequestPromise(options).then(
     $ => selectSourceAsync(url).then(
-      source => source.scrapeRecipe($)
+      source => {
+        const recipe = source.scrapeRecipe($);
+        const cleanIngredients = recipe.ingredients.filter(subRecipe => {
+          return subRecipe.name !== '' && subRecipe.ingredients.length !== 0;
+        })
+        return {
+          ...recipe,
+          ingredients: cleanIngredients,
+        };
+      }
     )
   )
 }
