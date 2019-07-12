@@ -20,13 +20,22 @@ function selectSourceAsync(url: string): Promise<ScrapingSource> {
 }
 
 export const parseIngredients = (rawIngredient: string): IIngredient => {
-  let parsed = parseIngredient(rawIngredient);
-  return {
-    name: parsed.ingredient,
-    quantity: Number(parsed.quantity) || 0,
-    unit: units(parsed.unit),
-    _original: rawIngredient,
-  };
+  try {
+    let parsed = parseIngredient(rawIngredient);
+    return {
+      name: parsed.ingredient,
+      quantity: Number(parsed.quantity) || 0,
+      unit: units(parsed.unit),
+      _original: rawIngredient,
+    };
+  } catch {
+    return {
+      name: '',
+      quantity: 0,
+      unit: '',
+      _original: rawIngredient
+    }
+  }
 };
 
 async function scrape(url:string) {
@@ -40,13 +49,17 @@ async function scrape(url:string) {
     $ => selectSourceAsync(url).then(
       source => {
         const recipe = source.scrapeRecipe($);
-        const cleanIngredients = recipe.ingredients.filter(subRecipe => {
-          return subRecipe.name !== '' && subRecipe.ingredients.length !== 0;
-        })
-        return {
-          ...recipe,
-          ingredients: cleanIngredients,
-        };
+        if (recipe.ingredients.length > 1 ) {
+          const cleanIngredients = recipe.ingredients.filter(subRecipe => {
+            return subRecipe.name !== '' && subRecipe.ingredients.length !== 0;
+          })
+          return {
+            ...recipe,
+            ingredients: cleanIngredients,
+          };
+        } else {
+          return recipe;
+        }
       }
     )
   )

@@ -1,5 +1,5 @@
 import React, { useState, Component } from 'react';
-import { Formik, Field, FieldArray,  FormikProps, ArrayHelpers } from 'formik';
+
 import Recipe, { Ingredient, Suggestion, _ingredient } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
@@ -7,6 +7,8 @@ import sample_image from 'sample.png';
 import { MeasuresTypes } from 'services/measurements';
 import { LightInput as Input } from 'components/Input';
 import Button from 'components/Button';
+//@ts-ignore
+import { Field, FieldArray, FormikProps, ArrayHelpers, Formik } from 'formik';
 
 type RecipeFormProps = {
   initialValues: Recipe,
