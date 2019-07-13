@@ -28,7 +28,7 @@
         @include ripple($grey-200, $grey-300);
     
         &--selected {
-          background-color: $grey-200;
+          background-color: $grey-100;
         }
 
         &--selected.tab span::before {
@@ -120,7 +120,7 @@
         align-items: end;
       }
       input {
-        line-height: 1.5rem;
+        line-height: 1rem;
         width: 100%;
       }
 

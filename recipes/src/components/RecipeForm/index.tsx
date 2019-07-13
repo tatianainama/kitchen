@@ -1,6 +1,6 @@
 import React, { useState, Component } from 'react';
 
-import Recipe, { Ingredient, Suggestion, _ingredient } from 'types/recipes';
+import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
 import sample_image from 'sample.png';
@@ -46,15 +46,21 @@ const SubrecipeForm = (props: any) => {
               key={subrecipeIdx}
             >
               <div className='tab__content' onClick={()=> setSelectedTab(subrecipeIdx)}> 
-                <Field name={`ingredients[${subrecipeIdx}].name`}/>
+                <Field name={`ingredients[${subrecipeIdx}].name`} placeholder='subrecipe name'/>
               </div>
-              <Button className='remove' type='button' icon='clear' onClick={() => remove(subrecipeIdx)}></Button>
+              <Button
+                className='remove'
+                type='button'
+                icon='clear'
+                onClick={() => remove(subrecipeIdx)}
+                disabled={subrecipes.length === 1}
+              ></Button>
               <span></span>
             </li>
           ))
         }
         <li className='tab tab--add'>
-          <Button type='button' icon='add' onClick={() => push({name: '', ingredients: []})}></Button>
+          <Button type='button' icon='add' onClick={() => push({..._subRecipe})}></Button>
         </li>
       </ul>
       <div className='ingredients-form'>
@@ -81,7 +87,7 @@ const SubrecipeForm = (props: any) => {
             return (
               <div>
                 {
-                  form.values.ingredients[selectedTab].ingredients.map((ingredient: Ingredient, index: number) => (
+                  form.values.ingredients[selectedTab] && form.values.ingredients[selectedTab].ingredients.map((ingredient: Ingredient, index: number) => (
                     <div key={index} className='ingredients-form-item'>
                       <Row className='ingredient-detail'>
                         <Cell columns={4}>
@@ -106,8 +112,8 @@ const SubrecipeForm = (props: any) => {
                         <Cell columns={3}>
                           <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
                         </Cell>
-                        <Cell columns={1}>  
-                          <Button type='button' icon='clear' className='remove' onClick={() => ingredientHelpers.remove(index)}></Button>
+                        <Cell columns={1}> 
+                          <Button type='button' icon='clear' className='remove' onClick={() => ingredientHelpers.remove(index)} disabled={form.values.ingredients[selectedTab].ingredients.length === 1}></Button>
                         </Cell>
                       </Row>
                       <div className='ingredient-suggestions'>
@@ -217,7 +223,7 @@ const RenderForm = ({
                   </Row>
                 ))
               }
-              <Button onClick={() => push('')}>Add instruction</Button>
+              <Button type="button" onClick={() => push('')}>Add instruction</Button>
             </div>
           )}
         />
