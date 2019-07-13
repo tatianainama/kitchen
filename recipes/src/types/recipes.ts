@@ -36,7 +36,6 @@ export const _subRecipe: SubRecipe = {
 };
 
 export const _recipe: Recipe = {
-  _id: '',
   author: {
     name: '',
     website: '',
@@ -108,7 +107,7 @@ export interface Suggestion {
 }
 
 export default interface Recipe {
-  _id: string,
+  _id?: string,
   author: Author,
   details: Details,
   ingredients: SubRecipe[],
