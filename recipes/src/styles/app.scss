@@ -37,6 +37,7 @@ h4 {
   font-family: $font-family-display;
   font-weight: $font-weight-bold;
   font-size: $font-size-xx-large;
+  line-height: 1.5rem;
 }
 
 h4:after {
@@ -44,7 +45,7 @@ h4:after {
   display: block;
   margin: 0 auto;
   width: 50px;
-  margin-top: -20px;
+  margin-top: -14px;
   border-bottom: 16px solid;
   border-bottom-color: $grey-300;
   margin-left: -4px;
@@ -57,11 +58,19 @@ code {
 
 #root {
   display: flex;
-  height: 100vh;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.cbk-app-drawer {
+  flex-basis: 16rem;
+  flex-grow: 1;
 }
 
 .cbk-main {
-  width: 100%;
+  flex-basis: 0;
+  flex-grow: 9999;
+
   .mdc-layout-grid {
     display: flex;
     flex-direction: column;
@@ -105,4 +114,48 @@ textarea
 	-webkit-box-sizing:content-box;
 	-moz-box-sizing:content-box;
 	box-sizing:content-box;
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles 
+*/
+
+@media (max-width: 840px) {
+  
+  #root {
+    flex-direction: column;
+    .cbk-app-drawer {
+      flex-basis: unset;
+
+      .cbk-drawer {
+        width: 100%;
+        flex-direction: row;
+        padding: 1rem;
+        h1.mdc-drawer__title {
+          margin: 0;
+          padding: 0;
+
+          &:after,
+          &:before {
+            display: none;
+          }
+        }
+        .mdc-drawer__header,
+        .mdc-list {
+          min-height: unset;
+          padding: 0;
+          display: flex;
+          flex-direction: row;
+          .mdc-list-item {
+            margin: 0;
+          }
+        }
+
+        .cbk-icon svg {
+          width: 45px!important;
+        }
+      }
+    }
+  }
+  
 }

@@ -19,44 +19,38 @@ function Users() {
 
 const store = configureStore();
 
-class App extends Component<{}, {}> {
-  navbarItems: { title: string, path: string, active: boolean }[]
-
-  constructor(props: any) {
-    super(props);
-    this.navbarItems = [
-      { title: 'Recipes', path: '/recipes', active: false },
-      { title: 'Planner', path: '/planner', active: false },
-      { title: 'Shoplist', path: '/shoplist', active: false },
-    ];
-  }
-
-  render() {
-    return (
-      <Provider store={store}>
-        <Router>
-          <CBKDrawer>
-            {
-              this.navbarItems.map((item, i) => (
-                <NavLink
-                  to={item.path}
-                  activeClassName='active'
-                  key={i}
-                >{item.title}</NavLink>
-              ))
-            }
-          </CBKDrawer>
-          <div className="cbk-main">
-            {
-              Routes.map((route, i) => (
-                <RouteWithSubRoutes key={i} {...route} />
-              ))
-            }
-          </div>
-        </Router>
-      </Provider>
-    )
-  }
+const App = () => {
+  const navbarItems = [
+    { title: 'Recipes', path: '/recipes', active: false },
+    { title: 'Planner', path: '/planner', active: false },
+    { title: 'Shoplist', path: '/shoplist', active: false },
+  ];
+  return (
+    <Provider store={store}>
+      <Router>
+        <div className="cbk-app-drawer">
+        <CBKDrawer>
+          {
+            navbarItems.map((item, i) => (
+              <NavLink
+                to={item.path}
+                activeClassName='active'
+                key={i}
+              >{item.title}</NavLink>
+            ))
+          }
+        </CBKDrawer>
+        </div>
+        <div className="cbk-main">
+          {
+            Routes.map((route, i) => (
+              <RouteWithSubRoutes key={i} {...route} />
+            ))
+          }
+        </div>
+      </Router>
+    </Provider>
+  )
 }
 
 export default App;

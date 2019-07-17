@@ -83,7 +83,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
 
         <Grid>
           <Row>
-            <Cell columns={6}>
+            <Cell columns={6} phoneColumns={4} tabletColumns={8}>
               {
                 data.map((recipe, i) => {
                   return (

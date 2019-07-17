@@ -3,7 +3,6 @@ import { Route } from 'react-router';
 import RecipesContainer from 'containers/Recipes';
 
 const emptyRoute = (title: string) => () => {
-  debugger;
   return (<h1>{title}</h1>);
 };
 
