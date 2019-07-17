@@ -6,14 +6,14 @@ import {
 } from "containers/Recipes/List/actions";
 import { connect } from "react-redux";
 import { Grid, Row, Cell } from "@material/react-layout-grid";
-import { Button } from "@material/react-button";
+import Button from "components/Button";
 import Card from 'components/Card';
 import RecipeCard from 'components/RecipeCard';
 import Recipe from 'types/recipes';
 import Navbar from 'components/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 
-type RecipeListProps = {
+interface RecipeListProps extends RouteComponentProps {
   data: Recipe[],
   isFetching: boolean,
   selectedRecipe: any | undefined,
@@ -22,9 +22,12 @@ type RecipeListProps = {
   selectRecipe: (recipe: Recipe) => undefined,
 };
 
-class RecipeList extends Component<RecipeListProps> {
-  constructor(props: any) {
+class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
+  constructor(props: RecipeListProps) {
     super(props);
+    this.state = {
+      phoneDisplay: window.innerWidth < 600
+    }
   }
 
   componentDidMount() {
@@ -39,8 +42,13 @@ class RecipeList extends Component<RecipeListProps> {
     }
   }
 
-  handleRecipeSelection(recipe: any) {
-    return (event: React.MouseEvent) => this.props.selectRecipe(recipe);
+  handleRecipeSelection(recipe: Recipe) {
+    return (event: React.MouseEvent) => {
+      this.props.selectRecipe(recipe) 
+      if (this.state.phoneDisplay) {
+        this.props.history.push('/recipes/view/' + recipe._id)
+      }
+    };
   }
 
   handler(event: React.MouseEvent) {
@@ -66,16 +74,18 @@ class RecipeList extends Component<RecipeListProps> {
         <Navbar
           title="Recipes"
         >
-          <Button unelevated>
-            <Link to='/recipes/create'>Create Recipe</Link>
-          </Button>
+          <Link to='/recipes/create'>
+            <Button unelevated>
+              Create Recipe
+            </Button>
+          </Link>
         </Navbar>
 
         <Grid>
           <Row>
             <Cell columns={6}>
               {
-                data.map((recipe: any, i: number) => {
+                data.map((recipe, i) => {
                   return (
                     <Card
                       key={i}
