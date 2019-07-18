@@ -3,24 +3,41 @@ import { getRecipeById } from './../services';
 import { RouteComponentProps } from 'react-router';
 
 import RecipeCard from 'components/RecipeCard';
-import { _recipe } from 'types/recipes';
+import Recipe, { _recipe } from 'types/recipes';
 
 interface ViewRecipeProps extends RouteComponentProps<{id: string}>{
 
 }
 
-const ViewRecipe = (props: ViewRecipeProps) => {
-  const [ recipe, setRecipe ] = useState({..._recipe});
+class ViewRecipe extends React.Component<ViewRecipeProps, {recipe: Recipe}> {
+  constructor(props: ViewRecipeProps) {
+    super(props);
+    this.state = {
+      recipe: { ..._recipe }
+    }
+  }
 
-  useEffect(() => {
-    getRecipeById(props.match.params.id).then(recipe => setRecipe(recipe))
-  });
+  componentDidMount() {
+    getRecipeById(this.props.match.params.id).then(
+      recipe => this.setState({ recipe })
+    );
+  }
 
-  return (
-    <div className='cbk-recipe-viewer'>
-      <RecipeCard recipe={recipe}/>
-    </div>
-  )
+  render() {
+    return (
+      <div className='cbk-recipe-viewer'>
+        <RecipeCard recipe={this.state.recipe}/>
+      </div>
+    );
+  }
 }
+// const ViewRecipe = (props: ViewRecipeProps) => {
+//   const [ recipe, setRecipe ] = useState({..._recipe});
+//   return (
+//     <div className='cbk-recipe-viewer'>
+//       <RecipeCard recipe={recipe}/>
+//     </div>
+//   )
+// }
 
 export default ViewRecipe;

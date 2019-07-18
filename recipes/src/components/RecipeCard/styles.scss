@@ -6,8 +6,6 @@
   
   &__primary {
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
     justify-content: space-between;
 
     &__image.mdc-card__media {
@@ -65,6 +63,16 @@
           margin: $spacing-small 0px;
         }
       }
+    }
+  }
+
+  @media #{$phone} {
+    padding: $spacing-small;
+    .cbk-recipe-card__primary {
+      flex-direction: column;
+    }
+    .cbk-recipe-card__primary__title {
+      padding: $spacing-regular 0;
     }
   }
 }

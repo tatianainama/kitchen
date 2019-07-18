@@ -44,9 +44,10 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
 
   handleRecipeSelection(recipe: Recipe) {
     return (event: React.MouseEvent) => {
-      this.props.selectRecipe(recipe) 
       if (this.state.phoneDisplay) {
         this.props.history.push('/recipes/view/' + recipe._id)
+      } else {
+        this.props.selectRecipe(recipe) 
       }
     };
   }

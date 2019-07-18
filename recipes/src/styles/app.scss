@@ -125,6 +125,9 @@ textarea
   
   #root {
     flex-direction: column;
+    display: flex;
+    flex-wrap: unset;
+
     .cbk-app-drawer {
       flex-basis: unset;
 
@@ -133,13 +136,7 @@ textarea
         flex-direction: row;
         padding: 1rem;
         h1.mdc-drawer__title {
-          margin: 0;
-          padding: 0;
-
-          &:after,
-          &:before {
-            display: none;
-          }
+          display: none;
         }
         .mdc-drawer__header,
         .mdc-list {
@@ -147,13 +144,17 @@ textarea
           padding: 0;
           display: flex;
           flex-direction: row;
+          font-size: $font-size-small;
           .mdc-list-item {
             margin: 0;
+            a {
+              font-size: $font-size-regular;
+            }
           }
         }
 
         .cbk-icon svg {
-          width: 45px!important;
+          width: 35px!important;
         }
       }
     }
