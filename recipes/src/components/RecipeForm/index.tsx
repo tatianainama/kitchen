@@ -1,6 +1,6 @@
 import React, { useState, Component } from 'react';
 
-import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe } from 'types/recipes';
+import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe, DBRecipe } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
 import sample_image from 'sample.png';
@@ -10,9 +10,9 @@ import Button from 'components/Button';
 //@ts-ignore
 import { Field, FieldArray, FormikProps, ArrayHelpers, Formik } from 'formik';
 
-type RecipeFormProps = {
-  initialValues: Recipe,
-  onSubmit: (recipe: Recipe) => void
+type RecipeFormProps<T> = {
+  initialValues: T,
+  onSubmit: (data: T) => void
 }
 
 const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingredient => {
@@ -151,7 +151,7 @@ const RenderForm = ({
   values,
   handleChange,
   handleSubmit
-}: FormikProps<Recipe>) => {
+}: FormikProps<Recipe|DBRecipe>) => {
   return (
     <Grid>
       <form onSubmit={handleSubmit} className='cbk-recipe-form'>
@@ -236,7 +236,7 @@ const RenderForm = ({
   );
 }
 
-const RecipeForm = ({ initialValues, onSubmit }: RecipeFormProps) => (
+const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: RecipeFormProps<T>) => (
   <Formik
     enableReinitialize
     initialValues={initialValues}

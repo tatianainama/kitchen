@@ -1,17 +1,17 @@
 import axios, { AxiosPromise } from 'axios';
-import Recipe from 'types/recipes';
+import Recipe, { DBRecipe } from 'types/recipes';
 
 //@ts-ignore
 const API: string = process.env.REACT_APP_API_RECIPES;
 
-export const getRecipes = (query: any): Promise<Recipe[]> => 
+export const getRecipes = (query: any): Promise<DBRecipe[]> => 
   axios.get(`${API}/all`)
   .then(response => response.data);
 
 export const saveRecipe = (recipe: Recipe): Promise<any> => 
   axios.post(`${API}`, recipe)
 
-export const getRecipeById = (id: string): Promise<Recipe> =>
+export const getRecipeById = (id: string): Promise<DBRecipe> =>
   axios.get(`${API}/id/${id}`)
   .then(response => response.data)
 
@@ -21,9 +21,16 @@ export const scrapeRecipe = (url: string): Promise<Recipe> =>
     { url }
   ).then(response => response.data);
 
+export const updateRecipe = (recipe: DBRecipe): Promise<any> => 
+    axios.put(
+      `${API}/edit/${recipe._id}`,
+      recipe
+    ).then(response => response);
+
 export default {
   getRecipes,
   getRecipeById,
   scrapeRecipe,
-  saveRecipe
+  saveRecipe,
+  updateRecipe
 }

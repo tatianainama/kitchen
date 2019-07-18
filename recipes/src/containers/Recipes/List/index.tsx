@@ -9,17 +9,17 @@ import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Button from "components/Button";
 import Card from 'components/Card';
 import RecipeCard from 'components/RecipeCard';
-import Recipe from 'types/recipes';
+import Recipe, { DBRecipe } from 'types/recipes';
 import Navbar from 'components/Navbar';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 interface RecipeListProps extends RouteComponentProps {
-  data: Recipe[],
+  data: DBRecipe[],
   isFetching: boolean,
   selectedRecipe: any | undefined,
   fetchRecipes: (query: any) => undefined,
-  receiveRecipes: (recipes: Recipe[]) => undefined,
-  selectRecipe: (recipe: Recipe) => undefined,
+  receiveRecipes: (recipes: DBRecipe[]) => undefined,
+  selectRecipe: (recipe?: DBRecipe) => undefined,
 };
 
 class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
@@ -42,10 +42,15 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
     }
   }
 
-  handleRecipeSelection(recipe: Recipe) {
+  cleanRecipeSelection() {
+    this.props.selectRecipe();
+  }
+
+  handleRecipeSelection(recipe: DBRecipe) {
     return (event: React.MouseEvent) => {
       if (this.state.phoneDisplay) {
         this.props.history.push('/recipes/view/' + recipe._id)
+        this.cleanRecipeSelection();
       } else {
         this.props.selectRecipe(recipe) 
       }
@@ -54,6 +59,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
 
   handleEditRecipe = (id = '') => (event: React.MouseEvent) => {
     this.props.history.push('/recipes/edit/' + id)
+    this.cleanRecipeSelection();
   }
 
   handler = (event: React.MouseEvent) => {
@@ -127,10 +133,10 @@ const mapDispatchToProps = (dispatch: any) => {
     fetchRecipes: (query: any) => {
       dispatch(fetch(query))
     },
-    receiveRecipes: (recipes: Recipe[]) => {
+    receiveRecipes: (recipes: DBRecipe[]) => {
       dispatch(receive(recipes))
     },
-    selectRecipe: (recipe: Recipe) => {
+    selectRecipe: (recipe: DBRecipe) => {
       dispatch(select(recipe))
     }
   }

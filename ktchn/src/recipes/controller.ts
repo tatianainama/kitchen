@@ -5,6 +5,7 @@ import { FilterQuery } from 'mongodb';
 import Scrape from './scrape/index';
 import { ScrapedRecipe } from './model';
 import Ingredient from '../ingredients/model';
+import { dissoc } from 'ramda';
 
 function validRecipe(data: any): Promise<Recipe> {
   return new Promise(function(resolve, reject) {
@@ -91,7 +92,8 @@ const getByIngredients: Controller = (db) => ({ query }, res) => {
 }
 
 const update: Controller = (db) => ({params, body}, res) => {
-  return db.update<Recipe>(params.id, body).then(result => res.json(result))
+  const newRecipe = dissoc('_id', body) as Recipe; 
+  return db.update<Recipe>(params.id, newRecipe).then(result => res.json(result))
 }
 
 export {

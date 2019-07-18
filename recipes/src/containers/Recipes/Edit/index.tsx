@@ -5,35 +5,37 @@ import RecipeForm from 'components/RecipeForm';
 
 import './styles.scss';
 
-import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient } from 'types/recipes';
-import { getRecipeById, saveRecipe } from '../services';
+import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient, DBRecipe } from 'types/recipes';
+import { getRecipeById, updateRecipe } from '../services';
 import { RouteComponentProps } from 'react-router';
 
 interface EditRecipeProps extends RouteComponentProps<{id: string}> {
 
 };
 
-interface EdirRecipeState {
-  form: Recipe,
+interface EditRecipeState {
+  form: DBRecipe,
 };
 
-class EditRecipe extends React.Component<EditRecipeProps, EdirRecipeState> {
+class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
   constructor(props: EditRecipeProps) {
     super(props);
     this.state = { 
       form: {
         ..._recipe,
+        _id: '',
       }
     }
   }
 
   componentDidMount = () => {
     getRecipeById(this.props.match.params.id).then(recipe => this.setState({ form: recipe }))
+
   }
 
-  saveRecipe = (recipe: Recipe) => {
-    saveRecipe(recipe)
-      .then(response => {
+  saveRecipe = (recipe: DBRecipe) => {
+    updateRecipe(recipe)
+      .then((response: any) => {
         if (response.status === 200) {
           this.props.history.push('/recipes')
         } else {
@@ -53,7 +55,7 @@ class EditRecipe extends React.Component<EditRecipeProps, EdirRecipeState> {
         <div className="cbk-create-recipe">
           <RecipeForm
             initialValues={form}
-            onSubmit={(recipe) => this.saveRecipe(recipe)}
+            onSubmit={(recipe: DBRecipe) => this.saveRecipe(recipe)}
           />
         </div>
       </div>

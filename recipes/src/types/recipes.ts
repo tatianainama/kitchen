@@ -107,7 +107,6 @@ export interface Suggestion {
 }
 
 export default interface Recipe {
-  _id?: string,
   author: Author,
   details: Details,
   ingredients: SubRecipe[],
@@ -115,4 +114,8 @@ export default interface Recipe {
   name: string,
   summary: string,
   tags: string[],
+}
+
+export interface DBRecipe extends Recipe {
+  _id: string
 }

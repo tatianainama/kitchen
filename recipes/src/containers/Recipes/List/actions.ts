@@ -17,7 +17,7 @@ export const receiveRecipes = (json: Recipe[]) => ({
   payload: json,
 });
 
-export const selectRecipe = (recipe: Recipe) => ({
+export const selectRecipe = (recipe?: Recipe) => ({
   type: SELECT_RECIPE,
   payload: recipe,
 });
