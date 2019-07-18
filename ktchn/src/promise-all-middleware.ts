@@ -13,7 +13,6 @@ const piddleware = (middlewares: IMiddleware[]) => (req: Request, res: Response,
   middlewares.reduce((middlewaresChain, currentMiddleware) => {
     return middlewaresChain.then(x => currentMiddleware(req, res, next))
   }, Promise.resolve([])).then(results => { // results would be ever necessary ?  
-    console.log("results", results)
     next();
   }).catch(error => next(error));
 }

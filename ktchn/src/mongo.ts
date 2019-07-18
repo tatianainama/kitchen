@@ -1,4 +1,4 @@
-import { Db, Cursor, MongoClient, InsertOneWriteOpResult, Collection, ObjectID, FilterQuery, ObjectId } from 'mongodb';
+import { Db, Cursor, MongoClient, InsertOneWriteOpResult, Collection, ObjectID, FilterQuery, ObjectId, UpdateWriteOpResult, WriteOpResult } from 'mongodb';
 
 export interface IDDocument {
   _id: ObjectID
@@ -12,6 +12,7 @@ export interface IMongoService {
   findOne<T>(query: FilterQuery<T>): Promise<IDBDocument<T>|null>,
   findOneById<T>(idParam: string): Promise<IDBDocument<T>|null>,
   find<T>(query: FilterQuery<T>, optionalQuery?: FilterQuery<T>): Promise<IDBDocument<T>[]>,
+  update<T>(id: string, data: T): Promise<WriteOpResult>
 }
 
 export const mongoService = (db: Db) => (col: string): IMongoService => {
@@ -23,6 +24,7 @@ export const mongoService = (db: Db) => (col: string): IMongoService => {
     findOne: <T>(query: FilterQuery<T>) => collection.findOne(query),
     findOneById: (idParam: string) => collection.findOne({ _id: new ObjectId(idParam) }),
     find: <T>(query: FilterQuery<T>, optionalQuery: FilterQuery<T> = {} ): Promise<IDBDocument<T>[]> => collection.find(query, optionalQuery).toArray(),
+    update: <T>(id: string, data: T) => collection.update({_id: new ObjectId(id)}, data)
   }
 };
 

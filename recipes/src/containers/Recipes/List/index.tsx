@@ -52,15 +52,20 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
     };
   }
 
-  handler(event: React.MouseEvent) {
-    console.log('click');
+  handleEditRecipe = (id = '') => (event: React.MouseEvent) => {
+    this.props.history.push('/recipes/edit/' + id)
+  }
+
+  handler = (event: React.MouseEvent) => {
+    console.log('click', event);
   }
 
   render() {
     const {data, selectedRecipe, selectRecipe} = this.props;
-    const actions = [{
+    
+    const actions = (id = '') => [{
       label: 'edit',
-      handler: this.handler,
+      handler: this.handleEditRecipe(id),
     }, {
       label: 'shopping',
       handler: this.handler
@@ -93,7 +98,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
                       title={recipe.name}
                       onClick={this.handleRecipeSelection(recipe)}
                       summary={recipe.summary}
-                      actions={actions}
+                      actions={actions(recipe._id)}
                     />
                   )
                 })

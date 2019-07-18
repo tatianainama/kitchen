@@ -3,6 +3,7 @@ import { Route } from 'react-router';
 import RecipesContainer from 'containers/Recipes';
 import CreateRecipe from 'containers/Recipes/Create';
 import ViewRecipe from 'containers/Recipes/View';
+import EditRecipe from 'containers/Recipes/Edit';
 
 const emptyRoute = (title: string) => (props: any) => {
   console.log(props);
@@ -21,8 +22,8 @@ const routes = [
       component: ViewRecipe
     },
     {
-      path: '/recipes/edit',
-      component: emptyRoute('edit recipe'),
+      path: '/recipes/edit/:id',
+      component: EditRecipe,
     }]
   }, {
     path: '/planner',

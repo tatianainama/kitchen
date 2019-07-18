@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getRecipeById } from './../services';
 import { RouteComponentProps } from 'react-router';
+import {dissoc} from 'ramda';
 
 import RecipeCard from 'components/RecipeCard';
 import Recipe, { _recipe } from 'types/recipes';
@@ -19,7 +20,7 @@ class ViewRecipe extends React.Component<ViewRecipeProps, {recipe: Recipe}> {
 
   componentDidMount() {
     getRecipeById(this.props.match.params.id).then(
-      recipe => this.setState({ recipe })
+      recipe => this.setState({ recipe: dissoc('_id', recipe) })
     );
   }
 

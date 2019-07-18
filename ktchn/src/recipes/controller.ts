@@ -90,6 +90,10 @@ const getByIngredients: Controller = (db) => ({ query }, res) => {
   )
 }
 
+const update: Controller = (db) => ({params, body}, res) => {
+  return db.update<Recipe>(params.id, body).then(result => res.json(result))
+}
+
 export {
   save,
   scrapeRecipe,
@@ -97,4 +101,5 @@ export {
   get,
   getAll,
   getByIngredients,
+  update,
 }
