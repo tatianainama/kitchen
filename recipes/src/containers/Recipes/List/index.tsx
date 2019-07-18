@@ -26,7 +26,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
   constructor(props: RecipeListProps) {
     super(props);
     this.state = {
-      phoneDisplay: window.innerWidth < 600
+      phoneDisplay: window.innerWidth < 840
     }
   }
 
@@ -98,7 +98,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
                 })
               }
             </Cell>
-            <Cell columns={6}>
+            <Cell columns={6} phoneColumns={4} tabletColumns={8}>
               { selectedRecipe !== undefined && 
                 <RecipeCard 
                   recipe={selectedRecipe}

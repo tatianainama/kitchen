@@ -8,8 +8,12 @@ export const getRecipes = (query: any): Promise<Recipe[]> =>
   axios.get(`${API}/all`)
   .then(response => response.data);
 
-  export const saveRecipe = (recipe: Recipe): Promise<any> => 
-    axios.post(`${API}`, recipe)
+export const saveRecipe = (recipe: Recipe): Promise<any> => 
+  axios.post(`${API}`, recipe)
+
+export const getRecipeById = (id: string): Promise<Recipe> =>
+  axios.get(`${API}/id/${id}`)
+  .then(response => response.data)
 
 export const scrapeRecipe = (url: string): Promise<Recipe> => 
   axios.post(
@@ -19,6 +23,7 @@ export const scrapeRecipe = (url: string): Promise<Recipe> =>
 
 export default {
   getRecipes,
+  getRecipeById,
   scrapeRecipe,
   saveRecipe
 }

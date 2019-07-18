@@ -1,10 +1,24 @@
-import React from "react";
+import React, { ReactType } from "react";
 
 import { Route, RouteComponentProps } from 'react-router-dom';
 import RecipeList from './List';
 import Create from './Create';
 
-const RecipesContainer = (props: RouteComponentProps) => {
+
+const view = (props: any) => (
+  <div>
+    <h1>id {props.match}</h1>
+  </div>
+)
+
+interface RecipeContainerProp extends RouteComponentProps {
+  routes: {
+    path: string,
+    component: ReactType<any>
+  }[]
+};
+
+const RecipesContainer = (props: RecipeContainerProp) => {
   return (
     <div>
       <Route
@@ -12,11 +26,15 @@ const RecipesContainer = (props: RouteComponentProps) => {
         path={props.match.path}
         component={RecipeList}
       />
-  
-      <Route
-        path='/recipes/create'
-        component={Create}
-      />
+      {
+        props.routes.map((route: any, i: number) => (
+          <Route
+            key={i}
+            path={route.path}
+            component={route.component}
+          />
+        ))
+      }
     </div>
   )
 }

@@ -60,6 +60,7 @@ code {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
+  height: 100vh;
 }
 
 .cbk-app-drawer {
@@ -120,7 +121,7 @@ textarea
   ##Device = Low Resolution Tablets, Mobiles 
 */
 
-@media (max-width: 840px) {
+@media (max-width: 839px) {
   
   #root {
     flex-direction: column;
