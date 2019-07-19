@@ -18,7 +18,7 @@ const conversionTable: {
   volume: {
     ml: 1,
     l: 1000,
-    cup: 240,
+    cup: 236.58,
     tbsp: 14.78,
     tsp: 4.92,
     gal: 3785.41,
@@ -33,7 +33,7 @@ const conversionTableDic: { [measure: string]: string[] } = {
 
 const Convert = (qty: number, from: string, to: string, measure: Measure) => {
   const toAnchor = (unit: string, amount: number) => conversionTable[measure][unit] * amount;
-  return ((qty * toAnchor(from, qty)) / toAnchor(to, 1)).toFixed(2);
+  return parseFloat((toAnchor(from, qty) / toAnchor(to, 1)).toFixed(3));
 }
 
 const GetMeasure = (unit: string): { name: string, values: string[]} => {

@@ -98,10 +98,12 @@ const SubrecipeForm = (props: any) => {
                         </Cell>
                         <Cell columns={1}>
                           <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
-                          <Dialog
-                            measure={{unit: ingredient.unit, quantity: ingredient.quantity}}
-                            onConvert={result => ingredientHelpers.replace(index, { ...ingredient, ...result })}
-                          />
+                          {ingredient.unit && ingredient.quantity ? (
+                            <Dialog
+                              measure={{unit: ingredient.unit, quantity: ingredient.quantity}}
+                              onConvert={result => ingredientHelpers.replace(index, { ...ingredient, ...result })}
+                            />
+                          ): null}
                         </Cell>
                         <Cell columns={1}>
                           <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
@@ -159,6 +161,7 @@ const RenderForm = ({
   handleChange,
   handleSubmit
 }: FormikProps<Recipe|DBRecipe>) => {
+  console.log("initial values", values)
   return (
     <Grid>
       <form onSubmit={handleSubmit} className='cbk-recipe-form'>

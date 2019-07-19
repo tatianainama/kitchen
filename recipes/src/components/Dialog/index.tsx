@@ -23,9 +23,11 @@ interface DialogProps {
 const CBKDialog = ({measure, onConvert}: DialogProps) => {
   const { name, values } = GetMeasure(measure.unit);
   const [ isOpen, setOpen ] = useState(false);
-  const [ result, setResult ] = useState({...measure})
+  const [ result, setResult ] = useState({
+    unit: measure.unit,
+    quantity: measure.quantity
+  })
   
-
   const convert = (qty: number, from: string, to: string) => {
     setResult({unit: to, quantity: Convert(qty, from, to, name as Measure)})
   }
@@ -41,7 +43,6 @@ const CBKDialog = ({measure, onConvert}: DialogProps) => {
       ></Button>
       <Dialog
         onClose={(action) => {
-          console.log(action)
           if (action === 'confirm') {
             onConvert(result)
           }
