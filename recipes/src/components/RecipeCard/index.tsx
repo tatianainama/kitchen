@@ -16,6 +16,7 @@ import './styles.scss';
 
 type RecipeCardProps = {
   recipe: Recipe,
+  full?: boolean
 }
 
 function CBKRecipeCard(props: RecipeCardProps) {
@@ -31,6 +32,9 @@ function CBKRecipeCard(props: RecipeCardProps) {
         <div className='cbk-recipe-card__primary__title'>
           <h4>{recipe.name}</h4>
           <p>{recipe.summary}</p>
+          <p>
+            <b>Author:</b> {recipe.author.name} {recipe.details.url && (<a href={recipe.details.url}>(website)</a>)}
+          </p>
           <ul>
             <li>
               <Icon width={32} height={32} icon='preparation' />

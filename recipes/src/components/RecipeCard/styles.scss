@@ -17,7 +17,7 @@
   
     &__title {
       flex-grow: 999;
-      min-width: 50%;
+      flex-basis: 75%;
       padding-left: $spacing-regular;
       padding-top: $spacing-regular;
       padding-bottom: $spacing-regular;
