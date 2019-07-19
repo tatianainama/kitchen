@@ -58,8 +58,26 @@ const getById: Controller = (db) => ({ params }, res) => {
 }
 
 const getAll: Controller = (db) => ({ query }, res) => {
-  return db.find<Recipe>(query).then(recipes => res.json(recipes));
+  const _query = Object.keys(query).reduce((q, field) => {
+    return {
+      ...q,
+      ...buildSearchQuery(field, query[field])
+    }
+  }, {});
+  return db.find<Recipe>(_query).then(recipes => res.json(recipes));
 }
+
+type RegexQuery = {
+  '$regex': string,
+  '$options': 'i'
+};
+
+const buildSearchQuery = (fieldName: string, value: string): { [field: string] : RegexQuery} => ({
+  [fieldName]: {
+    '$regex': value,
+    '$options': 'i'
+  }
+});
 
 async function buildQuery(tryQuery:()=>FilterQuery<any>): Promise<FilterQuery<any>> {
   try {
@@ -68,17 +86,13 @@ async function buildQuery(tryQuery:()=>FilterQuery<any>): Promise<FilterQuery<an
     return Promise.reject(error);
   }
 } 
+
 const getByIngredients: Controller = (db) => ({ query }, res) => {
   const ingredientsQuery = (query: FilterQuery<any>) => () => {
     if(query.ingredients) {
       const ingredients: string[] = query.ingredients.split(',');
       return {
-        '$or': ingredients.map((ing) => ({
-          'ingredients.ingredients.name': {
-            '$regex': ing,
-            '$options': 'i'        
-          }
-        }))
+        '$or': ingredients.map((ing) => buildSearchQuery('ingredients.ingredients.name', ing))
       };  
     } else {
       throw new Error('Invalid query key');

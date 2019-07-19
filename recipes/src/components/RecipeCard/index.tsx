@@ -8,15 +8,11 @@ import { List as Ingredients } from 'components/Ingredient';
 import moment from 'moment';
 
 import sample_img from "components/Card/sample.png";
-import { ReactComponent as Preparation } from 'svgs/preparation.svg';
-import { ReactComponent as Cooking } from 'svgs/cooking.svg';
-import { ReactComponent as Servings } from 'svgs/servings.svg';
 
 import './styles.scss';
 
 type RecipeCardProps = {
   recipe: Recipe,
-  full?: boolean
 }
 
 function CBKRecipeCard(props: RecipeCardProps) {

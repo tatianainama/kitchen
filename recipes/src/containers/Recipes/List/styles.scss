@@ -1,0 +1,8 @@
+@import 'styles/_variables.scss';
+
+.cbk-recipes-list {
+  &__search {
+    flex-basis: 30%;
+    padding-right: $spacing-regular;
+  }
+}

@@ -6,7 +6,7 @@ export const RECEIVE_RECIPES = 'RECEIVE_RECIPES';
 export const REQUEST_RECIPES = 'REQUEST_RECIPES';
 export const SELECT_RECIPE = 'SELECT_RECIPE';
 
-export const requestRecipes = (query: {}) => ({
+export const requestRecipes = (query: string) => ({
   type: REQUEST_RECIPES,
   isFetching: true,
 });
@@ -22,10 +22,10 @@ export const selectRecipe = (recipe?: Recipe) => ({
   payload: recipe,
 });
 
-export function fetchRecipes(query: any) {
+export function fetchRecipes(query: string) {
   return (dispatch: any) => {
     dispatch(requestRecipes(query))
-    return getRecipes({})
+    return getRecipes(query)
     .then(data => dispatch(receiveRecipes(data)))
     .catch(error => {
       console.log('error', error);
@@ -37,9 +37,8 @@ function shouldFetch(recipes: Recipe[]) {
   return recipes.length ? false : true;
 }
 
-export function fetchIfNeeded(query: any) {
+export function fetchIfNeeded(query: string) {
   return (dispatch: any, getState: any) => {
-    console.log("fetch");
     if(shouldFetch(getState())) {
       return dispatch(fetchRecipes(query))
     } else {

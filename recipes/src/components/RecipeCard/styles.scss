@@ -39,6 +39,7 @@
           padding-right: $spacing-small;
           color: $grey-500;
           .cbk-icon {
+            margin-right: 8px;
             svg > g path {
               fill: $grey-500;
             }

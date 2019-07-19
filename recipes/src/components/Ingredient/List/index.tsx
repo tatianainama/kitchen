@@ -26,7 +26,11 @@ export default function ShowIngredients(props: ShowIngredientsProps) {
               subRecipe.ingredients.map((ing, j) => (
                 <li className='cbk-ingredient-list__ingredient' key={j}>
                   <span>{ing.name}</span>
-                  <span>{ing.quantity + ing.unit}</span>
+                  {
+                    ing.quantity ? (
+                      <span><span>{ing.quantity}</span><span>{ing.unit}</span></span>
+                    ) : null
+                  }
                 </li>
               ))
             }

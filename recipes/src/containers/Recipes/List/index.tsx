@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, ReactEventHandler } from "react";
 import {
   fetchIfNeeded as fetch,
   receiveRecipes as receive,
@@ -12,27 +12,45 @@ import RecipeCard from 'components/RecipeCard';
 import Recipe, { DBRecipe } from 'types/recipes';
 import Navbar from 'components/Navbar';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import Input from 'components/Input';
+import { throttle } from 'throttle-debounce';
+
+import './styles.scss';
 
 interface RecipeListProps extends RouteComponentProps {
   data: DBRecipe[],
   isFetching: boolean,
   selectedRecipe: any | undefined,
-  fetchRecipes: (query: any) => undefined,
+  fetchRecipes: (query: string) => undefined,
   receiveRecipes: (recipes: DBRecipe[]) => undefined,
   selectRecipe: (recipe?: DBRecipe) => undefined,
 };
 
-class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
+class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, search: string}> {
   constructor(props: RecipeListProps) {
     super(props);
     this.state = {
-      phoneDisplay: window.innerWidth < 840
+      phoneDisplay: window.innerWidth < 840,
+      search: ''
     }
   }
 
   componentDidMount() {
     const { fetchRecipes } = this.props;
-    fetchRecipes({});
+    fetchRecipes('');
+  }
+
+  autocompleteSearch = throttle(500, (query: string) => {
+    this.props.fetchRecipes(query)
+  })
+
+
+  changeQuery = (query: string) => {
+    this.setState({
+      search: query
+    }, () => {
+      this.autocompleteSearch(this.state.search)
+    })
   }
 
   componentDidUpdate(prevProps: any) {
@@ -82,10 +100,20 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean}> {
     }];
 
     return(
-      <div>
+      <div className='cbk-recipes-list'>
         <Navbar
           title="Recipes"
         >
+          <Input
+            value={this.state.search}
+            label='search'
+            onChange={(e) => this.changeQuery(e.currentTarget.value)}
+            button={{
+              icon: 'clear',
+              onClick: () => this.changeQuery('')
+            }}
+            className='cbk-recipes-list__search'
+          />
           <Link to='/recipes/create'>
             <Button unelevated>
               Create Recipe
@@ -130,7 +158,7 @@ const mapStateToProps = ({ recipes }: any, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    fetchRecipes: (query: any) => {
+    fetchRecipes: (query: string) => {
       dispatch(fetch(query))
     },
     receiveRecipes: (recipes: DBRecipe[]) => {

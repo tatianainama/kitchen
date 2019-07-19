@@ -8,7 +8,8 @@ type NavbarProps = {
     label: string,
     onClick: () => void,
   }[],
-  children?: ReactElement|never[],
+  children?: ReactElement[],
+  contentClassName?: string,
 }
 export default function Navbar(props: NavbarProps){
   return (
@@ -27,9 +28,15 @@ export default function Navbar(props: NavbarProps){
           </div>
         ) : null
       }
-      {
-        props.children
-      }
+      <div className={`cbk-navbar__content ${props.contentClassName||''}`}>
+        {
+          props.children && (
+            props.children.map(child => (
+              child
+            ))
+          )
+        }
+      </div>
     </div>
   );
 };

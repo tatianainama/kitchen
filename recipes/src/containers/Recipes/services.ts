@@ -4,8 +4,8 @@ import Recipe, { DBRecipe } from 'types/recipes';
 //@ts-ignore
 const API: string = process.env.REACT_APP_API_RECIPES;
 
-export const getRecipes = (query: any): Promise<DBRecipe[]> => 
-  axios.get(`${API}/all`)
+export const getRecipes = (query: string): Promise<DBRecipe[]> => 
+  axios.get(`${API}/all/?name=${query}`)
   .then(response => response.data);
 
 export const saveRecipe = (recipe: Recipe): Promise<any> => 

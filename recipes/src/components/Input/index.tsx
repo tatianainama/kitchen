@@ -21,6 +21,7 @@ type InputProps = {
 		onClick: () => void,
 	},
 	field?: any,
+	className?: string,
 };
 
 const Input = ({
@@ -33,7 +34,8 @@ const Input = ({
 	style = 'regular',
 	icon,
 	button,
-	field = { name: '', value: '', onBlur: ()=>{}, onChange: ()=>{}}
+	field = { name: '', value: '', onBlur: ()=>{}, onChange: ()=>{}},
+	className = '',
 }: InputProps) => {
 	const fieldClasses = classNames(
 		'cbk-input',
@@ -45,6 +47,7 @@ const Input = ({
 	);
 	const containerClasses = classNames({
 		'cbk-input-container': !!icon || !!button,
+		[className]: className,
 	})
 
 	return (
