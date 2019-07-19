@@ -73,9 +73,26 @@ class App {
     return MongoClient.connect('mongodb://127.0.0.1:27017').then(dbClient => dbClient.db('ktchn'));
   }
 
+  private startDB(db: MongoClient.Db): void {
+    db.createCollection('ingredients').then(collection => {
+      collection.createIndex({
+        name: 'text',
+        variants: 'text'
+      }, {
+        //@ts-ignore
+        weights: {
+          name: 10,
+          variants: 5
+        }
+      })
+    });
+    db.createCollection('recipes');
+  }
+
   private launchApp() {
     this.connectDB().then(db => {
       this.routes(db);
+      this.startDB(db);
       const port = this.app.get("port");
       this.app.listen(port, '0.0.0.0', () => {
         console.log(

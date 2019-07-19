@@ -11,7 +11,7 @@ type Units =
   "tbsp" |
   "tsp" |
   "stick" |
-  "gr" |
+  "g" |
   "ml" |
   "oz" |
   "lb" |

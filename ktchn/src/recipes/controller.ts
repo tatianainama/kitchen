@@ -105,8 +105,20 @@ const getByIngredients: Controller = (db) => ({ query }, res) => {
   )
 }
 
+const updateOriginal = (ingredient: IIngredient): string => (`
+  ${ingredient.quantity} ${ingredient.unit||''} ${ingredient.unit && 'of'} ${ingredient.name}
+`);
+
 const update: Controller = (db) => ({params, body}, res) => {
-  const newRecipe = dissoc('_id', body) as Recipe; 
+  let newRecipe = dissoc('_id', body) as Recipe;
+  newRecipe.ingredients = newRecipe.ingredients.map(subRecipe => ({
+    ...subRecipe,
+    ingredients: subRecipe.ingredients.map(ingredient => ({
+      ...ingredient,
+      _original: updateOriginal(ingredient)
+    }))
+  }));
+  
   return db.update<Recipe>(params.id, newRecipe).then(result => res.json(result))
 }
 

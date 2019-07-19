@@ -33,6 +33,10 @@ class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
 
   }
 
+  updateOriginal = (ingredient: Ingredient): string => (`
+    ${ingredient.quantity} ${ingredient.unit||''} ${ingredient.unit && 'of'} ${ingredient.name}
+  `);
+
   saveRecipe = (recipe: DBRecipe) => {
     updateRecipe(recipe)
       .then((response: any) => {
