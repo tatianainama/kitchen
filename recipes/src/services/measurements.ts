@@ -1,6 +1,4 @@
-import convert from 'convert-units';
-
-type Measure = 'mass'|'volume';
+export type Measure = 'mass'|'volume';
 type UnitDic = {
   [unitName: string]: number
 }
@@ -24,13 +22,27 @@ const conversionTable: {
     tbsp: 14.78,
     tsp: 4.92,
     gal: 3785.41,
-    pt: 473.176,
+    pnt: 473.176,
   }
 }
 
+const conversionTableDic: { [measure: string]: string[] } = {
+  mass: ['mg', 'g', 'kg', 'lb', 'oz'],
+  volume: ['ml', 'l', 'cup', 'tbsp', 'tsp', 'gal', 'pnt']
+};
+
 const Convert = (qty: number, from: string, to: string, measure: Measure) => {
   const toAnchor = (unit: string, amount: number) => conversionTable[measure][unit] * amount;
-  return (qty * toAnchor(from, qty)) / toAnchor(to, 1);
+  return ((qty * toAnchor(from, qty)) / toAnchor(to, 1)).toFixed(2);
+}
+
+const GetMeasure = (unit: string): { name: string, values: string[]} => {
+  return ['mass', 'volume'].reduce((result, measure)=>{
+    return conversionTableDic[measure].includes(unit) ? {
+      name: measure,
+      values: conversionTableDic[measure]
+    } : result
+  }, {name: '', values: ['']});
 }
 
 const measurements = [
@@ -69,4 +81,5 @@ export {
   MeasuresTypes,
   Convert,
   ParseUnit,
+  GetMeasure,
 };

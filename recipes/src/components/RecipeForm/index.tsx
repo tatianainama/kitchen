@@ -7,6 +7,9 @@ import sample_image from 'sample.png';
 import { MeasuresTypes } from 'services/measurements';
 import { LightInput as Input } from 'components/Input';
 import Button from 'components/Button';
+import Dialog from 'components/Dialog';
+import { GetMeasure } from 'services/measurements';
+
 //@ts-ignore
 import { Field, FieldArray, FormikProps, ArrayHelpers, Formik } from 'formik';
 
@@ -95,6 +98,10 @@ const SubrecipeForm = (props: any) => {
                         </Cell>
                         <Cell columns={1}>
                           <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
+                          <Dialog
+                            measure={{unit: ingredient.unit, quantity: ingredient.quantity}}
+                            onConvert={result => ingredientHelpers.replace(index, { ...ingredient, ...result })}
+                          />
                         </Cell>
                         <Cell columns={1}>
                           <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
@@ -197,7 +204,6 @@ const RenderForm = ({
       </section>
   
       <h5>Ingredients</h5>
-      
       <section>
         <FieldArray
           name='ingredients'

@@ -118,6 +118,9 @@
 
       .ingredient-detail {
         align-items: end;
+        & > * {
+          display: flex;
+        }
       }
       input {
         line-height: 1rem;
@@ -148,7 +151,8 @@
       }
     }
   }
-  button.remove {
+  button.remove,
+  button.cbk-convert__button {
     align-self: center;
     --mdc-ripple-fg-size: 14px;
     --mdc-ripple-left: 5px;

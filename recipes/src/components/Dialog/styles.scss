@@ -1,0 +1,14 @@
+@import 'styles/_variables.scss';
+
+.cbk-convert {
+  &__dialog {
+    &__content {
+      display: flex;
+      align-content: space-between;
+      select {
+        flex-basis: 50%;
+        margin-right: $spacing-small;
+      }
+    }
+  }
+}
