@@ -161,7 +161,6 @@ const RenderForm = ({
   handleChange,
   handleSubmit
 }: FormikProps<Recipe|DBRecipe>) => {
-  console.log("initial values", values)
   return (
     <Grid>
       <form onSubmit={handleSubmit} className='cbk-recipe-form'>
