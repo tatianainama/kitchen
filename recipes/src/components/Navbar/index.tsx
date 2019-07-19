@@ -30,11 +30,7 @@ export default function Navbar(props: NavbarProps){
       }
       <div className={`cbk-navbar__content ${props.contentClassName||''}`}>
         {
-          props.children && (
-            props.children.map(child => (
-              child
-            ))
-          )
+          props.children && React.Children.map(props.children, child => child )
         }
       </div>
     </div>
