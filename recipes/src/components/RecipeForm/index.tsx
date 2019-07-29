@@ -38,6 +38,7 @@ const SubrecipeForm = (props: any) => {
   const {form, remove, push} = props;
   const subrecipes = form.values.ingredients;
   const [selectedTab, setSelectedTab] = useState(0);
+  const [focusLast, setFocusLast] = useState(false);
   const measurements = MeasuresTypes();
   return (
     <div className='subrecipe-tabs'>
@@ -90,11 +91,19 @@ const SubrecipeForm = (props: any) => {
             return (
               <div>
                 {
-                  form.values.ingredients[selectedTab] && form.values.ingredients[selectedTab].ingredients.map((ingredient: Ingredient, index: number) => (
+                  form.values.ingredients[selectedTab] && form.values.ingredients[selectedTab].ingredients.map((ingredient: Ingredient, index: number, array: Ingredient[]) => (
                     <div key={index} className='ingredients-form-item'>
                       <Row className='ingredient-detail'>
                         <Cell columns={4}>
-                          <Field name={`ingredients[${selectedTab}].ingredients[${index}].name`}/>
+                          <Field
+                            name={`ingredients[${selectedTab}].ingredients[${index}].name`}
+                            innerRef={(ref: any) => {
+                              if(index === array.length-1 && ref && focusLast) {
+                                ref.focus();
+                                setFocusLast(false);
+                              }
+                            }}
+                          />
                         </Cell>
                         <Cell columns={1}>
                           <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
@@ -122,7 +131,9 @@ const SubrecipeForm = (props: any) => {
                           <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
                         </Cell>
                         <Cell columns={1}> 
-                          <Button type='button' icon='clear' className='remove' onClick={() => ingredientHelpers.remove(index)} disabled={form.values.ingredients[selectedTab].ingredients.length === 1}></Button>
+                          <Button type='button' icon='clear' className='remove' onClick={() => {
+                            ingredientHelpers.remove(index)
+                          }} disabled={form.values.ingredients[selectedTab].ingredients.length === 1}></Button>
                         </Cell>
                       </Row>
                       <div className='ingredient-suggestions'>
@@ -145,7 +156,14 @@ const SubrecipeForm = (props: any) => {
                     </div>
                   ))
                 }
-                <Button type='button' onClick={() => ingredientHelpers.push({ ..._ingredient })}>add ingredient</Button>
+                <Button
+                  type='button'
+                  onClick={() => {
+                    ingredientHelpers.push({ ..._ingredient })
+                    setFocusLast(true);                    
+                  }}>
+                    add ingredient
+                  </Button>
               </div>
             )
           }}
