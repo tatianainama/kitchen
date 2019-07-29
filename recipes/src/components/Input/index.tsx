@@ -3,7 +3,7 @@ import TextField, { HelperText, Input as Field } from '@material/react-text-fiel
 import classNames from 'classnames';
 import Button from 'components/Button';
 import Icon from '../Icon';
-import {FieldProps} from 'Formik';
+import {FieldProps} from 'formik';
 import '@material/react-text-field/dist/text-field.css';
 import './styles.scss';
 
