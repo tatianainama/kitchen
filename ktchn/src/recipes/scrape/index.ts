@@ -51,7 +51,7 @@ async function scrape(url:string) {
         const recipe = source.scrapeRecipe($);
         if (recipe.ingredients.length > 1 ) {
           const cleanIngredients = recipe.ingredients.filter(subRecipe => {
-            return subRecipe.name !== '' && subRecipe.ingredients.length !== 0;
+            return subRecipe.ingredients.length > 0;
           })
           return {
             ...recipe,
