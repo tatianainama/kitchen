@@ -58,14 +58,19 @@ function CBKCard(props: CBKCardProps){
               }
             </CardActionButtons>
             {
-              icons && icons.map((action) => (
+              icons ? (
                 <CardActionIcons>
-                  <Button
-                    icon={action.icon}
-                    onClick={action.handler}
-                  />
+                  {
+                    icons.map((action, i) => (
+                      <Button
+                        icon={action.icon}
+                        onClick={action.handler}
+                        key={i}
+                      />
+                    ))
+                  }
                 </CardActionIcons>
-              ))
+              ) : null
             }
           </CardActions>
         ) :
