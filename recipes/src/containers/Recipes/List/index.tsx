@@ -99,6 +99,11 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
       onClick: () => {}
     }];
 
+    const icons = (id = '') => [{
+      icon: 'open_in_new',
+      handler: () => this.props.history.push('/recipes/view/' + id)
+    }]
+
     return(
       <div className='cbk-recipes-list'>
         <Navbar
@@ -133,6 +138,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
                       onClick={this.handleRecipeSelection(recipe)}
                       summary={recipe.summary}
                       actions={actions(recipe._id)}
+                      icons={icons(recipe._id)}
                     />
                   )
                 })

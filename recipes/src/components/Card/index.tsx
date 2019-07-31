@@ -4,8 +4,9 @@ import Card, {
   CardActionButtons,
   CardPrimaryContent,
   CardMedia,
+  CardActionIcons
 } from "@material/react-card";
-import Button from "@material/react-button";
+import Button from "components/Button";
 import '@material/react-card/dist/card.min.css';
 import '@material/react-button/dist/button.min.css';
 
@@ -21,11 +22,15 @@ type CBKCardProps = {
     label: string,
     handler: (event: React.MouseEvent) => void,
   }[],
+  icons?: {
+    icon: string,
+    handler: (event: React.MouseEvent) => void
+  }[],
   onClick: (event: React.MouseEvent) => void,
 }
 
 function CBKCard(props: CBKCardProps){
-  const {onClick, img, title, summary, actions} = props;
+  const {onClick, img, title, summary, actions, icons} = props;
   return(
     <Card outlined className='cbk-card'>
       <CardPrimaryContent onClick={onClick}>
@@ -52,6 +57,16 @@ function CBKCard(props: CBKCardProps){
                 )) 
               }
             </CardActionButtons>
+            {
+              icons && icons.map((action) => (
+                <CardActionIcons>
+                  <Button
+                    icon={action.icon}
+                    onClick={action.handler}
+                  />
+                </CardActionIcons>
+              ))
+            }
           </CardActions>
         ) :
         null
