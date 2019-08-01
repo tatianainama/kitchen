@@ -159,7 +159,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
 }
 
 const mapStateToProps = ({ recipes }: any, ownProps: any) => {
-  return recipes.list;
+  return recipes;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
