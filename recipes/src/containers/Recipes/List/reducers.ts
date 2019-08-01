@@ -2,6 +2,7 @@ const initialState = {
   isFetching: false,
   data: [],
   selectedRecipe: undefined,
+  shoppingCart: []
 };
 
 export const recipesReducer = (

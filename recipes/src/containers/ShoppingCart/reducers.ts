@@ -24,7 +24,7 @@ const shoppingCartReducer = (
     case REMOVE_FROM_CART: 
       return {
         cart: state.cart.filter(
-          item => item._id !== action.payload
+          item => item.recipeId !== action.payload
         )
       }
     default:

@@ -1,7 +1,7 @@
 import Recipe, { Ingredient } from './recipes';
 
 interface ShoppingItem extends Ingredient {
-  _id: string,
+  recipeId: string,
 }
 
 export default ShoppingItem;

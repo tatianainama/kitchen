@@ -4,6 +4,10 @@ import {
   receiveRecipes as receive,
   selectRecipe as select,
 } from "containers/Recipes/List/actions";
+import {
+  addToCart,
+  removeFromCart
+} from 'containers/ShoppingCart/actions';
 import { connect } from "react-redux";
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Button from "components/Button";
@@ -24,6 +28,8 @@ interface RecipeListProps extends RouteComponentProps {
   fetchRecipes: (query: string) => undefined,
   receiveRecipes: (recipes: DBRecipe[]) => undefined,
   selectRecipe: (recipe?: DBRecipe) => undefined,
+  removeFromCart: (recipe: DBRecipe) => undefined,
+  addToCart: (recipe: DBRecipe) => undefined,
 };
 
 class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, search: string}> {
@@ -80,29 +86,29 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
     this.cleanRecipeSelection();
   }
 
+  handleAddToShopping = (recipe: DBRecipe) => (event: React.MouseEvent) => {
+    this.props.addToCart(recipe)
+  }
+
   handler = (event: React.MouseEvent) => {
     console.log('click', event);
   }
 
+  actions = (recipe: DBRecipe) => [{
+    label: 'edit',
+    handler: this.handleEditRecipe(recipe._id),
+  }, {
+    label: 'shopping',
+    handler: this.handleAddToShopping(recipe)
+  }];
+
+  icons = (id = '') => [{
+    icon: 'open_in_new',
+    handler: () => this.props.history.push('/recipes/view/' + id)
+  }]
+
   render() {
     const {data, selectedRecipe, selectRecipe} = this.props;
-    
-    const actions = (id = '') => [{
-      label: 'edit',
-      handler: this.handleEditRecipe(id),
-    }, {
-      label: 'shopping',
-      handler: this.handler
-    }];
-    const navbarActions = [{
-      label: 'create recipe',
-      onClick: () => {}
-    }];
-
-    const icons = (id = '') => [{
-      icon: 'open_in_new',
-      handler: () => this.props.history.push('/recipes/view/' + id)
-    }]
 
     return(
       <div className='cbk-recipes-list'>
@@ -137,8 +143,8 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
                       title={recipe.name}
                       onClick={this.handleRecipeSelection(recipe)}
                       summary={recipe.summary}
-                      actions={actions(recipe._id)}
-                      icons={icons(recipe._id)}
+                      actions={this.actions(recipe)}
+                      icons={this.icons(recipe._id)}
                     />
                   )
                 })
@@ -158,8 +164,11 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
   }
 }
 
-const mapStateToProps = ({ recipes }: any, ownProps: any) => {
-  return recipes;
+const mapStateToProps = (state: any) => {
+  return {
+    ...state.recipes,
+    shoppingCart: state.shoppingCart.cart
+  };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -172,6 +181,12 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     selectRecipe: (recipe: DBRecipe) => {
       dispatch(select(recipe))
+    },
+    addToCart: (recipe: DBRecipe) => {
+      dispatch(addToCart(recipe))
+    },
+    removeFromCart: (recipe: DBRecipe) => {
+      dispatch(removeFromCart(recipe))
     }
   }
 }

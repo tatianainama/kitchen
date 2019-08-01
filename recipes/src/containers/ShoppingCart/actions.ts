@@ -10,7 +10,7 @@ const getIngredients = (recipe: DBRecipe): ShoppingItem[] => {
       ...ingredients,
       ...subRecipe.ingredients.map(ingredient => ({
         ...ingredient,
-        _id: recipe._id
+        recipeId: recipe._id
       })),
     ]
   }, [] as ShoppingItem[])
