@@ -1,17 +1,24 @@
 import { DBRecipe } from 'types/recipes';
 import ShoppingItem from 'types/shopping-cart';
+import { bindActionCreators } from 'redux';
 
 export const ADD_TO_CART = 'ADD_TO_CART';
-export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
+export const REMOVE_RECIPE_FROM_CART = 'REMOVE_RECIPE_FROM_CART';
+export const REMOVE_ITEM_FROM_CART = 'REMOVE_ITEM_FROM_CART';
 
 export const addToCart = (recipe: DBRecipe): AddToCart => ({
   type: ADD_TO_CART,
   payload: recipe
 })
 
-export const removeFromCart = (recipe: DBRecipe): RemoveFromCart => ({
-  type: REMOVE_FROM_CART,
+export const removeFromCart = (recipe: DBRecipe): RemoveRecipeFromCart => ({
+  type: REMOVE_RECIPE_FROM_CART,
   payload: recipe._id
+})
+
+export const removeItemFromCart = (id: string): RemoveItemFromCart => ({
+  type: REMOVE_ITEM_FROM_CART,
+  payload: id
 })
 
 export type AddToCart = {
@@ -19,9 +26,14 @@ export type AddToCart = {
   payload: DBRecipe
 }
 
-export type RemoveFromCart = {
-  type: typeof REMOVE_FROM_CART,
+export type RemoveRecipeFromCart = {
+  type: typeof REMOVE_RECIPE_FROM_CART,
   payload: string
 }
 
-export type ActionTypes = AddToCart | RemoveFromCart
+export type RemoveItemFromCart = {
+  type: typeof REMOVE_ITEM_FROM_CART,
+  payload: string,
+}
+
+export type ActionTypes = AddToCart | RemoveRecipeFromCart | RemoveItemFromCart

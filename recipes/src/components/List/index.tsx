@@ -1,29 +1,28 @@
 import React from 'react';
-import List, {ListItem, ListItemText, ListItemMeta} from '@material/react-list';
 
-import '@material/react-list/dist/list.css';
+import './styles.scss';
 
-type ListProps = {
+
+type ListProps<T> = {
   nonInteractive?: boolean,
   dense?: boolean,
-  items: {
-    primaryText: string,
-    secondaryText?: string,
-  }[]
+  items: T[],
+  render: (item: T) => React.ComponentElement<T, any>
 }
 
-const CBKList = (props: ListProps) => (
-  <List dense={props.dense} nonInteractive={props.nonInteractive}>
+const CBKList = <T extends {}>(props: ListProps<T>) => (
+  <ul className='cbk-list'>
     {
       props.items.map((item, index) => (
-        <ListItem key={index}>
-          <ListItemText
-            primaryText={item.primaryText}
-          />
-        </ListItem>
+        <li
+          key={index}
+          className='cbk-list__item'
+        >
+          {props.render(item)}
+        </li>
       ))
     }
-  </List>
+  </ul>
 );
 
 export default CBKList

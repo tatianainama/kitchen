@@ -6,14 +6,37 @@ import Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import List from 'components/List';
 import ShoppingItem from 'src/types/shopping-cart';
+import { addToCart, removeItemFromCart, AddToCart, RemoveItemFromCart } from './../actions';
+
+import Button from 'components/Button';
+import { DBRecipe } from 'src/types/recipes';
 
 interface ShoppingListProps extends RouteComponentProps {
   items: ShoppingItem[],
+  recipesId: string[],
+  addToCart: typeof addToCart,
+  removeItemFromCart: typeof removeItemFromCart
 }
 
+const renderItem = (actions: { addToCart: typeof addToCart, removeItemFromCart: typeof removeItemFromCart }) => (props: ShoppingItem) => (
+  <>
+    <span>{props.name}</span>
+    <span>
+      <Button icon='delete' onClick={() => actions.removeItemFromCart(props.name)}/>
+      <Button icon='remove'/>
+      <input type='number' value={props.quantity} readOnly/>
+      <Button icon='add'/>
+    </span>
+  </>
+);
+
 class ShoppingList extends Component<ShoppingListProps, {}> {
+  constructor(props: ShoppingListProps) {
+    super(props);
+  }
   render () {
-    console.log(this.props)
+    const { addToCart, removeItemFromCart } = this.props;
+    console.log(this.props);
     return (
       <div className='cbk-shopping-list'>
         <Navbar
@@ -24,9 +47,12 @@ class ShoppingList extends Component<ShoppingListProps, {}> {
         <div>
           <List
             dense
-            items={this.props.items.map((item) => ({
-              primaryText: item.name
-            }))}
+            nonInteractive
+            items={this.props.items}
+            render={renderItem({
+              addToCart,
+              removeItemFromCart
+            })}
           />
         </div>
       </div>
@@ -38,11 +64,7 @@ const mapStateToProps = (state: AppState) => {
   return state.shoppingCart;
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {}
-}
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {addToCart, removeItemFromCart}
 )(ShoppingList);
