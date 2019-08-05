@@ -6,19 +6,24 @@ import Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import List from 'components/List';
 import ShoppingItem from 'src/types/shopping-cart';
-import { addToCart, removeItemFromCart, AddToCart, RemoveItemFromCart } from './../actions';
+import { addToCart, removeItemFromCart, removeAll } from './../actions';
 
 import Button from 'components/Button';
 import { DBRecipe } from 'src/types/recipes';
 
-interface ShoppingListProps extends RouteComponentProps {
-  items: ShoppingItem[],
-  recipesId: string[],
+type ActionsType = {
   addToCart: typeof addToCart,
   removeItemFromCart: typeof removeItemFromCart
 }
 
-const renderItem = (actions: { addToCart: typeof addToCart, removeItemFromCart: typeof removeItemFromCart }) => (props: ShoppingItem) => (
+interface ShoppingListProps extends RouteComponentProps, ActionsType {
+  items: ShoppingItem[],
+  recipesId: string[],
+  removeAll: typeof removeAll
+}
+
+
+const renderItem = (actions: ActionsType) => (props: ShoppingItem) => (
   <>
     <span>{props.name}</span>
     <span>
@@ -35,14 +40,14 @@ class ShoppingList extends Component<ShoppingListProps, {}> {
     super(props);
   }
   render () {
-    const { addToCart, removeItemFromCart } = this.props;
+    const { addToCart, removeItemFromCart, removeAll } = this.props;
     console.log(this.props);
     return (
       <div className='cbk-shopping-list'>
         <Navbar
           title='Shopping List'
         >
-
+          <Button onClick={() => removeAll()}>Clear</Button>
         </Navbar>
         <div>
           <List
@@ -51,7 +56,7 @@ class ShoppingList extends Component<ShoppingListProps, {}> {
             items={this.props.items}
             render={renderItem({
               addToCart,
-              removeItemFromCart
+              removeItemFromCart,
             })}
           />
         </div>
@@ -66,5 +71,5 @@ const mapStateToProps = (state: AppState) => {
 
 export default connect(
   mapStateToProps,
-  {addToCart, removeItemFromCart}
+  {addToCart, removeItemFromCart, removeAll}
 )(ShoppingList);

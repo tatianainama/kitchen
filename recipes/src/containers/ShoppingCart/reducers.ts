@@ -1,5 +1,5 @@
 import ShoppingItem from 'types/shopping-cart';
-import { ActionTypes, ADD_TO_CART, REMOVE_RECIPE_FROM_CART, REMOVE_ITEM_FROM_CART } from './actions';
+import { ActionTypes, ADD_TO_CART, REMOVE_RECIPE_FROM_CART, REMOVE_ITEM_FROM_CART, REMOVE_ALL } from './actions';
 import { DBRecipe } from 'src/types/recipes';
 
 export type ShoppingCartState = {
@@ -125,12 +125,16 @@ const shoppingCartReducer = (
         recipesId: state.recipesId.filter(item => item !== action.payload)
       }
     case REMOVE_ITEM_FROM_CART: 
-      console.log("remove item", action)
       return {
         ...state,
         items: state.items.filter(
           item => item.name !== action.payload
         )
+      }
+    case REMOVE_ALL:
+      return {
+        items: [],
+        recipesId: []
       }
     default:
       return state

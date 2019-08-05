@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 export const ADD_TO_CART = 'ADD_TO_CART';
 export const REMOVE_RECIPE_FROM_CART = 'REMOVE_RECIPE_FROM_CART';
 export const REMOVE_ITEM_FROM_CART = 'REMOVE_ITEM_FROM_CART';
+export const REMOVE_ALL = 'REMOVE_ALL';
 
 export const addToCart = (recipe: DBRecipe): AddToCart => ({
   type: ADD_TO_CART,
@@ -21,6 +22,10 @@ export const removeItemFromCart = (id: string): RemoveItemFromCart => ({
   payload: id
 })
 
+export const removeAll = (): RemoveAll => ({
+  type: REMOVE_ALL
+});
+
 export type AddToCart = {
   type: typeof ADD_TO_CART,
   payload: DBRecipe
@@ -36,4 +41,8 @@ export type RemoveItemFromCart = {
   payload: string,
 }
 
-export type ActionTypes = AddToCart | RemoveRecipeFromCart | RemoveItemFromCart
+export type RemoveAll = {
+  type: typeof REMOVE_ALL
+}
+
+export type ActionTypes = AddToCart | RemoveRecipeFromCart | RemoveItemFromCart | RemoveAll;
