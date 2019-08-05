@@ -7,7 +7,7 @@ import sample_image from 'sample.png';
 import { MeasuresTypes } from 'services/measurements';
 import { LightInput as Input } from 'components/Input';
 import Button from 'components/Button';
-import Dialog from 'components/Dialog';
+import Dialog from 'components/DialogConverter';
 import { GetMeasure } from 'services/measurements';
 
 //@ts-ignore
