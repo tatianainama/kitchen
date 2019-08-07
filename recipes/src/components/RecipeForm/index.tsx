@@ -106,7 +106,7 @@ const SubrecipeForm = (props: any) => {
                           />
                         </Cell>
                         <Cell columns={1}>
-                          <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`}/>
+                          <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`} type='number'/>
                           {ingredient.unit && ingredient.quantity ? (
                             <Dialog
                               measure={{unit: ingredient.unit, quantity: ingredient.quantity}}
