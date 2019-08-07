@@ -28,8 +28,11 @@ interface ShoppingListState {
 
 const renderItem = (actions: ActionsType) => (props: ShoppingItem) => (
   <>
-    <span>{props.name}</span>
     <span>
+      <span className='primary-text'>{props.name}</span>
+      <span className='secondary-text'>{props.recipeName && props.recipeName.join(', ')}</span>
+    </span>
+    <span className='actions'>
       <Button icon='delete' onClick={() => actions.removeItemFromCart(props.name)}/>
       <Button icon='remove'/>
       <input type='number' value={props.quantity} readOnly/>

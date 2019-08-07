@@ -16,7 +16,7 @@ const initialState: ShoppingCartState = {
         _original: '4 6oz Chicken Breast',
         suggestions: [],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: 'Sunday Night Chicken Parm'
+        recipeName: ['Sunday Night Chicken Parm', 'Fried Chicken']
       },
       {
         name: 'eggs',
@@ -25,7 +25,7 @@ const initialState: ShoppingCartState = {
         _original: '2 Eggs',
         suggestions: [],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: 'Sunday Night Chicken Parm'
+        recipeName: ['Sunday Night Chicken Parm']
       },
       {
         name: 'freshly grated parm',
@@ -34,7 +34,7 @@ const initialState: ShoppingCartState = {
         _original: 'Freshly Grated Parm',
         suggestions: [],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: 'Sunday Night Chicken Parm'
+        recipeName: ['Sunday Night Chicken Parm']
       },
       {
         name: 'bread crumbs',
@@ -58,7 +58,7 @@ const initialState: ShoppingCartState = {
           }
         ],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: 'Sunday Night Chicken Parm'
+        recipeName: ['Sunday Night Chicken Parm']
       },
       {
         name: 'salt and pepper, to taste',
@@ -67,7 +67,7 @@ const initialState: ShoppingCartState = {
         _original: 'Salt and Pepper, to taste',
         suggestions: [],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: 'Sunday Night Chicken Parm'
+        recipeName: ['Sunday Night Chicken Parm']
       },
       {
         name: 'light olive oil for shallow frying',
@@ -75,7 +75,7 @@ const initialState: ShoppingCartState = {
         unit: '',
         _original: 'Light Olive Oil for shallow Frying',
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: 'Sunday Night Chicken Parm'
+        recipeName: ['Sunday Night Chicken Parm']
       },
       {
         name: 'olive oil',
@@ -83,7 +83,6 @@ const initialState: ShoppingCartState = {
         unit: 'tbsp',
         _original: '3 Tbsp of Olive Oil',
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: 'Sunday Night Chicken Parm'
       },
     ],
     recipesId: [
@@ -98,7 +97,7 @@ const getIngredients = (recipe: DBRecipe): ShoppingItem[] => {
       ...subRecipe.ingredients.map(ingredient => ({
         ...ingredient,
         recipeId: recipe._id,
-        recipeName: recipe.name
+        recipeName: [recipe.name]
       })),
     ]
   }, [] as ShoppingItem[])
