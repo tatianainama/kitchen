@@ -6,13 +6,13 @@ import Navbar from 'components/Navbar';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import List from 'components/List';
 import ShoppingItem from 'src/types/shopping-cart';
-import { addToCart, removeItemFromCart, removeAll } from './../actions';
+import { addRecipeToCart, removeItemFromCart, removeAll } from './../actions';
 import Dialog from 'components/Dialog';
 import Button from 'components/Button';
 import { DBRecipe } from 'src/types/recipes';
 
 type ActionsType = {
-  addToCart: typeof addToCart,
+  addToCart: typeof addRecipeToCart,
   removeItemFromCart: typeof removeItemFromCart
 }
 
@@ -87,5 +87,5 @@ const mapStateToProps = (state: AppState) => {
 
 export default connect(
   mapStateToProps,
-  {addToCart, removeItemFromCart, removeAll}
+  {addToCart: addRecipeToCart, removeItemFromCart, removeAll}
 )(ShoppingList);

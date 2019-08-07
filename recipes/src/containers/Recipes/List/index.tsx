@@ -5,7 +5,7 @@ import {
   selectRecipe as select,
 } from "containers/Recipes/List/actions";
 import {
-  addToCart,
+  addRecipeToCart,
   removeFromCart
 } from 'containers/ShoppingCart/actions';
 import { connect } from "react-redux";
@@ -29,7 +29,7 @@ interface RecipeListProps extends RouteComponentProps {
   receiveRecipes: (recipes: DBRecipe[]) => undefined,
   selectRecipe: (recipe?: DBRecipe) => undefined,
   removeFromCart: (recipe: DBRecipe) => undefined,
-  addToCart: (recipe: DBRecipe) => undefined,
+  addRecipeToCart: (recipe: DBRecipe) => undefined,
 };
 
 class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, search: string}> {
@@ -87,7 +87,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
   }
 
   handleAddToShopping = (recipe: DBRecipe) => (event: React.MouseEvent) => {
-    this.props.addToCart(recipe)
+    this.props.addRecipeToCart(recipe)
   }
 
   handler = (event: React.MouseEvent) => {
@@ -182,8 +182,8 @@ const mapDispatchToProps = (dispatch: any) => {
     selectRecipe: (recipe: DBRecipe) => {
       dispatch(select(recipe))
     },
-    addToCart: (recipe: DBRecipe) => {
-      dispatch(addToCart(recipe))
+    addRecipeToCart: (recipe: DBRecipe) => {
+      dispatch(addRecipeToCart(recipe))
     },
     removeFromCart: (recipe: DBRecipe) => {
       dispatch(removeFromCart(recipe))

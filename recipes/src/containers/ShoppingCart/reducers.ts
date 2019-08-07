@@ -1,6 +1,8 @@
 import ShoppingItem from 'types/shopping-cart';
-import { ActionTypes, ADD_TO_CART, REMOVE_RECIPE_FROM_CART, REMOVE_ITEM_FROM_CART, REMOVE_ALL } from './actions';
-import { DBRecipe } from 'src/types/recipes';
+import { ActionTypes, ADD_RECIPE_TO_CART, REMOVE_RECIPE_FROM_CART, REMOVE_ITEM_FROM_CART, REMOVE_ALL } from './actions';
+import { DBRecipe, Ingredient } from 'src/types/recipes';
+import { update } from 'ramda';
+import { Convert, GetMeasure, Measure } from 'services/measurements';
 
 export type ShoppingCartState = {
   items: ShoppingItem[],
@@ -16,7 +18,7 @@ const initialState: ShoppingCartState = {
         _original: '4 6oz Chicken Breast',
         suggestions: [],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: ['Sunday Night Chicken Parm', 'Fried Chicken']
+        recipeName: ['Chicken', 'Fried Chicken']
       },
       {
         name: 'eggs',
@@ -25,7 +27,7 @@ const initialState: ShoppingCartState = {
         _original: '2 Eggs',
         suggestions: [],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: ['Sunday Night Chicken Parm']
+        recipeName: ['Chicken']
       },
       {
         name: 'freshly grated parm',
@@ -34,7 +36,7 @@ const initialState: ShoppingCartState = {
         _original: 'Freshly Grated Parm',
         suggestions: [],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: ['Sunday Night Chicken Parm']
+        recipeName: ['Chicken']
       },
       {
         name: 'bread crumbs',
@@ -58,7 +60,7 @@ const initialState: ShoppingCartState = {
           }
         ],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: ['Sunday Night Chicken Parm']
+        recipeName: ['Chicken']
       },
       {
         name: 'salt and pepper, to taste',
@@ -67,7 +69,7 @@ const initialState: ShoppingCartState = {
         _original: 'Salt and Pepper, to taste',
         suggestions: [],
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: ['Sunday Night Chicken Parm']
+        recipeName: ['Chicken']
       },
       {
         name: 'light olive oil for shallow frying',
@@ -75,7 +77,7 @@ const initialState: ShoppingCartState = {
         unit: '',
         _original: 'Light Olive Oil for shallow Frying',
         recipeId: '5d37045aef8ef87af296cba7',
-        recipeName: ['Sunday Night Chicken Parm']
+        recipeName: ['Chicken']
       },
       {
         name: 'olive oil',
@@ -90,30 +92,76 @@ const initialState: ShoppingCartState = {
     ]
 };
 
-const getIngredients = (recipe: DBRecipe): ShoppingItem[] => {
+const getItemsFromRecipe = (recipe: DBRecipe): ShoppingItem[] => {
   return recipe.ingredients.reduce((ingredients, subRecipe) => {
     return [
       ...ingredients,
-      ...subRecipe.ingredients.map(ingredient => ({
-        ...ingredient,
-        recipeId: recipe._id,
-        recipeName: [recipe.name]
-      })),
+      ...subRecipe.ingredients.map(createShoppingItem(recipe._id, recipe.name)),
     ]
   }, [] as ShoppingItem[])
 } 
+
+const combineItems = (a: ShoppingItem, b: ShoppingItem): ShoppingItem => {
+  if (a.unit && b.unit) {
+    const m = GetMeasure(b.unit);
+    return {
+      ...a,
+      quantity: a.quantity + Convert(b.quantity, b.unit, a.unit, m.name as Measure)
+    }
+  } else {
+    if (a.unit !== b.unit) {
+      throw Error(`cannot sum this units: ${b.unit, a.unit}`)
+    } else {
+      return {
+        ...a,
+        quantity: a.quantity + b.quantity
+      }
+    }
+  }
+}
+
+const createShoppingList = (initial: ShoppingItem[], newItems: ShoppingItem[]): ShoppingItem[] => {
+  return newItems.reduce((shoppingCart, newItem) => {
+    const existentItemIdx = shoppingCart.findIndex(item => item.name === newItem.name);
+    if ( existentItemIdx > -1 ) {
+      try {
+        const sum = combineItems(initial[existentItemIdx], newItem).quantity
+        return update(existentItemIdx, {
+          ...initial[existentItemIdx],
+          recipeName: (initial[existentItemIdx].recipeName||[]).concat(newItem.recipeName||[]),
+          quantity: sum
+        }, shoppingCart)
+      } catch {
+        return [
+          ...shoppingCart,
+          newItem
+        ]
+      }
+    } else {
+      return [
+        ...shoppingCart,
+        newItem
+      ]
+    }
+  }, initial);
+}
+
+const createShoppingItem = (recipeId: string, recipeName: string) => (ingredient: Ingredient): ShoppingItem => {
+  return {
+    ...ingredient,
+    recipeId,
+    recipeName: [recipeName]
+  };
+}
 
 const shoppingCartReducer = (
   state = initialState,
   action: ActionTypes
 ): ShoppingCartState => {
   switch (action.type) {
-    case ADD_TO_CART:
+    case ADD_RECIPE_TO_CART:
       return {
-        items: [
-          ...state.items,
-          ...getIngredients(action.payload)
-        ],
+        items: createShoppingList(state.items, getItemsFromRecipe(action.payload)),
         recipesId: state.recipesId.concat([action.payload._id])
       }
     case REMOVE_RECIPE_FROM_CART: 
