@@ -33,10 +33,9 @@ const renderItem = (actions: ActionsType) => (props: ShoppingItem) => (
       <span className='secondary-text'>{props.recipeName && props.recipeName.join(', ')}</span>
     </span>
     <span className='actions'>
-      <Button icon='delete' onClick={() => actions.removeItemFromCart(props.name)}/>
-      <Button icon='remove'/>
-      <input type='number' value={props.quantity} readOnly/>
-      <Button icon='add'/>
+      <Button icon='delete' style={{flexBasis: '20%'}} onClick={() => actions.removeItemFromCart(props.name)}/>
+      <input type='number' style={{flexBasis: '60%'}} value={props.quantity} readOnly/>
+      <span style={{flexBasis: '20%'}}>{props.unit}</span>
     </span>
   </>
 );
