@@ -5,6 +5,7 @@ import CreateRecipe from 'containers/Recipes/Create';
 import ViewRecipe from 'containers/Recipes/View';
 import EditRecipe from 'containers/Recipes/Edit';
 import ShoppingList from 'containers/ShoppingCart/List';
+import PlannerContainer from 'containers/Planner';
 
 const emptyRoute = (title: string) => (props: any) => {
   return (<h1>{title} {props.match.params && props.match.params.id}</h1>);
@@ -27,7 +28,7 @@ const routes = [
     }]
   }, {
     path: '/planner',
-    component: emptyRoute('planner'),
+    component: PlannerContainer,
     routes: [{
       path: '/planner/lala',
       component: emptyRoute('planner lala'),
