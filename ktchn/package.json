@@ -32,7 +32,7 @@
     "ramda": "^0.26.1",
     "recipe-ingredient-parser": "git+https://github.com/DavidVentura/recipe-parser.git",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "@types/morgan": "^1.7.35",
