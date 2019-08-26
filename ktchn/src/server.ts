@@ -6,6 +6,7 @@ import express, { Application } from "express";
 import rootRouter from "./routes/root";
 import recipeRouter from "./recipes/routes";
 import ingredientsRouter from './ingredients/routes';
+import plannerRouter from './planner/routes';
 import dotenv from 'dotenv';
 import MongoClient from 'mongodb';
 import { Response } from 'express';
@@ -46,6 +47,7 @@ class App {
   private routes(db: MongoClient.Db): void {
     this.app.use("/recipes", new recipeRouter(db).router);
     this.app.use("/ingredients", new ingredientsRouter(db).router);
+    this.app.use('/planner', new plannerRouter(db).router);
     this.app.use("/", rootRouter);
   }
 
@@ -87,6 +89,7 @@ class App {
       })
     });
     db.createCollection('recipes');
+    db.createCollection('planner');
   }
 
   private launchApp() {
