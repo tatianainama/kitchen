@@ -17,12 +17,15 @@ export type WeekPlan = {
   [day in Weekday]: DayPlan;
 };
 
-export default interface PlanDB {
-  _id: ObjectID,
+export interface Plan {
   day: Date,
   week: number,
   recipe: ObjectID,
   meal: Meal
+}
+
+export default interface PlanDB extends Plan{
+  _id: ObjectID,
 }
 
 export interface CompletePlanDB extends Omit<PlanDB, 'recipe'> {
