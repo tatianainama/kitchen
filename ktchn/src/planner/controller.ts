@@ -15,6 +15,8 @@ const mkWeekQuery = (week: string) => ({
   week: parseInt(week) || moment().isoWeek()
 });
 
+const validatePlan = (mbPlan: any) => mbPlan.day && mbPlan.week && mbPlan.recipe && mbPlan.meal;
+
 const validPlan = (mbPlan: any) => {
   if (mbPlan.day && mbPlan.week && mbPlan.recipe && mbPlan.meal) {
     return Promise.resolve({
@@ -68,8 +70,18 @@ const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
   return validPlan(plan).then(db.insertOne)
 }
 
+const saveManyPlans: Controller<void, PlanDB[]> = db => req => prev => {
+  const mbPlanner = req.body;
+  if (mbPlanner.filter) {
+    return db.insertMany(mbPlanner.filter(validatePlan))
+  } else {
+    return Promise.reject('Invalid type: body content must be a Plan Array')
+  }
+
+}
 export {
   getWeekPlanner,
   formatPlanner,
   savePlan,
+  saveManyPlans,
 }
