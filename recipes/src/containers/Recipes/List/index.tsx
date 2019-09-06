@@ -8,6 +8,8 @@ import {
   addRecipeToCart,
   removeFromCart
 } from 'containers/ShoppingCart/actions';
+import plannerActions from 'containers/Planner/actions';
+
 import { connect } from "react-redux";
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Button from "components/Button";
@@ -30,6 +32,7 @@ interface RecipeListProps extends RouteComponentProps {
   selectRecipe: (recipe?: DBRecipe) => undefined,
   removeFromCart: (recipe: DBRecipe) => undefined,
   addRecipeToCart: (recipe: DBRecipe) => undefined,
+  addRecipeToPlanner: (recipe: DBRecipe) => undefined
 };
 
 class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, search: string}> {
@@ -90,6 +93,9 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
     this.props.addRecipeToCart(recipe)
   }
 
+  handleAddToPlanner = (recipe: DBRecipe) => (event: React.MouseEvent) => {
+    this.props.addRecipeToPlanner(recipe)
+  }
   handler = (event: React.MouseEvent) => {
     console.log('click', event);
   }
@@ -100,6 +106,9 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
   }, {
     label: 'shopping',
     handler: this.handleAddToShopping(recipe)
+  }, {
+    label: 'planner',
+    handler: this.handleAddToPlanner(recipe)
   }];
 
   icons = (id = '') => [{
@@ -187,6 +196,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     removeFromCart: (recipe: DBRecipe) => {
       dispatch(removeFromCart(recipe))
+    },
+    addRecipeToPlanner: (recipe: DBRecipe) => {
+      dispatch(plannerActions.addToBacklog(recipe))
     }
   }
 }

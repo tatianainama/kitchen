@@ -1,6 +1,7 @@
 import { ActionTypes, ADD_TO_BACKLOG, ASSIGN_TO_DAY } from './actions';
-import Planner, { PlannerState } from 'types/planner';
+import Planner, { PlannerState, Weekday } from 'types/planner';
 import { getWeekNumber, mkWeekDay, getWeekDay } from 'services/time';
+
 
 const initialState: PlannerState = {
   isFetching: false,
@@ -10,7 +11,7 @@ const initialState: PlannerState = {
     week: getWeekNumber(),
     monday:   { date: mkWeekDay(1)},
     tuesday:  { date: mkWeekDay(2)},
-    wednsday: { date: mkWeekDay(3)},
+    wednesday: { date: mkWeekDay(3)},
     thursday: { date: mkWeekDay(4)},
     friday:   { date: mkWeekDay(5)},
     saturday: { date: mkWeekDay(6)},
@@ -30,11 +31,15 @@ const PlannerReducer = (
         backlog: state.backlog.concat([action.recipe])
       };
     case 'ASSIGN_TO_DAY':
+      const weekday = getWeekDay(action.day) as Weekday;
       return {
         ...state,
-        [getWeekDay(action.day)]: {
-          date: action.day,
-          [action.meal]: action.recipe
+        data: {
+          ...state.data,
+          [weekday]: {
+            ...state.data[weekday],
+            [action.meal]: action.recipe
+          }
         }
       };
     case 'REMOVE_FROM_BACKLOG':

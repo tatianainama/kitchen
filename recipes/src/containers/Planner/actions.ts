@@ -42,6 +42,5 @@ export type AssignToDay = {
 
 export type ActionTypes = AddToBacklog | RemoveFromBacklog | AssignToDay;
 
-export default {
-  ...actions
-}
+export type Actions = typeof actions;
+export default actions

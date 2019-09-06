@@ -18,6 +18,7 @@ type CBKCardProps = {
   title: string,
   summary?: string,
   img?: string,
+  noMedia?: boolean,
   actions?: {
     label: string,
     handler: (event: React.MouseEvent) => void,
@@ -29,14 +30,14 @@ type CBKCardProps = {
   onClick: (event: React.MouseEvent) => void,
 }
 
-function CBKCard(props: CBKCardProps){
-  const {onClick, img, title, summary, actions, icons} = props;
+function CBKCard({onClick, img, title, summary, actions, icons, noMedia = false}: CBKCardProps){
+  
   return(
     <Card outlined className='cbk-card'>
       <CardPrimaryContent onClick={onClick}>
-        <CardMedia square imageUrl={props.img || sample_img}></CardMedia>
+        { noMedia ? null : <CardMedia square imageUrl={img || sample_img}></CardMedia>}
         <div className='cbk-card__main'>
-          <h6 className='cbk-card__main__title'>{props.title}</h6>
+          <h6 className='cbk-card__main__title'>{title}</h6>
           {
             summary ? 
               <p className='cbk-card__main__summary'>{summary}</p> :

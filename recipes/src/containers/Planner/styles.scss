@@ -1,0 +1,44 @@
+.cbk-planner {
+  &__body {
+
+    &__backlog {
+    }
+
+    &__calendar {
+      .container {
+        display: flex;
+        justify-content: space-between;
+
+        .day-schedule {
+          flex-basis: 14%;
+          max-width: 14%;
+          background-color:white;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+
+          &--name {
+            height: 3rem;
+            justify-content: center;
+            align-items: center;
+            line-height: 2rem;
+          }
+
+          &--lunch,
+          &--dinner {
+            height: 5rem;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid gainsboro;
+          }
+
+          &-content {
+            width: inherit;
+            height: 100%;
+          }
+        }
+      }
+    }
+  }
+
+}

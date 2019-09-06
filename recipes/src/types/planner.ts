@@ -4,7 +4,7 @@ import { DBRecipe } from "./recipes";
 export type Weekday =
   'monday' |
   'tuesday' |
-  'wednsday' |
+  'wednesday' |
   'thursday' |
   'friday' |
   'saturday' |
