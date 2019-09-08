@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import Navbar from 'components/Navbar';
 import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
-import { PlannerState, Weekday, Meal } from 'types/planner';
+import { PlannerState, Weekday, Meal, RecipePlan } from 'types/planner';
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Card from 'components/Card';
 import PlannerActions, { Actions } from './actions';
@@ -12,6 +12,7 @@ import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautif
 import './styles.scss';
 import { mkWeekData, mkWeekDay } from 'services/time';
 import { DBRecipe } from 'types/recipes';
+import Button from 'components/Button';
 
 
 interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions {
@@ -24,14 +25,23 @@ interface PlannerContainerState {
   week: [Weekday, string][]
 }
 
-const DisplayMeal = (meal?: DBRecipe) => meal ? (
-  <Card
-    key={meal._id}
-    onClick={()=>{}}
-    title={meal.name}
-    noMedia
-  />
+const DisplayMeal = (meal?: RecipePlan) => meal ? (
+  <div className='meal-card'>
+    <h3>{meal.name}</h3>
+    <Button icon='clear' onClick={() => {}}></Button>
+  </div>
 ) : null;
+
+const mkScheduleDay = (weekday: Weekday, idx: number, meal: Meal, recipe?: RecipePlan) => (
+  <Droppable droppableId={`${idx}-${weekday}-${meal}`}>
+    {provided => (
+      <div className='day-schedule-content' ref={provided.innerRef}>
+        {provided.placeholder}
+        { DisplayMeal(recipe) }
+      </div>
+    )}
+  </Droppable> 
+)
 
 class PlannerContainer extends Component<PlannerContainerProps, PlannerContainerState> {
 
@@ -97,45 +107,20 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                     </Droppable>
                   </div>
                 </Cell>
-
-                {/* {
-                  this.props.backlog.map((recipe, i) => (
-                    <Card
-                      key={i}
-                      title={recipe.name}
-                      onClick={() => {}}
-                      summary={recipe.summary}
-                    />
-                  ))
-                } */}
                 <Cell columns={10}>
                   <div className='cbk-planner__body__calendar'>
                     <div className='container'>
                       {
-                        this.state.week.map((data, weekdayNumber) => (
+                        this.state.week.map(([weekday, day], weekdayNumber) => (
                           <div key={weekdayNumber} className='day-schedule'>
-                            <div className='day-schedule--name'>
-                              {data[DAY]} {moment(data[DATE]).format('D')}
+                            <div className='day-schedule--date'>
+                              {weekday} {moment(day).format('D')}
                             </div>
                             <div className='day-schedule--lunch'>
-                              <Droppable droppableId={`${weekdayNumber}-${data[DAY]}-lunch`}>
-                                {provided => (
-                                  <div className='day-schedule-content' ref={provided.innerRef}>
-                                    {provided.placeholder}
-                                    { DisplayMeal(this.props.data[data[DAY] as Weekday].lunch) }
-                                  </div>
-                                )}
-                              </Droppable>
+                              { mkScheduleDay(weekday, weekdayNumber, 'lunch', this.props.data[weekday].lunch) }
                             </div>
                             <div className='day-schedule--dinner'>
-                              <Droppable droppableId={`${weekdayNumber}-${data[DAY]}-dinner`}>
-                                {provided => (
-                                  <div className='day-schedule-content' ref={provided.innerRef}>
-                                    {provided.placeholder}
-                                    { DisplayMeal(this.props.data[data[DAY] as Weekday].dinner) }
-                                  </div>
-                                )}
-                              </Droppable>
+                              { mkScheduleDay(weekday, weekdayNumber, 'dinner', this.props.data[weekday].dinner) }
                             </div>
                           </div>
                         ))

@@ -28,8 +28,13 @@ export default interface PlanDB extends Plan{
   _id: ObjectID,
 }
 
+export interface RecipePlan {
+  _id: string,
+  name: string
+}
+
 export interface CompletePlanDB extends Omit<PlanDB, 'recipe'> {
-  recipe: RecipeDB
+  recipe: RecipePlan
 }
 
 export interface DayPlan {

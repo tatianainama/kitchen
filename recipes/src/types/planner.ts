@@ -10,10 +10,15 @@ export type Weekday =
   'saturday' |
   'sunday';
 
+export type RecipePlan = {
+  _id: string,
+  name: string,
+}
+
 export type DayPlan = {
   date: Moment,
-  lunch?: DBRecipe,
-  dinner?: DBRecipe,
+  lunch?: RecipePlan,
+  dinner?: RecipePlan,
 };
 
 export type WeekPlan = {
@@ -32,5 +37,5 @@ export interface PlannerState {
   isFetching: boolean,
   error?: string,
   data: Planner,
-  backlog: DBRecipe[]
+  backlog: RecipePlan[]
 }
