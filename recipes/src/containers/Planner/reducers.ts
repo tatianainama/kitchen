@@ -60,6 +60,7 @@ const PlannerReducer = (
         backlog: state.backlog.filter(recipe => recipe._id !== action.recipe._id)
       }
     case 'REMOVE_MEAL':
+      const meal = state.planner[action.day][action.meal];
       return {
         ...state,
         planner: {
@@ -68,7 +69,8 @@ const PlannerReducer = (
             ...state.planner[action.day],
             [action.meal]: undefined
           }
-        }
+        },
+        backlog: meal ? state.backlog.concat([meal]) : state.backlog
       }
     default:
       return state
