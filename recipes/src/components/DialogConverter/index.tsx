@@ -39,7 +39,6 @@ const CBKDialog = ({measure, onConvert}: DialogProps) => {
         onClick={() => setOpen(true)}
         disabled={measure.unit === ''}
         className='cbk-convert__button'
-        title='convert unit'
       ></Button>
       <Dialog
         onClose={(action) => {

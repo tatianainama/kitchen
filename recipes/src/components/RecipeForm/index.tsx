@@ -53,11 +53,11 @@ const SubrecipeForm = (props: any) => {
                 <Field name={`ingredients[${subrecipeIdx}].name`} placeholder='subrecipe name'/>
               </div>
               <Button
-                className='remove'
                 type='button'
                 icon='clear'
                 onClick={() => remove(subrecipeIdx)}
                 disabled={subrecipes.length === 1}
+                small
               ></Button>
               <span></span>
             </li>
@@ -131,9 +131,11 @@ const SubrecipeForm = (props: any) => {
                           <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
                         </Cell>
                         <Cell columns={1}> 
-                          <Button type='button' icon='clear' className='remove' onClick={() => {
+                          <Button type='button' icon='clear' onClick={() => {
                             ingredientHelpers.remove(index)
-                          }} disabled={form.values.ingredients[selectedTab].ingredients.length === 1}></Button>
+                          }}
+                          disabled={form.values.ingredients[selectedTab].ingredients.length === 1}
+                          small></Button>
                         </Cell>
                       </Row>
                       <div className='ingredient-suggestions'>
@@ -244,7 +246,7 @@ const RenderForm = ({
                       <Field name={`instructions[${instructionIdx}]`}/>
                     </Cell>
                     <Cell columns={1}>
-                      <Button icon='clear' className='remove' onClick={() => remove(instructionIdx)}></Button>
+                      <Button icon='clear' onClick={() => remove(instructionIdx)} small></Button>
                     </Cell>
                   </Row>
                 ))

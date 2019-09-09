@@ -51,6 +51,13 @@ h4:after {
   margin-left: -4px;
 }
 
+.subtitle-2 {
+  font-family: $font-family-display;
+  font-size: $font-size-regular;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-enhanced;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

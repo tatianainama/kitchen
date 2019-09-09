@@ -26,8 +26,8 @@ const DisplayMeal = (dayPlan: DayPlan, meal: Meal, onRemove: typeof PlannerActio
   if (dish !== undefined) {
     return (
       <div className='meal-card'>
-        <h3>{dish.name}</h3>
-        <Button icon='clear' onClick={() => onRemove(getWeekDay(dayPlan.date), meal)}></Button>
+        <p className='subtitle-2'>{dish.name}</p>
+        <Button icon='clear' onClick={() => onRemove(getWeekDay(dayPlan.date), meal)} small></Button>
       </div>
     )
   } else {

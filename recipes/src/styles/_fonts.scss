@@ -16,11 +16,14 @@ $font-size-xx-large: 1.5rem;
 $font-size-xxx-large: 2rem;
 $font-size-xxxx-large: 2.125rem;
 
+$letter-spacing-normal: 0.1px;
+$letter-spacing-enhanced: 0.5px;
+
 @mixin button() {
   font-size: 0.875rem;
   line-height: 2.25rem;
   font-weight: 500;
-  letter-spacing: 0.1px;
+  letter-spacing: $letter-spacing-normal;
   text-decoration: none;
   text-transform: uppercase;
 }
