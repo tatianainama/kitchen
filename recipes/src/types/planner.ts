@@ -27,15 +27,12 @@ export type WeekPlan = {
 
 export type Meal = 'lunch' | 'dinner';
 
-export default interface Planner extends WeekPlan {
-  week: number,
-  from: Moment,
-  to: Moment
-};
-
 export interface PlannerState {
   isFetching: boolean,
   error?: string,
-  data: Planner,
+  week: number,
+  from: Moment,
+  to: Moment,
+  planner: WeekPlan,
   backlog: RecipePlan[]
 }

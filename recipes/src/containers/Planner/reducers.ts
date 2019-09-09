@@ -1,14 +1,14 @@
 import { ActionTypes, ADD_TO_BACKLOG, ASSIGN_TO_DAY } from './actions';
-import Planner, { PlannerState, Weekday } from 'types/planner';
+import { PlannerState, Weekday } from 'types/planner';
 import { getWeekNumber, mkWeekDay, getWeekDay } from 'services/time';
 
 
 const initialState: PlannerState = {
   isFetching: false,
-  data: {
-    from: mkWeekDay(1),
-    to: mkWeekDay(7),
-    week: getWeekNumber(),
+  from: mkWeekDay(1),
+  to: mkWeekDay(7),
+  week: getWeekNumber(),
+  planner: {
     monday:     { date: mkWeekDay(1)},
     tuesday:    { date: mkWeekDay(2)},
     wednesday:  { date: mkWeekDay(3)},
@@ -47,10 +47,10 @@ const PlannerReducer = (
       let weekday = getWeekDay(action.day) as Weekday;
       return {
         ...state,
-        data: {
-          ...state.data,
+        planner: {
+          ...state.planner,
           [weekday]: {
-            ...state.data[weekday],
+            ...state.planner[weekday],
             [action.meal]: action.recipe
           }
         }
@@ -64,10 +64,10 @@ const PlannerReducer = (
       const day = getWeekDay(action.day) as Weekday;
       return {
         ...state,
-        data: {
-          ...state.data,
+        planner: {
+          ...state.planner,
           [day]: {
-            ...state.data[day],
+            ...state.planner[day],
             [action.meal]: undefined
           }
         }

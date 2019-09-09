@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import Navbar from 'components/Navbar';
 import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
-import { PlannerState, Weekday, Meal, RecipePlan } from 'types/planner';
+import { PlannerState, Weekday, Meal, RecipePlan, DayPlan } from 'types/planner';
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Card from 'components/Card';
 import PlannerActions, { Actions } from './actions';
@@ -32,12 +32,12 @@ const DisplayMeal = (meal?: RecipePlan) => meal ? (
   </div>
 ) : null;
 
-const mkScheduleDay = (weekday: Weekday, idx: number, meal: Meal, recipe?: RecipePlan) => (
+const mkScheduleDay = (weekday: Weekday, idx: number, meal: Meal, dayPlan: DayPlan) => (
   <Droppable droppableId={`${idx}-${weekday}-${meal}`}>
     {provided => (
       <div className='day-schedule-content' ref={provided.innerRef}>
         {provided.placeholder}
-        { DisplayMeal(recipe) }
+        { DisplayMeal(dayPlan[meal]) }
       </div>
     )}
   </Droppable> 
@@ -48,7 +48,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
   constructor(props: PlannerContainerProps) {
     super(props);
     this.state = {
-      week: mkWeekData(this.props.data.week)
+      week: Object.keys(props.planner).map((weekday) => ([ weekday as Weekday, props.planner[weekday as Weekday].date.format()]))
     }
   }
 
@@ -70,7 +70,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
         <Navbar
           title='Planner'
         >
-          <div>Week {this.props.data.week}</div>
+          <div>Week {this.props.week}</div>
         </Navbar>
         <section className='cbk-planner__body'>
           <DragDropContext onDragEnd={this.assignRecipe}>
@@ -86,7 +86,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                                   key={item._id}
                                   draggableId={item._id}
                                   index={index}>
-                                  {(provided, snapshot) => (
+                                  {provided => (
                                     <div
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
@@ -111,16 +111,16 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                   <div className='cbk-planner__body__calendar'>
                     <div className='container'>
                       {
-                        this.state.week.map(([weekday, day], weekdayNumber) => (
-                          <div key={weekdayNumber} className='day-schedule'>
+                        this.state.week.map(([weekday, day], dayNumber) => (
+                          <div key={dayNumber} className='day-schedule'>
                             <div className='day-schedule--date'>
-                              {weekday} {moment(day).format('D')}
+                              {weekday} {moment(day).format('DD')}
                             </div>
                             <div className='day-schedule--lunch'>
-                              { mkScheduleDay(weekday, weekdayNumber, 'lunch', this.props.data[weekday].lunch) }
+                              { mkScheduleDay(weekday, dayNumber, 'lunch', this.props.planner[weekday]) }
                             </div>
                             <div className='day-schedule--dinner'>
-                              { mkScheduleDay(weekday, weekdayNumber, 'dinner', this.props.data[weekday].dinner) }
+                              { mkScheduleDay(weekday, dayNumber, 'dinner', this.props.planner[weekday]) }
                             </div>
                           </div>
                         ))
