@@ -10,7 +10,7 @@ import PlannerActions, { Actions } from './actions';
 import moment, { Moment } from 'moment';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import './styles.scss';
-import { mkWeekData, mkWeekDay } from 'services/time';
+import { mkWeekData, mkWeekDay, getWeekDay } from 'services/time';
 import { DBRecipe } from 'types/recipes';
 import Button from 'components/Button';
 
@@ -25,23 +25,19 @@ interface PlannerContainerState {
   week: [Weekday, string][]
 }
 
-const DisplayMeal = (meal?: RecipePlan) => meal ? (
-  <div className='meal-card'>
-    <h3>{meal.name}</h3>
-    <Button icon='clear' onClick={() => {}}></Button>
-  </div>
-) : null;
-
-const mkScheduleDay = (weekday: Weekday, idx: number, meal: Meal, dayPlan: DayPlan) => (
-  <Droppable droppableId={`${idx}-${weekday}-${meal}`}>
-    {provided => (
-      <div className='day-schedule-content' ref={provided.innerRef}>
-        {provided.placeholder}
-        { DisplayMeal(dayPlan[meal]) }
+const DisplayMeal = (dayPlan: DayPlan, meal: Meal, onRemove: typeof PlannerActions.removeMeal) => {
+  const dish = dayPlan[meal];
+  if (dish !== undefined) {
+    return (
+      <div className='meal-card'>
+        <h3>{dish.name}</h3>
+        <Button icon='clear' onClick={() => onRemove(getWeekDay(dayPlan.date), meal)}></Button>
       </div>
-    )}
-  </Droppable> 
-)
+    )
+  } else {
+    return null;
+  }
+};
 
 class PlannerContainer extends Component<PlannerContainerProps, PlannerContainerState> {
 
@@ -117,10 +113,24 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                               {weekday} {moment(day).format('DD')}
                             </div>
                             <div className='day-schedule--lunch'>
-                              { mkScheduleDay(weekday, dayNumber, 'lunch', this.props.planner[weekday]) }
+                            <Droppable droppableId={`${dayNumber}-${weekday}-lunch`}>
+                              {provided => (
+                                <div className='day-schedule-content' ref={provided.innerRef}>
+                                  {provided.placeholder}
+                                  { DisplayMeal(this.props.planner[weekday], 'lunch', this.props.removeMeal) }
+                                </div>
+                              )}
+                            </Droppable> 
                             </div>
                             <div className='day-schedule--dinner'>
-                              { mkScheduleDay(weekday, dayNumber, 'dinner', this.props.planner[weekday]) }
+                              <Droppable droppableId={`${dayNumber}-${weekday}-dinner`}>
+                                {provided => (
+                                  <div className='day-schedule-content' ref={provided.innerRef}>
+                                    {provided.placeholder}
+                                    { DisplayMeal(this.props.planner[weekday], 'dinner', this.props.removeMeal) }
+                                  </div>
+                                )}
+                              </Droppable> 
                             </div>
                           </div>
                         ))

@@ -1,6 +1,6 @@
 import { DBRecipe } from 'types/recipes';
 import { Moment } from 'moment'
-import { Meal, RecipePlan } from 'types/planner';
+import { Meal, RecipePlan, Weekday } from 'types/planner';
 
 export const ADD_TO_BACKLOG = 'ADD_TO_BACKLOG';
 export const REMOVE_FROM_BACKLOG = 'REMOVE_FROM_BACKLOG';
@@ -25,7 +25,7 @@ const actions = {
     day,
     meal,
   }),
-  removeMeal: (day: Moment, meal: Meal) => ({
+  removeMeal: (day: Weekday, meal: Meal) => ({
     type: REMOVE_MEAL,
     day,
     meal
@@ -51,7 +51,7 @@ export type AssignToDay = {
 
 export type RemoveMeal = {
   type: typeof REMOVE_MEAL,
-  day: Moment,
+  day: Weekday,
   meal: Meal
 }
 

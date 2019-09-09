@@ -7,7 +7,7 @@ export const mkWeekDay = (day: string | number): Moment => moment().isoWeekday(d
 
 export const getWeekNumber = (): number => moment().isoWeek();
 
-export const getWeekDay = (day: Moment): string => day.format('dddd').toLowerCase();
+export const getWeekDay = (day: Moment): Weekday => day.format('dddd').toLowerCase() as Weekday;
 
 export const mkWeekData = (weekNumber: number): [Weekday, string][] => mkWeek().map(day => (
   [ day, moment().week(weekNumber).isoWeekday(day).format() ]

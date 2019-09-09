@@ -61,13 +61,12 @@ const PlannerReducer = (
         backlog: state.backlog.filter(recipe => recipe._id !== action.recipe._id)
       }
     case 'REMOVE_MEAL':
-      const day = getWeekDay(action.day) as Weekday;
       return {
         ...state,
         planner: {
           ...state.planner,
-          [day]: {
-            ...state.planner[day],
+          [action.day]: {
+            ...state.planner[action.day],
             [action.meal]: undefined
           }
         }
