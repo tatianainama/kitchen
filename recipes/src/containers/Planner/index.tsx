@@ -3,24 +3,20 @@ import { RouteComponentProps } from 'react-router';
 import Navbar from 'components/Navbar';
 import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
-import { PlannerState, Weekday, Meal, RecipePlan, DayPlan } from 'types/planner';
+import { PlannerState, Weekday, Meal, DayPlan } from 'types/planner';
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Card from 'components/Card';
 import PlannerActions, { Actions } from './actions';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import './styles.scss';
-import { mkWeekData, mkWeekDay, getWeekDay } from 'services/time';
-import { DBRecipe } from 'types/recipes';
+import { getWeekDay } from 'services/time';
 import Button from 'components/Button';
 
 
 interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions {
 }
 
-const [ DAY, DATE ] = [ 0, 1 ];
-
-type _WeekDay = [ Weekday, string ]
 interface PlannerContainerState {
   week: [Weekday, string][]
 }
@@ -52,8 +48,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
     const recipe = this.findRecipe(result.draggableId);
     if (result.destination && recipe) {
       const [idx, day, meal] = result.destination.droppableId.split('-');
-      const dayData = this.state.week[parseInt(idx)];
-      this.props.assignToDay(recipe, moment(dayData[DATE]), meal as Meal);
+      this.props.assignToDay(recipe, day as Weekday, meal as Meal);
       this.props.removeFromBacklog(recipe);
     }
   }

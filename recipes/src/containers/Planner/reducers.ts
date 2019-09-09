@@ -1,6 +1,6 @@
-import { ActionTypes, ADD_TO_BACKLOG, ASSIGN_TO_DAY } from './actions';
-import { PlannerState, Weekday } from 'types/planner';
-import { getWeekNumber, mkWeekDay, getWeekDay } from 'services/time';
+import { ActionTypes } from './actions';
+import { PlannerState } from 'types/planner';
+import { getWeekNumber, mkWeekDay } from 'services/time';
 
 
 const initialState: PlannerState = {
@@ -44,13 +44,12 @@ const PlannerReducer = (
         backlog: state.backlog.concat([action.recipe])
       };
     case 'ASSIGN_TO_DAY':
-      let weekday = getWeekDay(action.day) as Weekday;
       return {
         ...state,
         planner: {
           ...state.planner,
-          [weekday]: {
-            ...state.planner[weekday],
+          [action.day]: {
+            ...state.planner[action.day],
             [action.meal]: action.recipe
           }
         }
