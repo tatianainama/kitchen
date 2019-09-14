@@ -1,3 +1,5 @@
+@import 'styles/_variables.scss';
+
 .cbk-planner {
   &__body {
 
@@ -8,6 +10,18 @@
       .container {
         display: flex;
         justify-content: space-between;
+        background-color: white;
+        .day-meals {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+
+          > div {
+            height: 5rem;
+            
+          }
+        }
 
         .day-schedule {
           flex-basis: 14%;
@@ -17,10 +31,21 @@
           display: flex;
           flex-direction: column;
 
+          &--meals {
+            max-width: none;
+            flex-basis: 2%;
+            h5 {
+              writing-mode: vertical-lr;
+              text-orientation: mixed;
+              margin: 0.5rem 0;
+            }
+          }
+
           &--date {
             height: 3rem;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
             line-height: 2rem;
           }
 
@@ -35,10 +60,20 @@
           &-content {
             width: inherit;
             height: 100%;
+            display: flex;
 
             .meal-card {
               display: flex;
+              flex-direction: column;
+              width: 100%;
               align-items: center;
+
+              &--actions {
+                flex-basis: 30%;
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
+              }
             }
           }
         }

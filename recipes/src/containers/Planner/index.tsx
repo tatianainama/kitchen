@@ -26,8 +26,10 @@ const DisplayMeal = (dayPlan: DayPlan, meal: Meal, onRemove: typeof PlannerActio
   if (dish !== undefined) {
     return (
       <div className='meal-card'>
-        <p className='subtitle-2'>{dish.name}</p>
-        <Button icon='clear' onClick={() => onRemove(getWeekDay(dayPlan.date), meal)} small></Button>
+        <div className='meal-card--actions'>
+          <Button icon='clear' onClick={() => onRemove(getWeekDay(dayPlan.date), meal)} small></Button>
+        </div>
+        <h5>{dish.name}</h5>
       </div>
     )
   } else {
@@ -101,11 +103,16 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                 <Cell columns={10}>
                   <div className='cbk-planner__body__calendar'>
                     <div className='container'>
+                      <div className='day-schedule day-schedule--meals'>
+                        <div className='day-schedule--date'></div>
+                        <div className='day-schedule--lunch'> <h5>lunch</h5></div>
+                        <div className='day-schedule--dinner'> <h5>dinner</h5> </div>                                      
+                      </div>
                       {
                         this.state.week.map(([weekday, day], dayNumber) => (
                           <div key={dayNumber} className='day-schedule'>
                             <div className='day-schedule--date'>
-                              {weekday} {moment(day).format('DD')}
+                              <h5>{weekday} {moment(day).format('DD')}</h5>
                             </div>
                             <div className='day-schedule--lunch'>
                             <Droppable droppableId={`${dayNumber}-${weekday}-lunch`}>
