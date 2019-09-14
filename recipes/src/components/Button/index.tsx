@@ -35,7 +35,7 @@ export default function CBKButton(props: CBKButtonProps) {
         className={classnames({
           'btn-small': props.small,
         }, props.className)}
-        type={props.type}
+        type={props.type || 'button'}
         disabled={props.disabled}
         style={props.style}
       >
@@ -52,6 +52,7 @@ export default function CBKButton(props: CBKButtonProps) {
         className={props.className}
         onClick={props.onClick}
         style={props.style}
+        type={props.type || 'button'}
       >
         { props.children }
       </Button>
