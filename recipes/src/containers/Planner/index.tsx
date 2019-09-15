@@ -63,7 +63,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
         <Navbar
           title='Planner'
         >
-          <div>Week {this.props.week}</div>
+          <Button outlined raised>Save</Button>
         </Navbar>
         <section className='cbk-planner__body'>
           <DragDropContext onDragEnd={this.assignRecipe}>
@@ -102,6 +102,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                 </Cell>
                 <Cell columns={10}>
                   <div className='cbk-planner__body__calendar'>
+                    <div>Week {this.props.week}</div>
                     <div className='container'>
                       <div className='day-schedule day-schedule--meals'>
                         <div className='day-schedule--date'></div>

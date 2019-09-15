@@ -1,5 +1,4 @@
 import { Moment } from "moment";
-import { DBRecipe } from "./recipes";
 
 export type Weekday =
   'monday' |
@@ -35,4 +34,8 @@ export interface PlannerState {
   to: Moment,
   planner: WeekPlan,
   backlog: RecipePlan[]
+}
+
+export interface DBPlanner extends WeekPlan {
+  week: number,
 }
