@@ -13,8 +13,8 @@ export type Weekday =
   'saturday' |
   'sunday';
 
-export type WeekPlan = {
-  [day in Weekday]: DayPlan;
+export type WeekPlan<T> = {
+  [day in Weekday]: T;
 };
 
 export interface Plan {
@@ -43,7 +43,17 @@ export interface DayPlan {
   dinner?: RecipeDB
 }
 
-export interface WeeklyPlanner extends WeekPlan {
+export interface CompactDayPlan {
+  date: Date,
+  lunch?: { _id: ObjectID, name: string },
+  dinner?: { _id: ObjectID, name: string },
+}
+
+export interface WeeklyPlanner extends WeekPlan<DayPlan> {
+  week: number
+}
+
+export interface CompactWeeklyPlanner extends WeekPlan<CompactDayPlan> {
   week: number
 }
 

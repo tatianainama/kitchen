@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { IMongoService } from '../mongo';
 import { ChainPController } from '../promise-all-middleware';
-import PlanDB, { WeeklyPlanner, CompletePlanDB, Weekday, Plan } from './model';
+import PlanDB, { WeeklyPlanner, CompletePlanDB, Weekday, Plan, CompactWeeklyPlanner } from './model';
 import moment, { Moment } from 'moment';
 import { ObjectId } from 'bson';
 import { RecipeDB } from '../recipes/model';
@@ -32,7 +32,7 @@ const validPlan = (mbPlan: any) => {
 const getWeekPlanner: Controller<void, PlanDB[]> =
   db => req => () => db.find<PlanDB>(mkWeekQuery(req.params.week));
 
-const formatPlanner: Controller<PlanDB[], WeeklyPlanner> = db => req => prevResult => {
+const completePlanner: Controller<PlanDB[], WeeklyPlanner> = db => req => prevResult => {
   const week = mkWeekQuery(req.params.week).week;
   return db.aggregate<CompletePlanDB>([
     {
@@ -65,6 +65,48 @@ const formatPlanner: Controller<PlanDB[], WeeklyPlanner> = db => req => prevResu
   }, { week } as WeeklyPlanner))
 }
 
+const compactPlanner: Controller<null, CompactWeeklyPlanner> = db => req => prevResult => {
+  const week = mkWeekQuery(req.params.week).week;
+  return db.aggregate<CompletePlanDB>([
+    {
+      '$match': {
+        'week': week
+      }
+    },
+    {
+      '$lookup': {
+        'from': 'recipes', 
+        'localField': 'recipe', 
+        'foreignField': '_id', 
+        'as': 'recipe'
+      }
+    }, {
+      '$unwind': {
+        'path': '$recipe'
+      }, 
+    }, {
+      '$project': {
+        'recipe': {
+          'author': 0, 
+          'details': 0, 
+          'ingredients': 0, 
+          'instructions': 0
+        }
+      }
+    }
+  ]).then(plans => plans.reduce((planner, plan) => {
+    const day = moment(plan.day);
+    return {
+      ...planner,
+      [getWeekDay(day)]: {
+        ...planner[getWeekDay(day)],
+        day,
+        [plan.meal]: plan.recipe
+      }
+    };
+  }, { week } as CompactWeeklyPlanner))
+}
+
 const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
   const plan = req.body;
   return validPlan(plan).then(db.insertOne)
@@ -81,7 +123,8 @@ const saveManyPlans: Controller<void, PlanDB[]> = db => req => prev => {
 }
 export {
   getWeekPlanner,
-  formatPlanner,
+  completePlanner,
+  compactPlanner,
   savePlan,
   saveManyPlans,
 }
