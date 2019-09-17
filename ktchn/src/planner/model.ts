@@ -18,7 +18,7 @@ export type WeekPlan<T> = {
 };
 
 export interface Plan {
-  day: Date,
+  date: Date,
   week: number,
   recipe: ObjectID,
   meal: Meal

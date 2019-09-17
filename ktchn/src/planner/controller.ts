@@ -1,11 +1,9 @@
 
-import { Request, Response, NextFunction } from 'express';
 import { IMongoService } from '../mongo';
 import { ChainPController } from '../promise-all-middleware';
 import PlanDB, { WeeklyPlanner, CompletePlanDB, Weekday, Plan, CompactWeeklyPlanner } from './model';
 import moment, { Moment } from 'moment';
 import { ObjectId } from 'bson';
-import { RecipeDB } from '../recipes/model';
 
 type Controller<U, T> = (db: IMongoService) => ChainPController<U, T>;
 
@@ -15,13 +13,13 @@ const mkWeekQuery = (week: string) => ({
   week: parseInt(week) || moment().isoWeek()
 });
 
-const validatePlan = (mbPlan: any) => mbPlan.day && mbPlan.week && mbPlan.recipe && mbPlan.meal;
+const validatePlan = (mbPlan: any) => mbPlan.date && mbPlan.week && mbPlan.recipe && mbPlan.meal;
 
 const validPlan = (mbPlan: any) => {
-  if (mbPlan.day && mbPlan.week && mbPlan.recipe && mbPlan.meal) {
+  if (mbPlan.date && mbPlan.week && mbPlan.recipe && mbPlan.meal) {
     return Promise.resolve({
       ...mbPlan,
-      day: new Date(mbPlan.day),
+      date: new Date(mbPlan.date),
       recipe: new ObjectId(mbPlan.recipe)
     } as Plan)
   } else {
@@ -53,12 +51,12 @@ const completePlanner: Controller<PlanDB[], WeeklyPlanner> = db => req => prevRe
       }
     }
   ]).then(plans => plans.reduce((planner, plan) => {
-    const day = moment(plan.day);
+    const date = moment(plan.date);
     return {
       ...planner,
-      [getWeekDay(day)]: {
-        ...planner[getWeekDay(day)],
-        day,
+      [getWeekDay(date)]: {
+        ...planner[getWeekDay(date)],
+        date: date,
         [plan.meal]: plan.recipe
       }
     };
@@ -95,12 +93,12 @@ const compactPlanner: Controller<null, CompactWeeklyPlanner> = db => req => prev
       }
     }
   ]).then(plans => plans.reduce((planner, plan) => {
-    const day = moment(plan.day);
+    const date = moment(plan.date);
     return {
       ...planner,
-      [getWeekDay(day)]: {
-        ...planner[getWeekDay(day)],
-        day,
+      [getWeekDay(date)]: {
+        ...planner[getWeekDay(date)],
+        date: date,
         [plan.meal]: plan.recipe
       }
     };
