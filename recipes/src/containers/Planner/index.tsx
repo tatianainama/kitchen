@@ -13,33 +13,16 @@ import './styles.scss';
 import { getWeekDay } from 'services/time';
 import Button from 'components/Button';
 import { ThunkDispatch } from 'redux-thunk';
-import { Action, AnyAction } from 'redux';
 
 type Actions = typeof PlannerActions
 
 interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions {
-  fetch: any
+  fetch: typeof fetchPlannerActionCreator
 }
 
 interface PlannerContainerState {
   week: [Weekday, string][]
 }
-
-const DisplayMeal = (dayPlan: DayPlan, meal: Meal, onRemove: typeof PlannerActions.removeMeal) => {
-  const dish = dayPlan ? dayPlan[meal] : dayPlan;
-  if (dish !== undefined) {
-    return (
-      <div className='meal-card'>
-        <div className='meal-card--actions'>
-          <Button icon='clear' onClick={() => onRemove(getWeekDay(dayPlan.date), meal)} small></Button>
-        </div>
-        <h5>{dish.name}</h5>
-      </div>
-    )
-  } else {
-    return null;
-  }
-};
 
 class PlannerContainer extends Component<PlannerContainerProps, PlannerContainerState> {
 
@@ -52,6 +35,10 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
 
   componentDidMount() {
     this.props.fetch(this.props.week);
+  }
+
+  componentDidUpdate() {
+    const { isFetching } = this.props;
   }
 
   assignRecipe = (result: DropResult) => {
@@ -157,6 +144,22 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
     );
   }
 }
+
+const DisplayMeal = (dayPlan: DayPlan, meal: Meal, onRemove: typeof PlannerActions.removeMeal) => {
+  const dish = dayPlan ? dayPlan[meal] : dayPlan;
+  if (dish !== undefined) {
+    return (
+      <div className='meal-card'>
+        <div className='meal-card--actions'>
+          <Button icon='clear' onClick={() => onRemove(getWeekDay(dayPlan.date), meal)} small></Button>
+        </div>
+        <h5>{dish.name}</h5>
+      </div>
+    )
+  } else {
+    return null;
+  }
+};
 
 const mapStateToProps = (state: AppState) => {
   return state.planner

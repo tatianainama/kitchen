@@ -34,9 +34,10 @@ const initialState: PlannerState = {
   ]
 }
 
-const joinPlanner = (old: WeekPlan, updated: DBPlanner): WeekPlan => Object.keys(old).reduce((dayplan, day) => {
-  return merge(dayplan, updated[day as Weekday])
-}, {...old});
+const joinPlanner = (old: WeekPlan, updated: DBPlanner): WeekPlan => Object.keys(old).reduce((_oldPlanner, day) => ({
+  ..._oldPlanner,
+  [day]: merge(_oldPlanner[day as Weekday], updated[day as Weekday])
+}), {...old});
 
 const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
   state = initialState,
