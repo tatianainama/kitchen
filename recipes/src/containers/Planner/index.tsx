@@ -6,15 +6,19 @@ import { connect } from 'react-redux';
 import { PlannerState, Weekday, Meal, DayPlan } from 'types/planner';
 import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Card from 'components/Card';
-import PlannerActions, { Actions } from './actions';
+import PlannerActions, { fetchPlannerActionCreator, PlannerActions as PlannerActionsTypes } from './actions';
 import moment from 'moment';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import './styles.scss';
 import { getWeekDay } from 'services/time';
 import Button from 'components/Button';
+import { ThunkDispatch } from 'redux-thunk';
+import { Action, AnyAction } from 'redux';
 
+type Actions = typeof PlannerActions
 
 interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions {
+  fetch: any
 }
 
 interface PlannerContainerState {
@@ -22,7 +26,7 @@ interface PlannerContainerState {
 }
 
 const DisplayMeal = (dayPlan: DayPlan, meal: Meal, onRemove: typeof PlannerActions.removeMeal) => {
-  const dish = dayPlan[meal];
+  const dish = dayPlan ? dayPlan[meal] : dayPlan;
   if (dish !== undefined) {
     return (
       <div className='meal-card'>
@@ -44,6 +48,10 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
     this.state = {
       week: Object.keys(props.planner).map((weekday) => ([ weekday as Weekday, props.planner[weekday as Weekday].date.format()]))
     }
+  }
+
+  componentDidMount() {
+    this.props.fetch(this.props.week);
   }
 
   assignRecipe = (result: DropResult) => {
@@ -154,7 +162,12 @@ const mapStateToProps = (state: AppState) => {
   return state.planner
 }
 
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, any>) => ({
+  fetch: (week: number) => dispatch(fetchPlannerActionCreator(week)),
+  ...PlannerActions
+})
+
 export default connect(
   mapStateToProps,
-  PlannerActions
+  mapDispatchToProps
 )(PlannerContainer);

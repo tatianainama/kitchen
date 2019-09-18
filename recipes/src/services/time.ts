@@ -3,7 +3,10 @@ import { Weekday } from 'types/planner';
 
 export const mkWeek = () => ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as Weekday[];
 
-export const mkWeekDay = (day: string | number): Moment => moment().isoWeekday(day);
+export const mkWeekDay = (day: string | number, week?: number): Moment => {
+  const date = week ? moment().week(week) : moment();
+  return date.isoWeekday(day);
+};
 
 export const getWeekNumber = (): number => moment().isoWeek();
 

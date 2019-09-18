@@ -1,7 +1,8 @@
-import { ActionTypes } from './actions';
-import { PlannerState } from 'types/planner';
+import { PlannerActions } from './actions';
+import { PlannerState, DBPlanner, WeekPlan, Weekday } from 'types/planner';
 import { getWeekNumber, mkWeekDay } from 'services/time';
-
+import { Reducer } from 'redux';
+import { merge } from 'ramda';
 
 const initialState: PlannerState = {
   isFetching: false,
@@ -33,9 +34,13 @@ const initialState: PlannerState = {
   ]
 }
 
-const PlannerReducer = (
+const joinPlanner = (old: WeekPlan, updated: DBPlanner): WeekPlan => Object.keys(old).reduce((dayplan, day) => {
+  return merge(dayplan, updated[day as Weekday])
+}, {...old});
+
+const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
   state = initialState,
-  action: ActionTypes
+  action
 ): PlannerState => {
   switch (action.type) {
     case 'ADD_TO_BACKLOG': 
@@ -71,6 +76,20 @@ const PlannerReducer = (
           }
         },
         backlog: meal ? state.backlog.concat([meal]) : state.backlog
+      }
+    case 'REQUEST_PLANNER':
+      return {
+        ...state,
+        week: action.week,
+        from: mkWeekDay(1, action.week),
+        to: mkWeekDay(7, action.week),
+        isFetching: true,
+      }
+    case 'RECEIVE_PLANNER':
+      return {
+        ...state,
+        isFetching: false,
+        planner: joinPlanner(state.planner, action.payload)
       }
     default:
       return state

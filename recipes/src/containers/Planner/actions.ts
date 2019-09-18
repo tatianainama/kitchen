@@ -1,60 +1,113 @@
 import { DBRecipe } from 'types/recipes';
-import { Meal, RecipePlan, Weekday } from 'types/planner';
+import { Meal, RecipePlan, Weekday, DBPlanner } from 'types/planner';
+import { Dispatch, ActionCreator, Action } from 'redux';
+import { getPlanner } from './services'
+import { ThunkAction } from 'redux-thunk';
 
 export const ADD_TO_BACKLOG = 'ADD_TO_BACKLOG';
 export const REMOVE_FROM_BACKLOG = 'REMOVE_FROM_BACKLOG';
 export const ASSIGN_TO_DAY = 'ASSIGN_TO_DAY';
 export const REMOVE_MEAL = 'REMOVE_MEAL';
 
-const actions = {
-  addToBacklog: (recipe: DBRecipe) => ({
-    type: ADD_TO_BACKLOG,
-    recipe: {
-      _id: recipe._id,
-      name: recipe.name
-    },
-  }),
-  removeFromBacklog: (recipe: RecipePlan) => ({
-    type: REMOVE_FROM_BACKLOG,
-    recipe,
-  }),
-  assignToDay: (recipe: RecipePlan, day: Weekday, meal: Meal) => ({
-    type: ASSIGN_TO_DAY,
-    recipe,
-    day,
-    meal,
-  }),
-  removeMeal: (day: Weekday, meal: Meal) => ({
-    type: REMOVE_MEAL,
-    day,
-    meal
-  })
+export const REQUEST_PLANNER = 'REQUEST_PLANNER';
+export const RECEIVE_PLANNER = 'RECEIVE_PLANNER';
+
+export interface AddToBacklogAction extends Action<'ADD_TO_BACKLOG'> {
+  recipe: {
+    _id: string,
+    name: string
+  }
 }
+const addToBacklog = (recipe: DBRecipe): AddToBacklogAction => ({
+  recipe: {
+    _id: recipe._id,
+    name: recipe.name
+  },
+  type: ADD_TO_BACKLOG,
+});
 
-export type AddToBacklog = {
-  type: typeof ADD_TO_BACKLOG,
-  recipe: RecipePlan,
-};
-
-export type RemoveFromBacklog = {
-  type: typeof REMOVE_FROM_BACKLOG,
+export interface RemoveFromBacklogAction extends Action<'REMOVE_FROM_BACKLOG'> {
   recipe: RecipePlan
 }
+const removeFromBacklog = (recipe: RecipePlan): RemoveFromBacklogAction => ({
+  type: REMOVE_FROM_BACKLOG,
+  recipe,
+});
 
-export type AssignToDay = {
-  type: typeof ASSIGN_TO_DAY,
+export interface AssignToDayAction extends Action<'ASSIGN_TO_DAY'> {
   recipe: RecipePlan,
   day: Weekday,
   meal: Meal
 }
+const assignToDay = (recipe: RecipePlan, day: Weekday, meal: Meal): AssignToDayAction => ({
+  type: ASSIGN_TO_DAY,
+  recipe,
+  day,
+  meal,
+});
 
-export type RemoveMeal = {
-  type: typeof REMOVE_MEAL,
+export interface RemoveMealAction extends Action<'REMOVE_MEAL'> {
   day: Weekday,
   meal: Meal
 }
+const removeMeal = (day: Weekday, meal: Meal): RemoveMealAction => ({
+  type: REMOVE_MEAL,
+  day,
+  meal
+});
 
-export type ActionTypes = AddToBacklog | RemoveFromBacklog | AssignToDay | RemoveMeal;
+export interface RequestPlannerAction extends Action<'REQUEST_PLANNER'> {
+  week: number
+}
+const requestPlanner = (week: number): RequestPlannerAction => ({
+  type: REQUEST_PLANNER,
+  week
+})
 
-export type Actions = typeof actions;
-export default actions
+export interface ReceivePlannerAction extends Action<'RECEIVE_PLANNER'>{
+  payload: DBPlanner,
+}
+const receivePlanner = (json: DBPlanner): ReceivePlannerAction => ({
+  type: RECEIVE_PLANNER,
+  payload: json
+})
+
+export const fetchPlannerActionCreator: ActionCreator<
+  ThunkAction<
+    Promise<ReceivePlannerAction>,
+    DBPlanner,
+    number,
+    ReceivePlannerAction
+  >
+> = (week: number) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(requestPlanner(week));
+    const planner = await getPlanner(week);
+    return dispatch(receivePlanner(planner))
+  }
+}
+export const fetchPlanner = (week: number) => async (dispatch: Dispatch) => {
+  dispatch(requestPlanner(week));
+  try {
+    const data = await getPlanner(week);
+    return dispatch(receivePlanner(data));
+  }
+  catch (error) {
+    return console.log('Error while receiving planner data:', error);
+  }
+}
+
+export type PlannerActions =
+  AddToBacklogAction |
+  RemoveFromBacklogAction |
+  AssignToDayAction |
+  RemoveMealAction |
+  RequestPlannerAction |
+  ReceivePlannerAction;
+
+export default {
+  addToBacklog,
+  removeFromBacklog,
+  assignToDay,
+  removeMeal,
+}
