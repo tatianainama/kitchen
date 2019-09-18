@@ -86,16 +86,6 @@ export const fetchPlannerActionCreator: ActionCreator<
     return dispatch(receivePlanner(planner))
   }
 }
-export const fetchPlanner = (week: number) => async (dispatch: Dispatch) => {
-  dispatch(requestPlanner(week));
-  try {
-    const data = await getPlanner(week);
-    return dispatch(receivePlanner(data));
-  }
-  catch (error) {
-    return console.log('Error while receiving planner data:', error);
-  }
-}
 
 export type PlannerActions =
   AddToBacklogAction |
