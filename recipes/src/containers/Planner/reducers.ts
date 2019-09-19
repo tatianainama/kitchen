@@ -1,10 +1,11 @@
 import { PlannerActions } from './actions';
-import { PlannerState, DBPlanner, WeekPlan, Weekday } from 'types/planner';
+import { PlannerState, DBPlanner, WeekPlan, Weekday, RecipePlan } from 'types/planner';
 import { getWeekNumber, mkWeekDay } from 'services/time';
 import { Reducer } from 'redux';
-import { merge } from 'ramda';
+import { merge, uniqBy } from 'ramda';
 
 const initialState: PlannerState = {
+  mode: 'view',
   isFetching: false,
   from: mkWeekDay(1),
   to: mkWeekDay(7),
@@ -67,6 +68,7 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
       }
     case 'REMOVE_MEAL':
       const meal = state.planner[action.day][action.meal];
+      const inBacklog = meal && state.backlog.find(r => r._id === meal._id) !== undefined;
       return {
         ...state,
         planner: {
@@ -76,7 +78,7 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
             [action.meal]: undefined
           }
         },
-        backlog: meal ? state.backlog.concat([meal]) : state.backlog
+        backlog: meal && !inBacklog ? state.backlog.concat([meal]) : state.backlog
       }
     case 'REQUEST_PLANNER':
       return {
@@ -91,6 +93,11 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
         ...state,
         isFetching: false,
         planner: joinPlanner(state.planner, action.payload)
+      }
+    case 'CHANGE_PLANNER_MODE':
+      return {
+        ...state,
+        mode: action.mode
       }
     default:
       return state

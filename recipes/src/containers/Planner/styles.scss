@@ -2,11 +2,17 @@
 
 .cbk-planner {
   &__body {
+    display: flex;
+    margin: 1rem 0.5rem;
 
     &__backlog {
+      margin: 0 0.5rem;
+      flex-basis: 20%;
     }
 
     &__calendar {
+      margin: 0 0.5rem;
+      flex: 1;
       .container {
         display: flex;
         justify-content: space-between;

@@ -26,7 +26,10 @@ export type WeekPlan = {
 
 export type Meal = 'lunch' | 'dinner';
 
+export type PlannerMode = 'edit' | 'view';
+
 export interface PlannerState {
+  mode: PlannerMode,
   isFetching: boolean,
   error?: string,
   week: number,

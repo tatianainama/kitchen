@@ -1,5 +1,5 @@
 import { DBRecipe } from 'types/recipes';
-import { Meal, RecipePlan, Weekday, DBPlanner } from 'types/planner';
+import { Meal, RecipePlan, Weekday, DBPlanner, PlannerMode } from 'types/planner';
 import { Dispatch, ActionCreator, Action } from 'redux';
 import { getPlanner } from './services'
 import { ThunkAction } from 'redux-thunk';
@@ -11,6 +11,8 @@ export const REMOVE_MEAL = 'REMOVE_MEAL';
 
 export const REQUEST_PLANNER = 'REQUEST_PLANNER';
 export const RECEIVE_PLANNER = 'RECEIVE_PLANNER';
+
+export const CHANGE_PLANNER_MODE = 'CHANGE_PLANNER_MODE';
 
 export interface AddToBacklogAction extends Action<'ADD_TO_BACKLOG'> {
   recipe: {
@@ -87,17 +89,27 @@ export const fetchPlannerActionCreator: ActionCreator<
   }
 }
 
+export interface ChangePlannerModeAction extends Action<'CHANGE_PLANNER_MODE'> {
+  mode: PlannerMode
+}
+export const changePlannerMode = (mode: PlannerMode): ChangePlannerModeAction => ({
+  type: CHANGE_PLANNER_MODE,
+  mode,
+});
+
 export type PlannerActions =
   AddToBacklogAction |
   RemoveFromBacklogAction |
   AssignToDayAction |
   RemoveMealAction |
   RequestPlannerAction |
-  ReceivePlannerAction;
+  ReceivePlannerAction |
+  ChangePlannerModeAction;
 
 export default {
   addToBacklog,
   removeFromBacklog,
   assignToDay,
   removeMeal,
+  changePlannerMode,
 }
