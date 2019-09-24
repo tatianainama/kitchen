@@ -113,7 +113,12 @@ const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
 const saveManyPlans: Controller<void, PlanDB[]> = db => req => prev => {
   const mbPlanner = req.body;
   if (mbPlanner.filter) {
-    return db.insertMany(mbPlanner.filter(validatePlan))
+    const valid = mbPlanner.filter(validatePlan);
+    if (valid.length) {
+      return db.insertMany(valid)
+    } else {
+      return Promise.reject('Data did not have required fields: date, week, meal, ')
+    }
   } else {
     return Promise.reject('Invalid type: body content must be a Plan Array')
   }

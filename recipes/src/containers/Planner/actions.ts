@@ -1,8 +1,9 @@
 import { DBRecipe } from 'types/recipes';
-import { Meal, RecipePlan, Weekday, DBPlanner, PlannerMode } from 'types/planner';
+import { Meal, RecipePlan, Weekday, DBPlanner, PlannerMode, WeekPlan, DBDayPlan } from 'types/planner';
 import { Dispatch, ActionCreator, Action } from 'redux';
-import { getPlanner } from './services'
+import { getPlanner, savePlanner } from './services'
 import { ThunkAction } from 'redux-thunk';
+import { async } from 'q';
 
 export const ADD_TO_BACKLOG = 'ADD_TO_BACKLOG';
 export const REMOVE_FROM_BACKLOG = 'REMOVE_FROM_BACKLOG';
@@ -13,6 +14,10 @@ export const REQUEST_PLANNER = 'REQUEST_PLANNER';
 export const RECEIVE_PLANNER = 'RECEIVE_PLANNER';
 
 export const CHANGE_PLANNER_MODE = 'CHANGE_PLANNER_MODE';
+
+export const PENDING_SAVE_PLANNER = 'PENDING_SAVE_PLANNER';
+export const CONFIRM_SAVE_PLANNER = 'CONFIRM_SAVE_PLANNER';
+export const REJECT_SAVE_PLANNER = 'REJECT_SAVE_PLANNER';
 
 export interface AddToBacklogAction extends Action<'ADD_TO_BACKLOG'> {
   recipe: {
@@ -97,6 +102,50 @@ export const changePlannerMode = (mode: PlannerMode): ChangePlannerModeAction =>
   mode,
 });
 
+export interface PendingSavePlannerAction extends Action<'PENDING_SAVE_PLANNER'> {
+  planner: WeekPlan
+}
+export const pendingSavePlanner = (planner: WeekPlan): PendingSavePlannerAction => ({
+  type: PENDING_SAVE_PLANNER,
+  planner,
+})
+
+export interface ConfirmSavePlannerAction extends Action<'CONFIRM_SAVE_PLANNER'> {
+  result: DBDayPlan[]
+}
+export const confirmSavePlanner = (result: DBDayPlan[]): ConfirmSavePlannerAction => ({
+  type: CONFIRM_SAVE_PLANNER,
+  result
+})
+
+export interface RejectSavePlannerAction extends Action<'REJECT_SAVE_PLANNER'> {
+  error: Error
+}
+export const rejectSavePlanner = (error: Error): RejectSavePlannerAction => ({
+  type: REJECT_SAVE_PLANNER,
+  error,
+})
+
+export const savePlannerActionCreator: ActionCreator<
+  ThunkAction<
+    Promise<ConfirmSavePlannerAction|RejectSavePlannerAction>,
+    DBDayPlan[],
+    WeekPlan,
+    ConfirmSavePlannerAction|RejectSavePlannerAction
+  >
+> = (weekplan: WeekPlan) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(pendingSavePlanner(weekplan))
+    try {
+      const result = await savePlanner(weekplan);
+      return dispatch(confirmSavePlanner(result))
+    } catch(error) {
+      return dispatch(rejectSavePlanner(error))
+    }
+  }
+}
+
+
 export type PlannerActions =
   AddToBacklogAction |
   RemoveFromBacklogAction |
@@ -104,7 +153,10 @@ export type PlannerActions =
   RemoveMealAction |
   RequestPlannerAction |
   ReceivePlannerAction |
-  ChangePlannerModeAction;
+  ChangePlannerModeAction |
+  PendingSavePlannerAction |
+  ConfirmSavePlannerAction |
+  RejectSavePlannerAction;
 
 export default {
   addToBacklog,
@@ -112,4 +164,5 @@ export default {
   assignToDay,
   removeMeal,
   changePlannerMode,
+  
 }

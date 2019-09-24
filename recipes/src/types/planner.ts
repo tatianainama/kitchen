@@ -31,12 +31,20 @@ export type PlannerMode = 'edit' | 'view';
 export interface PlannerState {
   mode: PlannerMode,
   isFetching: boolean,
+  saving: boolean,
   error?: string,
   week: number,
   from: Moment,
   to: Moment,
   planner: WeekPlan,
   backlog: RecipePlan[]
+}
+
+export interface DBDayPlan {
+  date: string,
+  recipe: string,
+  week: number,
+  meal: Meal
 }
 
 export interface DBPlanner extends WeekPlan {

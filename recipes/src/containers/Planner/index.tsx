@@ -4,9 +4,8 @@ import Navbar from 'components/Navbar';
 import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
 import { PlannerState, Weekday, Meal, DayPlan, PlannerMode, RecipePlan, WeekPlan } from 'types/planner';
-import { Grid, Row, Cell } from "@material/react-layout-grid";
 import Card from 'components/Card';
-import PlannerActions, { fetchPlannerActionCreator, PlannerActions as PlannerActionsTypes } from './actions';
+import PlannerActions, { fetchPlannerActionCreator, PlannerActions as PlannerActionsTypes, savePlannerActionCreator } from './actions';
 import moment from 'moment';
 import { DragDropContext, Droppable, Draggable, DropResult, OnDragEndResponder } from 'react-beautiful-dnd';
 import './styles.scss';
@@ -18,7 +17,8 @@ import { bindActionCreators } from 'redux';
 type Actions = typeof PlannerActions
 
 interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions {
-  fetch: typeof fetchPlannerActionCreator
+  fetch: typeof fetchPlannerActionCreator,
+  save: typeof savePlannerActionCreator
 }
 
 interface PlannerContainerState {
@@ -65,8 +65,11 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
           {
             this.props.mode === 'view' ? (
               <Button outlined raised onClick={() => this.changeMode('edit')}>Edit</Button>
-              ) : (  
-              <Button outlined raised onClick={() => this.changeMode('view')}>Save</Button>
+              ) : (
+              <Button outlined raised onClick={() => {
+                this.props.save(this.props.planner)
+                this.changeMode('view')
+              }}>Save</Button>
             )
           }
         </Navbar>
@@ -217,6 +220,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, any>) => ({
   fetch: (week: number) => dispatch(fetchPlannerActionCreator(week)),
+  save: (plan: WeekPlan) => dispatch(savePlannerActionCreator(plan)),
   ...bindActionCreators(PlannerActions, dispatch)
 })
 
