@@ -15,7 +15,7 @@ const mkWeekQuery = (week: string) => ({
 
 const validatePlan = (mbPlan: any) => mbPlan.date && mbPlan.week && mbPlan.recipe && mbPlan.meal;
 
-const validPlan = (mbPlan: any) => {
+const validPlan = (mbPlan: any): Promise<Plan> => {
   if (mbPlan.date && mbPlan.week && mbPlan.recipe && mbPlan.meal) {
     return Promise.resolve({
       ...mbPlan,
@@ -113,14 +113,9 @@ const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
 const saveManyPlans: Controller<void, PlanDB[]> = db => req => prev => {
   const mbPlanner = req.body;
   if (mbPlanner.filter) {
-    const valid = mbPlanner.filter(validatePlan);
-    if (valid.length) {
-      return db.insertMany(valid)
-    } else {
-      return Promise.reject('Data did not have required fields: date, week, meal, ')
-    }
+    return Promise.all(mbPlanner.map(validPlan) as Plan[]).then(db.insertMany)
   } else {
-    return Promise.reject('Invalid type: body content must be a Plan Array')
+    return Promise.reject('Invalid type: body content must be a Plan Array. Use /day/ endpoint instead')
   }
 
 }

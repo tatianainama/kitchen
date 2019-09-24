@@ -67,6 +67,9 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
               <Button outlined raised onClick={() => this.changeMode('edit')}>Edit</Button>
               ) : (
               <Button outlined raised onClick={() => {
+                console.log('====================================');
+                console.log(this.props.planner);
+                console.log('====================================');
                 this.props.save(this.props.planner)
                 this.changeMode('view')
               }}>Save</Button>

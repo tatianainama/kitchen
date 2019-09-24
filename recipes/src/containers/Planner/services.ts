@@ -1,5 +1,6 @@
 import axios, { AxiosPromise } from 'axios';
 import { DBPlanner, DBDayPlan, WeekPlan, Weekday, Meal, DayPlan } from 'types/planner';
+import moment from 'moment';
 
 //@ts-ignore
 const PLANNER: string = process.env.REACT_APP_API_PLANNER;
@@ -7,12 +8,14 @@ const PLANNER: string = process.env.REACT_APP_API_PLANNER;
 const toDBPlan = (weekplan: WeekPlan) => {
   const planner = Object.keys(weekplan).map((weekday) => weekplan[weekday as Weekday]);
   const mkPlan = (day: DayPlan, meal: Meal): Array<DBDayPlan> => {
+    console.log(day);
     const dish = day[meal];
+    const date = moment(day.date);
     return dish ? [{
-      week: day.date.week(),
+      week: date.week(),
       recipe: dish._id,
       meal: meal,
-      date: day.date.format()
+      date: date.format()
     }] : []
   } 
   return planner.reduce((acc, day)=> {
