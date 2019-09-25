@@ -1,4 +1,4 @@
-
+import { WriteOpResult, UpdateWriteOpResult } from 'mongodb';
 import { IMongoService } from '../mongo';
 import { ChainPController } from '../promise-all-middleware';
 import PlanDB, { WeeklyPlanner, CompletePlanDB, Weekday, Plan, CompactWeeklyPlanner } from './model';
@@ -110,15 +110,18 @@ const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
   return validPlan(plan).then(db.insertOne)
 }
 
-const saveManyPlans: Controller<void, PlanDB[]> = db => req => prev => {
+const saveManyPlans: Controller<void, UpdateWriteOpResult[]> = db => req => prev => {
   const mbPlanner = req.body;
-  if (mbPlanner.filter) {
-    return Promise.all(mbPlanner.map(validPlan) as Plan[]).then(db.insertMany)
+  if (Array.isArray(mbPlanner)) {
+    return Promise.all(mbPlanner.map(validPlan)).then(plans => Promise.all(plans.map(plan => db.updateOne({
+      date: new Date(plan.date),
+      meal: plan.meal
+    }, plan, {upsert: true}))));
   } else {
     return Promise.reject('Invalid type: body content must be a Plan Array. Use /day/ endpoint instead')
   }
-
 }
+
 export {
   getWeekPlanner,
   completePlanner,
