@@ -110,13 +110,14 @@ const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
   return validPlan(plan).then(db.insertOne)
 }
 
-const saveManyPlans: Controller<void, UpdateWriteOpResult[]> = db => req => prev => {
+const saveManyPlans: Controller<void, UpdateWriteOpResult[]> = db => req => async () => {
   const mbPlanner = req.body;
   if (Array.isArray(mbPlanner)) {
-    return Promise.all(mbPlanner.map(validPlan)).then(plans => Promise.all(plans.map(plan => db.updateOne({
+    const plans = await Promise.all(mbPlanner.map(validPlan));
+    return await Promise.all(plans.map(plan => db.updateOne({
       date: new Date(plan.date),
       meal: plan.meal
-    }, plan, {upsert: true}))));
+    }, plan, { upsert: true })));
   } else {
     return Promise.reject('Invalid type: body content must be a Plan Array. Use /day/ endpoint instead')
   }
