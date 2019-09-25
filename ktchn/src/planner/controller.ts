@@ -1,4 +1,4 @@
-import { WriteOpResult, UpdateWriteOpResult } from 'mongodb';
+import { WriteOpResult } from 'mongodb';
 import { IMongoService } from '../mongo';
 import { ChainPController } from '../promise-all-middleware';
 import PlanDB, { WeeklyPlanner, CompletePlanDB, Weekday, Plan, CompactWeeklyPlanner } from './model';
@@ -110,7 +110,7 @@ const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
   return validPlan(plan).then(db.insertOne)
 }
 
-const saveManyPlans: Controller<void, UpdateWriteOpResult[]> = db => req => async () => {
+const saveManyPlans: Controller<void, WriteOpResult[]> = db => req => async () => {
   const mbPlanner = req.body;
   if (Array.isArray(mbPlanner)) {
     const plans = await Promise.all(mbPlanner.map(validPlan));

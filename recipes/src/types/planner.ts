@@ -37,7 +37,8 @@ export interface PlannerState {
   from: Moment,
   to: Moment,
   planner: WeekPlan,
-  backlog: RecipePlan[]
+  backlog: RecipePlan[],
+  edit: boolean,
 }
 
 export interface DBDayPlan {

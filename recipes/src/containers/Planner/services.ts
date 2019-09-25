@@ -8,7 +8,6 @@ const PLANNER: string = process.env.REACT_APP_API_PLANNER;
 const toDBPlan = (weekplan: WeekPlan) => {
   const planner = Object.keys(weekplan).map((weekday) => weekplan[weekday as Weekday]);
   const mkPlan = (day: DayPlan, meal: Meal): Array<DBDayPlan> => {
-    console.log(day);
     const dish = day[meal];
     const date = moment(day.date);
     return dish ? [{

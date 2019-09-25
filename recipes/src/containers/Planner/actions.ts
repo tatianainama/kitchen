@@ -14,6 +14,7 @@ export const REQUEST_PLANNER = 'REQUEST_PLANNER';
 export const RECEIVE_PLANNER = 'RECEIVE_PLANNER';
 
 export const CHANGE_PLANNER_MODE = 'CHANGE_PLANNER_MODE';
+export const EDIT_PLANNER = 'EDIT_PLANNER';
 
 export const PENDING_SAVE_PLANNER = 'PENDING_SAVE_PLANNER';
 export const CONFIRM_SAVE_PLANNER = 'CONFIRM_SAVE_PLANNER';
@@ -102,6 +103,12 @@ export const changePlannerMode = (mode: PlannerMode): ChangePlannerModeAction =>
   mode,
 });
 
+export interface EditPlannerAction extends Action<'EDIT_PLANNER'> {
+}
+export const editPlanner = (): EditPlannerAction => ({
+  type: EDIT_PLANNER
+});
+
 export interface PendingSavePlannerAction extends Action<'PENDING_SAVE_PLANNER'> {
   planner: WeekPlan
 }
@@ -154,6 +161,7 @@ export type PlannerActions =
   RequestPlannerAction |
   ReceivePlannerAction |
   ChangePlannerModeAction |
+  EditPlannerAction |
   PendingSavePlannerAction |
   ConfirmSavePlannerAction |
   RejectSavePlannerAction;
@@ -164,5 +172,5 @@ export default {
   assignToDay,
   removeMeal,
   changePlannerMode,
-  
+  editPlanner  
 }

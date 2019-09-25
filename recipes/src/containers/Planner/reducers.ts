@@ -9,6 +9,7 @@ const initialState: PlannerState = {
   mode: 'view',
   isFetching: false,
   saving: false,
+  edit: false,
   from: mkWeekDay(1),
   to: mkWeekDay(7),
   week: getWeekNumber(),
@@ -100,6 +101,11 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
       return {
         ...state,
         mode: action.mode
+      }
+    case 'EDIT_PLANNER':
+      return {
+        ...state,
+        edit: true,
       }
     case 'PENDING_SAVE_PLANNER':
       return {

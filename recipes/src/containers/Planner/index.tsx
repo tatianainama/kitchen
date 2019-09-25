@@ -29,7 +29,6 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
 
   constructor(props: PlannerContainerProps) {
     super(props);
-    console.log(props)
     this.state = {
       week: Object.keys(props.planner).map((weekday) => ([ weekday as Weekday, moment(props.planner[weekday as Weekday].date).format()]))
     }
@@ -49,7 +48,13 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
       const [idx, day, meal] = result.destination.droppableId.split('-');
       this.props.assignToDay(recipe, day as Weekday, meal as Meal);
       this.props.removeFromBacklog(recipe);
+      this.props.editPlanner();
     }
+  }
+
+  removeMeal = (day: Weekday, meal: Meal) => {
+    this.props.editPlanner();
+    return this.props.removeMeal(day, meal);
   }
 
   findRecipe = (recipeId: string) => this.props.backlog.find(recipe => recipe._id === recipeId);
@@ -67,10 +72,9 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
               <Button outlined raised onClick={() => this.changeMode('edit')}>Edit</Button>
               ) : (
               <Button outlined raised onClick={() => {
-                console.log('====================================');
-                console.log(this.props.planner);
-                console.log('====================================');
-                this.props.save(this.props.planner)
+                if (this.props.edit) {
+                  this.props.save(this.props.planner)
+                }
                 this.changeMode('view')
               }}>Save</Button>
             )
@@ -83,28 +87,12 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
           onDragEnd={this.assignRecipe}
           backlog={this.props.backlog}
           planner={this.props.planner}
-          removeMeal={this.props.removeMeal}
+          removeMeal={this.removeMeal}
         />
       </div>
     );
   }
 }
-
-const DisplayMeal = (dayPlan: DayPlan, meal: Meal, onRemove: typeof PlannerActions.removeMeal) => {
-  const dish = dayPlan ? dayPlan[meal] : dayPlan;
-  if (dish !== undefined) {
-    return (
-      <div className='meal-card'>
-        <div className='meal-card--actions'>
-          <Button icon='clear' onClick={() => onRemove(getWeekDay(dayPlan.date), meal)} small></Button>
-        </div>
-        <h5>{dish.name}</h5>
-      </div>
-    )
-  } else {
-    return null;
-  }
-};
 
 const DisplayMealWithActions: React.SFC<{
   recipe?: RecipePlan,
