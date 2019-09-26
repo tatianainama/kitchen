@@ -73,7 +73,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
               ) : (
               <Button outlined raised onClick={() => {
                 if (this.props.edit) {
-                  this.props.save(this.props.planner)
+                  this.props.save(this.props.planner, this.props.from, this.props.to)
                 }
                 this.changeMode('view')
               }}>Save</Button>
@@ -211,7 +211,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, any>) => ({
   fetch: (week: number) => dispatch(fetchPlannerActionCreator(week)),
-  save: (plan: WeekPlan) => dispatch(savePlannerActionCreator(plan)),
+  save: (plan: WeekPlan, from: Date, to: Date) => dispatch(savePlannerActionCreator(plan, from, to)),
   ...bindActionCreators(PlannerActions, dispatch)
 })
 

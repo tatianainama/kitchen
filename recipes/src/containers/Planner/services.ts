@@ -29,8 +29,12 @@ export const getPlanner = (week: number): Promise<DBPlanner> =>
   axios.get(`${PLANNER}/week/${week}/compact`)
   .then(response => response.data)
 
-export const savePlanner = (weekPlan: WeekPlan): Promise<Array<DBDayPlan>> => {
-  return axios.post(`${PLANNER}/`, toDBPlan(weekPlan))
+export const savePlanner = (weekPlan: WeekPlan, from: Date, to: Date): Promise<Array<DBDayPlan>> => {
+  return axios.post(`${PLANNER}/week`, {
+    planner: toDBPlan(weekPlan),
+    from,
+    to,
+  })
     .then(response => response.data)
 }
 

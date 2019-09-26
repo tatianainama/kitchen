@@ -1,4 +1,4 @@
-import { Db, Collection, ObjectID, FilterQuery, ObjectId, WriteOpResult, FindOneOptions } from 'mongodb';
+import { Db, Collection, ObjectID, FilterQuery, ObjectId, WriteOpResult, FindOneOptions, BulkWriteOpResultObject, CollectionBulkWriteOptions, UpdateOneOptions, DeleteWriteOpResultObject } from 'mongodb';
 
 export interface IDDocument {
   _id: ObjectID
@@ -13,8 +13,10 @@ export interface IMongoService {
   findOneById<T>(idParam: string): Promise<IDBDocument<T>|null>,
   find<T>(query: FilterQuery<T>, optionalQuery?: FindOneOptions): Promise<IDBDocument<T>[]>,
   update<T>(id: string, data: T): Promise<WriteOpResult>,
-  updateOne<T>(filter: FilterQuery<T>, data: T, options?: {upsert?: boolean}): Promise<WriteOpResult>,
-  aggregate<T>(pipeline: Object[]): Promise<T[]>
+  updateOne<T>(filter: FilterQuery<T>, data: T, options?: UpdateOneOptions): Promise<WriteOpResult>,
+  aggregate<T>(pipeline: Object[]): Promise<T[]>,
+  bulkWrite<T>(operations: Object[], options?: CollectionBulkWriteOptions): Promise<BulkWriteOpResultObject>,
+  deleteMany<T>(filter: FilterQuery<T>): Promise<DeleteWriteOpResultObject>
 }
 
 export const mongoService = (db: Db) => (col: string): IMongoService => {
@@ -28,7 +30,9 @@ export const mongoService = (db: Db) => (col: string): IMongoService => {
     find: (query, optionalQuery) => collection.find(query, optionalQuery).toArray(),
     update: (id, data) => collection.update({_id: new ObjectId(id)}, data),
     updateOne: (filter, data, options) => collection.update(filter, data, options), 
-    aggregate: pipeline => collection.aggregate(pipeline).toArray()
+    aggregate: pipeline => collection.aggregate(pipeline).toArray(),
+    bulkWrite: (operations, options) => collection.bulkWrite(operations, options),
+    deleteMany: (filter) => collection.deleteMany(filter),
   }
 };
 

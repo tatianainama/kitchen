@@ -3,7 +3,6 @@ import { Meal, RecipePlan, Weekday, DBPlanner, PlannerMode, WeekPlan, DBDayPlan 
 import { Dispatch, ActionCreator, Action } from 'redux';
 import { getPlanner, savePlanner } from './services'
 import { ThunkAction } from 'redux-thunk';
-import { async } from 'q';
 
 export const ADD_TO_BACKLOG = 'ADD_TO_BACKLOG';
 export const REMOVE_FROM_BACKLOG = 'REMOVE_FROM_BACKLOG';
@@ -110,11 +109,15 @@ export const editPlanner = (): EditPlannerAction => ({
 });
 
 export interface PendingSavePlannerAction extends Action<'PENDING_SAVE_PLANNER'> {
-  planner: WeekPlan
+  planner: WeekPlan,
+  from: Date,
+  to: Date
 }
-export const pendingSavePlanner = (planner: WeekPlan): PendingSavePlannerAction => ({
+export const pendingSavePlanner = (planner: WeekPlan, from: Date, to: Date): PendingSavePlannerAction => ({
   type: PENDING_SAVE_PLANNER,
   planner,
+  from,
+  to,
 })
 
 export interface ConfirmSavePlannerAction extends Action<'CONFIRM_SAVE_PLANNER'> {
@@ -140,11 +143,11 @@ export const savePlannerActionCreator: ActionCreator<
     WeekPlan,
     ConfirmSavePlannerAction|RejectSavePlannerAction
   >
-> = (weekplan: WeekPlan) => {
+> = (weekplan: WeekPlan, from: Date, to: Date) => {
   return async (dispatch: Dispatch) => {
-    dispatch(pendingSavePlanner(weekplan))
+    dispatch(pendingSavePlanner(weekplan, from, to))
     try {
-      const result = await savePlanner(weekplan);
+      const result = await savePlanner(weekplan, from, to);
       return dispatch(confirmSavePlanner(result))
     } catch(error) {
       return dispatch(rejectSavePlanner(error))

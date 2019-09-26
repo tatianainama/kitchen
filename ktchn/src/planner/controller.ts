@@ -1,9 +1,10 @@
 import { WriteOpResult } from 'mongodb';
-import { IMongoService } from '../mongo';
+import { IMongoService, IDBDocument } from '../mongo';
 import { ChainPController } from '../promise-all-middleware';
 import PlanDB, { WeeklyPlanner, CompletePlanDB, Weekday, Plan, CompactWeeklyPlanner } from './model';
 import moment, { Moment } from 'moment';
 import { ObjectId } from 'bson';
+import { Request, NextFunction, Response } from 'express';
 
 type Controller<U, T> = (db: IMongoService) => ChainPController<U, T>;
 
@@ -110,16 +111,41 @@ const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
   return validPlan(plan).then(db.insertOne)
 }
 
-const saveManyPlans: Controller<void, WriteOpResult[]> = db => req => async () => {
-  const mbPlanner = req.body;
-  if (Array.isArray(mbPlanner)) {
-    const plans = await Promise.all(mbPlanner.map(validPlan));
-    return await Promise.all(plans.map(plan => db.updateOne({
-      date: new Date(plan.date),
-      meal: plan.meal
-    }, plan, { upsert: true })));
+type PlannerRequest = {
+  planner: Plan[],
+  from: Date,
+  to: Date
+};
+
+const toPlan = (plan: any): Plan => ({
+  ...plan,
+  date: new Date(plan.date),
+  recipe: new ObjectId(plan.recipe),
+})
+
+const validatePlanner: Controller<any, PlannerRequest> = () => ({ body }) => async () => {
+  if (body.planner && Array.isArray(body.planner) && new Date(body.from) && new Date(body.to)) {
+    const planner: Plan[] = body.planner.map(toPlan);
+    return Promise.resolve({
+      planner,
+      from: new Date(body.from),
+      to: new Date(body.to)
+    })
   } else {
-    return Promise.reject('Invalid type: body content must be a Plan Array. Use /day/ endpoint instead')
+    return Promise.reject('Invalid request: Body must have planner, from and to properties')
+  }
+}
+
+const saveWeekPlanner: Controller<PlannerRequest, IDBDocument<Plan[]>> = db => req => async ({ planner, from , to }) => {
+  try {
+    return db.deleteMany({
+      'date': {'$gte': new Date(from), '$lte': new Date(to)}
+    }).then(result => {
+      return planner.length ? db.insertMany<Plan>(planner) : []
+    })
+  } catch(error) {
+    console.error(error)
+    return error;
   }
 }
 
@@ -128,5 +154,6 @@ export {
   completePlanner,
   compactPlanner,
   savePlan,
-  saveManyPlans,
+  saveWeekPlanner,
+  validatePlanner
 }
