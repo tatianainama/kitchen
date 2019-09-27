@@ -86,9 +86,9 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
     case 'REQUEST_PLANNER':
       return {
         ...state,
-        week: action.week,
-        from: mkWeekDay(1, action.week),
-        to: mkWeekDay(7, action.week),
+        week: getWeekNumber(action.from),
+        from: action.from,
+        to: action.to,
         isFetching: true,
       }
     case 'RECEIVE_PLANNER':

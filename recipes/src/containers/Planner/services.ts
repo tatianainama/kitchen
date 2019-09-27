@@ -1,6 +1,7 @@
+import { shortDate } from 'services/time';
 import axios, { AxiosPromise } from 'axios';
 import { DBPlanner, DBDayPlan, WeekPlan, Weekday, Meal, DayPlan } from 'types/planner';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 //@ts-ignore
 const PLANNER: string = process.env.REACT_APP_API_PLANNER;
@@ -25,20 +26,20 @@ const toDBPlan = (weekplan: WeekPlan) => {
     ]
   }, [] as Array<DBDayPlan>)
 }
-export const getPlanner = (week: number): Promise<DBPlanner> =>
-  axios.get(`${PLANNER}/week/${week}/compact`)
-  .then(response => response.data)
 
-export const savePlanner = (weekPlan: WeekPlan, from: Date, to: Date): Promise<Array<DBDayPlan>> => {
+export const getPlanner = (from: Moment, to: Moment): Promise<DBPlanner> => 
+  axios.get(`${PLANNER}/week/${shortDate(from)}/${shortDate(to)}`).then(response => response.data);
+
+export const savePlanner = (weekPlan: WeekPlan, from: Moment, to: Moment): Promise<Array<DBDayPlan>> => {
   return axios.post(`${PLANNER}/week`, {
     planner: toDBPlan(weekPlan),
-    from,
-    to,
+    from: shortDate(from),
+    to: shortDate(to),
   })
     .then(response => response.data)
 }
 
 export default {
   getPlanner,
-  savePlanner
+  savePlanner,
 }

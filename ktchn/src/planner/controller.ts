@@ -1,20 +1,12 @@
-import { WriteOpResult } from 'mongodb';
 import { IMongoService, IDBDocument } from '../mongo';
 import { ChainPController } from '../promise-all-middleware';
 import PlanDB, { WeeklyPlanner, CompletePlanDB, Weekday, Plan, CompactWeeklyPlanner } from './model';
 import moment, { Moment } from 'moment';
 import { ObjectId } from 'bson';
-import { Request, NextFunction, Response } from 'express';
 
 type Controller<U, T> = (db: IMongoService) => ChainPController<U, T>;
 
 export const getWeekDay = (day: Moment): Weekday => day.format('dddd').toLowerCase() as Weekday;
-
-const mkWeekQuery = (week: string) => ({
-  week: parseInt(week) || moment().isoWeek()
-});
-
-const validatePlan = (mbPlan: any) => mbPlan.date && mbPlan.week && mbPlan.recipe && mbPlan.meal;
 
 const validPlan = (mbPlan: any): Promise<Plan> => {
   if (mbPlan.date && mbPlan.week && mbPlan.recipe && mbPlan.meal) {
@@ -28,51 +20,21 @@ const validPlan = (mbPlan: any): Promise<Plan> => {
   }
 }
 
-const getWeekPlanner: Controller<void, PlanDB[]> =
-  db => req => () => db.find<PlanDB>(mkWeekQuery(req.params.week));
-
-const completePlanner: Controller<PlanDB[], WeeklyPlanner> = db => req => prevResult => {
-  const week = mkWeekQuery(req.params.week).week;
-  return db.aggregate<CompletePlanDB>([
-    {
-      '$match': {
-        'week': week
-      }
-    },
-    {
-      '$lookup': {
-        'from': 'recipes', 
-        'localField': 'recipe', 
-        'foreignField': '_id', 
-        'as': 'recipe'
-      }
-    }, {
-      '$unwind': {
-        'path': '$recipe'
-      }
-    }
-  ]).then(plans => plans.reduce((planner, plan) => {
-    const date = moment(plan.date);
-    return {
-      ...planner,
-      [getWeekDay(date)]: {
-        ...planner[getWeekDay(date)],
-        date: date,
-        [plan.meal]: plan.recipe
-      }
-    };
-  }, { week } as WeeklyPlanner))
+const validateRange: Controller<void, {from: Date, to: Date}> = () => req => () => {
+  const from = moment(req.params.from),
+        to = moment(req.params.to);
+  return from.isValid() && to.isValid() && to.diff(from, 'days') === 6 ?
+    Promise.resolve({ from: from.toDate(), to: to.toDate()}) :
+    Promise.reject('Invalid date range');
 }
 
-const compactPlanner: Controller<null, CompactWeeklyPlanner> = db => req => prevResult => {
-  const week = mkWeekQuery(req.params.week).week;
+const getPlannerByRange: Controller<{from: Date, to: Date}, WeeklyPlanner> = db => () => ({ from, to }) => {
   return db.aggregate<CompletePlanDB>([
     {
       '$match': {
-        'week': week
+        'date': {'$gte': from, '$lte': to}
       }
-    },
-    {
+    }, {
       '$lookup': {
         'from': 'recipes', 
         'localField': 'recipe', 
@@ -82,7 +44,7 @@ const compactPlanner: Controller<null, CompactWeeklyPlanner> = db => req => prev
     }, {
       '$unwind': {
         'path': '$recipe'
-      }, 
+      }
     }, {
       '$project': {
         'recipe': {
@@ -95,6 +57,7 @@ const compactPlanner: Controller<null, CompactWeeklyPlanner> = db => req => prev
     }
   ]).then(plans => plans.reduce((planner, plan) => {
     const date = moment(plan.date);
+    console.log(plan);
     return {
       ...planner,
       [getWeekDay(date)]: {
@@ -103,7 +66,7 @@ const compactPlanner: Controller<null, CompactWeeklyPlanner> = db => req => prev
         [plan.meal]: plan.recipe
       }
     };
-  }, { week } as CompactWeeklyPlanner))
+  }, { week: moment(from).isoWeek() } as WeeklyPlanner))
 }
 
 const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
@@ -150,10 +113,9 @@ const saveWeekPlanner: Controller<PlannerRequest, IDBDocument<Plan[]>> = db => r
 }
 
 export {
-  getWeekPlanner,
-  completePlanner,
-  compactPlanner,
   savePlan,
   saveWeekPlanner,
-  validatePlanner
+  validatePlanner,
+  validateRange,
+  getPlannerByRange
 }

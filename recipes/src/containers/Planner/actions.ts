@@ -3,6 +3,7 @@ import { Meal, RecipePlan, Weekday, DBPlanner, PlannerMode, WeekPlan, DBDayPlan 
 import { Dispatch, ActionCreator, Action } from 'redux';
 import { getPlanner, savePlanner } from './services'
 import { ThunkAction } from 'redux-thunk';
+import { Moment } from 'moment';
 
 export const ADD_TO_BACKLOG = 'ADD_TO_BACKLOG';
 export const REMOVE_FROM_BACKLOG = 'REMOVE_FROM_BACKLOG';
@@ -64,11 +65,13 @@ const removeMeal = (day: Weekday, meal: Meal): RemoveMealAction => ({
 });
 
 export interface RequestPlannerAction extends Action<'REQUEST_PLANNER'> {
-  week: number
+  from: Moment,
+  to: Moment
 }
-const requestPlanner = (week: number): RequestPlannerAction => ({
+const requestPlanner = (from: Moment, to: Moment): RequestPlannerAction => ({
   type: REQUEST_PLANNER,
-  week
+  from,
+  to
 })
 
 export interface ReceivePlannerAction extends Action<'RECEIVE_PLANNER'>{
@@ -83,13 +86,13 @@ export const fetchPlannerActionCreator: ActionCreator<
   ThunkAction<
     Promise<ReceivePlannerAction>,
     DBPlanner,
-    number,
+    {from: Moment, to: Moment},
     ReceivePlannerAction
   >
-> = (week: number) => {
+> = (from: Moment, to: Moment) => {
   return async (dispatch: Dispatch) => {
-    dispatch(requestPlanner(week));
-    const planner = await getPlanner(week);
+    dispatch(requestPlanner(from, to));
+    const planner = await getPlanner(from, to);
     return dispatch(receivePlanner(planner))
   }
 }
@@ -110,10 +113,10 @@ export const editPlanner = (): EditPlannerAction => ({
 
 export interface PendingSavePlannerAction extends Action<'PENDING_SAVE_PLANNER'> {
   planner: WeekPlan,
-  from: Date,
-  to: Date
+  from: Moment,
+  to: Moment
 }
-export const pendingSavePlanner = (planner: WeekPlan, from: Date, to: Date): PendingSavePlannerAction => ({
+export const pendingSavePlanner = (planner: WeekPlan, from: Moment, to: Moment): PendingSavePlannerAction => ({
   type: PENDING_SAVE_PLANNER,
   planner,
   from,
@@ -143,7 +146,7 @@ export const savePlannerActionCreator: ActionCreator<
     WeekPlan,
     ConfirmSavePlannerAction|RejectSavePlannerAction
   >
-> = (weekplan: WeekPlan, from: Date, to: Date) => {
+> = (weekplan: WeekPlan, from: Moment, to: Moment) => {
   return async (dispatch: Dispatch) => {
     dispatch(pendingSavePlanner(weekplan, from, to))
     try {

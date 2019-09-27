@@ -2,7 +2,7 @@ import { Router } from 'express';
 import mongoService, { IMongoService } from '../mongo';
 import MongoClient from 'mongodb';
 import { chainP } from '../promise-all-middleware';
-import { getWeekPlanner, completePlanner, compactPlanner, savePlan, saveWeekPlanner, validatePlanner } from './controller';
+import { savePlan, saveWeekPlanner, validatePlanner, validateRange, getPlannerByRange } from './controller';
 
 class PlannerRoutes {
   public router: Router;
@@ -16,9 +16,7 @@ class PlannerRoutes {
 
   private init() {
     this.router.get('/all/');
-    this.router.get('/week/:week', chainP([getWeekPlanner(this.PlannerDB)]));
-    this.router.get('/week/:week/complete', chainP([completePlanner(this.PlannerDB)]));
-    this.router.get('/week/:week/compact', chainP([compactPlanner(this.PlannerDB)]));
+    this.router.get('/week/:from/:to', chainP([validateRange(this.PlannerDB), getPlannerByRange(this.PlannerDB)]))
     this.router.post('/week', chainP([validatePlanner(this.PlannerDB), saveWeekPlanner(this.PlannerDB)]));
     this.router.post('/day', chainP([savePlan(this.PlannerDB)]));
   }

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { PlannerState, Weekday, Meal, DayPlan, PlannerMode, RecipePlan, WeekPlan } from 'types/planner';
 import Card from 'components/Card';
 import PlannerActions, { fetchPlannerActionCreator, PlannerActions as PlannerActionsTypes, savePlannerActionCreator } from './actions';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { DragDropContext, Droppable, Draggable, DropResult, OnDragEndResponder } from 'react-beautiful-dnd';
 import './styles.scss';
 import { getWeekDay } from 'services/time';
@@ -35,7 +35,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
   }
 
   componentDidMount() {
-    this.props.fetch(this.props.week);
+    this.props.fetch(this.props.from, this.props.to);
   }
 
   componentDidUpdate() {
@@ -210,8 +210,8 @@ const mapStateToProps = (state: AppState) => {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, any>) => ({
-  fetch: (week: number) => dispatch(fetchPlannerActionCreator(week)),
-  save: (plan: WeekPlan, from: Date, to: Date) => dispatch(savePlannerActionCreator(plan, from, to)),
+  fetch: (from: Moment, to: Moment) => dispatch(fetchPlannerActionCreator(from, to)),
+  save: (plan: WeekPlan, from: Moment, to: Moment) => dispatch(savePlannerActionCreator(plan, from, to)),
   ...bindActionCreators(PlannerActions, dispatch)
 })
 
