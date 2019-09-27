@@ -2,7 +2,10 @@ import { ObjectID } from 'mongodb';
 import { RecipeDB } from '../recipes/model';
 import { Moment, weekdays } from 'moment';
 
-export type Meal = 'lunch' | 'dinner';
+export enum Meal {
+  Lunch = 1,
+  Dinner
+}
 
 export type Weekday =
   'monday' |

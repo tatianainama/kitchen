@@ -1,6 +1,6 @@
 import { shortDate } from 'services/time';
 import axios, { AxiosPromise } from 'axios';
-import { DBPlanner, DBDayPlan, WeekPlan, Weekday, Meal, DayPlan } from 'types/planner';
+import { DBPlanner, DBDayPlan, WeekPlan, Weekday, DayPlan, Meal } from 'types/planner';
 import moment, { Moment } from 'moment';
 
 //@ts-ignore
@@ -21,8 +21,8 @@ const toDBPlan = (weekplan: WeekPlan) => {
   return planner.reduce((acc, day)=> {
     return [
       ...acc,
-      ...mkPlan(day, 'lunch'),
-      ...mkPlan(day, 'dinner')
+      ...mkPlan(day, Meal.Lunch),
+      ...mkPlan(day, Meal.Dinner)
     ]
   }, [] as Array<DBDayPlan>)
 }

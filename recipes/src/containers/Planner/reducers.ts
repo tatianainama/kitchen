@@ -1,5 +1,5 @@
 import { PlannerActions } from './actions';
-import { PlannerState, DBPlanner, WeekPlan, Weekday, RecipePlan } from 'types/planner';
+import { PlannerState, DBPlanner, WeekPlan, Weekday } from 'types/planner';
 import { getWeekNumber, mkWeekDay } from 'services/time';
 import { Reducer } from 'redux';
 import { merge, uniqBy } from 'ramda';

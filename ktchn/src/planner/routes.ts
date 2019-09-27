@@ -15,7 +15,6 @@ class PlannerRoutes {
   }
 
   private init() {
-    this.router.get('/all/');
     this.router.get('/week/:from/:to', chainP([validateRange(this.PlannerDB), getPlannerByRange(this.PlannerDB)]))
     this.router.post('/week', chainP([validatePlanner(this.PlannerDB), saveWeekPlanner(this.PlannerDB)]));
     this.router.post('/day', chainP([savePlan(this.PlannerDB)]));

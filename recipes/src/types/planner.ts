@@ -9,6 +9,11 @@ export type Weekday =
   'saturday' |
   'sunday';
 
+export enum Meal {
+  Lunch = 0,
+  Dinner,
+}
+
 export type RecipePlan = {
   _id: string,
   name: string,
@@ -16,15 +21,13 @@ export type RecipePlan = {
 
 export type DayPlan = {
   date: Moment,
-  lunch?: RecipePlan,
-  dinner?: RecipePlan,
+  [Meal.Lunch]?: RecipePlan,
+  [Meal.Dinner]?: RecipePlan,
 };
 
 export type WeekPlan = {
   [day in Weekday]: DayPlan;
 };
-
-export type Meal = 'lunch' | 'dinner';
 
 export type PlannerMode = 'edit' | 'view';
 

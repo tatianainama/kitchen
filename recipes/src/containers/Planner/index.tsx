@@ -3,13 +3,12 @@ import { RouteComponentProps } from 'react-router';
 import Navbar from 'components/Navbar';
 import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
-import { PlannerState, Weekday, Meal, DayPlan, PlannerMode, RecipePlan, WeekPlan } from 'types/planner';
+import { PlannerState, Weekday, Meal, PlannerMode, RecipePlan, WeekPlan } from 'types/planner';
 import Card from 'components/Card';
-import PlannerActions, { fetchPlannerActionCreator, PlannerActions as PlannerActionsTypes, savePlannerActionCreator } from './actions';
+import PlannerActions, { fetchPlannerActionCreator, savePlannerActionCreator } from './actions';
 import moment, { Moment } from 'moment';
 import { DragDropContext, Droppable, Draggable, DropResult, OnDragEndResponder } from 'react-beautiful-dnd';
 import './styles.scss';
-import { getWeekDay } from 'services/time';
 import Button from 'components/Button';
 import { ThunkDispatch } from 'redux-thunk';
 import { bindActionCreators } from 'redux';
@@ -46,7 +45,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
     const recipe = this.findRecipe(result.draggableId);
     if (result.destination && recipe) {
       const [idx, day, meal] = result.destination.droppableId.split('-');
-      this.props.assignToDay(recipe, day as Weekday, meal as Meal);
+      this.props.assignToDay(recipe, day as Weekday, parseInt(meal) as Meal);
       this.props.removeFromBacklog(recipe);
       this.props.editPlanner();
     }
@@ -93,18 +92,6 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
     );
   }
 }
-
-const DisplayMealWithActions: React.SFC<{
-  recipe?: RecipePlan,
-  children?: React.ReactElement
-}> = ({ recipe, children }) => recipe ? (
-  <div className='meal-card'>
-    <div className="meal-card--actions">
-      { children }
-    </div>
-    <h5>{ recipe.name }</h5>
-  </div>
-) : null; 
 
 const DisplayPlanner: React.SFC<{
   week: [Weekday, string][],
@@ -155,8 +142,8 @@ const DisplayPlanner: React.SFC<{
         <div className='container'>
           <div className='day-schedule day-schedule--meals'>
             <div className='day-schedule--date'></div>
-            <div className='day-schedule--lunch'> <h5>lunch</h5></div>
-            <div className='day-schedule--dinner'> <h5>dinner</h5> </div>                                      
+            <div className='day-schedule--meal'> <h5>lunch</h5></div>
+            <div className='day-schedule--meal'> <h5>dinner</h5> </div>                                      
           </div>
           {
             week.map(([weekday, day], dayNumber) => (
@@ -164,38 +151,38 @@ const DisplayPlanner: React.SFC<{
                 <div className='day-schedule--date'>
                   <h5>{weekday} {moment(day).format('DD')}</h5>
                 </div>
-                <div className='day-schedule--lunch'>
-                <Droppable droppableId={`${dayNumber}-${weekday}-lunch`}>
-                  {provided => (
-                    <div className='day-schedule-content' ref={provided.innerRef}>
-                      {provided.placeholder}
-                      <DisplayMealWithActions recipe={planner[weekday]['lunch']}>
-                        {
-                          planner[weekday]['lunch'] && mode === 'edit' ? (
-                            <Button icon='clear' onClick={() => removeMeal(weekday, 'lunch')} small></Button>
-                          ) : undefined
-                        }
-                      </DisplayMealWithActions>
-                    </div>
-                  )}
-                </Droppable> 
-                </div>
-                <div className='day-schedule--dinner'>
-                  <Droppable droppableId={`${dayNumber}-${weekday}-dinner`}>
-                    {provided => (
-                      <div className='day-schedule-content' ref={provided.innerRef}>
-                        {provided.placeholder}
-                        <DisplayMealWithActions recipe={planner[weekday]['dinner']}>
+                {
+                  [Meal.Lunch, Meal.Dinner].map((meal, key) => {
+                    const recipe = planner[weekday][meal];
+                    return (
+                      <div className='day-schedule--meal' key={key}>
+                        <Droppable droppableId={`${dayNumber}-${weekday}-${meal}`}>
                           {
-                            planner[weekday]['dinner'] && mode === 'edit' ? (
-                              <Button icon='clear' onClick={() => removeMeal(weekday, 'dinner')} small></Button>
-                            ) : undefined
+                            provided => (
+                              <div className='day-schedule-content' ref={provided.innerRef}>
+                                { provided.placeholder }
+                                {
+                                  recipe ? (
+                                    <div className='meal-card'>
+                                      <div className="meal-card--actions">
+                                        {
+                                          recipe && mode === 'edit' ? (
+                                            <Button icon='clear' onClick={() => removeMeal(weekday, meal)} small></Button>      
+                                          ) : null
+                                        }
+                                      </div>
+                                      <h5>{ recipe.name }</h5>
+                                    </div>
+                                  ) : null
+                                }
+                              </div>
+                            )
                           }
-                        </DisplayMealWithActions>
+                        </Droppable>
                       </div>
-                    )}
-                  </Droppable> 
-                </div>
+                    )
+                  })
+                }
               </div>
             ))
           }
