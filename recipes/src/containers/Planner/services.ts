@@ -1,5 +1,5 @@
 import { shortDate } from 'services/time';
-import axios, { AxiosPromise } from 'axios';
+import axios from 'axios';
 import { DBPlanner, DBDayPlan, WeekPlan, Weekday, DayPlan, Meal } from 'types/planner';
 import moment, { Moment } from 'moment';
 
@@ -12,7 +12,6 @@ const toDBPlan = (weekplan: WeekPlan) => {
     const dish = day[meal];
     const date = moment(day.date);
     return dish ? [{
-      week: date.week(),
       recipe: dish._id,
       meal: meal,
       date: date.format()

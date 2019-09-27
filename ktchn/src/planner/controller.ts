@@ -57,7 +57,6 @@ const getPlannerByRange: Controller<{from: Date, to: Date}, WeeklyPlanner> = db 
     }
   ]).then(plans => plans.reduce((planner, plan) => {
     const date = moment(plan.date);
-    console.log(plan);
     return {
       ...planner,
       [getWeekDay(date)]: {

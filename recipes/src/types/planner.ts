@@ -47,7 +47,6 @@ export interface PlannerState {
 export interface DBDayPlan {
   date: string,
   recipe: string,
-  week: number,
   meal: Meal
 }
 

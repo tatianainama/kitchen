@@ -22,7 +22,6 @@ export type WeekPlan<T> = {
 
 export interface Plan {
   date: Date,
-  week: number,
   recipe: ObjectID,
   meal: Meal
 }
