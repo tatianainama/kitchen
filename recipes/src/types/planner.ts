@@ -29,7 +29,10 @@ export type WeekPlan = {
   [day in Weekday]: DayPlan;
 };
 
-export type PlannerMode = 'edit' | 'view';
+export enum PlannerMode {
+  View = 'VIEW',
+  Edit = 'EDIT'
+}
 
 export interface PlannerState {
   mode: PlannerMode,

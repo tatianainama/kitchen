@@ -21,7 +21,7 @@ interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actio
 }
 
 interface PlannerContainerState {
-  week: [Weekday, string][]
+  week: [Weekday, string][],
 }
 
 class PlannerContainer extends Component<PlannerContainerProps, PlannerContainerState> {
@@ -29,16 +29,26 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
   constructor(props: PlannerContainerProps) {
     super(props);
     this.state = {
-      week: Object.keys(props.planner).map((weekday) => ([ weekday as Weekday, moment(props.planner[weekday as Weekday].date).format()]))
+      week: Object.keys(props.planner).map((weekday) => ([ weekday as Weekday, moment(props.planner[weekday as Weekday].date).format()])),
     }
+  }
+
+  _prevState = {
+    planner: { ...this.props.planner },
+    backlog: { ...this.props.backlog } 
   }
 
   componentDidMount() {
     this.props.fetch(this.props.from, this.props.to);
   }
 
-  componentDidUpdate() {
-    const { isFetching } = this.props;
+  componentDidUpdate(prevProps: PlannerContainerProps) {
+    if (prevProps.mode === PlannerMode.View && this.props.mode === PlannerMode.Edit) {
+      this._prevState = { 
+        planner: {...this.props.planner},
+        backlog: [...this.props.backlog]
+      };
+    }
   }
 
   assignRecipe = (result: DropResult) => {
@@ -60,6 +70,8 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
 
   changeMode = (mode: PlannerMode) => this.props.changePlannerMode(mode);
 
+  cancel = () => this.props.cancelSavePlanner(this._prevState.planner, this._prevState.backlog)
+
   render () {
     return (
       <div className='cbk-planner'>
@@ -67,15 +79,20 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
           title='Planner'
         >
           {
-            this.props.mode === 'view' ? (
-              <Button outlined raised onClick={() => this.changeMode('edit')}>Edit</Button>
+            this.props.mode === PlannerMode.View ? (
+              <Button outlined raised onClick={() => this.changeMode(PlannerMode.Edit)}>Edit</Button>
               ) : (
-              <Button outlined raised onClick={() => {
-                if (this.props.edit) {
-                  this.props.save(this.props.planner, this.props.from, this.props.to)
-                }
-                this.changeMode('view')
-              }}>Save</Button>
+                <div>
+                  <Button outlined raised onClick={() => {
+                    this.props.save(this.props.planner, this.props.from, this.props.to)
+                    this.changeMode(PlannerMode.View)
+                  }}>Save</Button>
+                  <Button outlined raised onClick={() => {
+                    this.cancel();
+                    this.changeMode(PlannerMode.View)
+                  }}> Cancel </Button>
+
+                </div>
             )
           }
         </Navbar>
@@ -105,7 +122,7 @@ const DisplayPlanner: React.SFC<{
   <section className='cbk-planner__body'>
     <DragDropContext onDragEnd={onDragEnd}>
       {
-        mode === 'edit' ? (
+        mode === PlannerMode.Edit ? (
           <div className='cbk-planner__body__backlog'>
             <Droppable droppableId='recipeList'>
               {(provided) => (
@@ -166,7 +183,7 @@ const DisplayPlanner: React.SFC<{
                                     <div className='meal-card'>
                                       <div className="meal-card--actions">
                                         {
-                                          recipe && mode === 'edit' ? (
+                                          recipe && mode === PlannerMode.Edit ? (
                                             <Button icon='clear' onClick={() => removeMeal(weekday, meal)} small></Button>      
                                           ) : null
                                         }

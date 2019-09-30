@@ -20,6 +20,8 @@ export const PENDING_SAVE_PLANNER = 'PENDING_SAVE_PLANNER';
 export const CONFIRM_SAVE_PLANNER = 'CONFIRM_SAVE_PLANNER';
 export const REJECT_SAVE_PLANNER = 'REJECT_SAVE_PLANNER';
 
+export const CANCEL_SAVE_PLANNER = 'CANCEL_SAVE_PLANNER';
+
 export interface AddToBacklogAction extends Action<'ADD_TO_BACKLOG'> {
   recipe: {
     _id: string,
@@ -158,6 +160,16 @@ export const savePlannerActionCreator: ActionCreator<
   }
 }
 
+export interface CancelSavePlannerAction extends Action<'CANCEL_SAVE_PLANNER'> {
+  oldPlanner: WeekPlan,
+  oldBacklog: RecipePlan[]
+}
+
+export const cancelSavePlanner = (oldPlanner: WeekPlan, oldBacklog: RecipePlan[]): CancelSavePlannerAction => ({
+  type: CANCEL_SAVE_PLANNER,
+  oldPlanner,
+  oldBacklog
+})
 
 export type PlannerActions =
   AddToBacklogAction |
@@ -170,7 +182,8 @@ export type PlannerActions =
   EditPlannerAction |
   PendingSavePlannerAction |
   ConfirmSavePlannerAction |
-  RejectSavePlannerAction;
+  RejectSavePlannerAction |
+  CancelSavePlannerAction;
 
 export default {
   addToBacklog,
@@ -178,5 +191,6 @@ export default {
   assignToDay,
   removeMeal,
   changePlannerMode,
-  editPlanner  
+  editPlanner,
+  cancelSavePlanner
 }

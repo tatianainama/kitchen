@@ -1,11 +1,11 @@
 import { PlannerActions } from './actions';
-import { PlannerState, DBPlanner, WeekPlan, Weekday } from 'types/planner';
+import { PlannerState, DBPlanner, WeekPlan, Weekday, PlannerMode } from 'types/planner';
 import { getWeekNumber, mkWeekDay } from 'services/time';
 import { Reducer } from 'redux';
 import { merge } from 'ramda';
 
 const initialState: PlannerState = {
-  mode: 'view',
+  mode: PlannerMode.View,
   isFetching: false,
   saving: false,
   edit: false,
@@ -121,6 +121,14 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
         ...state,
         saving: false,
         error: action.error.message
+      }
+    case 'CANCEL_SAVE_PLANNER':
+      return {
+        ...state,
+        edit: false,
+        mode: PlannerMode.View,
+        planner: action.oldPlanner,
+        backlog: action.oldBacklog
       }
     default:
       return state
