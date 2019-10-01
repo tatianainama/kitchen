@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import Navbar from 'components/Navbar';
 import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
-import { PlannerState, Weekday, Meal, PlannerMode, RecipePlan, WeekPlan } from 'types/planner';
+import { PlannerState, Weekday, Meal, PlannerMode, RecipePlan, WeekPlan, Meals } from 'types/planner';
 import Card from 'components/Card';
 import PlannerActions, { fetchPlannerActionCreator, savePlannerActionCreator } from './actions';
 import moment, { Moment } from 'moment';
@@ -159,8 +159,13 @@ const DisplayPlanner: React.SFC<{
         <div className='container'>
           <div className='day-schedule day-schedule--meals'>
             <div className='day-schedule--date'></div>
-            <div className='day-schedule--meal'> <h5>lunch</h5></div>
-            <div className='day-schedule--meal'> <h5>dinner</h5> </div>                                      
+            {
+              Meals.map((meal, key) => (
+                <div className='day-schedule--meal' key={key}>
+                  <h5>{Meal[meal]}</h5>
+                </div>
+              ))
+            }
           </div>
           {
             week.map(([weekday, day], dayNumber) => (
@@ -169,7 +174,7 @@ const DisplayPlanner: React.SFC<{
                   <h5>{weekday} {moment(day).format('DD')}</h5>
                 </div>
                 {
-                  [Meal.Lunch, Meal.Dinner].map((meal, key) => {
+                  Meals.map((meal, key) => {
                     const recipe = planner[weekday][meal];
                     return (
                       <div className='day-schedule--meal' key={key}>

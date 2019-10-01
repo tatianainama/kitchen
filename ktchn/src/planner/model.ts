@@ -3,22 +3,34 @@ import { RecipeDB } from '../recipes/model';
 import { Moment, weekdays } from 'moment';
 
 export enum Meal {
-  Lunch = 1,
-  Dinner
+  Lunch = 0,
+  Dinner,
+  Dessert
 }
 
 export type Weekday =
   'monday' |
   'tuesday' |
-  'wednsday' |
+  'wednesday' |
   'thursday' |
   'friday' |
   'saturday' |
   'sunday';
 
-export type WeekPlan<T> = {
-  [day in Weekday]: T;
+export type DayPlan = {
+  date: Moment,
+  [Meal.Lunch]?: RecipePlan,
+  [Meal.Dinner]?: RecipePlan,
+  [Meal.Dessert]?: RecipePlan
+}
+
+export type WeekPlan = {
+  [day in Weekday]: DayPlan;
 };
+
+export interface WeeklyPlanner extends WeekPlan {
+  week: number;
+}
 
 export interface Plan {
   date: Date,
@@ -26,7 +38,7 @@ export interface Plan {
   meal: Meal
 }
 
-export default interface PlanDB extends Plan{
+export default interface PlanDB extends Plan {
   _id: ObjectID,
 }
 
@@ -38,24 +50,3 @@ export interface RecipePlan {
 export interface CompletePlanDB extends Omit<PlanDB, 'recipe'> {
   recipe: RecipePlan
 }
-
-export interface DayPlan {
-  date: Moment,
-  lunch?: RecipeDB,
-  dinner?: RecipeDB
-}
-
-export interface CompactDayPlan {
-  date: Date,
-  lunch?: { _id: ObjectID, name: string },
-  dinner?: { _id: ObjectID, name: string },
-}
-
-export interface WeeklyPlanner extends WeekPlan<DayPlan> {
-  week: number
-}
-
-export interface CompactWeeklyPlanner extends WeekPlan<CompactDayPlan> {
-  week: number
-}
-

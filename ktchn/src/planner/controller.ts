@@ -1,6 +1,6 @@
 import { IMongoService, IDBDocument } from '../mongo';
 import { ChainPController } from '../promise-all-middleware';
-import PlanDB, { WeeklyPlanner, CompletePlanDB, Weekday, Plan, CompactWeeklyPlanner } from './model';
+import PlanDB, { CompletePlanDB, Weekday, Plan, WeeklyPlanner } from './model';
 import moment, { Moment } from 'moment';
 import { ObjectId } from 'bson';
 

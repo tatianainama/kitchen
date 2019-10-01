@@ -12,6 +12,7 @@ export type Weekday =
 export enum Meal {
   Lunch = 0,
   Dinner,
+  Dessert
 }
 
 export type RecipePlan = {
@@ -23,6 +24,7 @@ export type DayPlan = {
   date: Moment,
   [Meal.Lunch]?: RecipePlan,
   [Meal.Dinner]?: RecipePlan,
+  [Meal.Dessert]?: RecipePlan
 };
 
 export type WeekPlan = {
@@ -56,3 +58,5 @@ export interface DBDayPlan {
 export interface DBPlanner extends WeekPlan {
   week: number,
 }
+
+export const Meals = [Meal.Lunch, Meal.Dinner, Meal.Dessert]

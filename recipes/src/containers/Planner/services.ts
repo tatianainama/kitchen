@@ -21,7 +21,8 @@ const toDBPlan = (weekplan: WeekPlan) => {
     return [
       ...acc,
       ...mkPlan(day, Meal.Lunch),
-      ...mkPlan(day, Meal.Dinner)
+      ...mkPlan(day, Meal.Dinner),
+      ...mkPlan(day, Meal.Dessert)
     ]
   }, [] as Array<DBDayPlan>)
 }
