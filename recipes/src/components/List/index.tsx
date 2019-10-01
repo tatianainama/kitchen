@@ -6,8 +6,9 @@ import './styles.scss';
 type ListProps<T> = {
   nonInteractive?: boolean,
   dense?: boolean,
+  focus?: number,
   items: T[],
-  render: (item: T) => React.ComponentElement<T, any>
+  render: (item: T, index: number) => React.ComponentElement<T, any>
 }
 
 const CBKList = <T extends {}>(props: ListProps<T>) => (
@@ -16,9 +17,9 @@ const CBKList = <T extends {}>(props: ListProps<T>) => (
       props.items.map((item, index) => (
         <li
           key={index}
-          className='cbk-list__item'
+          className={`cbk-list__item ${index === props.focus ? 'cbk-list__item--focus' : ''}`}
         >
-          {props.render(item)}
+          {props.render(item, index)}
         </li>
       ))
     }

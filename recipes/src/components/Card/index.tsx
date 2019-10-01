@@ -28,12 +28,13 @@ type CBKCardProps = {
     handler: (event: React.MouseEvent) => void
   }[],
   onClick: (event: React.MouseEvent) => void,
+  className?: string,
 }
 
-function CBKCard({onClick, img, title, summary, actions, icons, noMedia = false}: CBKCardProps){
+function CBKCard({onClick, img, title, summary, actions, icons, noMedia = false, className = ''}: CBKCardProps){
   
   return(
-    <Card outlined className='cbk-card'>
+    <Card outlined className={`cbk-card ${className}`}>
       <CardPrimaryContent onClick={onClick}>
         { noMedia ? null : <CardMedia square imageUrl={img || sample_img}></CardMedia>}
         <div className='cbk-card__main'>

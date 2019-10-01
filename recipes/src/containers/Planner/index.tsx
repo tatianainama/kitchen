@@ -12,7 +12,8 @@ import './styles.scss';
 import Button from 'components/Button';
 import { ThunkDispatch } from 'redux-thunk';
 import { bindActionCreators } from 'redux';
-
+import RecipeSearch from 'components/RecipeSearch';
+import { DBRecipe } from 'src/types/recipes';
 type Actions = typeof PlannerActions
 
 interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions {
@@ -104,6 +105,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
           backlog={this.props.backlog}
           planner={this.props.planner}
           removeMeal={this.removeMeal}
+          addToBacklog={this.props.addToBacklog}
         />
       </div>
     );
@@ -117,13 +119,15 @@ const DisplayPlanner: React.SFC<{
   backlog: RecipePlan[],
   planner: WeekPlan,
   removeMeal: typeof PlannerActions.removeMeal,
+  addToBacklog: (recipe: DBRecipe) => {},
   mode?: PlannerMode,
-}> = ({ mode, onDragEnd, backlog, weekNumber, week, planner, removeMeal}) => (
+}> = ({ mode, onDragEnd, backlog, weekNumber, week, planner, removeMeal, addToBacklog }) => (
   <section className='cbk-planner__body'>
     <DragDropContext onDragEnd={onDragEnd}>
       {
         mode === PlannerMode.Edit ? (
           <div className='cbk-planner__body__backlog'>
+            <RecipeSearch onSelect={(selected)=>{ addToBacklog(selected) }}/>
             <Droppable droppableId='recipeList'>
               {(provided) => (
                 <div ref={provided.innerRef}>

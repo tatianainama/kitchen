@@ -13,7 +13,8 @@
     overflow: hidden;
     transition: opacity 15ms linear,
                 background-color 15ms linear;
-    &:hover {
+    &:hover,
+    &--focus {
       background-color: rgba(0,0,0,0.04)
     }
     .primary-text,

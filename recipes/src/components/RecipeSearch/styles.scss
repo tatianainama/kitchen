@@ -1,0 +1,15 @@
+.cbk-recipe-search {
+  width: 100%;
+  position: relative;
+  &__results {
+    display: block;
+    width: 100%;
+    position: absolute;
+    z-index: 10000;
+    background-color: white;
+    .cbk-list {
+      max-height: 20rem;
+      overflow-y: scroll;
+    }
+  }
+}

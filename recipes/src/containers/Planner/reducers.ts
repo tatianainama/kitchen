@@ -2,7 +2,7 @@ import { PlannerActions } from './actions';
 import { PlannerState, DBPlanner, WeekPlan, Weekday, PlannerMode } from 'types/planner';
 import { getWeekNumber, mkWeekDay } from 'services/time';
 import { Reducer } from 'redux';
-import { merge } from 'ramda';
+import { merge, uniqBy } from 'ramda';
 
 const initialState: PlannerState = {
   mode: PlannerMode.View,
@@ -21,20 +21,7 @@ const initialState: PlannerState = {
     saturday:   { date: mkWeekDay(6)},
     sunday:     { date: mkWeekDay(7)},
   },
-  backlog: [
-    {
-      _id: '5d638a66eed9f450ff3b32dc',
-      name: 'Summer Corn Chowder'
-    },
-    {
-      _id: '5d638aedeed9f450ff3b32dd',
-      name: 'Chicken Parm'
-    },
-    {
-      _id: '5d6906f806662f07a2825ab7',
-      name: 'Creamy Chicken And Wild Rice Soup'
-    }
-  ]
+  backlog: []
 }
 
 const joinPlanner = (old: WeekPlan, updated: DBPlanner): WeekPlan => Object.keys(old).reduce((_oldPlanner, day) => ({
@@ -50,7 +37,10 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
     case 'ADD_TO_BACKLOG': 
       return {
         ...state,
-        backlog: state.backlog.concat([action.recipe])
+        backlog: uniqBy(item => item._id, [
+          action.recipe,
+          ...state.backlog
+        ])
       };
     case 'ASSIGN_TO_DAY':
       return {

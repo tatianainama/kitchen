@@ -36,6 +36,7 @@ const Input = ({
 	button,
 	field = { name: '', value: '', onBlur: ()=>{}, onChange: ()=>{}},
 	className = '',
+
 }: InputProps) => {
 	const fieldClasses = classNames(
 		'cbk-input',
@@ -71,6 +72,7 @@ const Input = ({
 						value={value}
 						//@ts-ignore
 						onChange={onChange}
+						onKeyDown={onKeyDown}
 						type={type}
 						min={0}
 						rows={1}
