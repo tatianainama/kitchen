@@ -1,5 +1,5 @@
 import { DBRecipe } from 'types/recipes';
-import { Meal, RecipePlan, Weekday, DBPlanner, PlannerMode, WeekPlan, DBDayPlan } from 'types/planner';
+import { Meal, RecipePlan, Weekday, DBPlanner, PlannerMode, WeekPlan, DBDayPlan, WeekShift } from 'types/planner';
 import { Dispatch, ActionCreator, Action } from 'redux';
 import { getPlanner, savePlanner } from './services'
 import { ThunkAction } from 'redux-thunk';
@@ -15,6 +15,7 @@ export const RECEIVE_PLANNER = 'RECEIVE_PLANNER';
 
 export const CHANGE_PLANNER_MODE = 'CHANGE_PLANNER_MODE';
 export const EDIT_PLANNER = 'EDIT_PLANNER';
+export const CHANGE_PLANNER_RANGE = 'CHANGE_PLANNER_RANGE';
 
 export const PENDING_SAVE_PLANNER = 'PENDING_SAVE_PLANNER';
 export const CONFIRM_SAVE_PLANNER = 'CONFIRM_SAVE_PLANNER';
@@ -113,6 +114,33 @@ export const editPlanner = (): EditPlannerAction => ({
   type: EDIT_PLANNER
 });
 
+export interface ChangePlannerRangeAction extends Action<'CHANGE_PLANNER_RANGE'> {
+  from: Moment,
+  to: Moment,
+  week: number
+}
+export const changePlannerRange = (from: Moment, to: Moment, week: number): ChangePlannerRangeAction => ({
+  type: CHANGE_PLANNER_RANGE,
+  from,
+  to,
+  week
+});
+export const changePlannerRangeActionCreator: ActionCreator<
+  ThunkAction<
+    Promise<ReceivePlannerAction>,
+    DBPlanner,
+    {from: Moment, to: Moment},
+    ReceivePlannerAction
+  >
+> = (from, to, week) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(changePlannerRange(from, to, week));
+    dispatch(requestPlanner(from, to));
+    const planner = await getPlanner(from, to);
+    return dispatch(receivePlanner(planner))
+  }
+}
+
 export interface PendingSavePlannerAction extends Action<'PENDING_SAVE_PLANNER'> {
   planner: WeekPlan,
   from: Moment,
@@ -183,7 +211,9 @@ export type PlannerActions =
   PendingSavePlannerAction |
   ConfirmSavePlannerAction |
   RejectSavePlannerAction |
-  CancelSavePlannerAction;
+  CancelSavePlannerAction |
+  ChangePlannerRangeAction;
+
 
 export default {
   addToBacklog,
@@ -192,5 +222,6 @@ export default {
   removeMeal,
   changePlannerMode,
   editPlanner,
-  cancelSavePlanner
+  cancelSavePlanner,
+  changePlannerRange
 }

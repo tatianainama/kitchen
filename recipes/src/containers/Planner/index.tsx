@@ -3,9 +3,9 @@ import { RouteComponentProps } from 'react-router';
 import Navbar from 'components/Navbar';
 import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
-import { PlannerState, Weekday, Meal, PlannerMode, RecipePlan, WeekPlan, Meals } from 'types/planner';
+import { PlannerState, Weekday, Meal, PlannerMode, RecipePlan, WeekPlan, Meals, WeekShift } from 'types/planner';
 import Card from 'components/Card';
-import PlannerActions, { fetchPlannerActionCreator, savePlannerActionCreator } from './actions';
+import PlannerActions, { fetchPlannerActionCreator, savePlannerActionCreator, changePlannerRangeActionCreator } from './actions';
 import moment, { Moment } from 'moment';
 import { DragDropContext, Droppable, Draggable, DropResult, OnDragEndResponder } from 'react-beautiful-dnd';
 import './styles.scss';
@@ -13,12 +13,15 @@ import Button from 'components/Button';
 import { ThunkDispatch } from 'redux-thunk';
 import { bindActionCreators } from 'redux';
 import RecipeSearch from 'components/RecipeSearch';
-import { DBRecipe } from 'src/types/recipes';
+import { DBRecipe } from 'types/recipes';
+import { getWeekPeriod } from 'services/time';
+
 type Actions = typeof PlannerActions
 
 interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions {
   fetch: typeof fetchPlannerActionCreator,
   save: typeof savePlannerActionCreator
+  changeRange: typeof changePlannerRangeActionCreator
 }
 
 interface PlannerContainerState {
@@ -71,7 +74,12 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
 
   changeMode = (mode: PlannerMode) => this.props.changePlannerMode(mode);
 
-  cancel = () => this.props.cancelSavePlanner(this._prevState.planner, this._prevState.backlog)
+  cancel = () => this.props.cancelSavePlanner(this._prevState.planner, this._prevState.backlog);
+
+  changeWeek = (shift?: WeekShift) => {
+    const newPeriod = getWeekPeriod(this.props.from, this.props.to, shift);
+    this.props.changeRange(newPeriod.from, newPeriod.to, newPeriod.week);
+  }
 
   render () {
     return (
@@ -107,6 +115,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
           removeMeal={this.removeMeal}
           addToBacklog={this.props.addToBacklog}
           assignToDay={this.props.assignToDay}
+          changeWeek={this.changeWeek}
         />
       </div>
     );
@@ -122,8 +131,9 @@ const DisplayPlanner: React.SFC<{
   removeMeal: typeof PlannerActions.removeMeal,
   assignToDay: typeof PlannerActions.assignToDay,
   addToBacklog: (recipe: DBRecipe) => {},
+  changeWeek: (shift?: WeekShift) => void,
   mode?: PlannerMode,
-}> = ({ mode, onDragEnd, backlog, weekNumber, week, planner, removeMeal, addToBacklog, assignToDay }) => (
+}> = ({ mode, onDragEnd, backlog, weekNumber, week, planner, removeMeal, addToBacklog, assignToDay, changeWeek}) => (
   <section className='cbk-planner__body'>
     <DragDropContext onDragEnd={onDragEnd}>
       {
@@ -161,7 +171,11 @@ const DisplayPlanner: React.SFC<{
         ) : null
       }
       <div className='cbk-planner__body__calendar'>
-        <div>Week {weekNumber}</div>
+        <div>
+          Week {weekNumber}</div>
+          <Button onClick={() => changeWeek(WeekShift.Prev)}>Prev</Button>
+          <Button onClick={() => changeWeek()}>Current</Button>
+          <Button onClick={() => changeWeek(WeekShift.Next)}>Next</Button>
         <div className='container'>
           <div className='day-schedule day-schedule--meals'>
             <div className='day-schedule--date'></div>
@@ -177,7 +191,7 @@ const DisplayPlanner: React.SFC<{
             week.map(([weekday, day], dayNumber) => (
               <div key={dayNumber} className='day-schedule'>
                 <div className='day-schedule--date'>
-                  <h5>{weekday} {moment(day).format('DD')}</h5>
+                  <h5>{planner[weekday].date.format('ddd DD.MM') || weekday}</h5>
                 </div>
                 {
                   Meals.map((meal, key) => {
@@ -232,6 +246,7 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, any>) => ({
   fetch: (from: Moment, to: Moment) => dispatch(fetchPlannerActionCreator(from, to)),
   save: (plan: WeekPlan, from: Moment, to: Moment) => dispatch(savePlannerActionCreator(plan, from, to)),
+  changeRange: (from: Moment, to: Moment, shift: WeekShift) => dispatch(changePlannerRangeActionCreator(from, to, shift)),
   ...bindActionCreators(PlannerActions, dispatch)
 })
 

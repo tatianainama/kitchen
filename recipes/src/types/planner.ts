@@ -60,3 +60,8 @@ export interface DBPlanner extends WeekPlan {
 }
 
 export const Meals = [Meal.Lunch, Meal.Dinner, Meal.Dessert]
+
+export enum WeekShift {
+  Prev,
+  Next
+}

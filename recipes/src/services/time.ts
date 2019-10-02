@@ -1,5 +1,5 @@
 import moment, { Moment } from 'moment';
-import { Weekday } from 'types/planner';
+import { Weekday, WeekShift } from 'types/planner';
 
 export const mkWeek = () => ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as Weekday[];
 
@@ -16,6 +16,15 @@ export const mkWeekData = (weekNumber: number): [Weekday, string][] => mkWeek().
   [ day, moment().week(weekNumber).isoWeekday(day).format() ]
 ))
 
+export const getWeekPeriod = (from: Moment|Date|string, to: Moment|Date|string, shift?: WeekShift) => {
+  const anchor = shift ? moment(from).add(shift ? 7 : -7, 'days') : moment();
+  return {
+    from: moment(anchor).isoWeekday(1),
+    to: moment(anchor).isoWeekday(7),
+    week: anchor.isoWeek()
+  }
+}
+
 export const shortDate = (date: Moment): string => date.format('YYYY-MM-DD')
 
 export default {
@@ -24,4 +33,5 @@ export default {
   getWeekDay,
   mkWeekData,
   shortDate,
+  getWeekPeriod
 }

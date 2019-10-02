@@ -1,4 +1,4 @@
-import { shortDate } from 'services/time';
+import { shortDate, mkWeekDay, mkWeek } from 'services/time';
 import axios from 'axios';
 import { DBPlanner, DBDayPlan, WeekPlan, Weekday, DayPlan, Meal } from 'types/planner';
 import moment, { Moment } from 'moment';
@@ -26,6 +26,13 @@ const toDBPlan = (weekplan: WeekPlan) => {
     ]
   }, [] as Array<DBDayPlan>)
 }
+
+export const mkPlanner = (from: Moment = moment()): WeekPlan => mkWeek().reduce((planner, weekday, index)=> {
+  return {
+    ...planner,
+    [weekday]: { date: mkWeekDay(index+1, from.isoWeek()) }
+  } 
+}, {} as WeekPlan);
 
 export const getPlanner = (from: Moment, to: Moment): Promise<DBPlanner> => 
   axios.get(`${PLANNER}/week/${shortDate(from)}/${shortDate(to)}`).then(response => response.data);

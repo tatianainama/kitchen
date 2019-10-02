@@ -1,8 +1,9 @@
 import { PlannerActions } from './actions';
 import { PlannerState, DBPlanner, WeekPlan, Weekday, PlannerMode } from 'types/planner';
-import { getWeekNumber, mkWeekDay } from 'services/time';
+import { getWeekNumber, mkWeekDay, getWeekPeriod } from 'services/time';
 import { Reducer } from 'redux';
 import { merge, uniqBy } from 'ramda';
+import { mkPlanner } from './services';
 
 const initialState: PlannerState = {
   mode: PlannerMode.View,
@@ -12,21 +13,16 @@ const initialState: PlannerState = {
   from: mkWeekDay(1),
   to: mkWeekDay(7),
   week: getWeekNumber(),
-  planner: {
-    monday:     { date: mkWeekDay(1)},
-    tuesday:    { date: mkWeekDay(2)},
-    wednesday:  { date: mkWeekDay(3)},
-    thursday:   { date: mkWeekDay(4)},
-    friday:     { date: mkWeekDay(5)},
-    saturday:   { date: mkWeekDay(6)},
-    sunday:     { date: mkWeekDay(7)},
-  },
+  planner: mkPlanner(),
   backlog: []
 }
 
 const joinPlanner = (old: WeekPlan, updated: DBPlanner): WeekPlan => Object.keys(old).reduce((_oldPlanner, day) => ({
   ..._oldPlanner,
-  [day]: merge(_oldPlanner[day as Weekday], updated[day as Weekday])
+  [day]: {
+    ...merge(_oldPlanner[day as Weekday], updated[day as Weekday]),
+    date: _oldPlanner[day as Weekday].date
+  }
 }), {...old});
 
 const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
@@ -90,6 +86,14 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
       return {
         ...state,
         mode: action.mode
+      }
+    case 'CHANGE_PLANNER_RANGE':
+      return {
+        ...state,
+        from: action.from,
+        to: action.to,
+        week: action.week,
+        planner: mkPlanner(action.from)
       }
     case 'EDIT_PLANNER':
       return {
