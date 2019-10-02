@@ -13,6 +13,7 @@ type InputProps = {
 	onChange: (e: any) => void,
 	textarea?: boolean,
 	onKeyDown? : (e: any) => void,
+	onBlur?: (e: React.FocusEvent) => void,
 	type?: 'text'|'number',
 	style?: 'display'|'regular',
 	icon?: string,
@@ -30,6 +31,7 @@ const Input = ({
 	value,
 	onChange,
 	onKeyDown,
+	onBlur,
 	type = 'text',
 	style = 'regular',
 	icon,
@@ -73,6 +75,7 @@ const Input = ({
 						//@ts-ignore
 						onChange={onChange}
 						onKeyDown={onKeyDown}
+						onBlur={onBlur}
 						type={type}
 						min={0}
 						rows={1}

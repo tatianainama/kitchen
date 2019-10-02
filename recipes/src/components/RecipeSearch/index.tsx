@@ -4,8 +4,6 @@ import { DBRecipe } from 'types/recipes';
 import Input from 'components/Input';
 import List from 'components/List';
 
-import classnames from 'classnames';
-
 import { getRecipes } from 'containers/Recipes/services';
 import { throttle } from 'throttle-debounce';
 
@@ -94,6 +92,12 @@ class RecipeSearch extends React.Component<Props, State> {
     })
   }
 
+  closeResults = (event: any) => {
+    this.setState({
+      openResult: false
+    })
+  }
+
   render() {
     const { results, search, cursor, openResult } = this.state;
     return (
@@ -103,6 +107,7 @@ class RecipeSearch extends React.Component<Props, State> {
         value={search}
         onChange={this.changeQuery}
         onKeyDown={this.onKeyDown}
+        onBlur={this.closeResults}
       />
       <div className='cbk-recipe-search__results'>
         {

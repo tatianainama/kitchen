@@ -106,6 +106,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
           planner={this.props.planner}
           removeMeal={this.removeMeal}
           addToBacklog={this.props.addToBacklog}
+          assignToDay={this.props.assignToDay}
         />
       </div>
     );
@@ -119,9 +120,10 @@ const DisplayPlanner: React.SFC<{
   backlog: RecipePlan[],
   planner: WeekPlan,
   removeMeal: typeof PlannerActions.removeMeal,
+  assignToDay: typeof PlannerActions.assignToDay,
   addToBacklog: (recipe: DBRecipe) => {},
   mode?: PlannerMode,
-}> = ({ mode, onDragEnd, backlog, weekNumber, week, planner, removeMeal, addToBacklog }) => (
+}> = ({ mode, onDragEnd, backlog, weekNumber, week, planner, removeMeal, addToBacklog, assignToDay }) => (
   <section className='cbk-planner__body'>
     <DragDropContext onDragEnd={onDragEnd}>
       {
@@ -182,6 +184,11 @@ const DisplayPlanner: React.SFC<{
                     const recipe = planner[weekday][meal];
                     return (
                       <div className='day-schedule--meal' key={key}>
+                        {
+                          mode === PlannerMode.Edit && !recipe ? 
+                            (<RecipeSearch onSelect={(selected)=>{ assignToDay(selected, weekday, meal) }}/>) :
+                            null
+                        }
                         <Droppable droppableId={`${dayNumber}-${weekday}-${meal}`}>
                           {
                             provided => (
