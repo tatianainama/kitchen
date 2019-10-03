@@ -87,3 +87,45 @@
   }
 
 }
+
+.cbk-planner-mobile {
+  &__body {
+    &__calendar {
+      padding: $spacing-small/2;
+      .day-schedule {
+        display: flex;
+        margin-bottom: $spacing-small/2;
+        &__day {
+          writing-mode: vertical-rl;
+          height: 5rem;
+          background-color: $grey-900;
+          color: $white;
+          padding: 0.3rem;
+        }
+        &__meals {
+          min-width: 0;
+          width: 100%;
+          border-top: 1px solid $grey-300;
+          border-bottom: 1px solid $grey-300;
+          border-right: 1px solid $grey-300;
+          &--0,
+          &--1 {
+            border-bottom: 1px solid $grey-300;
+          }
+          &--0,
+          &--1,
+          &--2 {
+            padding: 2px 4px;
+            height: 1.5rem;
+            h5 {
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              line-height: 1.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

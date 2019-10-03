@@ -14,11 +14,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import { bindActionCreators } from 'redux';
 import RecipeSearch from 'components/RecipeSearch';
 import { DBRecipe } from 'types/recipes';
+import { Display, UiState} from 'types/ui';
 import { getWeekPeriod } from 'services/time';
 
 type Actions = typeof PlannerActions
 
-interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions {
+interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions, UiState {
   fetch: typeof fetchPlannerActionCreator,
   save: typeof savePlannerActionCreator
   changeRange: typeof changePlannerRangeActionCreator
@@ -81,46 +82,110 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
     this.props.changeRange(newPeriod.from, newPeriod.to, newPeriod.week);
   }
 
+  goToRecipe = (recipeId: string) => {
+    this.props.history.push('/recipes/view/' + recipeId)
+  }
+
   render () {
     return (
       <div className='cbk-planner'>
-        <Navbar
-          title='Planner'
-        >
-          {
-            this.props.mode === PlannerMode.View ? (
-              <Button outlined raised onClick={() => this.changeMode(PlannerMode.Edit)}>Edit</Button>
-              ) : (
-                <div>
-                  <Button outlined raised onClick={() => {
-                    this.props.save(this.props.planner, this.props.from, this.props.to)
-                    this.changeMode(PlannerMode.View)
-                  }}>Save</Button>
-                  <Button outlined raised onClick={() => {
-                    this.cancel();
-                    this.changeMode(PlannerMode.View)
-                  }}> Cancel </Button>
+        {
+          this.props.display === Display.Desktop ?
+          (
+            <>
+              <Navbar title='Planner'>
+              {
+                this.props.mode === PlannerMode.View ? (
+                  <Button outlined raised onClick={() => this.changeMode(PlannerMode.Edit)}>Edit</Button>
+                  ) : (
+                    <div>
+                      <Button outlined raised onClick={() => {
+                        this.props.save(this.props.planner, this.props.from, this.props.to)
+                        this.changeMode(PlannerMode.View)
+                      }}>Save</Button>
+                      <Button outlined raised onClick={() => {
+                        this.cancel();
+                        this.changeMode(PlannerMode.View)
+                      }}> Cancel </Button>
 
-                </div>
-            )
-          }
-        </Navbar>
-        <DisplayPlanner
-          mode={this.props.mode}
-          week={this.state.week}
-          weekNumber={this.props.week}
-          onDragEnd={this.assignRecipe}
-          backlog={this.props.backlog}
-          planner={this.props.planner}
-          removeMeal={this.removeMeal}
-          addToBacklog={this.props.addToBacklog}
-          assignToDay={this.props.assignToDay}
-          changeWeek={this.changeWeek}
-        />
+                    </div>
+                )
+              }
+              </Navbar>
+              <DisplayPlanner
+                mode={this.props.mode}
+                week={this.state.week}
+                weekNumber={this.props.week}
+                onDragEnd={this.assignRecipe}
+                backlog={this.props.backlog}
+                planner={this.props.planner}
+                removeMeal={this.removeMeal}
+                addToBacklog={this.props.addToBacklog}
+                assignToDay={this.props.assignToDay}
+                changeWeek={this.changeWeek}
+              />
+            </>
+          ) 
+          :(<MobileDisplayPlanner 
+              week={this.state.week}
+              weekNumber={this.props.week}
+              planner={this.props.planner}
+              changeWeek={this.changeWeek}
+              goTo={this.goToRecipe}
+            />)
+        }
+        
       </div>
     );
   }
 }
+
+const MobileDisplayPlanner: React.SFC<{
+  week: [Weekday, string][],
+  weekNumber: number,
+  planner: WeekPlan,
+  changeWeek: (shift?: WeekShift) => void,
+  goTo: (recipeId: string) => void
+}> = ({ weekNumber, week, planner, changeWeek, goTo}) => (
+  <section className='cbk-planner-mobile__body'>
+    <div className='cbk-planner-mobile__body__actions'>
+      <Button onClick={() => changeWeek(WeekShift.Prev)}>Prev</Button>
+      Week {weekNumber}
+      <Button onClick={() => changeWeek()}>Current</Button>
+      <Button onClick={() => changeWeek(WeekShift.Next)}>Next</Button>
+    </div>
+    <div className='cbk-planner-mobile__body__calendar'>
+      {
+        week.map(([weekday], dayNumber)=>(
+          <div key={dayNumber} className='day-schedule'>
+            <div className='day-schedule__day'>
+              <h5>{planner[weekday].date.format('ddd DD.MM') || weekday}</h5>
+            </div>
+            <div className='day-schedule__meals'>
+              {
+                Meals.map((meal, key) => {
+                  const recipe = planner[weekday][meal];
+                  return (
+                    <div
+                      key={key}
+                      className={`day-schedule__meals--${meal}`}
+                    >
+                      {
+                        recipe ? (
+                          <h5 onClick={() => goTo(recipe._id)}>{ recipe.name }</h5>
+                        ) : null
+                      }
+                    </div>
+                  )
+                })
+              }
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+)
 
 const DisplayPlanner: React.SFC<{
   week: [Weekday, string][],
@@ -172,7 +237,8 @@ const DisplayPlanner: React.SFC<{
       }
       <div className='cbk-planner__body__calendar'>
         <div>
-          Week {weekNumber}</div>
+          Week {weekNumber}
+          </div>
           <Button onClick={() => changeWeek(WeekShift.Prev)}>Prev</Button>
           <Button onClick={() => changeWeek()}>Current</Button>
           <Button onClick={() => changeWeek(WeekShift.Next)}>Next</Button>
@@ -240,7 +306,10 @@ const DisplayPlanner: React.SFC<{
 )
 
 const mapStateToProps = (state: AppState) => {
-  return state.planner
+  return {
+    ...state.planner,
+    ...state.ui
+  }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, any>) => ({

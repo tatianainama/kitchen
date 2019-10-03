@@ -1,13 +1,5 @@
 import { Reducer, Action } from "redux"
-
-export enum Display {
-  Desktop,
-  Mobile
-}
-
-type UiState = {
-  display: Display,
-}
+import { UiState, Display } from 'types/ui';
 
 const initialState: UiState = {
   display: window.innerWidth < 840 ? Display.Mobile : Display.Desktop
