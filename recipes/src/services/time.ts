@@ -16,8 +16,8 @@ export const mkWeekData = (weekNumber: number): [Weekday, string][] => mkWeek().
   [ day, moment().week(weekNumber).isoWeekday(day).format() ]
 ))
 
-export const getWeekPeriod = (from: Moment|Date|string, to: Moment|Date|string, shift?: WeekShift) => {
-  const anchor = shift ? moment(from).add(shift ? 7 : -7, 'days') : moment();
+export const getWeekPeriod = (start: Moment|Date|string, shift?: WeekShift) => {
+  const anchor = shift !== undefined ? moment(start).add(shift ? 7 : -7, 'days') : moment();
   return {
     from: moment(anchor).isoWeekday(1),
     to: moment(anchor).isoWeekday(7),

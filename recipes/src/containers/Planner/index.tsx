@@ -78,7 +78,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
   cancel = () => this.props.cancelSavePlanner(this._prevState.planner, this._prevState.backlog);
 
   changeWeek = (shift?: WeekShift) => {
-    const newPeriod = getWeekPeriod(this.props.from, this.props.to, shift);
+    const newPeriod = getWeekPeriod(this.props.from, shift);
     this.props.changeRange(newPeriod.from, newPeriod.to, newPeriod.week);
   }
 

@@ -1,6 +1,6 @@
 import { PlannerActions } from './actions';
 import { PlannerState, DBPlanner, WeekPlan, Weekday, PlannerMode } from 'types/planner';
-import { getWeekNumber, mkWeekDay, getWeekPeriod } from 'services/time';
+import { getWeekNumber, mkWeekDay } from 'services/time';
 import { Reducer } from 'redux';
 import { merge, uniqBy } from 'ramda';
 import { mkPlanner } from './services';
