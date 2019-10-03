@@ -22,11 +22,13 @@ import Input from 'components/Input';
 import { throttle } from 'throttle-debounce';
 
 import './styles.scss';
+import { UiState, Display } from "types/ui";
 
 interface RecipeListProps extends RouteComponentProps {
   data: DBRecipe[],
   isFetching: boolean,
   selectedRecipe: any | undefined,
+  ui: UiState,
   fetchRecipes: (query: string) => undefined,
   receiveRecipes: (recipes: DBRecipe[]) => undefined,
   selectRecipe: (recipe?: DBRecipe) => undefined,
@@ -39,7 +41,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
   constructor(props: RecipeListProps) {
     super(props);
     this.state = {
-      phoneDisplay: window.innerWidth < 840,
+      phoneDisplay: this.props.ui.display === Display.Mobile,
       search: ''
     }
   }
@@ -176,6 +178,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
 const mapStateToProps = (state: any) => {
   return {
     ...state.recipes,
+    ui: state.ui,
     shoppingCart: state.shoppingCart.cart
   };
 }
