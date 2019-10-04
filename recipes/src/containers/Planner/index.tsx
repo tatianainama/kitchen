@@ -113,6 +113,10 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
               }
               </Navbar>
               <DisplayPlanner
+                week={this.state.week.map(([day]) => day)}
+                planner={this.props.planner}
+              />
+              {/* <DisplayPlannerDrag
                 mode={this.props.mode}
                 week={this.state.week}
                 weekNumber={this.props.week}
@@ -123,7 +127,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                 addToBacklog={this.props.addToBacklog}
                 assignToDay={this.props.assignToDay}
                 changeWeek={this.changeWeek}
-              />
+              /> */}
             </>
           ) 
           :(<MobileDisplayPlanner 
@@ -139,6 +143,49 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
     );
   }
 }
+
+const DisplayPlanner: React.SFC<{
+  week: Weekday[],
+  planner: WeekPlan
+}> = ({ week, planner }) => (
+  <section className='cbk-planner__body'>
+    <div className='cbk-planner__body__planner'>
+      {/* <div className='meals'>
+      </div> */}
+      <div className='week'>
+        <div className='day meal'>
+          <div className='meal-placeholder'> x </div>
+          {
+            Meals.map(meal => (
+              <div className='meal-name' key={meal}>
+                <h5 className='meal-name--style'>{Meal[meal].toLowerCase()}</h5>
+              </div>
+            ))
+          }
+        </div>
+        {
+          week.map(day => (
+            <div className='day' key={day}>
+              <div className='day-date'>
+                <h5>{planner[day].date.format('ddd DD.MM')}</h5>
+              </div>
+              {
+                Meals.map(meal => {
+                  const recipe = planner[day][meal];
+                  return (
+                    <div className='day-meal' key={meal}>
+                      <h5 title={recipe && recipe.name}>{ recipe && recipe.name }</h5>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+)
 
 const MobileDisplayPlanner: React.SFC<{
   week: [Weekday, string][],
@@ -187,7 +234,7 @@ const MobileDisplayPlanner: React.SFC<{
   </section>
 )
 
-const DisplayPlanner: React.SFC<{
+const DisplayPlannerDrag: React.SFC<{
   week: [Weekday, string][],
   onDragEnd: OnDragEndResponder,
   weekNumber: number,
@@ -203,7 +250,7 @@ const DisplayPlanner: React.SFC<{
     <DragDropContext onDragEnd={onDragEnd}>
       {
         mode === PlannerMode.Edit ? (
-          <div className='cbk-planner__body__backlog'>
+          <div className='cbk-planner-dnd__body__backlog'>
             <RecipeSearch onSelect={(selected)=>{ addToBacklog(selected) }}/>
             <Droppable droppableId='recipeList'>
               {(provided) => (
@@ -235,7 +282,7 @@ const DisplayPlanner: React.SFC<{
           </div>
         ) : null
       }
-      <div className='cbk-planner__body__calendar'>
+      <div className='cbk-planner-dnd__body__calendar'>
         <div>
           Week {weekNumber}
           </div>

@@ -2,6 +2,72 @@
 
 .cbk-planner {
   &__body {
+    padding: $spacing-small;
+    &__planner {
+      display: flex;
+      min-height: 16rem;
+      .week {
+        display: flex;
+        .day,
+        .meal {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          background-color: black;
+          border-bottom: 1px solid black;
+          min-width: 0;
+          &-date,
+          .meal-placeholder {
+            flex-basis: 1rem;
+            color: white;
+            font-family: $font-family-display;
+            h5 {
+              padding: 0 $spacing-small/2;
+            }
+          }
+          &-meal {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-basis: 5rem;
+            background-color: white;
+            box-sizing: border-box;
+            margin: 0.5px;
+            overflow: hidden;
+            h5 {
+              text-align: center;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
+          }
+        }
+        .meal {
+          
+          max-width: $spacing-regular;
+          flex-basis: $spacing-regular;
+          &-placeholder {
+            color: black!important;
+          }
+          &-name {
+            flex-basis: 5rem;
+            background-color: white;
+            box-sizing: border-box;
+            margin: 0.5px;
+            padding: 0!important;
+            &--style {
+              writing-mode: vertical-lr;
+              margin-top: $spacing-small/2;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &-dnd__body {
     display: flex;
     margin: 1rem 0.5rem;
 

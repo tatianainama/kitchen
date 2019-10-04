@@ -12,6 +12,11 @@ body {
   background-color: $grey-100;
 }
 
+::selection { 
+  background: rgba(255,183,0,1);
+  color: black;
+}
+
 ul {
   list-style-type: none;
   margin: 0;
