@@ -115,6 +115,9 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
               <DisplayPlanner
                 week={this.state.week.map(([day]) => day)}
                 planner={this.props.planner}
+                mode={this.props.mode}
+                assignToDay={this.props.assignToDay}
+                removeMeal={this.removeMeal}
               />
               {/* <DisplayPlannerDrag
                 mode={this.props.mode}
@@ -146,12 +149,13 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
 
 const DisplayPlanner: React.SFC<{
   week: Weekday[],
-  planner: WeekPlan
-}> = ({ week, planner }) => (
+  planner: WeekPlan,
+  mode: PlannerMode,
+  removeMeal: typeof PlannerActions.removeMeal,
+  assignToDay: typeof PlannerActions.assignToDay,
+}> = ({ week, planner, mode, removeMeal, assignToDay }) => (
   <section className='cbk-planner__body'>
     <div className='cbk-planner__body__planner'>
-      {/* <div className='meals'>
-      </div> */}
       <div className='week'>
         <div className='day meal'>
           <div className='meal-placeholder'> x </div>
@@ -170,14 +174,30 @@ const DisplayPlanner: React.SFC<{
                 <h5>{planner[day].date.format('ddd DD.MM')}</h5>
               </div>
               {
-                Meals.map(meal => {
-                  const recipe = planner[day][meal];
-                  return (
-                    <div className='day-meal' key={meal}>
-                      <h5 title={recipe && recipe.name}>{ recipe && recipe.name }</h5>
-                    </div>
-                  )
-                })
+                mode === PlannerMode.View ?
+                  Meals.map(meal => {
+                    const recipe = planner[day][meal];
+                    return (
+                      <div className='day-meal' key={meal}>
+                        <h5 title={recipe && recipe.name}>{ recipe && recipe.name }</h5>
+                      </div>
+                    )
+                  }) :
+                  Meals.map(meal => {
+                    const recipe = planner[day][meal];
+                    return recipe ? (
+                      <div className='day-meal day-meal--edit' key={meal}>
+                        <Button icon='clear' onClick={() => removeMeal(day, meal)} small></Button>
+                        <h5 title={recipe && recipe.name}>{ recipe && recipe.name }</h5>
+                      </div>
+                    ) : (
+                      <div className='day-meal' key={meal}>
+                        <RecipeSearch
+                          onSelect={(selected) => assignToDay(selected, day, meal)}
+                        />
+                      </div>
+                    )
+                  })
               }
             </div>
           ))

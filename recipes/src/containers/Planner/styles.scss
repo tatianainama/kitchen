@@ -33,7 +33,6 @@
             background-color: white;
             box-sizing: border-box;
             margin: 0.5px;
-            overflow: hidden;
             h5 {
               text-align: center;
               overflow: hidden;
@@ -42,10 +41,15 @@
               -webkit-line-clamp: 2;
               -webkit-box-orient: vertical;
             }
+            &--edit {
+              justify-content: end;
+              button {
+                align-self: flex-end;
+              }
+            }
           }
         }
         .meal {
-          
           max-width: $spacing-regular;
           flex-basis: $spacing-regular;
           &-placeholder {
