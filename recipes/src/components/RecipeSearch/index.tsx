@@ -1,7 +1,7 @@
 import React from 'react';
 import { DBRecipe } from 'types/recipes';
 
-import Input from 'components/Input';
+import { Input2 as Input} from 'components/Input';
 import List from 'components/List';
 
 import { getRecipes } from 'containers/Recipes/services';
@@ -102,8 +102,8 @@ class RecipeSearch extends React.Component<Props, State> {
     const { results, search, cursor, openResult } = this.state;
     return (
     <div className='cbk-recipe-search'>
-      <Input 
-        label=''
+      <Input
+        className='cbk-recipe-search__input'
         value={search}
         onChange={this.changeQuery}
         onKeyDown={this.onKeyDown}

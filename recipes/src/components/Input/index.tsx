@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { InputHTMLAttributes } from 'react';
 import TextField, { HelperText, Input as Field } from '@material/react-text-field';
 import classNames from 'classnames';
 import Button from 'components/Button';
@@ -89,6 +89,15 @@ const Input = ({
 			}
 		</div>
 )};
+
+export const Input2: React.FunctionComponent<InputHTMLAttributes<{}>> = (props) => (
+	<div className='cbk-input-2'>
+		<input
+			{...props}
+		/>
+		<span></span>
+	</div>
+)
 
 interface LightInputProps extends FieldProps {
 	label?: string,

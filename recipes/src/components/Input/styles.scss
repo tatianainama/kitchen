@@ -65,3 +65,16 @@
 .cbk-light-input {
   @include lightInput();
 }
+
+.cbk-input-2 {
+  @include lightInput();
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  input {
+    padding: 0 8px;
+    width: auto;
+    @include display();
+    
+  }
+}
