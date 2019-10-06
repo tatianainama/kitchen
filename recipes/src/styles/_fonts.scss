@@ -27,3 +27,10 @@ $letter-spacing-enhanced: 0.5px;
   text-decoration: none;
   text-transform: uppercase;
 }
+
+@mixin display() {
+  font-family: $font-family-display;
+  font-size: $font-size-regular;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-enhanced;
+}
