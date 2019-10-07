@@ -5,7 +5,7 @@
   background-color: $black;
   color: $white;
   font-family: $font-family-special;
-  @include solidBoxShadow($pink);
+  @include solidBoxShadow();
   padding: $spacing-small/2;
   letter-spacing: $letter-spacing-enhanced;
 }

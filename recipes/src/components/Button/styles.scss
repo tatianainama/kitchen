@@ -43,14 +43,13 @@ button.cbk-btn {
   &--raised {
     background-color: $black;
     color: $white;
-    border: 3px solid $black;
-    box-shadow: 4px 4px $yellow;
+    @include solidBoxShadow();
     position: relative;
     
     &:hover {
       background-color: $black;
       color: $white;
-      border: 3px solid $black;
+      @include solidBoxShadow();
       box-shadow: 3px 3px $yellow;
       top: 1px;
       left: 1px;
