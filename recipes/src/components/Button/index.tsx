@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import Button from '@material/react-button';
 import Icon from 'components/Icon';
 import IconButton from '@material/react-icon-button';
 
@@ -19,12 +18,18 @@ type CBKButtonProps = {
   icon?: string,
   onClick?: (e: any) => void,
   small?: boolean,
-  type?: string
+  type?: 'button' | 'submit' | 'reset';
   disabled?: boolean
   style?: any;
 }
 
 export default function CBKButton(props: CBKButtonProps) {
+  const btnClassNames = classnames({
+    'cbk-btn': true,
+    'cbk-btn--raised': props.raised,
+    'cbk-btn--unelevated': props.unelevated,
+    'cbk-btn--outlined': props.outlined,
+  })
   if (props.icon) {
     return (
       <IconButton
@@ -44,18 +49,15 @@ export default function CBKButton(props: CBKButtonProps) {
     );
   } else {
     return (
-      <Button
+      <button
         disabled={props.disabled}
-        unelevated={props.unelevated}
-        raised={props.raised}
-        outlined={props.outlined}
-        className={props.className}
+        className={btnClassNames}
         onClick={props.onClick}
         style={props.style}
         type={props.type || 'button'}
       >
         { props.children }
-      </Button>
+      </button>
     )
   }
 };
