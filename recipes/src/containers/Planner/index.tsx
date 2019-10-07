@@ -41,7 +41,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
 
   _prevState = {
     planner: { ...this.props.planner },
-    backlog: { ...this.props.backlog } 
+    backlog: [ ...this.props.backlog ] 
   }
 
   componentDidMount() {
@@ -97,10 +97,10 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
               <Navbar title='Planner'>
               {
                 this.props.mode === PlannerMode.View ? (
-                  <Button outlined raised onClick={() => this.changeMode(PlannerMode.Edit)}>Edit</Button>
+                  <Button raised onClick={() => this.changeMode(PlannerMode.Edit)}>Edit</Button>
                   ) : (
                     <div>
-                      <Button outlined raised onClick={() => {
+                      <Button raised onClick={() => {
                         this.props.save(this.props.planner, this.props.from, this.props.to)
                         this.changeMode(PlannerMode.View)
                       }}>Save</Button>
@@ -120,9 +120,9 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                   </Sticker>
                 </div>
                 <div>
-                  <Button onClick={() => this.changeWeek(WeekShift.Prev)}>Prev</Button>
-                  <Button onClick={() => this.changeWeek()}>Current</Button>
-                  <Button onClick={() => this.changeWeek(WeekShift.Next)}>Next</Button>
+                  <Button outlined onClick={() => this.changeWeek(WeekShift.Prev)}>Prev</Button>
+                  <Button outlined onClick={() => this.changeWeek()}>Current</Button>
+                  <Button outlined onClick={() => this.changeWeek(WeekShift.Next)}>Next</Button>
                 </div>
 
               </div>
