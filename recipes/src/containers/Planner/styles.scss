@@ -8,6 +8,7 @@
       min-height: 16rem;
       .week {
         display: flex;
+        flex-basis: 100%;
         .day,
         .meal {
           flex: 1;
@@ -33,6 +34,7 @@
             background-color: white;
             box-sizing: border-box;
             margin: 0.5px;
+            padding: 0 $spacing-small/2;
             h5 {
               text-align: center;
               overflow: hidden;
@@ -46,6 +48,9 @@
               button {
                 align-self: flex-end;
               }
+            }
+            .cbk-recipe-search {
+              width: auto;
             }
           }
         }

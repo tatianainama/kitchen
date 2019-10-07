@@ -109,9 +109,9 @@ class RecipeSearch extends React.Component<Props, State> {
         onKeyDown={this.onKeyDown}
         onBlur={this.closeResults}
       />
-      <div className='cbk-recipe-search__results'>
         {
           results.length && openResult ? (
+          <div className='cbk-recipe-search__results'>
             <List
               dense
               items={results}
@@ -125,10 +125,11 @@ class RecipeSearch extends React.Component<Props, State> {
                 </div>
               )}
             />
+            </div>
           ) : null
         }
-      </div>
-    </div>)
+    </div>
+    )
   }    
 }
 
