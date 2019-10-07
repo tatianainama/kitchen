@@ -1,0 +1,11 @@
+@import 'styles/_variables.scss';
+
+.cbk-sticker {
+  display: inline-block;
+  background-color: $black;
+  color: $white;
+  font-family: $font-family-special;
+  @include solidBoxShadow($pink);
+  padding: $spacing-small/2;
+  letter-spacing: $letter-spacing-enhanced;
+}
