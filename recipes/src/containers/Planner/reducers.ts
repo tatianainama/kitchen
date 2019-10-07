@@ -6,7 +6,7 @@ import { merge, uniqBy } from 'ramda';
 import { mkPlanner } from './services';
 
 const initialState: PlannerState = {
-  mode: PlannerMode.View,
+  mode: PlannerMode.Edit,
   isFetching: false,
   saving: false,
   edit: false,

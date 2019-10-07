@@ -1,6 +1,12 @@
 @import 'styles/_variables.scss';
 
 .cbk-planner {
+  &__actions {
+    display: flex;
+    padding: 0 $spacing-small;
+    padding-top: $spacing-small;
+    justify-content: space-between;
+  }
   &__body {
     padding: $spacing-small;
     &__planner {

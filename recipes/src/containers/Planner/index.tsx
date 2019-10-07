@@ -16,6 +16,7 @@ import RecipeSearch from 'components/RecipeSearch';
 import { DBRecipe } from 'types/recipes';
 import { Display, UiState} from 'types/ui';
 import { getWeekPeriod } from 'services/time';
+import Sticker from 'components/Sticker';
 
 type Actions = typeof PlannerActions
 
@@ -112,6 +113,19 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                 )
               }
               </Navbar>
+              <div className='cbk-planner__actions'>
+                <div>
+                  <Sticker>
+                    Week {this.props.week}
+                  </Sticker>
+                </div>
+                <div>
+                  <Button onClick={() => this.changeWeek(WeekShift.Prev)}>Prev</Button>
+                  <Button onClick={() => this.changeWeek()}>Current</Button>
+                  <Button onClick={() => this.changeWeek(WeekShift.Next)}>Next</Button>
+                </div>
+
+              </div>
               <DisplayPlanner
                 week={this.state.week.map(([day]) => day)}
                 planner={this.props.planner}
