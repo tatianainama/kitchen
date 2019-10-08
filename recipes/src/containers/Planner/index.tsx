@@ -200,7 +200,6 @@ const DisplayPlanner: React.SFC<{
                             <h5 onClick={() => goTo(recipe._id)} title={recipe.name}>{ recipe.name }</h5>
                           )
                         }
-                        
                       </div>
                     )
                   }) :
