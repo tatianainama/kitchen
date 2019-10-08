@@ -132,6 +132,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                 mode={this.props.mode}
                 assignToDay={this.props.assignToDay}
                 removeMeal={this.removeMeal}
+                goTo={this.goToRecipe}
               />
               {/* <DisplayPlannerDrag
                 mode={this.props.mode}
@@ -167,7 +168,8 @@ const DisplayPlanner: React.SFC<{
   mode: PlannerMode,
   removeMeal: typeof PlannerActions.removeMeal,
   assignToDay: typeof PlannerActions.assignToDay,
-}> = ({ week, planner, mode, removeMeal, assignToDay }) => (
+  goTo: (recipeId: string) => void,
+}> = ({ week, planner, mode, removeMeal, assignToDay, goTo }) => (
   <section className='cbk-planner__body'>
     <div className='cbk-planner__body__planner'>
       <div className='week'>
@@ -193,7 +195,12 @@ const DisplayPlanner: React.SFC<{
                     const recipe = planner[day][meal];
                     return (
                       <div className='day-meal' key={meal}>
-                        <h5 title={recipe && recipe.name}>{ recipe && recipe.name }</h5>
+                        {
+                          recipe && (
+                            <h5 onClick={() => goTo(recipe._id)} title={recipe.name}>{ recipe.name }</h5>
+                          )
+                        }
+                        
                       </div>
                     )
                   }) :
