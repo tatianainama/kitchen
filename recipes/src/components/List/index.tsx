@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import './styles.scss';
 
@@ -12,7 +13,12 @@ type ListProps<T> = {
 }
 
 const CBKList = <T extends {}>(props: ListProps<T>) => (
-  <ul className='cbk-list'>
+  <ul className={
+    classnames({
+      'cbk-list': true,
+      'cbk-list--dense': props.dense
+    })
+  }>
     {
       props.items.map((item, index) => (
         <li

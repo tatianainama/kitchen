@@ -1,0 +1,36 @@
+@import 'styles/_variables';
+
+.cbk-shopping-list {
+  column-count: 2;
+  column-gap: $spacing-regular;
+
+  li {
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  &__item {
+    display: flex;
+    flex: 1;
+    padding: 4px 0;
+
+    &__name {
+      flex: 2;
+      font-weight: $font-weight-bold;
+      &__recipes {
+        font-size: 0.75rem;
+        font-style: italic;
+        color: $grey-600;
+        font-weight: initial;
+        span {
+          margin-right: $spacing-small/2;
+        }
+      }
+    }
+    &__quantity {
+      flex: 1;
+      text-align: right;
+    }
+  }
+}
