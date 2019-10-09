@@ -1,5 +1,5 @@
 import { DBRecipe } from 'types/recipes';
-import { Meal, RecipePlan, Weekday, DBPlanner, PlannerMode, WeekPlan, DBDayPlan, WeekShift } from 'types/planner';
+import { Meal, RecipePlan, Weekday, DBPlanner, PlannerMode, WeekPlan, DBDayPlan } from 'types/planner';
 import { Dispatch, ActionCreator, Action } from 'redux';
 import { getPlanner, savePlanner } from './services'
 import { ThunkAction } from 'redux-thunk';
@@ -24,15 +24,14 @@ export const REJECT_SAVE_PLANNER = 'REJECT_SAVE_PLANNER';
 export const CANCEL_SAVE_PLANNER = 'CANCEL_SAVE_PLANNER';
 
 export interface AddToBacklogAction extends Action<'ADD_TO_BACKLOG'> {
-  recipe: {
-    _id: string,
-    name: string
-  }
+  recipe: RecipePlan
 }
+
 const addToBacklog = (recipe: DBRecipe): AddToBacklogAction => ({
   recipe: {
     _id: recipe._id,
-    name: recipe.name
+    name: recipe.name,
+    ingredients: recipe.ingredients
   },
   type: ADD_TO_BACKLOG,
 });
