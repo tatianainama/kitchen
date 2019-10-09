@@ -7,11 +7,23 @@
     padding-top: $spacing-small;
     justify-content: space-between;
   }
+  &__shopping {
+    &__actions {
+      @extend .cbk-planner__actions;
+    }
+    &__list {
+      padding: $spacing-small;
+      .cbk-shopping-list {
+        @include box();
+      }
+    }
+  }
   &__body {
     padding: $spacing-small;
     &__planner {
       display: flex;
       min-height: 16rem;
+      @include box();
       .week {
         display: flex;
         flex-basis: 100%;

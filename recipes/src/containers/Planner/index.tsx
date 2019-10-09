@@ -15,12 +15,13 @@ import RecipeSearch from 'components/RecipeSearch';
 import { Display, UiState} from 'types/ui';
 import { getWeekPeriod } from 'services/time';
 import Sticker from 'components/Sticker';
-import { DBRecipe } from 'src/types/recipes';
+import ShoppingList from 'components/ShoppingList';
+import { ShoppingCartState } from '../ShoppingCart/reducers';
 
 type Actions = typeof PlannerActions
 type ShoppingCartActionsType = typeof ShoppingCartActions;
 
-interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions, ShoppingCartActionsType, UiState {
+interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions, ShoppingCartActionsType, UiState, ShoppingCartState {
   fetch: typeof fetchPlannerActionCreator,
   save: typeof savePlannerActionCreator
   changeRange: typeof changePlannerRangeActionCreator
@@ -34,7 +35,6 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
 
   constructor(props: PlannerContainerProps) {
     super(props);
-    console.log(props)
     this.state = {
       week: Object.keys(props.planner).map((weekday) => ([ weekday as Weekday, moment(props.planner[weekday as Weekday].date).format()])),
     }
@@ -109,7 +109,6 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                         this.cancel();
                         this.changeMode(PlannerMode.View)
                       }}> Cancel </Button>
-
                     </div>
                 )
               }
@@ -136,7 +135,23 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                 goTo={this.goToRecipe}
               />
               <div className='cbk-planner__shopping'>
-                <Button outlined onClick={() => { this.props.addAll(this.getRecipes(this.props.planner))}}>Add to shopping</Button>
+                <div className='cbk-planner__shopping__actions'>
+                  <Sticker>Shopping Cart</Sticker>
+                  <Button outlined onClick={() => { this.props.addAll(this.getRecipes(this.props.planner))}}>Add to shopping</Button>
+                </div>
+                <section className='cbk-planner__shopping__list'>
+                  {
+                    this.props.items.length ? (
+                      <ShoppingList
+                        items={this.props.items}
+                      />
+                    ) : (
+                      <div>
+                        Shopping cart is empty
+                      </div>
+                    )
+                  }
+                </section>
               </div>
             </>
           ) 
@@ -269,7 +284,8 @@ const MobileDisplayPlanner: React.SFC<{
 const mapStateToProps = (state: AppState) => {
   return {
     ...state.planner,
-    ...state.ui
+    ...state.ui,
+    ...state.shoppingCart
   }
 }
 
