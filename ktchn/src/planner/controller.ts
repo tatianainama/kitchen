@@ -50,7 +50,6 @@ const getPlannerByRange: Controller<{from: Date, to: Date}, WeeklyPlanner> = db 
         'recipe': {
           'author': 0, 
           'details': 0, 
-          'ingredients': 0, 
           'instructions': 0
         }
       }
