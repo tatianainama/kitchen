@@ -1,3 +1,4 @@
+import { SubRecipe } from 'types/recipes';
 import { Moment } from "moment";
 
 export type Weekday =
@@ -18,6 +19,7 @@ export enum Meal {
 export type RecipePlan = {
   _id: string,
   name: string,
+  ingredients: SubRecipe[]
 }
 
 export type DayPlan = {

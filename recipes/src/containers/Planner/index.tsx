@@ -4,23 +4,23 @@ import Navbar from 'components/Navbar';
 import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
 import { PlannerState, Weekday, Meal, PlannerMode, RecipePlan, WeekPlan, Meals, WeekShift } from 'types/planner';
-import Card from 'components/Card';
 import PlannerActions, { fetchPlannerActionCreator, savePlannerActionCreator, changePlannerRangeActionCreator } from './actions';
+import ShoppingCartActions from 'containers/ShoppingCart/actions';
 import moment, { Moment } from 'moment';
-import { DragDropContext, Droppable, Draggable, DropResult, OnDragEndResponder } from 'react-beautiful-dnd';
 import './styles.scss';
 import Button from 'components/Button';
 import { ThunkDispatch } from 'redux-thunk';
 import { bindActionCreators } from 'redux';
 import RecipeSearch from 'components/RecipeSearch';
-import { DBRecipe } from 'types/recipes';
 import { Display, UiState} from 'types/ui';
 import { getWeekPeriod } from 'services/time';
 import Sticker from 'components/Sticker';
+import { DBRecipe } from 'src/types/recipes';
 
 type Actions = typeof PlannerActions
+type ShoppingCartActionsType = typeof ShoppingCartActions;
 
-interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions, UiState {
+interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions, ShoppingCartActionsType, UiState {
   fetch: typeof fetchPlannerActionCreator,
   save: typeof savePlannerActionCreator
   changeRange: typeof changePlannerRangeActionCreator
@@ -34,6 +34,7 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
 
   constructor(props: PlannerContainerProps) {
     super(props);
+    console.log(props)
     this.state = {
       week: Object.keys(props.planner).map((weekday) => ([ weekday as Weekday, moment(props.planner[weekday as Weekday].date).format()])),
     }
@@ -57,16 +58,6 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
     }
   }
 
-  assignRecipe = (result: DropResult) => {
-    const recipe = this.findRecipe(result.draggableId);
-    if (result.destination && recipe) {
-      const [idx, day, meal] = result.destination.droppableId.split('-');
-      this.props.assignToDay(recipe, day as Weekday, parseInt(meal) as Meal);
-      this.props.removeFromBacklog(recipe);
-      this.props.editPlanner();
-    }
-  }
-
   removeMeal = (day: Weekday, meal: Meal) => {
     this.props.editPlanner();
     return this.props.removeMeal(day, meal);
@@ -85,6 +76,16 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
 
   goToRecipe = (recipeId: string) => {
     this.props.history.push('/recipes/view/' + recipeId)
+  }
+
+  getRecipes = (planner: WeekPlan): RecipePlan[] => {
+    const nonEmpty = (recipe: RecipePlan | undefined): recipe is RecipePlan => recipe !== undefined;
+    return Object.entries(planner).reduce((recipes, [weekday, dayplan]) => {
+      return [
+        ...recipes,
+        ...Meals.map(meal => dayplan[meal]).filter(nonEmpty),
+      ];
+    }, [] as RecipePlan[]);
   }
 
   render () {
@@ -134,18 +135,9 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                 removeMeal={this.removeMeal}
                 goTo={this.goToRecipe}
               />
-              {/* <DisplayPlannerDrag
-                mode={this.props.mode}
-                week={this.state.week}
-                weekNumber={this.props.week}
-                onDragEnd={this.assignRecipe}
-                backlog={this.props.backlog}
-                planner={this.props.planner}
-                removeMeal={this.removeMeal}
-                addToBacklog={this.props.addToBacklog}
-                assignToDay={this.props.assignToDay}
-                changeWeek={this.changeWeek}
-              /> */}
+              <div className='cbk-planner__shopping'>
+                <Button outlined onClick={() => { this.props.addAll(this.getRecipes(this.props.planner))}}>Add to shopping</Button>
+              </div>
             </>
           ) 
           :(<MobileDisplayPlanner 
@@ -274,124 +266,6 @@ const MobileDisplayPlanner: React.SFC<{
   </section>
 )
 
-const DisplayPlannerDrag: React.SFC<{
-  week: [Weekday, string][],
-  onDragEnd: OnDragEndResponder,
-  weekNumber: number,
-  backlog: RecipePlan[],
-  planner: WeekPlan,
-  removeMeal: typeof PlannerActions.removeMeal,
-  assignToDay: typeof PlannerActions.assignToDay,
-  addToBacklog: (recipe: DBRecipe) => {},
-  changeWeek: (shift?: WeekShift) => void,
-  mode?: PlannerMode,
-}> = ({ mode, onDragEnd, backlog, weekNumber, week, planner, removeMeal, addToBacklog, assignToDay, changeWeek}) => (
-  <section className='cbk-planner__body'>
-    <DragDropContext onDragEnd={onDragEnd}>
-      {
-        mode === PlannerMode.Edit ? (
-          <div className='cbk-planner-dnd__body__backlog'>
-            <RecipeSearch onSelect={(selected)=>{ addToBacklog(selected) }}/>
-            <Droppable droppableId='recipeList'>
-              {(provided) => (
-                <div ref={provided.innerRef}>
-                  {backlog.map((item, index) => (
-                      <Draggable
-                          key={item._id}
-                          draggableId={item._id}
-                          index={index}>
-                          {provided => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <Card
-                                key={item._id}
-                                title={item.name}
-                                onClick={() => {}}
-                              />
-                            </div>
-                          )}
-                      </Draggable>
-                  ))}
-                  {provided.placeholder}
-              </div>
-              )}
-            </Droppable>
-          </div>
-        ) : null
-      }
-      <div className='cbk-planner-dnd__body__calendar'>
-        <div>
-          Week {weekNumber}
-          </div>
-          <Button onClick={() => changeWeek(WeekShift.Prev)}>Prev</Button>
-          <Button onClick={() => changeWeek()}>Current</Button>
-          <Button onClick={() => changeWeek(WeekShift.Next)}>Next</Button>
-        <div className='container'>
-          <div className='day-schedule day-schedule--meals'>
-            <div className='day-schedule--date'></div>
-            {
-              Meals.map((meal, key) => (
-                <div className='day-schedule--meal' key={key}>
-                  <h5>{Meal[meal]}</h5>
-                </div>
-              ))
-            }
-          </div>
-          {
-            week.map(([weekday, day], dayNumber) => (
-              <div key={dayNumber} className='day-schedule'>
-                <div className='day-schedule--date'>
-                  <h5>{planner[weekday].date.format('ddd DD.MM') || weekday}</h5>
-                </div>
-                {
-                  Meals.map((meal, key) => {
-                    const recipe = planner[weekday][meal];
-                    return (
-                      <div className='day-schedule--meal' key={key}>
-                        {
-                          mode === PlannerMode.Edit && !recipe ? 
-                            (<RecipeSearch onSelect={(selected)=>{ assignToDay(selected, weekday, meal) }}/>) :
-                            null
-                        }
-                        <Droppable droppableId={`${dayNumber}-${weekday}-${meal}`}>
-                          {
-                            provided => (
-                              <div className='day-schedule-content' ref={provided.innerRef}>
-                                { provided.placeholder }
-                                {
-                                  recipe ? (
-                                    <div className='meal-card'>
-                                      <div className="meal-card--actions">
-                                        {
-                                          recipe && mode === PlannerMode.Edit ? (
-                                            <Button icon='clear' onClick={() => removeMeal(weekday, meal)} small></Button>      
-                                          ) : null
-                                        }
-                                      </div>
-                                      <h5>{ recipe.name }</h5>
-                                    </div>
-                                  ) : null
-                                }
-                              </div>
-                            )
-                          }
-                        </Droppable>
-                      </div>
-                    )
-                  })
-                }
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </DragDropContext>
-  </section>
-)
-
 const mapStateToProps = (state: AppState) => {
   return {
     ...state.planner,
@@ -403,7 +277,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, any>) => ({
   fetch: (from: Moment, to: Moment) => dispatch(fetchPlannerActionCreator(from, to)),
   save: (plan: WeekPlan, from: Moment, to: Moment) => dispatch(savePlannerActionCreator(plan, from, to)),
   changeRange: (from: Moment, to: Moment, shift: WeekShift) => dispatch(changePlannerRangeActionCreator(from, to, shift)),
-  ...bindActionCreators(PlannerActions, dispatch)
+  ...bindActionCreators(PlannerActions, dispatch),
+  ...bindActionCreators(ShoppingCartActions, dispatch)
 })
 
 export default connect(
