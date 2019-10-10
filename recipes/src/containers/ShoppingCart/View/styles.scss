@@ -1,0 +1,6 @@
+@import 'styles/_variables.scss';
+
+.cbk-shopping-cart-view {
+  margin: $spacing-small;
+  @include box();
+}

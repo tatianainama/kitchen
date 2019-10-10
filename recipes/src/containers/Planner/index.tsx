@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
-import Navbar from 'components/Navbar';
-import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
+import moment, { Moment } from 'moment';
+import { bindActionCreators } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
+import { ShoppingCartState } from 'types/shopping-cart';
 import { PlannerState, Weekday, Meal, PlannerMode, RecipePlan, WeekPlan, Meals, WeekShift } from 'types/planner';
+import { Display, UiState} from 'types/ui';
+
 import PlannerActions, { fetchPlannerActionCreator, savePlannerActionCreator, changePlannerRangeActionCreator } from './actions';
 import ShoppingCartActions from 'containers/ShoppingCart/actions';
-import moment, { Moment } from 'moment';
-import './styles.scss';
-import Button from 'components/Button';
-import { ThunkDispatch } from 'redux-thunk';
-import { bindActionCreators } from 'redux';
-import RecipeSearch from 'components/RecipeSearch';
-import { Display, UiState} from 'types/ui';
-import { getWeekPeriod } from 'services/time';
-import Sticker from 'components/Sticker';
-import ShoppingList from 'components/ShoppingList';
-import { ShoppingCartState } from '../ShoppingCart/reducers';
+import ShoppingCartView from 'containers/ShoppingCart/View';
 
-type Actions = typeof PlannerActions
+import { getWeekPeriod } from 'services/time';
+
+import Button from 'components/Button';
+import Navbar from 'components/Navbar';
+import RecipeSearch from 'components/RecipeSearch';
+import Sticker from 'components/Sticker';
+
+import { AppState } from 'store/configureStore';
+
+import './styles.scss';
+
+type Actions = typeof PlannerActions;
 type ShoppingCartActionsType = typeof ShoppingCartActions;
 
 interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions, ShoppingCartActionsType, UiState, ShoppingCartState {
@@ -139,19 +145,8 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
                   <Sticker>Shopping Cart</Sticker>
                   <Button outlined onClick={() => { this.props.addAll(this.getRecipes(this.props.planner))}}>Add to shopping</Button>
                 </div>
-                <section className='cbk-planner__shopping__list'>
-                  {
-                    this.props.items.length ? (
-                      <ShoppingList
-                        items={this.props.items}
-                      />
-                    ) : (
-                      <div>
-                        Shopping cart is empty
-                      </div>
-                    )
-                  }
-                </section>
+                <ShoppingCartView
+                />
               </div>
             </>
           ) 

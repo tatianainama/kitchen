@@ -1,7 +1,10 @@
-import ShoppingItem, { ShoppingRecipe } from 'types/shopping-cart';
+import ShoppingItem, { ShoppingRecipe, DBShoppingCart } from 'types/shopping-cart';
 import { Ingredient } from 'types/recipes';
 import { Convert, GetMeasure, Measure } from 'services/measurements';
 import { update } from 'ramda';
+import axios from 'axios';
+
+const SHOPPING: string = process.env.REACT_APP_API_SHOPPING || '';
 
 const getItemsFromRecipe = (recipe: ShoppingRecipe): ShoppingItem[] => {
   return recipe.ingredients.reduce((ingredients, subRecipe) => {
@@ -65,9 +68,22 @@ const createShoppingItem = (recipeId: string, recipeName: string) => (ingredient
   };
 }
 
+const fetchShoppingCart = async (): Promise<DBShoppingCart> => {
+  const response = await axios.get(`${SHOPPING}/`);
+  return response.data;
+}
+
+const saveShoppingCart = async (cart: ShoppingItem[]): Promise<DBShoppingCart> => {
+  return axios.post(`${SHOPPING}/`, { items: cart }).then(
+    response => response.data
+  ).catch(error => error);
+}
+
 export {
   getItemsFromRecipe,
   combineItems,
   createShoppingList,
-  createShoppingItem
+  createShoppingItem,
+  fetchShoppingCart,
+  saveShoppingCart,
 }
