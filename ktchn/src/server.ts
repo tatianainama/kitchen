@@ -2,15 +2,14 @@ import * as path from "path";
 import cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import logger from "morgan";
-import express, { Application } from "express";
+import express from "express";
 import rootRouter from "./routes/root";
 import recipeRouter from "./recipes/routes";
 import ingredientsRouter from './ingredients/routes';
 import plannerRouter from './planner/routes';
+import shoppingRouter from './shopping/routes';
 import dotenv from 'dotenv';
 import MongoClient from 'mongodb';
-import { Response } from 'express';
-import mongoService from './mongo';
 import { RecipeDB } from './recipes/model';
 
 namespace Application {
@@ -48,6 +47,7 @@ class App {
     this.app.use("/recipes", new recipeRouter(db).router);
     this.app.use("/ingredients", new ingredientsRouter(db).router);
     this.app.use('/planner', new plannerRouter(db).router);
+    this.app.use('/shopping', new shoppingRouter(db).router);
     this.app.use("/", rootRouter);
   }
 
@@ -90,6 +90,16 @@ class App {
     });
     db.createCollection('recipes');
     db.createCollection('planner');
+    db.createCollection('shopping').then(collection => {
+      collection.findOne({}).then(shoppingCart => {
+        if (!shoppingCart) {
+          collection.insertOne({
+            date: new Date(),
+            items: []
+          })
+        }
+      })
+    });
   }
 
   private launchApp() {
