@@ -3,4 +3,9 @@
 .cbk-shopping-cart-view {
   margin: $spacing-small;
   @include box();
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: $spacing-small;
+  }
 }

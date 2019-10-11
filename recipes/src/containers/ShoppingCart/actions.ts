@@ -89,11 +89,14 @@ export const saveCartActionCreator: ActionCreator<
     any,
     ConfirmSaveCartAction|RejectSaveCartAction
   >
-> = (cart: ShoppingItem[]) => {
+> = (cart: ShoppingItem[], deleted?: boolean) => {
   return async (dispatch: Dispatch) => {
     dispatch(pendingSaveCart(cart));
     try {
       const result = await saveShoppingCart(cart);
+      if (deleted) {
+        dispatch(removeAll());
+      }
       return dispatch(confirmSaveCart(result));
     } catch (error) {
       return dispatch(rejectSaveCart(error))

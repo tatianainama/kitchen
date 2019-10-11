@@ -9,7 +9,7 @@ const getShoppingList: Controller<void, IDBDocument<ShoppingList>|null> = db => 
 }
 
 const validShoppingList = (mbShoppingList: any): mbShoppingList is IDBDocument<ShoppingList> => {
-  return mbShoppingList._id && mbShoppingList.items;
+  return mbShoppingList.items && Array.isArray(mbShoppingList.items);
 }
 
 const validateShoppingList: Controller<void, IDBDocument<ShoppingList>> = () => req => () => {

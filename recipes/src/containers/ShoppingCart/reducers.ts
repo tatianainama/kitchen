@@ -78,7 +78,8 @@ const shoppingCartReducer = (
       };
     case DELETE_CART:
       return {
-        ...state
+        ...state,
+        items: [],
       };
     case REQUEST_CART:
       return {
@@ -89,6 +90,7 @@ const shoppingCartReducer = (
       return {
         ...state,
         isFetching: false,
+        items: action.payload.items
       }
     default:
       return state
