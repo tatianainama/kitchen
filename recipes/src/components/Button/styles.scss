@@ -116,4 +116,12 @@ button.cbk-btn {
       background-size: 45.25px 45.25px;
     }
   }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
 }
