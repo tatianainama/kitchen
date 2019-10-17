@@ -7,6 +7,7 @@ import { fetchShoppingCart, saveShoppingCart } from './services';
 export const ADD_RECIPE_TO_CART = 'ADD_ RECIPE_TO_CART';
 export const REMOVE_RECIPE_FROM_CART = 'REMOVE_RECIPE_FROM_CART';
 export const REMOVE_ITEM_FROM_CART = 'REMOVE_ITEM_FROM_CART';
+export const REMOVE_MULTIPLE_ITEMS_FROM_CART = 'REMOVE_MULTIPLE_ITEMS_FROM_CART';
 export const REMOVE_ALL = 'REMOVE_ALL';
 export const ADD_ALL = 'ADD_ALL';
 
@@ -118,6 +119,11 @@ export const mergeItemsCart = (deletedItems: string[], newItem: ShoppingItem): M
   }
 })
 
+export const removeMultipleItemsFromCart = (items: ShoppingItem[]): RemoveMultipleItemsFromCartAction => ({
+  type: REMOVE_MULTIPLE_ITEMS_FROM_CART,
+  payload: items
+})
+
 export type AddRecipeToCart = {
   type: typeof ADD_RECIPE_TO_CART,
   payload: ShoppingRecipe
@@ -149,6 +155,7 @@ export interface ConfirmSaveCartAction extends Action<'CONFIRM_SAVE_CART'> { car
 export interface RejectSaveCartAction extends Action<'REJECT_SAVE_CART'> { error: string };
 export interface DeleteCartAction extends Action<'DELETE_CART'> {};
 export interface MergeItemsCartAction extends Action<'MERGE_ITEMS_CART'> { payload: { items: string[], newItem: ShoppingItem }};
+export interface RemoveMultipleItemsFromCartAction extends Action<'REMOVE_MULTIPLE_ITEMS_FROM_CART'> { payload: ShoppingItem[] };
 
 export type ActionTypes = 
   AddRecipeToCart | 
@@ -163,7 +170,8 @@ export type ActionTypes =
   ConfirmSaveCartAction |
   RejectSaveCartAction |
   DeleteCartAction |
-  MergeItemsCartAction;
+  MergeItemsCartAction |
+  RemoveMultipleItemsFromCartAction;
 
 export default {
   addRecipeToCart,
@@ -172,5 +180,6 @@ export default {
   removeAll,
   addAll,
   deleteCart,
-  mergeItemsCart
+  mergeItemsCart,
+  removeMultipleItemsFromCart,
 }

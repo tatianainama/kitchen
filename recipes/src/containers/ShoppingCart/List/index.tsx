@@ -66,7 +66,7 @@ class ShoppingList extends Component<ShoppingListProps, ShoppingListState> {
           >
             <p>Are you sure you want to remove all items from shopping list ?</p>
           </Dialog>
-          <List
+          {/* <List
             dense
             nonInteractive
             items={this.props.items}
@@ -74,7 +74,7 @@ class ShoppingList extends Component<ShoppingListProps, ShoppingListState> {
               addToCart,
               removeItemFromCart,
             })}
-          />
+          /> */}
         </div>
       </div>
     )

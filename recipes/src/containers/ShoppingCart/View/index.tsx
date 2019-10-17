@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { bindActionCreators } from 'redux';
-import { update, includes, remove, findIndex, equals } from 'ramda';
+import { remove, equals } from 'ramda';
 
 import Button from 'components/Button';
 import Dialog from 'components/Dialog';
@@ -13,14 +13,11 @@ import shoppingCartActions, { fetchCartActionCreator, saveCartActionCreator } fr
 import { ShoppingItem, ShoppingCartState } from 'types/shopping-cart';
 import { AppState } from 'store/configureStore';
 
-import { combineItems, combineMultipleItems } from '../services';
+import { combineMultipleItems } from '../services';
 import { GetMeasure } from 'services/measurements';
 import './styles.scss';
 
 type shoppingCartActionTypes = typeof shoppingCartActions;
-interface SelectedItems extends ShoppingItem {
-  index: number
-};
 
 interface ShoppingCartViewProps extends ShoppingCartState, shoppingCartActionTypes {
   fetch: typeof fetchCartActionCreator,
@@ -29,7 +26,7 @@ interface ShoppingCartViewProps extends ShoppingCartState, shoppingCartActionTyp
 
 interface ShoppingCartViewState {
   dialogOpen: boolean,
-  selected: SelectedItems[],
+  selected: ShoppingItem[],
   selectedMeasure?: {
     name: string, values: string[]
   },
@@ -73,10 +70,8 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
     })
   }
 
-  selectItem = (item: ShoppingItem, index: number) => {
-    const duplicated = this.state.selected.findIndex(
-      selected => selected._original === item._original && selected.recipeName === item.recipeName
-    );
+  selectItem = (item: ShoppingItem) => {
+    const duplicated = this.state.selected.findIndex(equals(item));
     if (duplicated !== -1) {
       const newSelection = remove(duplicated, 1, this.state.selected);
       this.setState({
@@ -87,7 +82,7 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
       this.setState({
         selected: [
           ...this.state.selected,
-          { ...item, index }
+          item
         ],
         selectedMeasure: !this.state.selectedMeasure ? GetMeasure(item.unit) : this.state.selectedMeasure
       });
@@ -115,6 +110,11 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
     })
   }
 
+  removeItems = () => {
+    this.props.removeMultipleItemsFromCart(this.state.selected);
+    this.clearSelection();
+  }
+
   render () {
     return (
       <section className='cbk-shopping-cart-view'>
@@ -125,37 +125,30 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
                   {
                     this.state.selected.length >= 2 ? (
                       <div className='cbk-shopping-cart-view__actions--selection-actions'>
-                        <Button
-                          outlined
-                          onClick={this.mergeItems}
-                        >
+                        <Button outlined onClick={this.mergeItems}>
                           Merge
                         </Button>
-                        <Button
-                          outlined
-                          onClick={this.clearSelection}
-                        >
+                        <Button outlined onClick={this.removeItems}>
+                          Remove
+                        </Button>
+                        <Button outlined onClick={this.clearSelection}>
                           Clear
                         </Button>
                       </div>
                     ) : null
                   }
-                  <Button
-                    outlined
-                    onClick={() => this.openDialog(true) }
-                  > Delete
+                  <Button outlined onClick={() => this.openDialog(true) }>
+                    Delete
                   </Button>
-                  <Button
-                    raised
-                    onClick={() => this.props.save(this.props.items)}
-                  > Save
+                  <Button raised onClick={() => this.props.save(this.props.items)}>
+                    Save
                   </Button>
                 </div>
                 <div className='cbk-shopping-cart-view__items'>
                   <div className='cbk-shopping-list'>
                     <List
                       dense
-                      focusMultiple={this.state.selected.map(item => item.index)}
+                      focusMultiple={this.state.selected}
                       items={this.props.items}
                       render={ item => (
                         <div className='cbk-shopping-list__item'>
@@ -172,7 +165,7 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
                           </div>
                         </div>
                       )}
-                      onClick={(item, index) => { this.selectItem(item, index) }}
+                      onClick={ item => this.selectItem(item) }
                     />
                   </div>
                 </div>

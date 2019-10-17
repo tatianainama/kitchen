@@ -12,10 +12,11 @@ import { ActionTypes,
   DELETE_CART,
   REQUEST_CART,
   RECEIVE_CART,
-  MERGE_ITEMS_CART
+  MERGE_ITEMS_CART,
+  REMOVE_MULTIPLE_ITEMS_FROM_CART
 } from './actions';
 import { createShoppingList, getItemsFromRecipe } from './services';
-import { insert, reject } from 'ramda';
+import { insert, without } from 'ramda';
 
 const initialState: ShoppingCartState = {
     items: [],
@@ -99,6 +100,11 @@ const shoppingCartReducer = (
       return {
         ...state,
         items: insert(index, action.payload.newItem, state.items.filter((item) => !action.payload.items.includes(item._original)))
+      }
+    case REMOVE_MULTIPLE_ITEMS_FROM_CART:
+      return {
+        ...state,
+        items: without(action.payload, state.items)
       }
     default:
       return state

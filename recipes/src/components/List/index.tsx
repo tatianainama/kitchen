@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
-import { update } from 'ramda';
+import { includes } from 'ramda';
 
 import './styles.scss';
 
@@ -10,7 +10,7 @@ type ListProps<T extends ItemProps> = {
   nonInteractive?: boolean,
   focusOnClick?: boolean,
   dense?: boolean,
-  focusMultiple?: number[],
+  focusMultiple?: T[],
   focus?: number,
   items: T[],
   render: (item: T, index: number) => React.ComponentElement<T, any>,
@@ -33,7 +33,7 @@ const CBKList = <T extends ItemProps>(props: ListProps<T>) => {
             className={
               classnames({
                 'cbk-list__item': true,
-                'cbk-list__item--focus': index === props.focus || item.focused || (props.focusMultiple && props.focusMultiple.includes(index))
+                'cbk-list__item--focus': index === props.focus || item.focused || (props.focusMultiple && includes(item, props.focusMultiple))
               })
             }
             onClick={() => { props.onClick ? props.onClick(item, index) : null }}
