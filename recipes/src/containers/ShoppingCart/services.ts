@@ -1,7 +1,7 @@
 import ShoppingItem, { ShoppingRecipe, DBShoppingCart } from 'types/shopping-cart';
 import { Ingredient } from 'types/recipes';
 import { Convert, GetMeasure, Measure } from 'services/measurements';
-import { update } from 'ramda';
+import { update, uniq } from 'ramda';
 import axios from 'axios';
 
 const SHOPPING: string = process.env.REACT_APP_API_SHOPPING || '';
@@ -32,6 +32,16 @@ const combineItems = (a: ShoppingItem, b: ShoppingItem): ShoppingItem => {
       }
     }
   }
+}
+
+const combineMultipleItems = (items: ShoppingItem[]): ShoppingItem => {
+  return items.reduce((combined, item) => ({
+    ...combineItems(combined, item),
+    recipeName: uniq([
+      ...combined.recipeName || [],
+      ...item.recipeName || []
+    ]),
+  }))
 }
 
 const createShoppingList = (initial: ShoppingItem[], newItems: ShoppingItem[]): ShoppingItem[] => {
@@ -86,4 +96,5 @@ export {
   createShoppingItem,
   fetchShoppingCart,
   saveShoppingCart,
+  combineMultipleItems
 }
