@@ -42,5 +42,8 @@
     display: flex;
     justify-content: flex-end;
     padding: $spacing-small;
+    &--selection-actions {
+      flex: 2;
+    }
   }
 }

@@ -96,7 +96,6 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
 
   mergeItems = () => {
     const { selected, selectedMeasure } = this.state;
-    console.log(selected, selectedMeasure)
     if (selectedMeasure && selected.every(item => selectedMeasure.values.includes(item.unit))) {
       try {
         this.props.mergeItemsCart(this.state.selected.map(selected => selected._original), combineMultipleItems(this.state.selected));
@@ -125,7 +124,7 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
                 <div className='cbk-shopping-cart-view__actions'>
                   {
                     this.state.selected.length >= 2 ? (
-                      <>
+                      <div className='cbk-shopping-cart-view__actions--selection-actions'>
                         <Button
                           outlined
                           onClick={this.mergeItems}
@@ -138,7 +137,7 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
                         >
                           Clear
                         </Button>
-                      </>
+                      </div>
                     ) : null
                   }
                   <Button
