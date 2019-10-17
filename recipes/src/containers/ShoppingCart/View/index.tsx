@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { bindActionCreators } from 'redux';
-import { update, includes, remove } from 'ramda';
+import { update, includes, remove, findIndex, equals } from 'ramda';
 
 import Button from 'components/Button';
 import Dialog from 'components/Dialog';
@@ -74,7 +74,9 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
   }
 
   selectItem = (item: ShoppingItem, index: number) => {
-    const duplicated = this.state.selected.findIndex(selected => selected._original === item._original);
+    const duplicated = this.state.selected.findIndex(
+      selected => selected._original === item._original && selected.recipeName === item.recipeName
+    );
     if (duplicated !== -1) {
       const newSelection = remove(duplicated, 1, this.state.selected);
       this.setState({
@@ -87,13 +89,14 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
           ...this.state.selected,
           { ...item, index }
         ],
-        selectedMeasure: !this.state.selectedMeasure ? GetMeasure(item.unit) : undefined
+        selectedMeasure: !this.state.selectedMeasure ? GetMeasure(item.unit) : this.state.selectedMeasure
       });
     }
   }
 
   mergeItems = () => {
     const { selected, selectedMeasure } = this.state;
+    console.log(selected, selectedMeasure)
     if (selectedMeasure && selected.every(item => selectedMeasure.values.includes(item.unit))) {
       try {
         this.props.mergeItemsCart(this.state.selected.map(selected => selected._original), combineMultipleItems(this.state.selected));
