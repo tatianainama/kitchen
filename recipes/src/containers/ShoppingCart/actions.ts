@@ -19,6 +19,8 @@ export const REJECT_SAVE_CART = 'REJECT_SAVE_CART';
 
 export const DELETE_CART = 'DELETE_CART';
 
+export const MERGE_ITEMS_CART = 'MERGE_ITEMS_CART';
+
 export const addRecipeToCart = (recipe: ShoppingRecipe): AddRecipeToCart => ({
   type: ADD_RECIPE_TO_CART,
   payload: recipe
@@ -108,6 +110,14 @@ export const deleteCart = (): DeleteCartAction => ({
   type: DELETE_CART
 })
 
+export const mergeItemsCart = (deletedItems: string[], newItem: ShoppingItem): MergeItemsCartAction => ({
+  type: MERGE_ITEMS_CART,
+  payload: {
+    items: deletedItems,
+    newItem
+  }
+})
+
 export type AddRecipeToCart = {
   type: typeof ADD_RECIPE_TO_CART,
   payload: ShoppingRecipe
@@ -138,6 +148,7 @@ export interface PendingSaveCartAction extends Action<'PENDING_SAVE_CART'> { car
 export interface ConfirmSaveCartAction extends Action<'CONFIRM_SAVE_CART'> { cart: DBShoppingCart };
 export interface RejectSaveCartAction extends Action<'REJECT_SAVE_CART'> { error: string };
 export interface DeleteCartAction extends Action<'DELETE_CART'> {};
+export interface MergeItemsCartAction extends Action<'MERGE_ITEMS_CART'> { payload: { items: string[], newItem: ShoppingItem }};
 
 export type ActionTypes = 
   AddRecipeToCart | 
@@ -151,7 +162,8 @@ export type ActionTypes =
   PendingSaveCartAction |
   ConfirmSaveCartAction |
   RejectSaveCartAction |
-  DeleteCartAction;
+  DeleteCartAction |
+  MergeItemsCartAction;
 
 export default {
   addRecipeToCart,
@@ -159,5 +171,6 @@ export default {
   removeItemFromCart,
   removeAll,
   addAll,
-  deleteCart
+  deleteCart,
+  mergeItemsCart
 }

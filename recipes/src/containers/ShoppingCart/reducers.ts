@@ -11,9 +11,11 @@ import { ActionTypes,
   REJECT_SAVE_CART,
   DELETE_CART,
   REQUEST_CART,
-  RECEIVE_CART
+  RECEIVE_CART,
+  MERGE_ITEMS_CART
 } from './actions';
 import { createShoppingList, getItemsFromRecipe } from './services';
+import { insert, reject } from 'ramda';
 
 const initialState: ShoppingCartState = {
     items: [],
@@ -91,6 +93,12 @@ const shoppingCartReducer = (
         ...state,
         isFetching: false,
         items: action.payload.items
+      }
+    case MERGE_ITEMS_CART:
+      const index = state.items.findIndex(i => i._original === action.payload.items[0]);
+      return {
+        ...state,
+        items: insert(index, action.payload.newItem, state.items.filter((item) => !action.payload.items.includes(item._original)))
       }
     default:
       return state
