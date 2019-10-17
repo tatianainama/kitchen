@@ -23,6 +23,12 @@ const combineItems = (a: ShoppingItem, b: ShoppingItem): ShoppingItem => {
       quantity: a.quantity + Convert(b.quantity, b.unit, a.unit, m.name as Measure)
     }
   } else {
+    if (a.quantity && b.quantity && (a.unit === 'unit' || b.unit === 'unit')) {
+      return {
+        ...a,
+        quantity: a.quantity + b.quantity
+      }
+    }
     if (a.unit !== b.unit) {
       throw Error(`cannot sum this units: ${b.unit, a.unit}`)
     } else {
