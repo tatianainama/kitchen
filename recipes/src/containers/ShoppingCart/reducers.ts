@@ -1,5 +1,5 @@
 
-import ShoppingItem, { ShoppingCartState } from 'types/shopping-cart';
+import ShoppingItem, { ShoppingCartState, SortType } from 'types/shopping-cart';
 import { ActionTypes,
   ADD_RECIPE_TO_CART,
   REMOVE_RECIPE_FROM_CART,
@@ -13,16 +13,28 @@ import { ActionTypes,
   REQUEST_CART,
   RECEIVE_CART,
   MERGE_ITEMS_CART,
-  REMOVE_MULTIPLE_ITEMS_FROM_CART
+  REMOVE_MULTIPLE_ITEMS_FROM_CART,
+  SORT_CART
 } from './actions';
 import { createShoppingList, getItemsFromRecipe } from './services';
-import { insert, without } from 'ramda';
+import { insert, without, sort, ascend, prop, equals } from 'ramda';
 
 const initialState: ShoppingCartState = {
     items: [],
     recipesId: [],
     isFetching: false,
 };
+
+const sortSelection = (sort: SortType) => {
+  switch(sort) {
+    case SortType.Ingredient:
+      return ascend(prop('name'))
+    case SortType.Recipe:
+      return ascend(prop('recipeName'))
+    default:
+      return ascend(prop('name'))
+  }
+}
 
 const shoppingCartReducer = (
   state = initialState,
@@ -96,15 +108,20 @@ const shoppingCartReducer = (
         items: action.payload.items
       }
     case MERGE_ITEMS_CART:
-      const index = state.items.findIndex(i => i._original === action.payload.items[0]);
+      const index = state.items.findIndex(equals(action.payload.items[0]));
       return {
         ...state,
-        items: insert(index, action.payload.newItem, state.items.filter((item) => !action.payload.items.includes(item._original)))
+        items: insert(index, action.payload.newItem, without(action.payload.items, state.items))
       }
     case REMOVE_MULTIPLE_ITEMS_FROM_CART:
       return {
         ...state,
         items: without(action.payload, state.items)
+      }
+    case SORT_CART: 
+      return {
+        ...state,
+        items: sort(sortSelection(action.payload), state.items)
       }
     default:
       return state

@@ -1,6 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { DBRecipe, SubRecipe } from 'types/recipes';
-import { ShoppingRecipe, DBShoppingCart, ShoppingItem } from 'types/shopping-cart';
+import { ShoppingRecipe, DBShoppingCart, ShoppingItem, SortType } from 'types/shopping-cart';
 import { bindActionCreators, Action, ActionCreator, Dispatch } from 'redux';
 import { fetchShoppingCart, saveShoppingCart } from './services';
 
@@ -21,6 +20,7 @@ export const REJECT_SAVE_CART = 'REJECT_SAVE_CART';
 export const DELETE_CART = 'DELETE_CART';
 
 export const MERGE_ITEMS_CART = 'MERGE_ITEMS_CART';
+export const SORT_CART = 'SORT_CART';
 
 export const addRecipeToCart = (recipe: ShoppingRecipe): AddRecipeToCart => ({
   type: ADD_RECIPE_TO_CART,
@@ -111,7 +111,7 @@ export const deleteCart = (): DeleteCartAction => ({
   type: DELETE_CART
 })
 
-export const mergeItemsCart = (deletedItems: string[], newItem: ShoppingItem): MergeItemsCartAction => ({
+export const mergeItemsCart = (deletedItems: ShoppingItem[], newItem: ShoppingItem): MergeItemsCartAction => ({
   type: MERGE_ITEMS_CART,
   payload: {
     items: deletedItems,
@@ -122,6 +122,11 @@ export const mergeItemsCart = (deletedItems: string[], newItem: ShoppingItem): M
 export const removeMultipleItemsFromCart = (items: ShoppingItem[]): RemoveMultipleItemsFromCartAction => ({
   type: REMOVE_MULTIPLE_ITEMS_FROM_CART,
   payload: items
+})
+
+export const sortCart = (sort: SortType): SortCartAction => ({
+  type: SORT_CART,
+  payload: sort
 })
 
 export type AddRecipeToCart = {
@@ -154,8 +159,9 @@ export interface PendingSaveCartAction extends Action<'PENDING_SAVE_CART'> { car
 export interface ConfirmSaveCartAction extends Action<'CONFIRM_SAVE_CART'> { cart: DBShoppingCart };
 export interface RejectSaveCartAction extends Action<'REJECT_SAVE_CART'> { error: string };
 export interface DeleteCartAction extends Action<'DELETE_CART'> {};
-export interface MergeItemsCartAction extends Action<'MERGE_ITEMS_CART'> { payload: { items: string[], newItem: ShoppingItem }};
+export interface MergeItemsCartAction extends Action<'MERGE_ITEMS_CART'> { payload: { items: ShoppingItem[], newItem: ShoppingItem }};
 export interface RemoveMultipleItemsFromCartAction extends Action<'REMOVE_MULTIPLE_ITEMS_FROM_CART'> { payload: ShoppingItem[] };
+export interface SortCartAction extends Action<'SORT_CART'> { payload: SortType };
 
 export type ActionTypes = 
   AddRecipeToCart | 
@@ -171,7 +177,8 @@ export type ActionTypes =
   RejectSaveCartAction |
   DeleteCartAction |
   MergeItemsCartAction |
-  RemoveMultipleItemsFromCartAction;
+  RemoveMultipleItemsFromCartAction |
+  SortCartAction;
 
 export default {
   addRecipeToCart,
@@ -182,4 +189,5 @@ export default {
   deleteCart,
   mergeItemsCart,
   removeMultipleItemsFromCart,
+  sortCart
 }

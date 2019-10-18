@@ -2,7 +2,7 @@ import Recipe, { Ingredient, SubRecipe } from './recipes';
 
 export interface ShoppingItem extends Ingredient {
   recipeId?: string,
-  recipeName?: string[]
+  recipeName: string[]
 }
 
 export interface ShoppingRecipe {
@@ -22,6 +22,12 @@ export type ShoppingCartState = {
   recipesId: string[],
   isFetching: boolean,
   error?: string,
+}
+
+export enum SortType {
+  Ingredient,
+  Recipe,
+  Planner
 }
 
 export default ShoppingItem;

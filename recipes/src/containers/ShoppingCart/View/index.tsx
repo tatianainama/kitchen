@@ -10,7 +10,7 @@ import List from 'components/List';
 
 import shoppingCartActions, { fetchCartActionCreator, saveCartActionCreator } from 'containers/ShoppingCart/actions';
 
-import { ShoppingItem, ShoppingCartState } from 'types/shopping-cart';
+import { ShoppingItem, ShoppingCartState, SortType } from 'types/shopping-cart';
 import { AppState } from 'store/configureStore';
 
 import { combineMultipleItems } from '../services';
@@ -93,7 +93,7 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
     const { selected, selectedMeasure } = this.state;
     if (selectedMeasure && selected.every(item => selectedMeasure.values.includes(item.unit))) {
       try {
-        this.props.mergeItemsCart(this.state.selected.map(selected => selected._original), combineMultipleItems(this.state.selected));
+        this.props.mergeItemsCart(this.state.selected, combineMultipleItems(this.state.selected));
         this.clearSelection();
       } catch(error) {
         console.log(error)
@@ -115,6 +115,15 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
     this.clearSelection();
   }
 
+  sortItems = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    try {
+      const sort: SortType = parseInt(event.target.value);
+      this.props.sortCart(sort);
+    } catch (error) {
+      console.log('error while trying to sort items', error)
+    }
+  }
+
   render () {
     return (
       <section className='cbk-shopping-cart-view'>
@@ -122,21 +131,33 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
             this.props.items.length ? (
               <>
                 <div className='cbk-shopping-cart-view__actions'>
-                  {
-                    this.state.selected.length >= 2 ? (
-                      <div className='cbk-shopping-cart-view__actions--selection-actions'>
-                        <Button outlined onClick={this.mergeItems}>
-                          Merge
-                        </Button>
-                        <Button outlined onClick={this.removeItems}>
-                          Remove
-                        </Button>
-                        <Button outlined onClick={this.clearSelection}>
-                          Clear
-                        </Button>
-                      </div>
-                    ) : null
-                  }
+                  <div className='cbk-shopping-cart-view__actions--selection-actions'>
+                    {
+                      this.state.selected.length ? (
+                        <>
+                          <Button outlined onClick={this.removeItems}>
+                            Remove
+                          </Button>
+                          <Button outlined onClick={this.clearSelection}>
+                            Clear
+                          </Button>
+                          {
+                            this.state.selected.length > 1 && (
+                              <Button outlined onClick={this.mergeItems}>
+                                Merge
+                              </Button>
+                            )
+                          }
+                        </>
+                      ) : null
+                    }
+                  </div>
+                  <select onChange={this.sortItems} defaultValue=''>
+                    <option value='' disabled>Sort by</option>
+                    <option value={SortType.Ingredient}>Ingredients</option>
+                    <option value={SortType.Recipe}>Recipe</option>
+                    {/* <option value={SortType.Planner}>Planner</option> */}
+                  </select>
                   <Button outlined onClick={() => this.openDialog(true) }>
                     Delete
                   </Button>
