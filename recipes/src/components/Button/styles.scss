@@ -40,6 +40,19 @@ button.cbk-btn {
     background-color: $grey-400;
   }
 
+  &--disabled {
+    color: $grey-500!important;
+    pointer-events: none!important;
+    cursor: default;
+    box-shadow: none!important;
+    font-style: italic;
+    background-color: white;
+    &:hover,
+    &:active {
+      position: unset!important;
+    }
+  }
+
   &--raised {
     background-color: $black;
     color: $white;
@@ -63,10 +76,15 @@ button.cbk-btn {
       top: 4px;
       left: 4px
     }
+    &.cbk-btn--disabled {
+      background-color: $grey-300;
+      border-color: $grey-300;
+    }
   }
 
   &--unelevated {
     background-color: $black;
+    border: 3px solid $black;
     color: $white;
     &:hover {
       background-color: $black;
@@ -75,7 +93,12 @@ button.cbk-btn {
     
     &:active {
       background-color: $black;
+      border: 3px solid $black;
       box-shadow: 3px 3px $yellow-dark;
+    }
+    &.cbk-btn--disabled {
+      background-color: $grey-300;
+      border-color: $grey-300;
     }
   }
 
@@ -114,6 +137,11 @@ button.cbk-btn {
         $white 100%
       );
       background-size: 45.25px 45.25px;
+    }
+    
+    &.cbk-btn--disabled {
+      background-color: $white;
+      border-color: $grey-300;
     }
   }
 

@@ -29,6 +29,7 @@ export default function CBKButton(props: CBKButtonProps) {
     'cbk-btn--raised': props.raised,
     'cbk-btn--unelevated': props.unelevated,
     'cbk-btn--outlined': props.outlined,
+    'cbk-btn--disabled': props.disabled,
   })
   if (props.icon) {
     return (

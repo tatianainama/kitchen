@@ -33,6 +33,7 @@ interface ShoppingCartViewState {
   selectedMeasure?: {
     name: string, values: string[]
   },
+  saveDisabled: boolean,
 }
 
 class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCartViewState> {
@@ -43,6 +44,7 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
       dialogOpen: false,
       selected: [],
       selectedMeasure: undefined,
+      saveDisabled: true
     }
   }
   
@@ -97,7 +99,12 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
     if (selectedMeasure && selected.every(item => selectedMeasure.values.includes(item.unit))) {
       try {
         const result = this.props.mergeItemsCart(this.state.selected, combineMultipleItems(this.state.selected));
-        this.clearSelection(() => this.selectItem(result.payload.newItem));
+        this.clearSelection(() => {
+          this.selectItem(result.payload.newItem);
+          this.setState({
+            saveDisabled: false
+          })
+        });
       } catch(error) {
         toast.error("There was an error merging items:", error);
       }
@@ -115,7 +122,11 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
 
   removeItems = () => {
     this.props.removeMultipleItemsFromCart(this.state.selected);
-    this.clearSelection();
+    this.clearSelection(() => {
+      this.setState({
+        saveDisabled: false
+      })
+    });
   }
 
   sortItems = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -135,25 +146,15 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
               <>
                 <div className='cbk-shopping-cart-view__actions'>
                   <div className='cbk-shopping-cart-view__actions--selection-actions'>
-                    {
-                      this.state.selected.length ? (
-                        <>
-                          <Button outlined onClick={this.removeItems}>
-                            Remove
-                          </Button>
-                          <Button outlined onClick={this.clearSelection}>
-                            Clear
-                          </Button>
-                          {
-                            this.state.selected.length > 1 && (
-                              <Button outlined onClick={this.mergeItems}>
-                                Merge
-                              </Button>
-                            )
-                          }
-                        </>
-                      ) : null
-                    }
+                    <Button outlined onClick={this.mergeItems} disabled={this.state.selected.length < 2}>
+                      Merge
+                    </Button>
+                    <Button outlined onClick={() => this.clearSelection()} disabled={!this.state.selected.length}>
+                      Clear
+                    </Button>
+                    <Button unelevated onClick={this.removeItems} disabled={!this.state.selected.length}>
+                      Remove
+                    </Button>
                   </div>
                   <Select
                     onChange={this.sortItems}
@@ -167,7 +168,7 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
                   <Button outlined onClick={() => this.openDialog(true) }>
                     Delete
                   </Button>
-                  <Button raised onClick={() => this.props.save(this.props.items)}>
+                  <Button raised onClick={() => this.props.save(this.props.items)} disabled={this.state.saveDisabled}>
                     Save
                   </Button>
                 </div>
