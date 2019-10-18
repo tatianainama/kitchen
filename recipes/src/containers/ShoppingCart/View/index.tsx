@@ -24,7 +24,7 @@ type shoppingCartActionTypes = typeof shoppingCartActions;
 
 interface ShoppingCartViewProps extends ShoppingCartState, shoppingCartActionTypes {
   fetch: typeof fetchCartActionCreator,
-  save: typeof saveCartActionCreator,
+  save: typeof saveCartActionCreator
 }
 
 interface ShoppingCartViewState {
@@ -138,6 +138,23 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
     }
   }
 
+  saveChanges = () => {
+    // @ts-ignore: https://github.com/reduxjs/redux-thunk/issues/213
+    this.props.save(this.props.items).then((result: any) => {
+      if (result.error) {
+        toast.error('There was an error saving the changes: ', result.error);
+        this.setState({
+          saveDisabled: false
+        })
+      } else {
+        toast.success('Shopping list was saved correctly');
+        this.setState({
+          saveDisabled: true
+        })
+      }
+    })
+  }
+
   render () {
     return (
       <section className='cbk-shopping-cart-view'>
@@ -168,7 +185,7 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
                   <Button outlined onClick={() => this.openDialog(true) }>
                     Delete
                   </Button>
-                  <Button raised onClick={() => this.props.save(this.props.items)} disabled={this.state.saveDisabled}>
+                  <Button raised onClick={this.saveChanges} disabled={this.state.saveDisabled}>
                     Save
                   </Button>
                 </div>

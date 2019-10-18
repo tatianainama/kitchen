@@ -90,7 +90,7 @@ export const saveCartActionCreator: ActionCreator<
     Promise<ConfirmSaveCartAction|RejectSaveCartAction>,
     DBShoppingCart,
     any,
-    ConfirmSaveCartAction|RejectSaveCartAction
+    Action
   >
 > = (cart: ShoppingItem[], deleted?: boolean) => {
   return async (dispatch: Dispatch) => {
