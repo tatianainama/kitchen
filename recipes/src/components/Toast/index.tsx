@@ -11,7 +11,7 @@ const Toast: React.FunctionComponent<any> = (props) => (
     bodyClassName='cbk-toast-body'
     position='top-right'
     transition={Slide}
-    autoClose={false}
+    autoClose={3000}
     hideProgressBar
     newestOnTop
     closeOnClick

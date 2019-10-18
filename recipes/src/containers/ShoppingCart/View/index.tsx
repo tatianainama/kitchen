@@ -96,21 +96,21 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
     const { selected, selectedMeasure } = this.state;
     if (selectedMeasure && selected.every(item => selectedMeasure.values.includes(item.unit))) {
       try {
-        this.props.mergeItemsCart(this.state.selected, combineMultipleItems(this.state.selected));
-        this.clearSelection();
+        const result = this.props.mergeItemsCart(this.state.selected, combineMultipleItems(this.state.selected));
+        this.clearSelection(() => this.selectItem(result.payload.newItem));
       } catch(error) {
         toast.error("There was an error merging items:", error);
       }
     } else {
-      toast.error("There was an error merging items: one or more items have different measure types");
+      toast.error("Can't merge those items, check measurements and units");
     }
   }
 
-  clearSelection = () => {
+  clearSelection = (callback?: () => void) => {
     this.setState({
       selected: [],
-      selectedMeasure: undefined,
-    })
+      selectedMeasure: undefined
+    }, callback)
   }
 
   removeItems = () => {
