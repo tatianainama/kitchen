@@ -7,6 +7,7 @@ import { remove, equals } from 'ramda';
 import Button from 'components/Button';
 import Dialog from 'components/Dialog';
 import List from 'components/List';
+import { CBKSelect2 as Select } from 'components/Select';
 
 import shoppingCartActions, { fetchCartActionCreator, saveCartActionCreator } from 'containers/ShoppingCart/actions';
 
@@ -152,12 +153,15 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
                       ) : null
                     }
                   </div>
-                  <select onChange={this.sortItems} defaultValue=''>
-                    <option value='' disabled>Sort by</option>
-                    <option value={SortType.Ingredient}>Ingredients</option>
-                    <option value={SortType.Recipe}>Recipe</option>
-                    {/* <option value={SortType.Planner}>Planner</option> */}
-                  </select>
+                  <Select
+                    onChange={this.sortItems}
+                    options={[
+                      { label: 'name', value: SortType.Ingredient.toString() },
+                      { label: 'recipe', value: SortType.Recipe.toString() }
+                    ]}
+                    label='sort by'
+                    value=''
+                  />
                   <Button outlined onClick={() => this.openDialog(true) }>
                     Delete
                   </Button>

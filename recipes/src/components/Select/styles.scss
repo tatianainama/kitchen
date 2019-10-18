@@ -19,3 +19,9 @@
 .mdc-select:after {
   background-color: white;
 }
+
+.cbk-select-2 {
+  @include box();
+  @include button-reset();
+  @include button();
+}

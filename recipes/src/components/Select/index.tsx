@@ -39,4 +39,15 @@ class CBKSelect extends React.Component<CBKSelectProps> {
   }
 }
 
+export const CBKSelect2: React.FunctionComponent<CBKSelectProps> = (props) => (
+  <select defaultValue={props.value || ''} className='cbk-select-2' onChange={props.onChange}>
+    <option value='' disabled> {props.label} </option>
+    { 
+      props.options.map(option => (
+        <option key={option.value} disabled={option.disabled} value={option.value}> {option.label} </option>
+      ))
+    }
+  </select>
+)
+
 export default CBKSelect
