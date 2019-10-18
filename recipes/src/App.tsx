@@ -2,11 +2,11 @@ import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom"
 import React, { Component, Props } from 'react';
 import { Provider } from 'react-redux';
 import CBKDrawer from './components/Drawer';
-import { Grid, Row } from '@material/react-layout-grid';
-import List, { ListItem, ListItemText } from '@material/react-list';
+import Toast from 'components/Toast';
 import configureStore from 'store/configureStore';
 import './styles/app.scss';
 import "@material/react-layout-grid/dist/layout-grid.min.css";
+
 import Routes, { RouteWithSubRoutes } from 'route.config';
 
 function Index() {
@@ -27,6 +27,7 @@ const App = () => {
   ];
   return (
     <Provider store={store}>
+      <Toast />
       <Router>
         <div className="cbk-app-drawer">
         <CBKDrawer>

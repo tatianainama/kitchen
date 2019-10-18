@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { bindActionCreators } from 'redux';
 import { remove, equals } from 'ramda';
+import { toast } from "react-toastify";
 
 import Button from 'components/Button';
 import Dialog from 'components/Dialog';
@@ -16,6 +17,7 @@ import { AppState } from 'store/configureStore';
 
 import { combineMultipleItems } from '../services';
 import { GetMeasure } from 'services/measurements';
+
 import './styles.scss';
 
 type shoppingCartActionTypes = typeof shoppingCartActions;
@@ -97,10 +99,10 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
         this.props.mergeItemsCart(this.state.selected, combineMultipleItems(this.state.selected));
         this.clearSelection();
       } catch(error) {
-        console.log(error)
+        toast.error("There was an error merging items:", error);
       }
     } else {
-      console.log('one or more items do not match one of the selected measurements')
+      toast.error("There was an error merging items: one or more items have different measure types");
     }
   }
 
@@ -121,7 +123,7 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
       const sort: SortType = parseInt(event.target.value);
       this.props.sortCart(sort);
     } catch (error) {
-      console.log('error while trying to sort items', error)
+      toast.error("There was an error sorting items: ", error);
     }
   }
 

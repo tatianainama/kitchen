@@ -1,0 +1,15 @@
+@import 'styles/_variables.scss';
+
+.cbk-toast .Toastify{
+  &__toast {
+    background-color: white;
+    @include solidBoxShadow();
+    &-body {
+      @include display();
+      color: $grey-900;     
+    }
+  }
+  &__close-button {
+    color: black;
+  }
+}
