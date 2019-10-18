@@ -3,6 +3,10 @@
 .cbk-shopping-cart-view {
   margin: $spacing-small;
   @include box();
+  &--empty {
+    padding: $spacing-regular;
+    text-align: center;
+  }
   &__items {
     .cbk-shopping-list {
       column-count: 2;

@@ -100,7 +100,6 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
       try {
         const result = this.props.mergeItemsCart(this.state.selected, combineMultipleItems(this.state.selected));
         this.clearSelection(() => {
-          this.selectItem(result.payload.newItem);
           this.setState({
             saveDisabled: false
           })
