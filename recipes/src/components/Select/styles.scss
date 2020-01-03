@@ -24,4 +24,10 @@
   @include box();
   @include button-reset();
   @include button();
+  option {
+    &:focus,
+    &:checked {
+      background-color: $yellow;
+    }
+  }
 }
