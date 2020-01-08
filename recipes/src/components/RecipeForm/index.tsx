@@ -11,7 +11,8 @@ import Dialog from 'components/DialogConverter';
 import { GetMeasure } from 'services/measurements';
 
 //@ts-ignore
-import { Field, FieldArray, FormikProps, ArrayHelpers, Formik } from 'formik';
+import { Field, FieldArray, FormikProps, ArrayHelpers, Formik, useField, Form, FieldAttributes } from 'formik';
+import TextField from '@material/react-text-field';
 
 type RecipeFormProps<T> = {
   initialValues: T,
@@ -227,10 +228,10 @@ const RenderForm = ({
   
       <h5>Ingredients</h5>
       <section>
-        <FieldArray
+        {/* <FieldArray
           name='ingredients'
           component={SubrecipeForm}
-        />
+        /> */}
       </section>
   
       <h5>Instructions</h5>
@@ -264,13 +265,126 @@ const RenderForm = ({
   );
 }
 
+type FormikInputProps = {
+  [x: string]: any,
+  label?: string,
+  name: string,
+};
+
+const FormikInput = ({label, ...props}: FormikInputProps) => {
+  const [field, meta] = useField(props);
+  return (
+    <>
+      {
+        label && (<label htmlFor={props.id || props.name}>{label}</label>)
+      }
+      <input className="text-input" {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+    </>
+  )
+}
+
 const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: RecipeFormProps<T>) => (
-  <Formik
+  <>
+  <div>
+    <h4>New form</h4>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values) => {
+        console.log('submit', values)
+      }}
+    >
+      <Grid>
+      <Form className='cbk-recipe-form'>
+      <Row>
+        <Cell columns={2}>
+          <img src={sample_image} style={{ width: '100%' }}/>
+        </Cell>
+        <Cell columns={10}>
+          <Field name='name' render={Input('name')}/>
+  
+          <Field name='summary' render={Input('summary', 'textarea')}/>
+        </Cell>
+      </Row>
+      
+      <h5>Author Information</h5>
+      <section>
+        <Row>
+          <Cell columns={3}>
+            <Field name='author.name' render={Input('name')}/>
+          </Cell>
+          <Cell columns={3}>
+            <Field name='author.website' render={Input('website')}/>
+          </Cell>
+        </Row>
+      </section>
+  
+      <h5>Recipe Information</h5>
+      <section>
+        <Row>
+          <Cell columns={3}>
+            <Field name='details.preparationTime' render={Input('preparation time')}/>
+          </Cell>
+          <Cell columns={3}>
+            <Field name='details.cookingTime' render={Input('cooking time')}/>
+          </Cell>
+          <Cell columns={3}>
+            <Field name='details.servings' render={Input('servings', 'number')}/>
+          </Cell>
+          <Cell columns={3}>
+            <Field name='details.url' render={Input('recipe url')}/>
+          </Cell>
+        </Row>
+      </section>
+  
+      <h5>Ingredients</h5>
+      <section>
+        <FieldArray
+          name='ingredients'
+          component={SubrecipeForm}
+        />
+      </section>
+  
+      <h5>Instructions</h5>
+      {/* <section>
+        <FieldArray
+          name='instructions'
+          render={({remove, push}:ArrayHelpers) => (
+            <div>
+              {
+                values.instructions.map((instruction: string, instructionIdx: number) => (
+                  <Row key={instructionIdx}>
+                    <Cell columns={11}>
+                      <Field name={`instructions[${instructionIdx}]`}/>
+                    </Cell>
+                    <Cell columns={1}>
+                      <Button icon='clear' onClick={() => remove(instructionIdx)} small></Button>
+                    </Cell>
+                  </Row>
+                ))
+              }
+              <Button type="button" onClick={() => push('')}>Add instruction</Button>
+            </div>
+          )}
+        />
+      </section> */}
+      <Button type='submit' raised unelevated>Submit</Button>
+      </Form>
+    </Grid>
+    </Formik>
+  </div>
+  {/* <Formik
     enableReinitialize
     initialValues={initialValues}
     onSubmit={(values: any, actions:any) => onSubmit(values)}
-    render={RenderForm}
-  />
+  >
+    {
+      (props: any) => RenderForm(props)
+    }
+  </Formik> */}
+  </>
 );
 
 export default RecipeForm;
