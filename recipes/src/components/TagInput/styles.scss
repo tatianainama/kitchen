@@ -3,11 +3,9 @@
 .cbk-tag-input {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
 
-  .mdc-text-field {
-    grid-column-end: span 3;
-    width: auto!important;
+  .cbk-light-input {
+    flex-basis: 25%;
   }
 
   .mdc-chip__text {

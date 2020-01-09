@@ -9,9 +9,10 @@ import { LightInput as Input } from 'components/Input';
 import Button from 'components/Button';
 import Dialog from 'components/DialogConverter';
 import { GetMeasure } from 'services/measurements';
+import TagInput from 'components/TagInput';
 
 //@ts-ignore
-import { Field, FieldArray, FormikProps, ArrayHelpers, Formik, useField, Form, FieldAttributes } from 'formik';
+import { Field, FieldArray, FormikProps, ArrayHelpers, Formik, useField, Form, FieldAttributes, FieldArrayRenderProps } from 'formik';
 import TextField from '@material/react-text-field';
 
 type RecipeFormProps<T> = {
@@ -88,7 +89,7 @@ const SubrecipeForm = (props: any) => {
         </Row>
         <FieldArray
           name={`ingredients[${selectedTab}].ingredients`}
-          render={ (ingredientHelpers: any) => {
+          component={ (ingredientHelpers: any) => {
             return (
               <div>
                 {
@@ -177,94 +178,6 @@ const SubrecipeForm = (props: any) => {
   )
 }
 
-const RenderForm = ({
-  values,
-  handleChange,
-  handleSubmit
-}: FormikProps<Recipe|DBRecipe>) => {
-  return (
-    <Grid>
-      <form onSubmit={handleSubmit} className='cbk-recipe-form'>
-      <Row>
-        <Cell columns={2}>
-          <img src={sample_image} style={{ width: '100%' }}/>
-        </Cell>
-        <Cell columns={10}>
-          <Field name='name' render={Input('name')}/>
-  
-          <Field name='summary' render={Input('summary', 'textarea')}/>
-        </Cell>
-      </Row>
-      
-      <h5>Author Information</h5>
-      <section>
-        <Row>
-          <Cell columns={3}>
-            <Field name='author.name' render={Input('name')}/>
-          </Cell>
-          <Cell columns={3}>
-            <Field name='author.website' render={Input('website')}/>
-          </Cell>
-        </Row>
-      </section>
-  
-      <h5>Recipe Information</h5>
-      <section>
-        <Row>
-          <Cell columns={3}>
-            <Field name='details.preparationTime' render={Input('preparation time')}/>
-          </Cell>
-          <Cell columns={3}>
-            <Field name='details.cookingTime' render={Input('cooking time')}/>
-          </Cell>
-          <Cell columns={3}>
-            <Field name='details.servings' render={Input('servings', 'number')}/>
-          </Cell>
-          <Cell columns={3}>
-            <Field name='details.url' render={Input('recipe url')}/>
-          </Cell>
-        </Row>
-      </section>
-  
-      <h5>Ingredients</h5>
-      <section>
-        {/* <FieldArray
-          name='ingredients'
-          component={SubrecipeForm}
-        /> */}
-      </section>
-  
-      <h5>Instructions</h5>
-      <section>
-        <FieldArray
-          name='instructions'
-          render={({remove, push}:ArrayHelpers) => (
-            <div>
-              {
-                values.instructions.map((instruction: string, instructionIdx: number) => (
-                  <Row key={instructionIdx}>
-                    <Cell columns={11}>
-                      <Field name={`instructions[${instructionIdx}]`}/>
-                    </Cell>
-                    <Cell columns={1}>
-                      <Button icon='clear' onClick={() => remove(instructionIdx)} small></Button>
-                    </Cell>
-                  </Row>
-                ))
-              }
-              <Button type="button" onClick={() => push('')}>Add instruction</Button>
-            </div>
-          )}
-        />
-      </section>
-      <Button type='submit' raised unelevated>Submit</Button>
-      </form>
-    </Grid>
-    
-      
-  );
-}
-
 type FormikInputProps = {
   [x: string]: any,
   label?: string,
@@ -296,83 +209,99 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
         console.log('submit', values)
       }}
     >
-      <Grid>
-      <Form className='cbk-recipe-form'>
-      <Row>
-        <Cell columns={2}>
-          <img src={sample_image} style={{ width: '100%' }}/>
-        </Cell>
-        <Cell columns={10}>
-          <Field name='name' render={Input('name')}/>
-  
-          <Field name='summary' render={Input('summary', 'textarea')}/>
-        </Cell>
-      </Row>
-      
-      <h5>Author Information</h5>
-      <section>
-        <Row>
-          <Cell columns={3}>
-            <Field name='author.name' render={Input('name')}/>
-          </Cell>
-          <Cell columns={3}>
-            <Field name='author.website' render={Input('website')}/>
-          </Cell>
-        </Row>
-      </section>
-  
-      <h5>Recipe Information</h5>
-      <section>
-        <Row>
-          <Cell columns={3}>
-            <Field name='details.preparationTime' render={Input('preparation time')}/>
-          </Cell>
-          <Cell columns={3}>
-            <Field name='details.cookingTime' render={Input('cooking time')}/>
-          </Cell>
-          <Cell columns={3}>
-            <Field name='details.servings' render={Input('servings', 'number')}/>
-          </Cell>
-          <Cell columns={3}>
-            <Field name='details.url' render={Input('recipe url')}/>
-          </Cell>
-        </Row>
-      </section>
-  
-      <h5>Ingredients</h5>
-      <section>
-        <FieldArray
-          name='ingredients'
-          component={SubrecipeForm}
-        />
-      </section>
-  
-      <h5>Instructions</h5>
-      {/* <section>
-        <FieldArray
-          name='instructions'
-          render={({remove, push}:ArrayHelpers) => (
-            <div>
-              {
-                values.instructions.map((instruction: string, instructionIdx: number) => (
-                  <Row key={instructionIdx}>
-                    <Cell columns={11}>
-                      <Field name={`instructions[${instructionIdx}]`}/>
-                    </Cell>
-                    <Cell columns={1}>
-                      <Button icon='clear' onClick={() => remove(instructionIdx)} small></Button>
-                    </Cell>
-                  </Row>
-                ))
-              }
-              <Button type="button" onClick={() => push('')}>Add instruction</Button>
-            </div>
-          )}
-        />
-      </section> */}
-      <Button type='submit' raised unelevated>Submit</Button>
-      </Form>
-    </Grid>
+      {
+        ({setFieldValue, submitForm}) => (
+          <Grid>
+            <Form className='cbk-recipe-form'>
+            <Row>
+              <Cell columns={2}>
+                <img src={sample_image} style={{ width: '100%' }}/>
+              </Cell>
+              <Cell columns={10}>
+                <Field name='name' component={Input('name')}/>
+        
+                <Field name='summary' component={Input('summary', 'textarea')}/>
+              </Cell>
+            </Row>
+            
+            <h5>Author Information</h5>
+            <section>
+              <Row>
+                <Cell columns={3}>
+                  <Field name='author.name' component={Input('name')}/>
+                </Cell>
+                <Cell columns={3}>
+                  <Field name='author.website' component={Input('website')}/>
+                </Cell>
+              </Row>
+            </section>
+        
+            <h5>Recipe Information</h5>
+            <section>
+              <Row>
+                <Cell columns={3}>
+                  <Field name='details.preparationTime' component={Input('preparation time')}/>
+                </Cell>
+                <Cell columns={3}>
+                  <Field name='details.cookingTime' component={Input('cooking time')}/>
+                </Cell>
+                <Cell columns={3}>
+                  <Field name='details.servings' component={Input('servings', 'number')}/>
+                </Cell>
+                <Cell columns={3}>
+                  <Field name='details.url' component={Input('recipe url')}/>
+                </Cell>
+              </Row>
+              <Row>
+                <Cell columns={12}>
+                  <div>
+                    <TagInput
+                      label='tags'
+                      onNewTag={(tags) => {
+                        setFieldValue('tags', tags)
+                      }}
+                    />
+                  </div>
+                </Cell>
+              </Row>
+            </section>
+        
+            <h5>Ingredients</h5>
+            <section>
+              {/* <FieldArray
+                name='ingredients'
+                render={SubrecipeForm}
+              /> */}
+            </section>
+        
+            <h5>Instructions</h5>
+            {/* <section>
+              <FieldArray
+                name='instructions'
+                component={({remove, push}:ArrayHelpers) => (
+                  <div>
+                    {
+                      values.instructions.map((instruction: string, instructionIdx: number) => (
+                        <Row key={instructionIdx}>
+                          <Cell columns={11}>
+                            <Field name={`instructions[${instructionIdx}]`}/>
+                          </Cell>
+                          <Cell columns={1}>
+                            <Button icon='clear' onClick={() => remove(instructionIdx)} small></Button>
+                          </Cell>
+                        </Row>
+                      ))
+                    }
+                    <Button type="button" onClick={() => push('')}>Add instruction</Button>
+                  </div>
+                )}
+              />
+            </section> */}
+            <Button type='button' raised unelevated onClick={() => submitForm()} >Submit</Button>
+            </Form>
+          </Grid>
+        )
+      }
     </Formik>
   </div>
   {/* <Formik

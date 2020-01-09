@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { ChipSet, Chip } from '@material/react-chips';
 import MaterialIcon from '@material/react-material-icon';
-import Input from 'components/Input';
+import Input, {LightInputNotFormk} from 'components/Input';
+import { uniq } from 'ramda';
 
 import './styles.scss';
 
@@ -18,7 +19,7 @@ type TagInputProps = {
 }
 
 type TagInputState = {
-  tags: Tag[],
+  tags: string[],
   newTag: string,
 }
 
@@ -26,54 +27,53 @@ class TagInput extends Component<TagInputProps, TagInputState> {
   
   constructor(props: TagInputProps) {
     super(props);
-    const tags = props.initialValues ? props.initialValues.map(this.mkTag) : [];
     this.state = {
-      tags: tags,
+      tags: props.initialValues || [],
       newTag: '',
     }
   }
   
-  mkTag = (tagLike: string): Tag => ({
-    label: tagLike,
-    id: tagLike.replace(/\s/g,''),
-  })
+  mkTagId = (tag: string) => tag.replace(/\s/g,'');
 
-  updateTags = (newTags: Tag[]) => {
+  updateTags = (newTags: string[]) => {
     this.setState({
       tags: newTags,
-      newTag: '',
+      newTag: ''
     });
-    this.props.onNewTag(newTags.map(t => t.label||''))
+    this.props.onNewTag(newTags);
   }
 
   handleKeyDown = (e: any) => {
     const label = e.target.value;
     if (!!label && e.key === 'Enter') {
-      this.updateTags(this.state.tags.concat([this.mkTag(label)]))
+      this.updateTags(uniq([...this.state.tags, label]));
     }
   }
 
   render() {
     return (
       <div className="cbk-tag-input">
-        <Input
+        <LightInputNotFormk
+          label={this.props.label}
           value={this.state.newTag}
-          label={this.props.label || 'Tags'}
-          onChange={(e) => this.setState({newTag: e.currentTarget.value})}
+          onChange={(e: any) => this.setState({newTag: e.currentTarget.value})}
           onKeyDown={this.handleKeyDown}
-          icon='waiter'
         />
         <ChipSet
           input
-          updateChips={this.updateTags}
+          updateChips={(chips) => this.updateTags(chips.map(chip => chip.label || ''))}
         >
-          {this.state.tags.map((tag: any) =>
-            <Chip
-              id={tag.id}
-              key={tag.id}
-              label={tag.label}
-              trailingIcon={<MaterialIcon icon='cancel' />}
-            />
+          {this.state.tags.map((tag) => {
+            const id = this.mkTagId(tag);
+            return (
+              <Chip
+                id={id}
+                key={id}
+                label={tag}
+                trailingIcon={<MaterialIcon icon='cancel' />}
+              />
+            )
+          }
           )}
         </ChipSet>
       </div>

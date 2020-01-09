@@ -127,4 +127,24 @@ export const LightInput = (label?: string, type = 'text') => ({ field }: FieldPr
 	);
 };
 
+type NoFormikProps = {
+	[x: string]: any,
+	label?: string,
+	type?: 'input' | 'textarea',
+}
+export const LightInputNotFormk = ({label, type = 'input', ...props }: NoFormikProps) => {
+	const Tag = type;
+	return (
+		<div className="cbk-light-input">
+			{ label && (<label>{label}</label>)}
+			<Tag
+				className={props.value ? 'has-value': ''}
+				type={type}
+				{...props}
+			/>
+			<span></span>
+		</div>
+	)
+}
+
 export default Input;
