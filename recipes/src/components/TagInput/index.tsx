@@ -2,15 +2,10 @@
 import React, { Component } from 'react';
 import { ChipSet, Chip } from '@material/react-chips';
 import MaterialIcon from '@material/react-material-icon';
-import Input, {LightInputNotFormk} from 'components/Input';
+import { Input } from 'components/Input';
 import { uniq } from 'ramda';
 
 import './styles.scss';
-
-interface Tag {
-  label?: string,
-  id?: string
-};
 
 type TagInputProps = {
   onNewTag: (tags: string[]) => void,
@@ -53,7 +48,7 @@ class TagInput extends Component<TagInputProps, TagInputState> {
   render() {
     return (
       <div className="cbk-tag-input">
-        <LightInputNotFormk
+        <Input
           label={this.props.label}
           value={this.state.newTag}
           onChange={(e: any) => this.setState({newTag: e.currentTarget.value})}

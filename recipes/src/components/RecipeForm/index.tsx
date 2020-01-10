@@ -1,11 +1,11 @@
-import React, { useState, Component } from 'react';
+import React, { useState, Component, JSXElementConstructor } from 'react';
 
 import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe, DBRecipe } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
 import sample_image from 'sample.png';
 import { MeasuresTypes } from 'services/measurements';
-import { LightInput as Input } from 'components/Input';
+import { Input, Textarea } from 'components/Input';
 import Button from 'components/Button';
 import Dialog from 'components/DialogConverter';
 import { GetMeasure } from 'services/measurements';
@@ -180,24 +180,43 @@ const SubrecipeForm = (props: any) => {
 
 type FormikInputProps = {
   [x: string]: any,
-  label?: string,
   name: string,
+  label?: string,
 };
 
-const FormikInput = ({label, ...props}: FormikInputProps) => {
+const FormikInput = ({ label, ...props }: FormikInputProps)  => {
   const [field, meta] = useField(props);
   return (
     <>
-      {
-        label && (<label htmlFor={props.id || props.name}>{label}</label>)
-      }
-      <input className="text-input" {...field} {...props} />
+      <Input
+        label={label}
+        { ...props }
+        { ...field }
+      />
+      {/* TODO: Add validation errors when onSubmit */}
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
       ) : null}
     </>
-  )
-}
+  );
+};
+
+const FormikTextarea = ({ label, ...props }: FormikInputProps)  => {
+  const [field, meta] = useField(props);
+  return (
+    <>
+      <Textarea
+        label={label}
+        { ...props }
+        { ...field }
+      />
+      {/* TODO: Add validation errors when onSubmit */}
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+    </>
+  );
+};
 
 const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: RecipeFormProps<T>) => (
   <>
@@ -218,9 +237,9 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                 <img src={sample_image} style={{ width: '100%' }}/>
               </Cell>
               <Cell columns={10}>
-                <Field name='name' component={Input('name')}/>
+                <FormikInput name='name' label='name' />
         
-                <Field name='summary' component={Input('summary', 'textarea')}/>
+                <FormikTextarea name='summary' label='summary' />
               </Cell>
             </Row>
             
@@ -228,10 +247,10 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             <section>
               <Row>
                 <Cell columns={3}>
-                  <Field name='author.name' component={Input('name')}/>
+                  <FormikInput name='author.name' label='name' />
                 </Cell>
                 <Cell columns={3}>
-                  <Field name='author.website' component={Input('website')}/>
+                  <FormikInput name='author.website' label='website' />
                 </Cell>
               </Row>
             </section>
@@ -240,16 +259,16 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             <section>
               <Row>
                 <Cell columns={3}>
-                  <Field name='details.preparationTime' component={Input('preparation time')}/>
+                  <FormikInput name='details.preparationTime' label='preparation time' />
                 </Cell>
                 <Cell columns={3}>
-                  <Field name='details.cookingTime' component={Input('cooking time')}/>
+                  <FormikInput name='details.cookingTime' label='cooking time' />
                 </Cell>
                 <Cell columns={3}>
-                  <Field name='details.servings' component={Input('servings', 'number')}/>
+                  <FormikInput name='details.servings' label='servings' type='number' />
                 </Cell>
                 <Cell columns={3}>
-                  <Field name='details.url' component={Input('recipe url')}/>
+                  <FormikInput name='details.url' label='recipe url' />
                 </Cell>
               </Row>
               <Row>

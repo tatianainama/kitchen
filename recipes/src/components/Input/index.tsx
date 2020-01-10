@@ -1,94 +1,8 @@
-import React, { InputHTMLAttributes } from 'react';
-import TextField, { HelperText, Input as Field } from '@material/react-text-field';
-import classNames from 'classnames';
-import Button from 'components/Button';
-import Icon from '../Icon';
+import React, { InputHTMLAttributes, ChangeEvent } from 'react';
 import {FieldProps} from 'formik';
+
 import '@material/react-text-field/dist/text-field.css';
 import './styles.scss';
-
-type InputProps = {
-	label: string,
-	value: string|number,
-	onChange: (e: any) => void,
-	textarea?: boolean,
-	onKeyDown? : (e: any) => void,
-	onBlur?: (e: React.FocusEvent) => void,
-	type?: 'text'|'number',
-	style?: 'display'|'regular',
-	icon?: string,
-	button?: {
-		icon: string,
-		onClick: () => void,
-	},
-	field?: any,
-	className?: string,
-};
-
-const Input = ({
-	label,
-	textarea,
-	value,
-	onChange,
-	onKeyDown,
-	onBlur,
-	type = 'text',
-	style = 'regular',
-	icon,
-	button,
-	field = { name: '', value: '', onBlur: ()=>{}, onChange: ()=>{}},
-	className = '',
-
-}: InputProps) => {
-	const fieldClasses = classNames(
-		'cbk-input',
-		{
-			'cbk-input--prefilled': value!=='',
-			[`cbk-input-${style}`]: true,
-			'mdc-text-field--no-label': style === 'display',
-		}
-	);
-	const containerClasses = classNames({
-		'cbk-input-container': !!icon || !!button,
-		[className]: className,
-	})
-
-	return (
-		<div className={containerClasses}>
-			{
-				icon && 
-				<Icon
-					icon={icon}
-					width={46}
-					fill='#9E9E9E'
-				/>
-			}
-			<div className="cbk-input-box">
-				<TextField
-					label={field.name || label}
-					textarea={textarea}
-					className={fieldClasses}
-					fullWidth={style === 'display'}
-				>
-					<Field
-						value={value}
-						//@ts-ignore
-						onChange={onChange}
-						onKeyDown={onKeyDown}
-						onBlur={onBlur}
-						type={type}
-						min={0}
-						rows={1}
-						placeholder={style === 'display' ? label : ''}
-					/>
-				</TextField>
-			</div>
-			{
-				button && 
-				<Button className='cbk-input-button' onClick={button.onClick} icon={button.icon} />
-			}
-		</div>
-)};
 
 export const Input2: React.FunctionComponent<InputHTMLAttributes<{}>> = (props) => (
 	<div className='cbk-input-2'>
@@ -99,47 +13,39 @@ export const Input2: React.FunctionComponent<InputHTMLAttributes<{}>> = (props) 
 	</div>
 )
 
-interface LightInputProps extends FieldProps {
-	label?: string,
-	type?: 'textarea' | 'text' | 'number',
-};
-
-export const LightInput = (label?: string, type = 'text') => ({ field }: FieldProps) => {
-	const Tag = type === 'textarea' ? 'textarea' : 'input';
-
-	return (
-		<div className="cbk-light-input">
-			{ label && (<label>{label}</label>)}
-			<Tag
-				className={field.value ? 'has-value': ''}
-				type={type}
-				{...field}
-
-			/>
-			{/* {
-				type === 'text' ?
-				(<input className={field.value ? 'has-value': ''} type="text" onChange={field.onChange} name={field.name} onBlur={field.onBlur} />) :
-				(<textarea className={field.value ? 'has-value': ''} onChange={field.onChange} name={field.name} onBlur={field.onBlur} />)
-			} */}
-			
-			<span></span>
-		</div>
-	);
-};
-
-type NoFormikProps = {
+type InputProps = {
 	[x: string]: any,
 	label?: string,
-	type?: 'input' | 'textarea',
+	type?: 'text' | 'number' ,
+	onChange?: (e: React.FormEvent<HTMLInputElement>) => void,
 }
-export const LightInputNotFormk = ({label, type = 'input', ...props }: NoFormikProps) => {
-	const Tag = type;
+export const Input = ({label, type = 'text', ...props }: InputProps) => {
 	return (
 		<div className="cbk-light-input">
-			{ label && (<label>{label}</label>)}
-			<Tag
+			{ label && (<label htmlFor={props.name}>{label}</label>)}
+			<input
 				className={props.value ? 'has-value': ''}
 				type={type}
+				{...props}
+			/>
+			<span></span>
+		</div>
+	)
+}
+
+type TextareaProps = {
+	[x: string]: any,
+	label?: string,
+	type?: 'text' | 'number' ,
+	onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void,
+}
+
+export const Textarea = ({label, type = 'text', ...props }: TextareaProps) => {
+	return (
+		<div className="cbk-light-input">
+			{ label && (<label htmlFor={props.name}>{label}</label>)}
+			<textarea
+				className={props.value ? 'has-value': ''}
 				{...props}
 			/>
 			<span></span>
