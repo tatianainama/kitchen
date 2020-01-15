@@ -1,11 +1,11 @@
-import React, { useState, Component, JSXElementConstructor } from 'react';
+import React, { useState, forwardRef } from 'react';
 
 import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe, DBRecipe } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import './styles.scss';
 import sample_image from 'sample.png';
 import { MeasuresTypes } from 'services/measurements';
-import { Input, Textarea } from 'components/Input';
+import { Input, Textarea, ControlledInput } from 'components/Input';
 import Button from 'components/Button';
 import Dialog from 'components/DialogConverter';
 import { GetMeasure } from 'services/measurements';
@@ -184,7 +184,7 @@ type FormikInputProps = {
   label?: string,
 };
 
-const FormikInput = ({ label, ...props }: FormikInputProps)  => {
+const FormikInput = ({ label, ...props }:FormikInputProps)  => {
   const [field, meta] = useField(props);
   return (
     <>
@@ -200,6 +200,24 @@ const FormikInput = ({ label, ...props }: FormikInputProps)  => {
     </>
   );
 };
+
+const FormikFocusInput = forwardRef<HTMLInputElement, FormikInputProps>(({ label, ...props }, ref)  => {
+  const [field, meta] = useField(props);
+  return (
+    <>
+      <ControlledInput
+        ref={ref}
+        label={label}
+        { ...props }
+        { ...field }
+      />
+      {/* TODO: Add validation errors when onSubmit */}
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+    </>
+  );
+});
 
 const FormikTextarea = ({ label, ...props }: FormikInputProps)  => {
   const [field, meta] = useField(props);
@@ -228,7 +246,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
   <div>
     <h4>New form</h4>
     <Formik
-      enableReinitialize 
+      enableReinitialize
       initialValues={initialValues}
       onSubmit={(values) => {
         console.log('submit', values)
@@ -350,7 +368,14 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                                     <div key={index} className='ingredients-form-item'>
                                       <Row className='ingredient-detail'>
                                         <Cell columns={4}>
-                                          <FormikInput name={`ingredients[${selectedTab}].ingredients[${index}].name`} />
+                                          <FormikFocusInput name={`ingredients[${selectedTab}].ingredients[${index}].name`} 
+                                            ref={(ref: any) => {
+                                              if(index === array.length-1 && ref && focusLast) {
+                                                ref.focus();
+                                                setFocusLast(false);
+                                              }
+                                            }}
+                                          />
                                         </Cell>
                                         <Cell columns={1}>
                                           <FormikInput name={`ingredients[${selectedTab}].ingredients[${index}].quantity`} type='number'/>

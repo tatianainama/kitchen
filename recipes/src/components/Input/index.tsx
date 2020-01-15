@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, ChangeEvent } from 'react';
+import React, { InputHTMLAttributes, ChangeEvent, forwardRef } from 'react';
 import {FieldProps} from 'formik';
 
 import '@material/react-text-field/dist/text-field.css';
@@ -19,6 +19,7 @@ type InputProps = {
 	type?: 'text' | 'number' ,
 	onChange?: (e: React.FormEvent<HTMLInputElement>) => void,
 }
+
 export const Input = ({label, type = 'text', ...props }: InputProps) => {
 	return (
 		<div className="cbk-light-input">
@@ -32,6 +33,21 @@ export const Input = ({label, type = 'text', ...props }: InputProps) => {
 		</div>
 	)
 }
+
+export const ControlledInput = forwardRef<HTMLInputElement, InputProps>(({label, type = 'text', ...props }, ref) => {
+	return (
+		<div className="cbk-light-input">
+			{ label && (<label htmlFor={props.name}>{label}</label>)}
+			<input
+				ref={ref}
+				className={props.value ? 'has-value': ''}
+				type={type}
+				{...props}
+			/>
+			<span></span>
+		</div>
+	)
+})
 
 type TextareaProps = {
 	[x: string]: any,
