@@ -228,6 +228,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
   <div>
     <h4>New form</h4>
     <Formik
+      enableReinitialize 
       initialValues={initialValues}
       onSubmit={(values) => {
         console.log('submit', values)

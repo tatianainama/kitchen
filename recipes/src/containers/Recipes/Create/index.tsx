@@ -2,6 +2,7 @@ import React from 'react';
 import { assocPath, remove } from 'ramda';
 import  Navbar from 'components/Navbar';
 import Input from 'components/Input';
+import Button from 'components/Button';
 import RecipeForm from 'components/RecipeForm';
 import {  } from 'react-router';
 
@@ -70,11 +71,8 @@ class CreateRecipe extends React.Component<any, CreateRecipeState> {
             label='scrape recipe'
             value={scrapeUrl}
             onChange={(e: any)=> this.setState({scrapeUrl: e.currentTarget.value})}
-            button={{
-              icon: 'format_shapes',
-              onClick: this.scrapeRecipe
-            }}
           />
+          <Button onClick={this.scrapeRecipe}>Scrape</Button>
         </Navbar>
         
         <div className="cbk-create-recipe">
