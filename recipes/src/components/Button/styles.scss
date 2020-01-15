@@ -29,6 +29,7 @@ button.cbk-btn {
 
   &:focus {
     outline: 0;
+    background-color: $grey-300;
   }
   
   &:hover {
@@ -59,7 +60,8 @@ button.cbk-btn {
     @include solidBoxShadow();
     position: relative;
     
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: $black;
       color: $white;
       @include solidBoxShadow();
@@ -86,7 +88,8 @@ button.cbk-btn {
     background-color: $black;
     border: 3px solid $black;
     color: $white;
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: $black;
       box-shadow: 3px 3px $yellow;
     }
@@ -107,7 +110,8 @@ button.cbk-btn {
     border: 3px solid black;
     color: black;
     
-    &:hover {
+    &:hover,
+    &:focus {
       border: 3px solid black;
       color: black;
       background-image: linear-gradient(
