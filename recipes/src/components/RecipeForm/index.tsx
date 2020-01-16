@@ -343,10 +343,10 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                       </ul>
                       <div className='ingredients-form'>
                         <Row className='ingredients-form-header'>
-                          <Cell columns={4}>
+                          <Cell columns={3}>
                             Ingredient Name
                           </Cell>
-                          <Cell columns={1}>
+                          <Cell columns={2}>
                             Quantity
                           </Cell>
                           <Cell columns={1}>
@@ -367,7 +367,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                                   values.ingredients[selectedTab] && values.ingredients[selectedTab].ingredients.map((ingredient, index, array) => (
                                     <div key={index} className='ingredients-form-item'>
                                       <Row className='ingredient-detail'>
-                                        <Cell columns={4}>
+                                        <Cell columns={3}>
                                           <FormikFocusInput name={`ingredients[${selectedTab}].ingredients[${index}].name`} 
                                             ref={(ref: any) => {
                                               if(index === array.length-1 && ref && focusLast) {
@@ -377,7 +377,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                                             }}
                                           />
                                         </Cell>
-                                        <Cell columns={1}>
+                                        <Cell columns={2}>
                                           <FormikInput name={`ingredients[${selectedTab}].ingredients[${index}].quantity`} type='number'/>
                                           {ingredient.unit && ingredient.quantity ? (
                                             <Dialog
@@ -388,12 +388,12 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                                         </Cell>
                                         <Cell columns={1}>
                                           <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
+                                            <option value=''></option>
                                             {
                                               measurements.map((measure, measureIdx) => (
                                                 <option key={measureIdx} value={measure}>{measure}</option>    
                                               ))
                                             }
-                                            <option value=''></option>
                                           </Field>  
                                         </Cell>
                                         <Cell columns={2}>
