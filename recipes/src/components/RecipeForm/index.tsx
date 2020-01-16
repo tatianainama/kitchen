@@ -2,18 +2,15 @@ import React, { useState, forwardRef } from 'react';
 
 import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe, DBRecipe } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
-import './styles.scss';
-import sample_image from 'sample.png';
+import { Field, FieldArray, Formik, useField, Form, FieldArrayRenderProps } from 'formik';
 import { MeasuresTypes } from 'services/measurements';
 import { Input, Textarea, ControlledInput } from 'components/Input';
 import Button from 'components/Button';
 import Dialog from 'components/DialogConverter';
-import { GetMeasure } from 'services/measurements';
 import TagInput from 'components/TagInput';
 
-//@ts-ignore
-import { Field, FieldArray, FormikProps, ArrayHelpers, Formik, useField, Form, FieldAttributes, FieldArrayRenderProps } from 'formik';
-import TextField from '@material/react-text-field';
+import sample_image from 'sample.png';
+import './styles.scss';
 
 type RecipeFormProps<T> = {
   initialValues: T,
@@ -33,149 +30,6 @@ const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingr
     }
   }
   return ingredient;
-}
-
-
-const SubrecipeForm = (props: FieldArrayRenderProps) => {
-  const {form, remove, push} = props;
-  const subrecipes = form.values.ingredients;
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [focusLast, setFocusLast] = useState(false);
-  const measurements = MeasuresTypes();
-  return (
-    <div className='subrecipe-tabs'>
-      <ul className='tab-header'>
-        {
-          subrecipes.map((subrecipe: any, subrecipeIdx: number) => (
-            <li
-              className={`tab${selectedTab === subrecipeIdx ? ' tab--selected' : ''}`}
-              key={subrecipeIdx}
-            >
-              <div className='tab__content' onClick={()=> setSelectedTab(subrecipeIdx)}> 
-                <Field name={`ingredients[${subrecipeIdx}].name`} placeholder='subrecipe name'/>
-              </div>
-              <Button
-                type='button'
-                icon='clear'
-                onClick={() => remove(subrecipeIdx)}
-                disabled={subrecipes.length === 1}
-                small
-              ></Button>
-              <span></span>
-            </li>
-          ))
-        }
-        <li className='tab tab--add'>
-          <Button type='button' icon='add' onClick={() => push({..._subRecipe})}></Button>
-        </li>
-      </ul>
-      <div className='ingredients-form'>
-        <Row className='ingredients-form-header'>
-          <Cell columns={4}>
-            Ingredient Name
-          </Cell>
-          <Cell columns={1}>
-            Quantity
-          </Cell>
-          <Cell columns={1}>
-            Unit
-          </Cell>
-          <Cell columns={2}>
-            Notes
-          </Cell>
-          <Cell columns={3}>
-            Original
-          </Cell>
-        </Row>
-        <FieldArray
-          name={`ingredients[${selectedTab}].ingredients`}
-          component={ (ingredientHelpers: any) => {
-            return (
-              <div>
-                {
-                  form.values.ingredients[selectedTab] && form.values.ingredients[selectedTab].ingredients.map((ingredient: Ingredient, index: number, array: Ingredient[]) => (
-                    <div key={index} className='ingredients-form-item'>
-                      <Row className='ingredient-detail'>
-                        <Cell columns={4}>
-                          <Field
-                            name={`ingredients[${selectedTab}].ingredients[${index}].name`}
-                            innerRef={(ref: any) => {
-                              if(index === array.length-1 && ref && focusLast) {
-                                ref.focus();
-                                setFocusLast(false);
-                              }
-                            }}
-                          />
-                        </Cell>
-                        <Cell columns={1}>
-                          <Field name={`ingredients[${selectedTab}].ingredients[${index}].quantity`} type='number'/>
-                          {ingredient.unit && ingredient.quantity ? (
-                            <Dialog
-                              measure={{unit: ingredient.unit, quantity: ingredient.quantity}}
-                              onConvert={result => ingredientHelpers.replace(index, { ...ingredient, ...result })}
-                            />
-                          ): null}
-                        </Cell>
-                        <Cell columns={1}>
-                          <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
-                            {
-                              measurements.map((measure, measureIdx) => (
-                                <option key={measureIdx} value={measure}>{measure}</option>    
-                              ))
-                            }
-                            <option value=''></option>
-                          </Field>  
-                        </Cell>
-                        <Cell columns={2}>
-                          <Field name={`ingredients[${selectedTab}].ingredients[${index}].notes`}/>
-                        </Cell>
-                        <Cell columns={3}>
-                          <Field name={`ingredients[${selectedTab}].ingredients[${index}]._original`} disabled/>
-                        </Cell>
-                        <Cell columns={1}> 
-                          <Button type='button' icon='clear' onClick={() => {
-                            ingredientHelpers.remove(index)
-                          }}
-                          disabled={form.values.ingredients[selectedTab].ingredients.length === 1}
-                          small></Button>
-                        </Cell>
-                      </Row>
-                      <div className='ingredient-suggestions'>
-                        {
-                          ingredient.suggestions && ingredient.suggestions.map((suggestion, sugIdx) => (
-                            <button
-                              className='suggestion'
-                              type='button'
-                              key={sugIdx}
-                              onClick={() => {
-                                form.setFieldValue(
-                                  `ingredients[${selectedTab}].ingredients[${index}]`,
-                                  convertIngredient(ingredient, suggestion)
-                                )
-                              }}
-                            >{suggestion.name}</button>
-                          ))
-                        }
-                      </div>
-                    </div>
-                  ))
-                }
-                <Button
-                  type='button'
-                  onClick={() => {
-                    ingredientHelpers.push({ ..._ingredient })
-                    setFocusLast(true);                    
-                  }}>
-                    add ingredient
-                  </Button>
-              </div>
-            )
-          }}
-        />
-        
-      </div>
-    </div>
-  )
 }
 
 type FormikInputProps = {
@@ -237,12 +91,11 @@ const FormikTextarea = ({ label, ...props }: FormikInputProps)  => {
 };
 
 const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: RecipeFormProps<T>) => {
-  
   const [selectedTab, setSelectedTab] = useState(0);
   const [focusLast, setFocusLast] = useState(false);
   const measurements = MeasuresTypes();
+
   return (
-  <>
   <div>
     <h4>New form</h4>
     <Formik
@@ -473,16 +326,6 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
       }
     </Formik>
   </div>
-  {/* <Formik
-    enableReinitialize
-    initialValues={initialValues}
-    onSubmit={(values: any, actions:any) => onSubmit(values)}
-  >
-    {
-      (props: any) => RenderForm(props)
-    }
-  </Formik> */}
-  </>
 )};
 
 export default RecipeForm;
