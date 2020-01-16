@@ -93,7 +93,6 @@ const FormikTextarea = ({ label, ...props }: FormikInputProps)  => {
 const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: RecipeFormProps<T>) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [focusLast, setFocusLast] = useState(false);
-  const measurements = MeasuresTypes();
 
   return (
   <div>
@@ -243,7 +242,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                                           <Field component='select' name={`ingredients[${selectedTab}].ingredients[${index}].unit`}>
                                             <option value=''></option>
                                             {
-                                              measurements.map((measure, measureIdx) => (
+                                              MeasuresTypes.map((measure, measureIdx) => (
                                                 <option key={measureIdx} value={measure}>{measure}</option>    
                                               ))
                                             }

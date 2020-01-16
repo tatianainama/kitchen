@@ -62,7 +62,7 @@ const measureValues: { [key:string]: string[] } = {
   temperature: ['C', 'F'],
 }
 
-const MeasuresTypes = (measure?: Measure) => {
+const GetMeasuresTypes = (measure?: Measure) => {
   return measure ?
   measureValues[measure] :
   [ ...measureValues.mass, ...measureValues.volume, ...measureValues.misc ]
@@ -77,7 +77,10 @@ const ParseUnit = (unit: string): Measure => {
   return 'mass';
 }
 
+const MeasuresTypes = GetMeasuresTypes();
+
 export {
+  GetMeasuresTypes,
   MeasuresTypes,
   Convert,
   ParseUnit,

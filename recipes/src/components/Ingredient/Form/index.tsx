@@ -33,7 +33,7 @@ class IngredientForm extends React.Component<IngredientFormProps, IngredientForm
   constructor(props: IngredientFormProps) {
     super(props);
     this.state = {
-      unitOptions: MeasuresTypes().map(m => ({label: m, value: m})),
+      unitOptions: MeasuresTypes.map(m => ({label: m, value: m})),
       activeGroup: 0,
       normalizeUnits: {
         tablespoon: 'tbsp',
