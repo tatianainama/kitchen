@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, useState, FunctionComponent } from 'react';
 import { ChipSet, Chip } from '@material/react-chips';
 import MaterialIcon from '@material/react-material-icon';
 import { Input } from 'components/Input';
@@ -9,71 +9,54 @@ import './styles.scss';
 
 type TagInputProps = {
   onNewTag: (tags: string[]) => void,
-  initialValues?: string[],
+  tags: string[],
   label?: string,
 }
 
-type TagInputState = {
-  tags: string[],
-  newTag: string,
-}
-
-class TagInput extends Component<TagInputProps, TagInputState> {
+export const TagInput:FunctionComponent<TagInputProps> = ({ label, onNewTag, tags }) => {
+  const [tag, setTag] = useState('');
   
-  constructor(props: TagInputProps) {
-    super(props);
-    this.state = {
-      tags: props.initialValues || [],
-      newTag: '',
-    }
-  }
-  
-  mkTagId = (tag: string) => tag.replace(/\s/g,'');
+  const mkTagId = (tag: string) => tag.replace(/\s/g,'');
 
-  updateTags = (newTags: string[]) => {
-    this.setState({
-      tags: newTags,
-      newTag: ''
-    });
-    this.props.onNewTag(newTags);
+  const updateTags = (newTags: string[]) => {
+    setTag('');
+    onNewTag(newTags);
   }
 
-  handleKeyDown = (e: any) => {
+  const handleKeyDown = (e: any) => {
     const label = e.target.value;
     if (!!label && e.key === 'Enter') {
-      this.updateTags(uniq([...this.state.tags, label]));
+      updateTags(uniq([...tags, label]));
     }
   }
 
-  render() {
-    return (
-      <div className="cbk-tag-input">
-        <Input
-          label={this.props.label}
-          value={this.state.newTag}
-          onChange={(e: any) => this.setState({newTag: e.currentTarget.value})}
-          onKeyDown={this.handleKeyDown}
-        />
-        <ChipSet
-          input
-          updateChips={(chips) => this.updateTags(chips.map(chip => chip.label || ''))}
-        >
-          {this.state.tags.map((tag) => {
-            const id = this.mkTagId(tag);
-            return (
-              <Chip
-                id={id}
-                key={id}
-                label={tag}
-                trailingIcon={<MaterialIcon icon='cancel' />}
-              />
-            )
-          }
-          )}
-        </ChipSet>
-      </div>
-    );
-  }
+  return (
+    <div className="cbk-tag-input">
+      <Input
+        label={label}
+        value={tag}
+        onChange={e => setTag(e.currentTarget.value)}
+        onKeyDown={handleKeyDown}
+      />
+      <ChipSet
+        input
+        updateChips={(chips) => updateTags(chips.map(chip => chip.label || ''))}
+      >
+        {tags && tags.map((tag) => {
+          const id = mkTagId(tag);
+          return (
+            <Chip
+              id={id}
+              key={id}
+              label={tag}
+              trailingIcon={<MaterialIcon icon='cancel' />}
+            />
+          )
+        }
+        )}
+      </ChipSet>
+    </div>
+  ) 
 }
 
 export default TagInput;

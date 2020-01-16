@@ -152,10 +152,9 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                 <Cell columns={12}>
                   <div>
                     <TagInput
+                      tags={values.tags}
                       label='tags'
-                      onNewTag={(tags) => {
-                        setFieldValue('tags', tags)
-                      }}
+                      onNewTag={(tags) => setFieldValue('tags', tags)}
                     />
                   </div>
                 </Cell>
