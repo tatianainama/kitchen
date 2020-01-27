@@ -61,19 +61,11 @@ export interface Recipe {
   summary?: string;
 }
 
-export interface ScrapedRecipe {
-  name: string;
+export interface ScrapedRecipe extends Recipe {
   ingredients: {
     name: string,
     ingredients: IngredientSuggestion[]
   }[];
-  details?: RecipeDetails;
-  instructions?: string[];
-  author?: Author;
-  website?: string;
-  tags?: string[];
-  course?: string[];
-  summary?: string;
 }
 
 export interface RecipeDB extends Recipe {

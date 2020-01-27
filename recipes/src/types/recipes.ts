@@ -50,7 +50,8 @@ export const _recipe: Recipe = {
   instructions: [ '' ],
   name: '',
   summary: '',
-  tags: []
+  tags: [],
+  course: [],
 }
 
 export interface Equivalences {
@@ -114,6 +115,7 @@ export default interface Recipe {
   name: string,
   summary: string,
   tags: string[],
+  course: string[];
 }
 
 export interface DBRecipe extends Recipe {

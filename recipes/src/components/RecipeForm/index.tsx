@@ -137,8 +137,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
               <Row>
                 <Cell columns={3}>
                   <FormikInput name='details.preparationTime' label='preparation time' />
-                </Cell>
-                <Cell columns={3}>
+                </Cell>                <Cell columns={3}>
                   <FormikInput name='details.cookingTime' label='cooking time' />
                 </Cell>
                 <Cell columns={3}>
@@ -150,13 +149,20 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
               </Row>
               <Row>
                 <Cell columns={12}>
-                  <div>
-                    <TagInput
-                      tags={values.tags}
-                      label='tags'
-                      onNewTag={(tags) => setFieldValue('tags', tags)}
-                    />
-                  </div>
+                  <TagInput
+                    tags={values.tags}
+                    label='tags'
+                    onNewTag={(tags) => setFieldValue('tags', tags)}
+                  />
+                </Cell>
+              </Row>
+              <Row>
+                <Cell columns={12}>
+                  <TagInput
+                    tags={values.course}
+                    label='dish course'
+                    onNewTag={(dishCourse) => setFieldValue('course', dishCourse)}
+                  />
                 </Cell>
               </Row>
             </section>
