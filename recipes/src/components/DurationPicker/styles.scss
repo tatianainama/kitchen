@@ -1,0 +1,12 @@
+.cbk-duration {
+  &__input {
+    display: flex;
+    .cbk-light-input {
+      label {
+        position: absolute;
+        right: 25px;
+        top: 5px;
+      }
+    }
+  }
+}

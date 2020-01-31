@@ -5,9 +5,11 @@ import { Grid, Row, Cell } from '@material/react-layout-grid';
 import { Field, FieldArray, Formik, useField, Form, FieldArrayRenderProps } from 'formik';
 import { MeasuresTypes } from 'services/measurements';
 import { Input, Textarea, ControlledInput } from 'components/Input';
+
 import Button from 'components/Button';
 import Dialog from 'components/DialogConverter';
 import TagInput from 'components/TagInput';
+import DurationPicker from 'components/DurationPicker';
 
 import sample_image from 'sample.png';
 import './styles.scss';
@@ -93,7 +95,6 @@ const FormikTextarea = ({ label, ...props }: FormikInputProps)  => {
 const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: RecipeFormProps<T>) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [focusLast, setFocusLast] = useState(false);
-
   return (
   <div>
     <h4>New form</h4>
@@ -136,8 +137,14 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             <section>
               <Row>
                 <Cell columns={3}>
-                  <FormikInput name='details.preparationTime' label='preparation time' />
-                </Cell>                <Cell columns={3}>
+                  {/* <FormikInput name='details.preparationTime' label='preparation time' /> */}
+                  <DurationPicker
+                    initialValue={initialValues.details.preparationTime}
+                    onChange={(duration)=>{ setFieldValue('details.preparationTime', duration)}} 
+                    label='preparation time'
+                  />
+                </Cell>
+                <Cell columns={3}>
                   <FormikInput name='details.cookingTime' label='cooking time' />
                 </Cell>
                 <Cell columns={3}>
@@ -161,7 +168,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                   <TagInput
                     tags={values.course}
                     label='dish course'
-                    onNewTag={(dishCourse) => setFieldValue('course', dishCourse)}
+                    onNewTag={(dishCourse) => {console.log("dish", dishCourse, values); setFieldValue('course', dishCourse)}}
                   />
                 </Cell>
               </Row>
