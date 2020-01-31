@@ -139,13 +139,17 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                 <Cell columns={3}>
                   {/* <FormikInput name='details.preparationTime' label='preparation time' /> */}
                   <DurationPicker
-                    initialValue={initialValues.details.preparationTime}
+                    initialValue={values.details.preparationTime}
                     onChange={(duration)=>{ setFieldValue('details.preparationTime', duration)}} 
                     label='preparation time'
                   />
                 </Cell>
                 <Cell columns={3}>
-                  <FormikInput name='details.cookingTime' label='cooking time' />
+                  <DurationPicker
+                    initialValue={values.details.cookingTime}
+                    onChange={(duration)=>{ setFieldValue('details.cookingTime', duration)}} 
+                    label='cooking time'
+                  />
                 </Cell>
                 <Cell columns={3}>
                   <FormikInput name='details.servings' label='servings' type='number' />
