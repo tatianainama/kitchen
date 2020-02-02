@@ -6,6 +6,7 @@ import { Field, FieldArray, Formik, useField, Form, FieldArrayRenderProps } from
 import { MeasuresTypes } from 'services/measurements';
 import { Input, Textarea, ControlledInput } from 'components/Input';
 
+import ImageUploader from 'components/ImageUploader';
 import Button from 'components/Button';
 import Dialog from 'components/DialogConverter';
 import TagInput from 'components/TagInput';
@@ -112,7 +113,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             <Form className='cbk-recipe-form'>
             <Row>
               <Cell columns={2}>
-                <img src={sample_image} style={{ width: '100%' }}/>
+                <ImageUploader/>
               </Cell>
               <Cell columns={10}>
                 <FormikInput name='name' label='name' />
