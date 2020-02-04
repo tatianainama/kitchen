@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
-import { Recipe, IIngredient, IngredientSuggestion } from './model';
+import { Recipe, IIngredient, IngredientSuggestion, RecipeDB } from './model';
 import { IMongoService } from '../mongo';
-import { FilterQuery } from 'mongodb';
+import { FilterQuery, ObjectID } from 'mongodb';
 import Scrape from './scrape/index';
 import { ScrapedRecipe } from './model';
 import Ingredient from '../ingredients/model';
@@ -44,15 +44,15 @@ const scrapeRecipe: (db: IMongoService) => ChainPController<void, ScrapedRecipe>
     })
 }
 
-const saveImage = async (recipe: Recipe) => {
+const saveImage = async (recipe: Recipe, _id: ObjectID) => {
   if (recipe.image) {
     try {
       const [ prefix, base64Img ] = recipe.image.split(',');
-      const name = `${Date.now()}.${prefix.replace('data:image/', '').split(';', 1)}`;
-      fs.writeFileSync(`${__dirname}/public/${name}`, base64Img, { encoding: 'base64'});
+      const filename = `${_id}.${prefix.replace('data:image/', '').split(';', 1)}`;
+      fs.writeFileSync(`${__dirname}/../public/${filename}`, base64Img, { encoding: 'base64'});
       return {
         ...recipe,
-        image: name
+        image: filename
       }
     } catch (e) {
       throw Error(e);
@@ -63,13 +63,11 @@ const saveImage = async (recipe: Recipe) => {
 }
 
 const save: Controller = (db) => ({ body }, res) => {
+  const _id = new ObjectID();
   return validRecipe(body)
-    //.then(saveImage)
-    .then(db.insertOne)
-    .then(dbrecipe => {
-      return dbrecipe
-    })
-    .then(res.json);
+    .then(recipe => saveImage(recipe, _id))
+    .then(recipe => db.insertOne({ ...recipe, _id }))
+    .then(dbrecipe => res.json(dbrecipe));
 };
 
 const get: Controller = (db) => ({ query }, res) => {
@@ -141,8 +139,10 @@ const update: Controller = (db) => ({params, body}, res) => {
       _original: updateOriginal(ingredient)
     }))
   }));
-  
-  return db.update<Recipe>(params.id, newRecipe).then(result => res.json(result))
+  return saveImage(newRecipe, new ObjectID(params.id)).then(
+    recipe => db.update<Recipe>(params.id, recipe).then(
+      result => res.json(result))
+  )
 }
 
 export {
