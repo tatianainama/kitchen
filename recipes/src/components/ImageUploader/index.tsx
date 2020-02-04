@@ -5,24 +5,31 @@ import Button from 'components/Button';
 import './styles.scss';
 import sample_image from 'sample.png';
 
+
 type ImageUploaderProps = {
-  onChange?: (file: File) => void;
+  onChange?: (file: string | ArrayBuffer | null) => void;
 };
 
 export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ onChange = () => {} }) => {
   const [ file, setFile ] = useState({
     name: '',
-    url: ''
+    image: ''
   });
   const fileInput: React.RefObject<HTMLInputElement> = useRef(null);
 
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile({
-        url: URL.createObjectURL(e.target.files[0]),
-        name: e.target.files[0].name
-      });
-      onChange(e.target.files[0])
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result;
+        onChange(result)
+        setFile({
+          image: JSON.stringify(result),
+          name: file.name
+        });
+      }
     }
   }
 
@@ -30,10 +37,10 @@ export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ onC
     <div className='cbk-img-uploader'>
       <input type='file' onChange={onChangeFile} ref={fileInput} accept="image/*"/>
       {
-        file.url ? (
+        file.image ? (
           <div className='cbk-img-uploader__preview'
             style={{
-              backgroundImage: `url(${file.url})`
+              backgroundImage: `url(${file.image})`
             }}
           >
             <Button
@@ -42,7 +49,7 @@ export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ onC
               icon='clear'
               onClick={() => setFile({
                 name: '',
-                url: ''
+                image: ''
               }) }
             />
             <label>{file.name}</label>

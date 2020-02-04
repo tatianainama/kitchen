@@ -6,6 +6,7 @@ import Scrape from './scrape/index';
 import { ScrapedRecipe } from './model';
 import Ingredient from '../ingredients/model';
 import { dissoc } from 'ramda';
+import fs from 'fs';
 
 function validRecipe(data: any): Promise<Recipe> {
   return new Promise(function(resolve, reject) {
@@ -18,6 +19,7 @@ type Controller = (db: IMongoService) => (req: Request, res: Response, next: Nex
 type ChainPController<T, U> = (req: Request, res: Response, next: NextFunction) => (result: T) => Promise<U>;
 
 const getSuggestions = (db: IMongoService) => async function(ingredient: IIngredient): Promise<IngredientSuggestion> {
+  // @ts-ignore: yes
   const suggestions = await db.find<Ingredient>({$text: {$search: ingredient.name}}, { score: { $meta: "textScore" } });
   return {
     ...ingredient,
@@ -42,11 +44,32 @@ const scrapeRecipe: (db: IMongoService) => ChainPController<void, ScrapedRecipe>
     })
 }
 
+const saveImage = async (recipe: Recipe) => {
+  if (recipe.image) {
+    try {
+      const [ prefix, base64Img ] = recipe.image.split(',');
+      const name = `${Date.now()}.${prefix.replace('data:image/', '').split(';', 1)}`;
+      fs.writeFileSync(`${__dirname}/public/${name}`, base64Img, { encoding: 'base64'});
+      return {
+        ...recipe,
+        image: name
+      }
+    } catch (e) {
+      throw Error(e);
+    }
+  } else {
+    return recipe;
+  }
+}
+
 const save: Controller = (db) => ({ body }, res) => {
-  return validRecipe(body).then(
-    recipe => db.insertOne(recipe).then(
-      dbRecipe => res.json(dbRecipe)
-  ));
+  return validRecipe(body)
+    //.then(saveImage)
+    .then(db.insertOne)
+    .then(dbrecipe => {
+      return dbrecipe
+    })
+    .then(res.json);
 };
 
 const get: Controller = (db) => ({ query }, res) => {

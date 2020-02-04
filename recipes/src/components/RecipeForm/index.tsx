@@ -12,7 +12,6 @@ import Dialog from 'components/DialogConverter';
 import TagInput from 'components/TagInput';
 import DurationPicker from 'components/DurationPicker';
 
-import sample_image from 'sample.png';
 import './styles.scss';
 
 type RecipeFormProps<T> = {
@@ -103,21 +102,25 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
       enableReinitialize
       initialValues={initialValues}
       onSubmit={(values) => {
-        console.log('submit', values)
+        console.log(values);
+        onSubmit(values);
       }}
     >
       {
         ({setFieldValue, submitForm, values}) => {
           return (
           <Grid>
-            <Form className='cbk-recipe-form'>
+            <Form className='cbk-recipe-form' encType="multipart/form-data">
             <Row>
               <Cell columns={2}>
-                <ImageUploader/>
+                <ImageUploader
+                  onChange={(image)=> {
+                    setFieldValue('image', image)
+                  }}
+                />
               </Cell>
               <Cell columns={10}>
                 <FormikInput name='name' label='name' />
-        
                 <FormikTextarea name='summary' label='summary' />
               </Cell>
             </Row>

@@ -52,6 +52,7 @@ export const _recipe: Recipe = {
   summary: '',
   tags: [],
   course: [],
+  image: null
 }
 
 export interface Equivalences {
@@ -116,6 +117,7 @@ export default interface Recipe {
   summary: string,
   tags: string[],
   course: string[];
+  image?: any,
 }
 
 export interface DBRecipe extends Recipe {

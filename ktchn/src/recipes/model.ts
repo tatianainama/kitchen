@@ -59,6 +59,7 @@ export interface Recipe {
   tags?: string[];
   course?: string[];
   summary?: string;
+  image?: string;
 }
 
 export interface ScrapedRecipe extends Recipe {

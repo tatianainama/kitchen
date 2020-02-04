@@ -55,8 +55,8 @@ class App {
     this.app.set("port", process.env.PORT || 3000);
     this.app.use(logger("dev"));
     this.app.use(express.json());
-    this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(bodyParser.json({limit: '10mb'}));
+    this.app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
     this.app.use(cookieParser());
     this.app.use(express.static(path.join(__dirname, "public")));
     this.app.use((req, res, next)=> {
