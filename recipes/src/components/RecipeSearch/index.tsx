@@ -112,11 +112,11 @@ class RecipeSearch extends React.Component<Props, State> {
         {
           results.length && openResult ? (
           <div className='cbk-recipe-search__results'>
-            <List
+            <List<DBRecipe>
               dense
               items={results}
               focus={cursor}
-              render={recipe => (
+              render={(recipe: DBRecipe) => (
                 <div
                   className='cbk-recipe-search__results__item'
                   onClick={() => this.selectRecipe(recipe)}

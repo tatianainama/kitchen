@@ -6,7 +6,7 @@ import './styles.scss';
 
 type ItemProps = { focused?: boolean } ;
 
-type ListProps<T extends ItemProps> = {
+type ListProps<T> = {
   nonInteractive?: boolean,
   focusOnClick?: boolean,
   dense?: boolean,
@@ -17,7 +17,7 @@ type ListProps<T extends ItemProps> = {
   onClick?: (item: T, index: number) => void,
 }
 
-const CBKList = <T extends ItemProps>(props: ListProps<T>) => {
+const CBKList = <T extends any>(props: ListProps<T>) => {
   return (
     <ul className={
       classnames({
