@@ -18,6 +18,7 @@ export interface Author {
 
 export interface Details {
   url?: string,
+  video?: string,
   preparationTime: string,
   cookingTime: string,
   servings: number
@@ -42,6 +43,7 @@ export const _recipe: Recipe = {
   },
   details: {
     url: '',
+    video: '',
     preparationTime: '',
     cookingTime: '',
     servings: 0

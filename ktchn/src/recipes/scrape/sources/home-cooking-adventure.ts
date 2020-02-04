@@ -6,6 +6,7 @@ const SELECTORS = {
   TITLE: 'h1[itemprop="name"]',
   PREP_TIME: 'time[itemprop="prepTime"]',
   COOK_TIME: 'time[itemprop="cookTime"]',
+  VIDEO: 'div#subtitle iframe',
   SERVINGS: 'span.ingheading',
   INGREDIENTS: 'div#ingredients_bg ul li',
   INSTRUCTIONS: 'div#preparation ol li',
@@ -18,9 +19,10 @@ function getRecipeName($: CheerioSelector): string {
 
 function getRecipeDetails($: CheerioSelector): RecipeDetails {
   return {
-    preparationTime: $(SELECTORS.PREP_TIME).attr('content'),
-    cookingTime: $(SELECTORS.COOK_TIME).attr('content'),
+    preparationTime: $(SELECTORS.PREP_TIME).attr('content') || '',
+    cookingTime: $(SELECTORS.COOK_TIME).attr('content') || '',
     servings: Number($(SELECTORS.SERVINGS).text().replace(/\D/g, '')),
+    video: ($(SELECTORS.VIDEO).attr('src') || '').replace('//', '') || '',
   }
 }
 

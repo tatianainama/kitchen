@@ -33,6 +33,8 @@ export class RecipeDetails {
   preparationTime: string;
   cookingTime: string;
   servings: number;
+  url?: string;
+  video?: string;
 
   constructor(
     prepTime: string = '',

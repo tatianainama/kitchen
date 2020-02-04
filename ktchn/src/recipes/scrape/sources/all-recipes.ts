@@ -18,8 +18,8 @@ const SELECTORS = {
 
 function getRecipeDetails($: CheerioSelector): RecipeDetails {
   return {
-    preparationTime: getAttr($)(SELECTORS.PREP_TIME, SELECTORS.DATETIME),
-    cookingTime: getAttr($)(SELECTORS.COOK_TIME, SELECTORS.DATETIME),
+    preparationTime: getAttr($)(SELECTORS.PREP_TIME, SELECTORS.DATETIME) || '',
+    cookingTime: getAttr($)(SELECTORS.COOK_TIME, SELECTORS.DATETIME) || '',
     servings: Number(getAttr($)(SELECTORS.SERVINGS, SELECTORS.CONTENT)),
   };
 }
