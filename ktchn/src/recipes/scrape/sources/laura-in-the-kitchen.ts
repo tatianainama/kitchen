@@ -12,6 +12,7 @@ const SELECTORS = {
   DETAILS: 'script[type="application/ld+json"]',
   INGREDIENTS: '.cs-ingredients-check-list > ul',
   INSTRUCTIONS: '#recipe-process > ul',
+  IMAGE: 'div.ytp-cued-thumbnail-overlay-image'
 }
 
 function getRecipeDetails($: CheerioSelector): RecipeDetails {
@@ -48,6 +49,14 @@ function getInstructions($: CheerioSelector): string[] {
   return data.split('\n').filter(s => s !== '').map(s => s.trim().replace(/^\d\)\s*/, ''));
 }
 
+const getImage = ($: CheerioSelector) => {
+  try {
+    const image = `${LITK_AUTHOR_DATA.website}/500x300thumbnails/${getText($)(SELECTORS.TITLE).toLowerCase().replace(/ /g, '-')}.jpg`;
+    return image
+  } catch (e) {
+    return ''
+  }
+}
 const LITK_CONFIG = {
   name: 'Laura in the Kitchen',
   domain: 'laurainthekitchen',
@@ -58,6 +67,7 @@ const LITK_CONFIG = {
     details: getRecipeDetails($),
     ingredients: getIngredients($),
     instructions: getInstructions($),
+    image: getImage($)
   })
 }
 

@@ -10,7 +10,8 @@ const SELECTORS = {
   SERVINGS: 'span.ingheading',
   INGREDIENTS: 'div#ingredients_bg ul li',
   INSTRUCTIONS: 'div#preparation ol li',
-  SUMMARY: 'span[itemprop="summary"]'
+  SUMMARY: 'span[itemprop="summary"]',
+  IMAGE: 'div#main_img img'
 }
 
 function getRecipeName($: CheerioSelector): string {
@@ -66,6 +67,7 @@ const HCA_CONFIG = {
     ingredients: getIngredients($),
     instructions: getInstructions($),
     summary: $(SELECTORS.SUMMARY).children().first().text().trim(),  
+    image: `https://www.homecookingadventure.com${$(SELECTORS.IMAGE).attr('src')}`,
   }),
 }
 

@@ -9,6 +9,7 @@ const JOB_AUTHOR_DATA: Author = {
 
 const SELECTORS = {
   TITLE: 'h1 > span.Heading',
+  IMAGE: 'p[align="left"] img'
 }
 
 function getRecipeName($: CheerioSelector): string {
@@ -54,6 +55,7 @@ const JOB_CONFIG = {
       details: new RecipeDetails(), // There is no way to scrape this data from JOB
       ingredients: getIngredients($),
       instructions: getInstructions($),
+      image: `${JOB_AUTHOR_DATA.website}/${$(SELECTORS.IMAGE).attr('src')}`
     }; 
   }
 }
