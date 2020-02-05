@@ -1,0 +1,7 @@
+FROM node:13.7.0-buster-slim
+RUN echo 'Acquire::http::Proxy "http://proxies.labs:3142/apt-cacher/";' > /etc/apt/apt.conf.d/01proxy
+RUN apt-get update && apt-get install --no-install-recommends -y git openssh-client ca-certificates
+RUN mkdir /root/.ssh/ && chmod 700 /root/.ssh
+ADD key_for_recipes /root/.ssh/id_rsa
+RUN ssh-keyscan -H -p 2222 gogs.davidventura.com.ar  > /root/.ssh/known_hosts
+RUN git clone ssh://git@gogs.davidventura.com.ar:2222/tati/kitchn.git && cd /kitchn && git checkout recipe-model-completion
