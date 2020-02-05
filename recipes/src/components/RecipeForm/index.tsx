@@ -114,6 +114,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             <Row>
               <Cell columns={2}>
                 <ImageUploader
+                  initialValue={initialValues.image}
                   onChange={(image)=> {
                     setFieldValue('image', image)
                   }}

@@ -1,20 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import Button from 'components/Button';
 
 import './styles.scss';
 import sample_image from 'sample.png';
 
+const API: string = process.env.REACT_APP_API || '';
 
 type ImageUploaderProps = {
+  initialValue?: string;
   onChange?: (file: string | ArrayBuffer | null) => void;
 };
 
-export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ onChange = () => {} }) => {
+export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ initialValue, onChange = () => {} }) => {
   const [ file, setFile ] = useState({
     name: '',
     image: ''
   });
+
+  const isBase64 = (file: string): boolean => !file.indexOf('base64');
+
   const fileInput: React.RefObject<HTMLInputElement> = useRef(null);
 
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +38,15 @@ export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ onC
     }
   }
 
+  useEffect(() => {
+    if(initialValue) {
+      setFile({
+        image: isBase64(initialValue) ? initialValue : `${API}/${initialValue}`,
+        name: ''
+      })
+    }
+  }, [initialValue])
+
   return (
     <div className='cbk-img-uploader'>
       <input type='file' onChange={onChangeFile} ref={fileInput} accept="image/*"/>
@@ -44,7 +58,6 @@ export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ onC
             }}
           >
             <Button
-            
               type='button'
               icon='clear'
               onClick={() => setFile({
