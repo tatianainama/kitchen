@@ -21,7 +21,8 @@ const SELECTORS = {
   INSTRUCTIONS: 'div.wprm-recipe-instruction-text',
   TAGS: 'span.wprm-recipe-keyword',
   SUMMARY: 'div.wprm-recipe-summary',
-  COURSE: 'span.wprm-recipe-course'
+  COURSE: 'span.wprm-recipe-course',
+  IMAGE: 'div.wprm-recipe-image img'
 }
 
 const getRecipeName = ($: CheerioSelector): string => {
@@ -76,6 +77,7 @@ const JOC_CONFIG = {
     tags: (getText($)(SELECTORS.TAGS)).split(',').map(R.trim),
     course: [getText($)(SELECTORS.COURSE)],
     summary: getText($)(SELECTORS.SUMMARY),
+    image: $(SELECTORS.IMAGE).attr('nitro-lazy-src')
   })
 }
 

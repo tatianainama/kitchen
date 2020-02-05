@@ -1,6 +1,8 @@
 import { Recipe, Author, RecipeDetails, ISubRecipe } from '../../model';
 import { parseIngredients } from '../index';
 import { getText, getAttr, getTextList } from './../service';
+import request from 'request-promise';
+import { resolve } from 'dns';
 
 const SELECTORS = {
   TITLE: 'h1#recipe-main-content',
@@ -14,6 +16,7 @@ const SELECTORS = {
   TAGS: 'meta[itemprop="recipeCategory"]',
   DATETIME: 'datetime',
   CONTENT: 'content',
+  IMAGE: 'img.rec-photo',
 }
 
 function getRecipeDetails($: CheerioSelector): RecipeDetails {
@@ -62,6 +65,7 @@ const AR_CONFIG = {
     instructions: getTextList($)(SELECTORS.INSTRUCTIONS),
     tags: $(SELECTORS.TAGS).map((i, e) => $(e).attr('content')).get(),
     summary: getAttr($)(SELECTORS.SUMMARY, SELECTORS.CONTENT),
+    image:  $(SELECTORS.IMAGE).attr('src')
   }),
 }
 

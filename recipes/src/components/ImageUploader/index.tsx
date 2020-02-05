@@ -18,7 +18,7 @@ export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ ini
     image: ''
   });
 
-  const isBase64 = (file: string): boolean => !file.indexOf('base64');
+  const isBase64 = (file: string): boolean => !!file.indexOf('base64');
 
   const fileInput: React.RefObject<HTMLInputElement> = useRef(null);
 

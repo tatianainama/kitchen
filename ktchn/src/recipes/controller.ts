@@ -6,6 +6,7 @@ import Scrape from './scrape/index';
 import { ScrapedRecipe } from './model';
 import Ingredient from '../ingredients/model';
 import { dissoc } from 'ramda';
+import request from 'request-promise';
 import fs from 'fs';
 
 function validRecipe(data: any): Promise<Recipe> {
@@ -27,6 +28,19 @@ const getSuggestions = (db: IMongoService) => async function(ingredient: IIngred
   }
 }
 
+async function getImage(src?: string): Promise<string> {
+  if (src) {
+    try {
+      const result = await request({ uri: src, resolveWithFullResponse: true, encoding: null });
+      const data = "data:" + result.headers["content-type"] + ";base64," + new Buffer(result.body).toString('base64');
+      return data;
+    } catch (e) {
+      return ''
+    }
+  }
+  return Promise.resolve('')
+}
+
 const scrapeRecipe: (db: IMongoService) => ChainPController<void, ScrapedRecipe> = (db) => (req) => () => {
   return Scrape(req.body.url)
     .then(async scrapedRecipe => {
@@ -37,9 +51,11 @@ const scrapeRecipe: (db: IMongoService) => ChainPController<void, ScrapedRecipe>
           ingredients: subgroupIngredients
         });
       }));
+      const image = await getImage(scrapedRecipe.image);
       return {
         ...scrapedRecipe,
-        ingredients: recipeIngredients
+        ingredients: recipeIngredients,
+        image,
       }
     })
 }
