@@ -1,0 +1,4 @@
+FROM ktchn:latest
+RUN cd /kitchn/ktchn && npm install && npm run build
+RUN cd /kitchn/recipes && npm install && npm run build
+ENTRYPOINT /bin/bash
