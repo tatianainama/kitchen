@@ -5,7 +5,7 @@
   "scripts": {
     "start": "ts-node --inspect-brk=9229 src/server.ts",
     "dev": "node node_modules/nodemon/bin/nodemon.js ts-node --inspect-brk=9229 src/server.ts",
-    "build": "cd node_modules/recipe-ingredient-parser && npm run build && cd ../../ && tsc -p .",
+    "build": "cd node_modules/recipe-ingredient-parser && npm run build && cd ../../ && ./node_modules/.bin/webpack --mode production",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server.ts"
   },
   "dependencies": {
@@ -43,7 +43,11 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.20.1",
     "nodemon": "^1.19.4",
+    "ts-loader": "^6.2.1",
     "ts-node": "^7.0.1",
-    "typescript": "3.7.5"
+    "typescript": "3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-node-externals": "^1.7.2"
   }
 }
