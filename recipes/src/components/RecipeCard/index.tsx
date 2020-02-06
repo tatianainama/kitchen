@@ -8,6 +8,7 @@ import { List as Ingredients } from 'components/Ingredient';
 import moment from 'moment';
 
 import sample_img from "components/Card/sample.png";
+const API: string = process.env.REACT_APP_API || '';
 
 import './styles.scss';
 
@@ -24,7 +25,7 @@ function CBKRecipeCard(props: RecipeCardProps) {
   return (
     <Card outlined className='cbk-recipe-card'>
       <div className='cbk-recipe-card__primary'>
-        <CardMedia square imageUrl={sample_img} className='cbk-recipe-card__primary__image'/>
+        <CardMedia square imageUrl={recipe.image ? `${API}/${recipe.image}` : sample_img} className='cbk-recipe-card__primary__image'/>
         <div className='cbk-recipe-card__primary__title'>
           <h4>{recipe.name}</h4>
           <p>{recipe.summary}</p>
