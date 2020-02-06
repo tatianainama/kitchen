@@ -156,6 +156,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
                       summary={recipe.summary}
                       actions={this.actions(recipe)}
                       icons={this.icons(recipe._id)}
+                      img={recipe.image}
                     />
                   )
                 })
