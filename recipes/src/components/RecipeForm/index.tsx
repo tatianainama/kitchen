@@ -141,7 +141,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             <h5>Recipe Information</h5>
             <section>
               <Row>
-                <Cell columns={3}>
+                <Cell columns={2}>
                   {/* <FormikInput name='details.preparationTime' label='preparation time' /> */}
                   <DurationPicker
                     initialValue={values.details.preparationTime}
@@ -149,18 +149,21 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                     label='preparation time'
                   />
                 </Cell>
-                <Cell columns={3}>
+                <Cell columns={2}>
                   <DurationPicker
                     initialValue={values.details.cookingTime}
                     onChange={(duration)=>{ setFieldValue('details.cookingTime', duration)}} 
                     label='cooking time'
                   />
                 </Cell>
-                <Cell columns={3}>
+                <Cell columns={2}>
                   <FormikInput name='details.servings' label='servings' type='number' />
                 </Cell>
                 <Cell columns={3}>
                   <FormikInput name='details.url' label='recipe url' />
+                </Cell>
+                <Cell columns={3}>
+                  <FormikInput name='details.video' label='recipe video' />
                 </Cell>
               </Row>
               <Row>
