@@ -52,15 +52,16 @@ export const ControlledInput = forwardRef<HTMLInputElement, InputProps>(({label,
 type TextareaProps = {
 	[x: string]: any,
 	label?: string,
-	type?: 'text' | 'number' ,
+	rows?: number
 	onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void,
 }
 
-export const Textarea = ({label, type = 'text', ...props }: TextareaProps) => {
+export const Textarea = ({label, type = 'text', rows = 3, ...props }: TextareaProps) => {
 	return (
 		<div className="cbk-light-input">
 			{ label && (<label htmlFor={props.name}>{label}</label>)}
 			<textarea
+				rows={rows}
 				className={props.value ? 'has-value': ''}
 				{...props}
 			/>
