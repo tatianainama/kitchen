@@ -22,7 +22,8 @@ const SELECTORS = {
   TAGS: 'span.wprm-recipe-keyword',
   SUMMARY: 'div.wprm-recipe-summary',
   COURSE: 'span.wprm-recipe-course',
-  IMAGE: 'div.wprm-recipe-image img'
+  IMAGE: 'div.wprm-recipe-image img',
+  VIDEO: 'div.video-container'
 }
 
 const getRecipeName = ($: CheerioSelector): string => {
@@ -34,6 +35,7 @@ const getRecipeDetails = ($: CheerioSelector): RecipeDetails => {
     preparationTime: $(SELECTORS.PREP_TIME).text(),
     cookingTime: $(SELECTORS.COOK_TIME).text(),
     servings: Number($(SELECTORS.SERVINGS).text()),
+    video: $(SELECTORS.VIDEO).children()[0].attribs['data-l-src'] || ''
   }
 };
 

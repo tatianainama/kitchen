@@ -9,7 +9,8 @@ const JOB_AUTHOR_DATA: Author = {
 
 const SELECTORS = {
   TITLE: 'h1 > span.Heading',
-  IMAGE: 'p[align="left"] img'
+  IMAGE: 'p[align="left"] img',
+  VIDEO: 'iframe[allowfullscreen]'
 }
 
 function getRecipeName($: CheerioSelector): string {
@@ -52,7 +53,10 @@ const JOB_CONFIG = {
     return {
       name: getRecipeName($),
       author: JOB_AUTHOR_DATA,
-      details: new RecipeDetails(), // There is no way to scrape this data from JOB
+      details: {
+        ...new RecipeDetails(),
+        video: $(SELECTORS.VIDEO).attr('src')
+      }, // There is no way to scrape this data from JOB
       ingredients: getIngredients($),
       instructions: getInstructions($),
       image: `${JOB_AUTHOR_DATA.website}/${$(SELECTORS.IMAGE).attr('src')}`
