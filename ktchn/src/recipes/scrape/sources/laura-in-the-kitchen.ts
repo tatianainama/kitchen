@@ -12,18 +12,22 @@ const SELECTORS = {
   DETAILS: 'script[type="application/ld+json"]',
   INGREDIENTS: '.cs-ingredients-check-list > ul',
   INSTRUCTIONS: '#recipe-process > ul',
-  IMAGE: 'div.ytp-cued-thumbnail-overlay-image'
+  IMAGE: 'div.ytp-cued-thumbnail-overlay-image',
+  VIDEO: 'div#video-div iframe'
 }
 
 function getRecipeDetails($: CheerioSelector): RecipeDetails {
   const x = $(SELECTORS.DETAILS);
   let parsedScript = JSON.parse(($(x).html()||'').replace(/(\n|\t|\s{2,})/g, ' ').trim())
 
-  return new RecipeDetails(
-    parsedScript.prepTime,
-    parsedScript.cookTime,
-    parsedScript.recipeYield.match(/\d/)[0],
-  );
+  return {
+    ...new RecipeDetails(
+      parsedScript.prepTime,
+      parsedScript.cookTime,
+      parsedScript.recipeYield.match(/\d/)[0],
+    ),
+    video: $(SELECTORS.VIDEO).attr('src')
+  };
 }
 
 function getIngredients($: CheerioSelector): ISubRecipe[] {
