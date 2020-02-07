@@ -18,10 +18,11 @@ $phone: "(max-width: 839px)";
 
   input,
   textarea {
+    font-family: monospace;
     width: 100%;
     border: 0;
     padding: 4px 0;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #000;
     background-color: transparent;
     resize: vertical;
   }
@@ -43,19 +44,20 @@ $phone: "(max-width: 839px)";
     bottom: 0px;
     left: 0;
     width: 0;
-    height: 1px;
+    height: 2px;
   
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
     -moz-transition: all 0.4s;
     transition: all 0.4s;
   
-    background: #7f7f7f;
+    background: #000;
   }
   
   input:focus + span::before,
   textarea:focus + span::before {
     width: 100%;
+    box-shadow: 2px 2px 0 1px #eec71a;
   }
   
   input.has-value + span::before,

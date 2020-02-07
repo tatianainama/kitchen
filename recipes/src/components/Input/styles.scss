@@ -64,6 +64,10 @@
 
 .cbk-light-input {
   @include lightInput();
+  label {
+    @include display();
+    text-transform: uppercase;
+  }
 }
 
 .cbk-input-2 {
