@@ -68,6 +68,9 @@
     @include display();
     text-transform: uppercase;
   }
+  input:disabled {
+    border-color: $grey-400;
+  }
 }
 
 .cbk-input-2 {

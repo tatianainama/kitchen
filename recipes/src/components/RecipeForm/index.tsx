@@ -321,17 +321,20 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             </section>
         
             <h5>Instructions</h5>
-            <section>
+            <section className='instructions-set'>
               <FieldArray name='instructions'>
                 {({ remove, push }) => (
                   <div>
                     {
                       values.instructions.map((instruction, instructionIdx) => (
                         <Row key={instructionIdx}>
-                          <Cell columns={11}>
-                            <Field name={`instructions[${instructionIdx}]`}/>
+                          <Cell columns={11} className='instructions-set__text'>
+                            <div className='instructions-set__text__number'>
+                            {instructionIdx + 1}
+                            </div>
+                            <FormikTextarea name={`instructions[${instructionIdx}]`}/>
                           </Cell>
-                          <Cell columns={1}>
+                          <Cell columns={1} className='instructions-set__action'>
                             <Button icon='clear' onClick={() => remove(instructionIdx)} small></Button>
                           </Cell>
                         </Row>
