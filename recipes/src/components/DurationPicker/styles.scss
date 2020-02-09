@@ -1,11 +1,21 @@
+@import 'styles/_variables.scss';
+
 .cbk-duration {
+  label {
+    @include display();
+    text-transform: uppercase;
+  }
   &__input {
     display: flex;
     .cbk-light-input {
+      input {
+        text-align: center;
+      }
       label {
         position: absolute;
         right: 25px;
         top: 5px;
+        color: $grey-500;
       }
     }
   }

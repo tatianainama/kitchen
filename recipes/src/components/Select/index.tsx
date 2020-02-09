@@ -43,8 +43,8 @@ export const CBKSelect2: React.FunctionComponent<CBKSelectProps> = (props) => (
   <select defaultValue={props.value || ''} className='cbk-select-2' onChange={props.onChange} placeholder={props.label}>
     <option value='' disabled> {props.label} </option>
     { 
-      props.options.map(option => (
-        <option key={option.value} disabled={option.disabled} value={option.value}> {option.label} </option>
+      props.options.map((option, key) => (
+        <option key={key} disabled={option.disabled} value={option.value}> {option.label} </option>
       ))
     }
   </select>
