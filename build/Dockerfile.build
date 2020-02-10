@@ -1,5 +1,0 @@
-FROM ktchn:latest
-RUN git clone ssh://git@gogs.davidventura.com.ar:2222/tati/kitchn.git && cd /kitchn && git checkout recipe-model-completion
-RUN cd /kitchn/ktchn && npm install && npm run build
-RUN cd /kitchn/recipes && npm install && npm run build
-ENTRYPOINT /bin/bash
