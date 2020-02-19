@@ -1,5 +1,5 @@
 import { Request, Response, Router, NextFunction } from "express";
-import { save, get, getById, getAll, getByIngredients, scrapeRecipe, update } from './controller';
+import { save, get, getById, getAll, getByIngredients, scrapeRecipe, update, deleteRecipe } from './controller';
 import MongoClient from 'mongodb';
 import { mongoService, IMongoService } from '../mongo';
 import piddleware, { chainP } from '../promise-all-middleware';
@@ -24,6 +24,7 @@ class RecipeRoutes {
     this.router.post("/", piddleware([save(this.RecipeDB)]));
     this.router.post("/scrape", chainP([scrapeRecipe(this.IngredientDB)]));
     this.router.put("/edit/:id", piddleware([update(this.RecipeDB)]));
+    this.router.delete("/:id", piddleware([deleteRecipe(this.RecipeDB)]));
   }
 
   private logData(req:Request, res:Response, next: NextFunction): void {

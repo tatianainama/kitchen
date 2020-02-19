@@ -78,6 +78,11 @@ const saveImage = async (recipe: Recipe, _id: ObjectID) => {
   }
 }
 
+const deleteRecipe: Controller = (db) => ({ params }, res) => {
+  return db.deleteMany<Recipe>({_id: new ObjectID(params.id)})
+    .then(result => res.json(result.result))
+}
+
 const save: Controller = (db) => ({ body }, res) => {
   const _id = new ObjectID();
   return validRecipe(body)
@@ -169,4 +174,5 @@ export {
   getAll,
   getByIngredients,
   update,
+  deleteRecipe
 }
