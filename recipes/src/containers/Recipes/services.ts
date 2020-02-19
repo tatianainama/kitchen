@@ -27,10 +27,18 @@ export const updateRecipe = (recipe: DBRecipe): Promise<any> =>
       recipe
     ).then(response => response);
 
+export const deleteRecipe = (id: string): Promise<any> =>
+  axios.delete(`${API}/${id}`)
+      .then(response => ({
+        data: response.data,
+        statusText: response.statusText
+      }))
+
 export default {
   getRecipes,
   getRecipeById,
   scrapeRecipe,
   saveRecipe,
-  updateRecipe
+  updateRecipe,
+  deleteRecipe
 }

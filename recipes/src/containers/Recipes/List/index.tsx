@@ -3,6 +3,7 @@ import {
   fetchIfNeeded as fetch,
   receiveRecipes as receive,
   selectRecipe as select,
+  deleteRecipeActionCreator as deleteRecipe,
 } from "containers/Recipes/List/actions";
 import {
   addRecipeToCart,
@@ -34,7 +35,8 @@ interface RecipeListProps extends RouteComponentProps {
   selectRecipe: (recipe?: DBRecipe) => undefined,
   removeFromCart: (recipe: DBRecipe) => undefined,
   addRecipeToCart: (recipe: DBRecipe) => undefined,
-  addRecipeToPlanner: (recipe: DBRecipe) => undefined
+  addRecipeToPlanner: (recipe: DBRecipe) => undefined,
+  deleteRecipe: (id: string) => undefined
 };
 
 class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, search: string}> {
@@ -98,6 +100,11 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
   handleAddToPlanner = (recipe: DBRecipe) => (event: React.MouseEvent) => {
     this.props.addRecipeToPlanner(recipe)
   }
+
+  handleDeleteRecipe = (id: string) => (event: React.MouseEvent) => {
+    this.props.deleteRecipe(id)
+  }
+
   handler = (event: React.MouseEvent) => {
     console.log('click', event);
   }
@@ -116,6 +123,9 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
   icons = (id = '') => [{
     icon: 'open_in_new',
     handler: () => this.props.history.push('/recipes/view/' + id)
+  }, {
+    icon: 'delete_outline',
+    handler: this.handleDeleteRecipe(id)
   }]
 
   render() {
@@ -203,6 +213,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     addRecipeToPlanner: (recipe: DBRecipe) => {
       dispatch(plannerActions.addToBacklog(recipe))
+    },
+    deleteRecipe: (id: string) => {
+      dispatch(deleteRecipe(id))
     }
   }
 }
