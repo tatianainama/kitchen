@@ -9,7 +9,7 @@ export type IconProps = {
   icon: string,
   className?: string,
   fill?: string,
-  width?: number,
+  width?: 'auto' | number,
   height?: number,
   material?: boolean,
 }
