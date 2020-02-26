@@ -4,157 +4,106 @@
   width: 100%;
 
   .subrecipe-tabs {
+    display: flex;
+    flex-direction: column;
+    @include box();
+
     ul.tab-header {
       display: flex;
       width: 100%;
-      justify-content: space-evenly;
+      border-bottom: 3px solid #000;
 
-      .tab {
-        padding: 0 $spacing-small;
-        width: 100%;
+      li.tab {
+        flex-grow: 1;
         display: flex;
-        justify-content: space-between;
+        align-items: center;
+        padding: 0px $spacing-xs;
+        border-right: 3px solid #000;
         cursor: pointer;
-        align-self: center;
-        position: relative;
-        @include ripple($grey-200, $grey-300);
-    
+        
+        &:last-child {
+          border: 0px;
+        }
+
         &--selected {
-          background-color: $grey-100;
+          background-color: black;
+          color: $white;
+          
+          input {
+            color: $white;
+            &::placeholder {
+              color: rgba(255, 255, 255, 0.6);
+            }
+          }
         }
 
-        &--selected.tab span::before {
-          width: 100%;
+        .tab__content {
+          flex-grow: 1;
+          input {
+            @include button();
+            width: 100%;
+            line-height: 1rem;
+            font-family: 'Roboto';
+            border-bottom: 0;
+          }
         }
-
-        span {
-          position: absolute;
-          display: block;
-          width: 100%;
-          height: 100%;
-          top: 0;
-          left: 0;
-          pointer-events: none;
-        }
-
-        span::before {
-          content: "";
-          display: block;
-          position: absolute;
-          bottom: -2px;
-          left: 0;
-          width: 0;
-          height: 2px;
-        
-          -webkit-transition: all 0.4s;
-          -o-transition: all 0.4s;
-          -moz-transition: all 0.4s;
-          transition: all 0.4s;
-        
-          background: $grey-600;
-        }
-
-        input {
-          @include button();
-          line-height: 1rem;
-          font-family: 'Roboto';
-          border-bottom: 0;
-        }
-
-
-        &__content {
-          flex-basis: 90%;
-          width: 100;
-          cursor: pointer;
-          line-height: 2.5rem;
-        }
-
         &--add {
-          flex-basis: 0;
-        }
-
-        &--add:hover {
-          background: transparent;
-        }
-
-        button.remove {
-          align-self: center;
-          --mdc-ripple-fg-size: 14px;
-          --mdc-ripple-left: 5px;
-          --mdc-ripple-top: 5px;
-          width: 24px;
-          height: 24px;
-          padding: 6px;
-          font-size: 12px;
-  
-          .material-icons {
-            font-size: 12px;
-          }
+          flex-grow: 0;
+          padding: 0px;
         }
       }
-    }
-    
-  }
 
-  .ingredients-form {
-    min-height: 400px;
-    
-    &-header {
-      color: $grey-600;
-      & > * {
-        @include button();
-      }
     }
 
-    &-item {
+    .ingredients-form {
+      padding: $spacing-xs;
 
-      .ingredient-detail {
-        align-items: end;
+      &__header {
+        display: grid;
+        grid-template-columns: 2.5fr 0.75fr 0.75fr 1fr 1.5fr 24px;
+        column-gap: $spacing-xs;
+        color: $grey-600;
         & > * {
-          display: flex;
+          @include button();
         }
       }
-      .cbk-light-input {
-        margin: 0;
-      }
-      
-      input {
-        line-height: 1rem;
-        width: 100%;
-      }
 
-      select {
-        width: 100%;
-        height: 1.5rem;
-        @include box();
-        @include button-reset();
-        @include button();
-        option {
-          &:focus,
-          &:checked {
-            background-color: $yellow;
+      &__content {
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        &__item {
+          display: grid;
+          grid-template-columns: 2.5fr 0.75fr 0.75fr 1fr 1.5fr 24px;
+          column-gap: $spacing-xs;
+          
+          > div {
+            display: flex;
+          }
+
+          .cbk-light-input {
+            margin-bottom: 0;
+          }
+
+          .ingredient-suggestions {
+            height: .7rem;
+            margin-bottom: 12px;
+            button {
+              font-size: .6rem;
+              letter-spacing: .2px;
+              color: #757575;
+              line-height: 0rem;
+              padding: .5rem 0.1rem;
+              
+            }
+    
           }
         }
       }
-
-      input:disabled {
-        font-style: italic
-      }
-
-      .ingredient-suggestions {
-        height: .7rem;
-        margin-bottom: 12px;
-        button {
-          @include button-reset();
-          text-transform: uppercase;
-          font-size: .6rem;
-          letter-spacing: .2px;
-          color: $grey-600;
-          @include ripple($grey-200, $grey-300);
-        }
-
-      }
     }
+    
   }
 
   .instructions-set {
