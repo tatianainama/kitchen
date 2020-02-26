@@ -66,6 +66,10 @@ $phone: "(max-width: 839px)";
   }
 }
 
+@mixin shadow($color: #eec71a) {
+  box-shadow: 4px 4px 0 0 $color;
+}
+
 @mixin solidBoxShadow($color: #eec71a) {
   border: 3px solid #000;
   box-shadow: 4px 4px 0 0 $color;
