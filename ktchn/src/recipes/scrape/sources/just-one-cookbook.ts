@@ -72,7 +72,7 @@ const JOC_CONFIG = {
   website: 'https://www.justonecookbook.com',
   scrapeRecipe: ($: CheerioSelector): Recipe => ({
     name: getText($)(SELECTORS.TITLE),
-    author: { name: 'Nami' },
+    author: { name: 'Nami', website: 'https://www.justonecookbook.com' },
     details: getRecipeDetails($),
     ingredients: getIngredients($),
     instructions: getTextList($)(SELECTORS.INSTRUCTIONS),

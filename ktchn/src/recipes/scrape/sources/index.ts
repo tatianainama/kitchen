@@ -9,7 +9,7 @@ import { Recipe } from '../../model';
 export interface ScrapingSource {
   name: string,
   domain: string,
-  website?: string,
+  website: string,
   scrapeRecipe($: CheerioSelector): Recipe,
 }
 

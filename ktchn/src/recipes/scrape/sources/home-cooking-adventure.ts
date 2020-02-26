@@ -62,7 +62,7 @@ const HCA_CONFIG = {
   website: 'https://www.homecookingadventure.com',
   scrapeRecipe: ($: CheerioSelector): Recipe => ({
     name: getRecipeName($),
-    author: { name: 'Home Cooking Adventure' },
+    author: { name: 'Home Cooking Adventure', website: 'https://www.homecookingadventure.com' },
     details: getRecipeDetails($),
     ingredients: getIngredients($),
     instructions: getInstructions($),

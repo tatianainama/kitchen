@@ -58,7 +58,8 @@ const AR_CONFIG = {
   scrapeRecipe: ($: CheerioSelector): Recipe => ({
     name: getText($)(SELECTORS.TITLE),
     author: {
-      name: getText($)(SELECTORS.AUTHOR)
+      name: getText($)(SELECTORS.AUTHOR),
+      website: 'https://www.allrecipes.com',
     },
     details: getRecipeDetails($),
     ingredients: getIngredients($),

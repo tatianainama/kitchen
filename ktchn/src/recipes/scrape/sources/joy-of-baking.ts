@@ -48,7 +48,7 @@ function getInstructions($: CheerioSelector): string[] {
 const JOB_CONFIG = {
   name: 'Joy of Baking',
   domain: 'joyofbaking',
-  website: JOB_AUTHOR_DATA.website,
+  website: JOB_AUTHOR_DATA.website || '',
   scrapeRecipe: ($: CheerioSelector): Recipe => {
     return {
       name: getRecipeName($),

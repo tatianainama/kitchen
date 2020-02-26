@@ -64,7 +64,7 @@ const getImage = ($: CheerioSelector) => {
 const LITK_CONFIG = {
   name: 'Laura in the Kitchen',
   domain: 'laurainthekitchen',
-  website: LITK_AUTHOR_DATA.website,
+  website: LITK_AUTHOR_DATA.website || '',
   scrapeRecipe: ($: CheerioSelector): Recipe => ({
     name: getText($)(SELECTORS.TITLE),
     author: LITK_AUTHOR_DATA,
