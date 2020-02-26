@@ -21,6 +21,7 @@ import Navbar from 'components/Navbar';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import Input from 'components/Input';
 import { throttle } from 'throttle-debounce';
+import Spinner from 'components/Spinner';
 
 import './styles.scss';
 import { UiState, Display } from "types/ui";
@@ -44,7 +45,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
     super(props);
     this.state = {
       phoneDisplay: this.props.ui.display === Display.Mobile,
-      search: ''
+      search: '',
     }
   }
 
@@ -129,8 +130,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
   }]
 
   render() {
-    const {data, selectedRecipe, selectRecipe} = this.props;
-
+    const {data, selectedRecipe, isFetching} = this.props;
     return(
       <div className='cbk-recipes-list'>
         <Navbar
@@ -152,7 +152,9 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
             </Button>
           </Link>
         </Navbar>
-
+        {
+          isFetching && (<Spinner/>)
+        }
         <Grid>
           <Row>
             <Cell columns={6} phoneColumns={4} tabletColumns={8}>
