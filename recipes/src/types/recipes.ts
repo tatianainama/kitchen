@@ -33,7 +33,7 @@ export const _ingredient: Ingredient = {
 
 export const _subRecipe: SubRecipe = {
   name: '',
-  ingredients: [_ingredient]
+  ingredients: [{ ..._ingredient }]
 };
 
 export const _recipe: Recipe = {
@@ -48,7 +48,7 @@ export const _recipe: Recipe = {
     cookingTime: '',
     servings: 0
   },
-  ingredients: [_subRecipe],
+  ingredients: [ {..._subRecipe} ],
   instructions: [ '' ],
   name: '',
   summary: '',

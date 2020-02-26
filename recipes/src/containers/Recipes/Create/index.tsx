@@ -1,14 +1,11 @@
 import React from 'react';
-import { assocPath, remove } from 'ramda';
-import  Navbar from 'components/Navbar';
+import Navbar from 'components/Navbar';
 import Input from 'components/Input';
 import Button from 'components/Button';
 import RecipeForm from 'components/RecipeForm';
-import {  } from 'react-router';
+import Spinner from 'components/Spinner';
 
 import './styles.scss';
-
-import sample_img from "../../../sample.png";
 
 import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient } from 'types/recipes';
 import { scrapeRecipe, saveRecipe } from '../services';
@@ -20,6 +17,7 @@ interface CreateRecipeProps {
 interface CreateRecipeState {
   scrapeUrl: string,
   form: Recipe,
+  scrapingRecipe: boolean,
 };
 
 type FormKeys = keyof Recipe | keyof SubRecipe | keyof Ingredient | keyof Author | keyof Details | number;
@@ -32,19 +30,25 @@ class CreateRecipe extends React.Component<any, CreateRecipeState> {
         ..._recipe,
       },
       scrapeUrl: '',
+      scrapingRecipe: false,
     }
   }
 
   scrapeRecipe = () => {
-    scrapeRecipe(this.state.scrapeUrl).then(recipe => {
-      this.setState({
-        form: {
-          ...recipe,
-          details: {
-            ...recipe.details,
-            url: this.state.scrapeUrl,
+    this.setState({
+      scrapingRecipe: true
+    }, () => {
+      scrapeRecipe(this.state.scrapeUrl).then(recipe => {
+        this.setState({
+          scrapingRecipe: false,
+          form: {
+            ...recipe,
+            details: {
+              ...recipe.details,
+              url: this.state.scrapeUrl,
+            }
           }
-        }
+        })
       })
     })
   }
@@ -61,9 +65,12 @@ class CreateRecipe extends React.Component<any, CreateRecipeState> {
   }
 
   render() {
-    const { scrapeUrl, form } = this.state; 
+    const { scrapeUrl, form, scrapingRecipe } = this.state; 
     return (
       <div>
+        {
+          scrapingRecipe && (<Spinner/>)
+        }
         <Navbar
           title="Create a recipe"
         >
@@ -72,7 +79,7 @@ class CreateRecipe extends React.Component<any, CreateRecipeState> {
             value={scrapeUrl}
             onChange={(e: any)=> this.setState({scrapeUrl: e.currentTarget.value})}
           />
-          <Button onClick={this.scrapeRecipe}>Scrape</Button>
+          <Button onClick={this.scrapeRecipe} outlined>Scrape</Button>
         </Navbar>
         
         <div className="cbk-create-recipe">

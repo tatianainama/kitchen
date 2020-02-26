@@ -97,14 +97,10 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
   const [focusLast, setFocusLast] = useState(false);
   return (
   <div>
-    <h4>New form</h4>
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      onSubmit={(values) => {
-        console.log(values);
-        onSubmit(values);
-      }}
+      onSubmit={onSubmit}
     >
       {
         ({setFieldValue, submitForm, values}) => {
@@ -142,7 +138,6 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             <section>
               <Row>
                 <Cell columns={2}>
-                  {/* <FormikInput name='details.preparationTime' label='preparation time' /> */}
                   <DurationPicker
                     initialValue={values.details.preparationTime}
                     onChange={(duration)=>{ setFieldValue('details.preparationTime', duration)}} 
@@ -297,7 +292,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                                     ))
                                   }
                                   <div className='ingredients-form__content__actions'>
-                                    <Button type='button' onClick={() => { ingredientHelpers.push({ ..._ingredient }); setFocusLast(true);}}>
+                                    <Button type='button' unelevated onClick={() => { ingredientHelpers.push({ ..._ingredient }); setFocusLast(true);}}>
                                       add ingredient
                                     </Button>
                                   </div>
@@ -317,28 +312,34 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             <section className='instructions-set'>
               <FieldArray name='instructions'>
                 {({ remove, push }) => (
-                  <div>
+                  <>
                     {
                       values.instructions.map((instruction, instructionIdx) => (
-                        <Row key={instructionIdx}>
-                          <Cell columns={11} className='instructions-set__text'>
+                        <div key={instructionIdx}>
+                          <div className='instructions-set__text'>
                             <div className='instructions-set__text__number'>
                             {instructionIdx + 1}
                             </div>
                             <FormikTextarea name={`instructions[${instructionIdx}]`}/>
-                          </Cell>
-                          <Cell columns={1} className='instructions-set__action'>
+                          </div>
+                          <div className='instructions-set__action'>
                             <Button icon='clear' onClick={() => remove(instructionIdx)} small></Button>
-                          </Cell>
-                        </Row>
+                          </div>
+                        </div>
                       ))
                     }
-                    <Button type="button" onClick={() => push('')}>Add instruction</Button>
-                  </div>
+                    <Button type="button" onClick={() => push('')} unelevated>Add instruction</Button>
+                  </>
                 )}
               </FieldArray>
             </section>
-            <Button type='button' raised unelevated onClick={() => submitForm()} >Submit</Button>
+            
+            <section className='actions'>
+              <Button type='button' outlined>Reset</Button>
+              <Button type='button' outlined>Cancel</Button>
+              <Button type='button' raised unelevated onClick={() => submitForm()} >Submit</Button>
+
+            </section>
             </Form>
           </Grid>
         )}

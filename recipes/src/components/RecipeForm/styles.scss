@@ -7,6 +7,7 @@
     display: flex;
     flex-direction: column;
     @include box();
+    margin: $spacing-xs 0 ;
 
     ul.tab-header {
       display: flex;
@@ -107,8 +108,13 @@
   }
 
   .instructions-set {
+    & > div {
+      display: flex;
+    }
     &__text {
       display: flex;
+      flex-grow: 1;
+
       &__number {
         padding: 0 $spacing-xs;
         @include button();
@@ -117,6 +123,13 @@
       }
     }
   }
+
+  .actions {
+    margin-top: $spacing-small;
+    display: flex;
+    justify-content: flex-end;
+  }
+
   button.remove,
   button.cbk-convert__button {
     align-self: center;

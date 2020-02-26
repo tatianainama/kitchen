@@ -2,9 +2,9 @@
 
 .cbk-create-recipe {
     margin: $spacing-large;
-    padding: $spacing-small;
     background-color: white;
-
+    @include box();
+    
     .mdc-text-field,
     .mdc-select {
         width: 100%;
