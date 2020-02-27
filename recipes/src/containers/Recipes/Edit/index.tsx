@@ -1,41 +1,42 @@
 import React from 'react';
 import  Navbar from 'components/Navbar';
-import Input from 'components/Input';
 import RecipeForm from 'components/RecipeForm';
 
 import './styles.scss';
 
-import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient, DBRecipe } from 'types/recipes';
+import { _recipe, _subRecipe, _ingredient, Ingredient, DBRecipe } from 'types/recipes';
 import { getRecipeById, updateRecipe } from '../services';
 import { RouteComponentProps } from 'react-router';
+import Spinner from 'components/Spinner';
 
 interface EditRecipeProps extends RouteComponentProps<{id: string}> {
-
 };
 
 interface EditRecipeState {
   form: DBRecipe,
+  loadingRecipe: boolean,
 };
 
 class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
   constructor(props: EditRecipeProps) {
     super(props);
-    this.state = { 
+    this.state = {
       form: {
         ..._recipe,
         _id: '',
-      }
+      },
+      loadingRecipe: true,
     }
   }
 
   componentDidMount = () => {
-    getRecipeById(this.props.match.params.id).then(recipe => this.setState({ form: recipe }))
+    getRecipeById(this.props.match.params.id).then(recipe => 
+      this.setState({
+        form: recipe,
+        loadingRecipe: false,
+      }))
 
   }
-
-  updateOriginal = (ingredient: Ingredient): string => (`
-    ${ingredient.quantity} ${ingredient.unit||''} ${ingredient.unit && 'of'} ${ingredient.name}
-  `);
 
   saveRecipe = (recipe: DBRecipe) => {
     updateRecipe(recipe)
@@ -53,11 +54,12 @@ class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
   }
 
   render() {
-    const { form } = this.state; 
+    const { form, loadingRecipe } = this.state;
     return (
       <div>
+        { loadingRecipe && (<Spinner/>)}
         <Navbar
-          title="Create a recipe"
+          title="Edit recipe"
         />
         
         <div className="cbk-create-recipe">
