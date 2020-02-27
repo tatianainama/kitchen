@@ -41,11 +41,15 @@ class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
     updateRecipe(recipe)
       .then((response: any) => {
         if (response.status === 200) {
-          this.props.history.push('/recipes')
+          this.goToViewList()
         } else {
           alert(response.statusText)
         }
       })
+  }
+
+  goToViewList = () => {
+    this.props.history.push('/recipes');
   }
 
   render() {
@@ -60,6 +64,7 @@ class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
           <RecipeForm
             initialValues={form}
             onSubmit={(recipe: DBRecipe) => this.saveRecipe(recipe)}
+            onCancel={this.goToViewList}
           />
         </div>
       </div>

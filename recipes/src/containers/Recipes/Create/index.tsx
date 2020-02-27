@@ -20,8 +20,6 @@ interface CreateRecipeState {
   scrapingRecipe: boolean,
 };
 
-type FormKeys = keyof Recipe | keyof SubRecipe | keyof Ingredient | keyof Author | keyof Details | number;
-
 class CreateRecipe extends React.Component<any, CreateRecipeState> {
   constructor(props: CreateRecipeProps) {
     super(props);
@@ -35,34 +33,41 @@ class CreateRecipe extends React.Component<any, CreateRecipeState> {
   }
 
   scrapeRecipe = () => {
-    this.setState({
-      scrapingRecipe: true
-    }, () => {
-      scrapeRecipe(this.state.scrapeUrl).then(recipe => {
-        this.setState({
-          scrapingRecipe: false,
-          form: {
-            ...recipe,
-            details: {
-              ...recipe.details,
-              url: this.state.scrapeUrl,
+    if (this.state.scrapeUrl) {
+      this.setState({
+        scrapingRecipe: true
+      }, () => {
+        scrapeRecipe(this.state.scrapeUrl).then(recipe => {
+          this.setState({
+            scrapingRecipe: false,
+            form: {
+              ...recipe,
+              details: {
+                ...recipe.details,
+                url: this.state.scrapeUrl,
+              }
             }
-          }
+          })
         })
       })
-    })
+    }
   }
 
   saveRecipe = (recipe: Recipe) => {
     saveRecipe(recipe)
       .then(response => {
         if (response.status === 200) {
-          this.props.history.push('/recipes')
+          this.goToViewList()
         } else {
           alert(response.statusText)
         }
       })
   }
+
+  goToViewList = () => {
+    this.props.history.push('/recipes');
+  }
+  
 
   render() {
     const { scrapeUrl, form, scrapingRecipe } = this.state; 
@@ -86,6 +91,7 @@ class CreateRecipe extends React.Component<any, CreateRecipeState> {
           <RecipeForm
             initialValues={form}
             onSubmit={(recipe) => this.saveRecipe(recipe)}
+            onCancel={this.goToViewList}
           />
         </div>
       </div>

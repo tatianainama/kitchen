@@ -16,7 +16,8 @@ import './styles.scss';
 
 type RecipeFormProps<T> = {
   initialValues: T,
-  onSubmit: (data: T) => void
+  onSubmit: (data: T) => void,
+  onCancel: () => void,
 }
 
 const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingredient => {
@@ -92,7 +93,7 @@ const FormikTextarea = ({ label, ...props }: FormikInputProps)  => {
   );
 };
 
-const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: RecipeFormProps<T>) => {
+const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCancel}: RecipeFormProps<T>) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [focusLast, setFocusLast] = useState(false);
   return (
@@ -175,7 +176,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
                   <TagInput
                     tags={values.course}
                     label='dish course'
-                    onNewTag={(dishCourse) => {console.log("dish", dishCourse, values); setFieldValue('course', dishCourse)}}
+                    onNewTag={(dishCourse) => setFieldValue('course', dishCourse)}
                   />
                 </Cell>
               </Row>
@@ -335,10 +336,8 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit }: Reci
             </section>
             
             <section className='actions'>
-              <Button type='button' outlined>Reset</Button>
-              <Button type='button' outlined>Cancel</Button>
-              <Button type='button' raised unelevated onClick={() => submitForm()} >Submit</Button>
-
+              <Button type='button' outlined onClick={() => onCancel()}>Cancel</Button>
+              <Button type='button' raised unelevated onClick={() => submitForm()}>Submit</Button>
             </section>
             </Form>
           </Grid>
