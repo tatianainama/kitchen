@@ -1,11 +1,11 @@
 import React from 'react';
 import Dialog, {
-  DialogContent,
-  DialogFooter,
-  DialogButton
+  DialogContent
 } from '@material/react-dialog';
+import Button from 'components/Button';
 
 import '@material/react-dialog/dist/dialog.min.css';
+import './styles.scss'
 
 interface DialogProps {
   isOpen: boolean
@@ -15,31 +15,35 @@ interface DialogProps {
       onSelect: () => void,
       isDefault?: boolean
     },
-  }
+  },
   children?: React.ReactElement
 }
-const CBK_Dialog = (props: DialogProps) => {
+const CBK_Dialog = ({ isOpen, actions, children }: DialogProps) => {
   return (
     <Dialog
-      open={props.isOpen}
-      onClose={(action: string) => props.actions[action].onSelect()}
+      scrimClickAction={''}
+      escapeKeyAction={''}
+      open={isOpen}
+      onClose={(action: string) => actions[action] && actions[action].onSelect() }
+      className='cbk-dialog'
     >
-      <DialogContent>
-        {props.children}
+      <DialogContent className='cbk-dialog__content'>
+        {children}
       </DialogContent>
-      <DialogFooter>
+      <div className='cbk-dialog__footer'>
         {
-          Object.keys(props.actions).map((action, index) => (
-            <DialogButton
+          Object.keys(actions).map((action, index) => (
+            <Button
               key={index}
-              action={action}
-              isDefault={props.actions[action].isDefault}
+              outlined={!actions[action].isDefault}
+              unelevated={actions[action].isDefault}
+              onClick={actions[action].onSelect}
             >
-              {props.actions[action].label}
-            </DialogButton>
+              {actions[action].label}
+            </Button>
           ))
         }
-      </DialogFooter>
+      </div>
     </Dialog>
   )
 };

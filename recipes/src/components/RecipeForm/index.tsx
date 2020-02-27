@@ -8,9 +8,10 @@ import { Input, Textarea, ControlledInput } from 'components/Input';
 
 import ImageUploader from 'components/ImageUploader';
 import Button from 'components/Button';
-import Dialog from 'components/DialogConverter';
+import DialogConverter from 'components/DialogConverter';
 import TagInput from 'components/TagInput';
 import DurationPicker from 'components/DurationPicker';
+import Dialog from 'components/Dialog';
 
 import './styles.scss';
 
@@ -96,8 +97,31 @@ const FormikTextarea = ({ label, ...props }: FormikInputProps)  => {
 const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCancel}: RecipeFormProps<T>) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [focusLast, setFocusLast] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   return (
   <div>
+    <Dialog
+      isOpen={openDialog}
+      actions={{
+        cancel: {
+          label: 'cancel',
+          onSelect: () => setOpenDialog(false),
+          isDefault: false
+        },
+        accept: {
+          label: 'accept',
+          onSelect: () => {
+            setOpenDialog(false);
+            onCancel();
+          },
+          isDefault: true
+        },
+      }}
+    >
+      <div>
+        Are you sure ?
+      </div>
+    </Dialog>
     <Formik
       enableReinitialize
       initialValues={initialValues}
@@ -243,7 +267,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
                                         <div>
                                           <FormikInput name={`ingredients[${selectedTab}].ingredients[${index}].quantity`} type='number'/>
                                           {ingredient.unit && ingredient.quantity ? (
-                                            <Dialog
+                                            <DialogConverter
                                               measure={{unit: ingredient.unit, quantity: ingredient.quantity}}
                                               onConvert={result => ingredientHelpers.replace(index, { ...ingredient, ...result })}
                                             />
@@ -336,7 +360,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
             </section>
             
             <section className='actions'>
-              <Button type='button' outlined onClick={() => onCancel()}>Cancel</Button>
+              <Button type='button' outlined onClick={() => setOpenDialog(true)}>Cancel</Button>
               <Button type='button' raised unelevated onClick={() => submitForm()}>Submit</Button>
             </section>
             </Form>
