@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import Dialog, {
-  DialogContent,
-  DialogFooter,
-  DialogButton
-} from '@material/react-dialog';
+import Dialog from 'components/Dialog';
 import { GetMeasure, Convert, Measure } from 'services/measurements';
 import Button from 'components/Button';
 
@@ -17,10 +13,11 @@ type Data = {
 
 interface DialogProps {
   measure: Data,
-  onConvert: (result: Data) => void
+  onConvert: (result: Data) => void,
+  measureName?: string,
 }
 
-const CBKDialog = ({measure, onConvert}: DialogProps) => {
+const CBKDialog = ({measure, onConvert, measureName}: DialogProps) => {
   const { name, values } = GetMeasure(measure.unit);
   const [ isOpen, setOpen ] = useState(false);
   const [ result, setResult ] = useState({
@@ -41,18 +38,44 @@ const CBKDialog = ({measure, onConvert}: DialogProps) => {
         className='cbk-convert__button'
       ></Button>
       <Dialog
-        onClose={(action) => {
-          if (action === 'confirm') {
-            onConvert(result)
-          }
-          setOpen(false)
+        actions={{
+          cancel: {
+            label: 'cancel',
+            onSelect: () => { setOpen(false) }
+          },
+          convert: {
+            label: 'convert',
+            onSelect: () => {
+              setOpen(false);
+              onConvert(result);
+            },
+            isDefault: true
+          },
         }}
-        open={isOpen}
+        isOpen={isOpen}
       >
-        <DialogContent className='cbk-convert__dialog'>
-          <p>Converting <b>{measure.quantity + ' ' + measure.unit}</b> to:</p>
+        <div>
+          {/* <p>Converting <b>{measure.quantity + ' ' + measure.unit}</b> to:</p> */}
           <div className='cbk-convert__dialog__content'>
-            <select value={result.unit} onChange={(e) => {
+            <p>converting {measureName} </p>
+            <div className='cbk-convert__dialog__content__converter'>
+                <div>{measure.quantity}</div>
+                <div className='cbk-convert__dialog__content__converter--equal'> = </div>
+                <div>{result.quantity}</div>
+                <div>{measure.unit}</div>
+                <select value={result.unit} onChange={(e) => {
+                  convert(measure.quantity, measure.unit, e.target.value);
+                }}>
+                  {
+                    values.map(option => (
+                      <option key={option} value={option}>{option}</option>
+                    ))
+                  }
+                </select>
+            </div>
+
+
+            {/* <select value={result.unit} onChange={(e) => {
               convert(measure.quantity, measure.unit, e.target.value);
             }}>
               {
@@ -61,14 +84,10 @@ const CBKDialog = ({measure, onConvert}: DialogProps) => {
                 ))
               }
             </select>
-              {`${result.quantity} ${result.unit}`} 
+              {`${result.quantity} ${result.unit}`}  */}
           </div>
 
-        </DialogContent>
-        <DialogFooter>
-          <DialogButton action='dismiss' type='button'>cancel</DialogButton>
-          <DialogButton action='confirm' type='button'>ok</DialogButton>
-        </DialogFooter>
+        </div>
       </Dialog>
     </>
   )

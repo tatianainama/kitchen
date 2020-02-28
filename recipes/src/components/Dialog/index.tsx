@@ -35,8 +35,7 @@ const CBK_Dialog = ({ isOpen, actions, children }: DialogProps) => {
           Object.keys(actions).map((action, index) => (
             <Button
               key={index}
-              outlined={!actions[action].isDefault}
-              unelevated={actions[action].isDefault}
+              outlined={actions[action].isDefault}
               onClick={actions[action].onSelect}
             >
               {actions[action].label}

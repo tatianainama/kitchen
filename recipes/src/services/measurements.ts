@@ -33,11 +33,11 @@ const conversionTableDic: { [measure: string]: string[] } = {
 
 const Convert = (qty: number, from: string, to: string, measure: Measure) => {
   const toAnchor = (unit: string, amount: number) => conversionTable[measure][unit] * amount;
-  return parseFloat((toAnchor(from, qty) / toAnchor(to, 1)).toFixed(3));
+  return parseFloat((toAnchor(from, qty) / toAnchor(to, 1)).toFixed(2));
 }
 
 const GetMeasure = (unit: string): { name: string, values: string[]} => {
-  return ['mass', 'volume'].reduce((result, measure)=>{
+  return ['mass', 'volume'].reduce((result, measure) => {
     return conversionTableDic[measure].includes(unit) ? {
       name: measure,
       values: conversionTableDic[measure]

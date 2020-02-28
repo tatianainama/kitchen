@@ -268,6 +268,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
                                           <FormikInput name={`ingredients[${selectedTab}].ingredients[${index}].quantity`} type='number'/>
                                           {ingredient.unit && ingredient.quantity ? (
                                             <DialogConverter
+                                              measureName={ingredient.name}
                                               measure={{unit: ingredient.unit, quantity: ingredient.quantity}}
                                               onConvert={result => ingredientHelpers.replace(index, { ...ingredient, ...result })}
                                             />

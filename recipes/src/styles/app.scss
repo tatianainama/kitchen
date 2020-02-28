@@ -130,6 +130,16 @@ textarea
 	box-sizing:content-box;
 }
 
+select {
+  @include box();
+  border-width: 2px;
+}
+
+select:focus {
+  @include shadow();
+  outline: none;
+}
+
 /* 
   ##Device = Low Resolution Tablets, Mobiles 
 */

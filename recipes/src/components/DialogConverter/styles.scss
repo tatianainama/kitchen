@@ -5,9 +5,38 @@
     &__content {
       display: flex;
       align-content: space-between;
-      select {
-        flex-basis: 50%;
-        margin-right: $spacing-small;
+      flex-direction: column;
+      &__converter {
+        @include box();
+        @include button();
+        color: black;
+        text-align: center;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        & > div,
+        & > select {
+          background-color: white;
+        }
+        &--equal {
+          grid-column: 2 / span 1;
+          grid-row: 1 / span 2;
+          align-self: center;
+          font-size: $font-size-xxx-large;
+        }
+        select {
+          @include button();
+          font-weight: bold;
+          text-align-last: center;
+          box-shadow: none;
+          outline: none;
+          border: 0;
+          &:focus {
+            box-shadow: none;
+            outline: none;
+            border: 0;
+          }
+        }
       }
     }
   }
