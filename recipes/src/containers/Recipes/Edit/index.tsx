@@ -33,7 +33,8 @@ class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
     getRecipeById(this.props.match.params.id).then(recipe => 
       this.setState({
         form: recipe,
-        loadingRecipe: false,
+      }, () => {
+        this.setState({ loadingRecipe: false })
       }))
 
   }
@@ -55,6 +56,7 @@ class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
 
   render() {
     const { form, loadingRecipe } = this.state;
+    console.log("loading", loadingRecipe)
     return (
       <div>
         { loadingRecipe && (<Spinner/>)}
