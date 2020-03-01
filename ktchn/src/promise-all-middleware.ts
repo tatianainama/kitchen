@@ -16,7 +16,10 @@ const piddleware = (middlewares: IMiddleware[]) => (req: Request, res: Response,
     return middlewaresChain.then(x => currentMiddleware(req, res, next))
   }, Promise.resolve([])).then(results => { // results would be ever necessary ?  
     next();
-  }).catch(error => next(error));
+  }).catch(error => {
+    console.error(error);
+    next(error)
+  });
 }
 
 
@@ -26,7 +29,10 @@ const chainP = (middlewares: ChainedMiddleware[]) => (req: Request, res: Respons
     return await currentMiddleware(req, res, next)(result);
   }, Promise.resolve()).then(results => {
     res.json(results)
-  }).catch(error => next(error));
+  }).catch(error => {
+    console.error(error);
+    next(error);
+  });
 }
 
 export default piddleware;
