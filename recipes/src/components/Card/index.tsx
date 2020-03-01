@@ -37,7 +37,7 @@ function CBKCard({onClick, img, title, summary, actions, icons, noMedia = false,
   return(
     <Card outlined className={`cbk-card ${className}`}>
       <CardPrimaryContent onClick={onClick}>
-        { noMedia ? null : <CardMedia square imageUrl={ img ? `${API}/${img}` : sample_img}></CardMedia>}
+        { noMedia ? null : <CardMedia square imageUrl={ img ? `/public/${img}` : sample_img}></CardMedia>}
         <div className='cbk-card__main'>
           <h6 className='cbk-card__main__title'>{title}</h6>
           {

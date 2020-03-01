@@ -8,6 +8,7 @@ import Ingredient from '../ingredients/model';
 import { dissoc } from 'ramda';
 import request from 'request-promise';
 import fs from 'fs';
+import config from '../config';
 
 function validRecipe(data: any): Promise<Recipe> {
   return new Promise(function(resolve, reject) {
@@ -65,7 +66,7 @@ const saveImage = async (recipe: Recipe, _id: ObjectID) => {
     try {
       const [ prefix, base64Img ] = recipe.image.split(',');
       const filename = `${_id}.${prefix.replace('data:image/', '').split(';', 1)}`;
-      fs.writeFileSync(`${__dirname}/../public/${filename}`, base64Img, { encoding: 'base64'});
+      fs.writeFileSync(`${config.public_assets_path}/${filename}`, base64Img, { encoding: 'base64'});
       return {
         ...recipe,
         image: filename

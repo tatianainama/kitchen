@@ -1,4 +1,4 @@
-module.exports = {
+export const config = {
 	name: 'API',
 	env: process.env.NODE_ENV || 'development',
 	port: process.env.PORT || 3000,
@@ -6,4 +6,7 @@ module.exports = {
 	db: {
 		uri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/api',
 	},
+	public_assets_path: process.env.PUBLIC_ASSETS_PATH || `${__dirname}/../public`,
 };
+
+export default config;
