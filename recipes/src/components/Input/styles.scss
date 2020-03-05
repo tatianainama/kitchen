@@ -72,6 +72,20 @@
     border-color: $grey-400;
     font-style: italic;
   }
+  &--invalid {
+    display: block;
+    label {
+      color: $red;
+    }
+    span::before {
+      bottom: 1.25rem;
+      width: 100%;
+      box-shadow: 2px 2px 0 1px $red;
+    }
+    &__error {
+      @include error();
+    }
+  }
 }
 
 .cbk-input-2 {

@@ -4,6 +4,7 @@ import Input from 'components/Input';
 import Button from 'components/Button';
 import RecipeForm from 'components/RecipeForm';
 import Spinner from 'components/Spinner';
+import { toast } from "react-toastify";
 
 import './styles.scss';
 
@@ -57,9 +58,10 @@ class CreateRecipe extends React.Component<any, CreateRecipeState> {
     saveRecipe(recipe)
       .then(response => {
         if (response.status === 200) {
-          this.goToViewList()
+          toast.success("Recipe created correctly!");
+          this.goToViewList();
         } else {
-          alert(response.statusText)
+          toast.error("There was an error saving the recipe: " + response.statusText);
         }
       })
   }

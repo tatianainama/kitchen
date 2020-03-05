@@ -18,11 +18,12 @@ type InputProps = {
 	label?: string,
 	type?: 'text' | 'number' ,
 	onChange?: (e: React.FormEvent<HTMLInputElement>) => void,
+	error?: string,
 }
 
-export const Input = ({label, type = 'text', ...props }: InputProps) => {
+export const Input = ({label, type = 'text', error, children, ...props }: InputProps) => {
 	return (
-		<div className="cbk-light-input">
+		<div className={`cbk-light-input${error ? ' cbk-light-input--invalid' : ''}`}>
 			{ label && (<label htmlFor={props.name}>{label}</label>)}
 			<input
 				className={props.value ? 'has-value': ''}
@@ -30,13 +31,16 @@ export const Input = ({label, type = 'text', ...props }: InputProps) => {
 				{...props}
 			/>
 			<span></span>
+			{ error && (
+				<div className="cbk-light-input--invalid__error"> { error } </div>
+			)}
 		</div>
 	)
 }
 
-export const ControlledInput = forwardRef<HTMLInputElement, InputProps>(({label, type = 'text', ...props }, ref) => {
+export const ControlledInput = forwardRef<HTMLInputElement, InputProps>(({label, type = 'text', error, children, ...props }, ref) => {
 	return (
-		<div className="cbk-light-input">
+		<div className={`cbk-light-input${error ? ' cbk-light-input--invalid' : ''}`}>
 			{ label && (<label htmlFor={props.name}>{label}</label>)}
 			<input
 				ref={ref}
@@ -45,6 +49,9 @@ export const ControlledInput = forwardRef<HTMLInputElement, InputProps>(({label,
 				{...props}
 			/>
 			<span></span>
+			{ error && (
+				<div className="cbk-light-input--invalid__error"> { error } </div>
+			)}
 		</div>
 	)
 })
@@ -54,11 +61,12 @@ type TextareaProps = {
 	label?: string,
 	rows?: number
 	onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void,
+	error?: string,
 }
 
-export const Textarea = ({label, type = 'text', rows = 3, ...props }: TextareaProps) => {
+export const Textarea = ({label, type = 'text', rows = 3, error, children, ...props }: TextareaProps) => {
 	return (
-		<div className="cbk-light-input">
+		<div className={`cbk-light-input${error ? ' cbk-light-input--invalid' : ''}`}>
 			{ label && (<label htmlFor={props.name}>{label}</label>)}
 			<textarea
 				rows={rows}
@@ -66,6 +74,9 @@ export const Textarea = ({label, type = 'text', rows = 3, ...props }: TextareaPr
 				{...props}
 			/>
 			<span></span>
+			{ error && (
+				<div className="cbk-light-input--invalid__error"> { error } </div>
+			)}
 		</div>
 	)
 }

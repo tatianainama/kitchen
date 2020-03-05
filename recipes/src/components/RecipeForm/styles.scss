@@ -53,9 +53,15 @@
           padding: 0px;
         }
       }
-
     }
-
+    
+    &--invalid {
+      @include solidBoxShadow($red)
+    }
+    &__error {
+      @include error();
+    }
+    
     .ingredients-form {
       padding: $spacing-xs;
 

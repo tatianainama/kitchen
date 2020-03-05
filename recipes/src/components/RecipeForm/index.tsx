@@ -1,11 +1,11 @@
 import React, { useState, forwardRef } from 'react';
 
-import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe, DBRecipe } from 'types/recipes';
+import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe, DBRecipe, _recipe } from 'types/recipes';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
-import { Field, FieldArray, Formik, useField, Form, FieldArrayRenderProps } from 'formik';
+import { Field, FieldArray, Formik, useField, Form, FieldArrayRenderProps, FormikValues } from 'formik';
 import { MeasuresTypes } from 'services/measurements';
 import { Input, Textarea, ControlledInput } from 'components/Input';
-
+import { values, isEmpty } from 'ramda';
 import ImageUploader from 'components/ImageUploader';
 import Button from 'components/Button';
 import DialogConverter from 'components/DialogConverter';
@@ -19,6 +19,7 @@ type RecipeFormProps<T> = {
   initialValues: T,
   onSubmit: (data: T) => void,
   onCancel: () => void,
+  onErrors?: () => void,
 }
 
 const convertIngredient = (ingredient: Ingredient, suggestion: Suggestion): Ingredient => {
@@ -48,13 +49,10 @@ const FormikInput = ({ label, ...props }:FormikInputProps)  => {
     <>
       <Input
         label={label}
+        error={ meta.touched && meta.error ? meta.error : undefined }
         { ...props }
         { ...field }
       />
-      {/* TODO: Add validation errors when onSubmit */}
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
     </>
   );
 };
@@ -66,13 +64,10 @@ const FormikFocusInput = forwardRef<HTMLInputElement, FormikInputProps>(({ label
       <ControlledInput
         ref={ref}
         label={label}
+        error={ meta.touched && meta.error ? meta.error : undefined }
         { ...props }
         { ...field }
       />
-      {/* TODO: Add validation errors when onSubmit */}
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
     </>
   );
 });
@@ -83,16 +78,27 @@ const FormikTextarea = ({ label, ...props }: FormikInputProps)  => {
     <>
       <Textarea
         label={label}
+        error={ meta.touched && meta.error ? meta.error : undefined }
         { ...props }
         { ...field }
-      />
-      {/* TODO: Add validation errors when onSubmit */}
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      /> 
     </>
   );
 };
+
+const validateRecipe = (recipe: Recipe | DBRecipe): Recipe | DBRecipe => {
+  let errors: any = {}
+
+  if (!recipe.name) {
+    errors.name = 'recipe must have a name'
+  }
+
+  if (!recipe.ingredients[0].ingredients[0].name) {
+    errors.ingredients = 'the recipe must have at least one ingredient'
+  }
+
+  return errors;
+}
 
 const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCancel}: RecipeFormProps<T>) => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -126,9 +132,10 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
       enableReinitialize
       initialValues={initialValues}
       onSubmit={onSubmit}
+      validate={validateRecipe}
     >
       {
-        ({setFieldValue, submitForm, values}) => {
+        ({setFieldValue, submitForm, values, errors}) => {
           return (
           <Grid>
             <Form className='cbk-recipe-form' encType="multipart/form-data">
@@ -151,7 +158,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
             <section>
               <Row>
                 <Cell columns={3}>
-                  <FormikInput name='author.name' label='name' />
+                  <FormikInput name='author.name' label='name' required/>
                 </Cell>
                 <Cell columns={3}>
                   <FormikInput name='author.website' label='website' />
@@ -211,7 +218,8 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
               <FieldArray name='ingredients'>
                 {({remove, push}) => {
                   return (
-                    <div className='subrecipe-tabs'>
+                    <>
+                    <div className={`subrecipe-tabs${errors.ingredients ? ' subrecipe-tabs--invalid' : ''}`}>
                       <ul className='tab-header'>
                         {
                           values.ingredients.map((subrecipe, subrecipeIdx) => (
@@ -254,7 +262,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
                                   {
                                     values.ingredients[selectedTab] && values.ingredients[selectedTab].ingredients.map((ingredient, index, array) => (
                                       <div className='ingredients-form__content__item' key={index}>
-                                        <FormikFocusInput name={`ingredients[${selectedTab}].ingredients[${index}].name`} 
+                                        <FormikFocusInput name={`ingredients[${selectedTab}].ingredients[${index}].name` } 
                                           ref={(ref: any) => {
                                             if(index === array.length-1 && ref && focusLast) {
                                               ref.focus();
@@ -329,6 +337,10 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
                         </div>
                       </div>
                     </div>
+                    { errors.ingredients && (
+                      <div className="subrecipe-tabs__error"> {errors.ingredients} </div>
+                    )}
+                    </>
                   );
                 }}
               </FieldArray>

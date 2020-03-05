@@ -35,3 +35,10 @@ $letter-spacing-enhanced: 0.5px;
   font-weight: $font-weight-bold;
   letter-spacing: $letter-spacing-enhanced;
 }
+
+@mixin error() {
+  font-family: $font-family-text;
+  color: $red;
+  line-height: $font-size-x-large;
+  font-style: italic;
+}
