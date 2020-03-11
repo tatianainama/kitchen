@@ -79,3 +79,37 @@ $phone: "(max-width: 839px)";
   border: 3px solid $color;
   background-color: white;
 }
+
+@mixin ripple($color: #FAFAFA, $active-color: #EEEEEE) {
+  background-position: center;
+  transition: background 0.5s;
+  cursor: pointer;
+  &:hover {
+    background: $color radial-gradient(circle, transparent 1%, $color 1%) center/15000%;
+  }
+
+  &:active { 
+    background-color: $active-color;
+    background-size: 100%;
+    transition: background 0s;
+  }
+}
+
+@mixin elevated() {
+  position: relative;
+  
+  &:hover,
+  &:focus {
+    @include solidBoxShadow();
+    top: -4px;
+    left: -4px;
+  }
+  
+  &:active,
+  &:active + &:hover {
+    border: 3px solid $black;
+    box-shadow: none!important;
+    top: 0px;
+    left: 0px;
+  }
+}

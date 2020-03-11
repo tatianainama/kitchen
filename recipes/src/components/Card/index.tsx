@@ -32,54 +32,41 @@ type CBKCardProps = {
   className?: string,
 }
 
-function CBKCard({onClick, img, title, summary, actions, icons, noMedia = false, className = ''}: CBKCardProps){
-  
-  return(
-    <Card outlined className={`cbk-card ${className}`}>
-      <CardPrimaryContent onClick={onClick}>
-        { noMedia ? null : <CardMedia square imageUrl={ img ? `/public/${img}` : sample_img}></CardMedia>}
-        <div className='cbk-card__main'>
-          <h6 className='cbk-card__main__title'>{title}</h6>
-          {
-            summary ? 
-              <p className='cbk-card__main__summary'>{summary}</p> :
-              null
-          }
+const CBKCard: React.FunctionComponent<CBKCardProps> = ({ title, summary, icons, actions, onClick }) => {
+  return (
+    <div className="cbk-card">
+      <div className="cbk-card__header" onClick={onClick}>
+        <div className="cbk-card__header__media" style={{backgroundImage: `url(${sample_img})`}} onLoad={(e) => { console.log("loaded", e)}}></div>
+        <div className="cbk-card__header__main">
+          <div className="cbk-card__header__main__title" title={title}>
+            <h6>{title}</h6>
+          </div>
+          <div className="cbk-card__header__main__subtitle">
+            <p>{summary}</p>
+          </div>
         </div>
-      </CardPrimaryContent>
+      </div>
       {
-        actions ?
-        (
-          <CardActions>
-            <CardActionButtons>
-              {
-                actions.map(({label, handler}, i) => (
-                  <Button key={i} onClick={handler}>
-                    {label}
-                  </Button>
-                )) 
-              }
-            </CardActionButtons>
-            {
-              icons ? (
-                <CardActionIcons>
-                  {
-                    icons.map((action, i) => (
-                      <Button
-                        icon={action.icon}
-                        onClick={action.handler}
-                        key={i}
-                      />
-                    ))
-                  }
-                </CardActionIcons>
-              ) : null
-            }
-          </CardActions>
-        ) :
-        null
+        actions && (
+          <div className="cbk-card__actions">
+            <div className="cbk-card__actions__buttons">
+              { actions.map((action, i) => (
+                <Button key={i} onClick={action.handler}>{action.label}</Button>
+              ))}
+            </div>
+            <div className="cbk-card__actions__icons">
+              { icons && icons.map((icon, index) => (
+                <Button
+                  icon={icon.icon}
+                  onClick={icon.handler}
+                  key={index}
+                />
+              )) }
+            </div>
+          </div>
+        )
       }
-    </Card>
+    </div>
   )
 }
 

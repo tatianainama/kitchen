@@ -42,3 +42,10 @@ $letter-spacing-enhanced: 0.5px;
   line-height: $font-size-x-large;
   font-style: italic;
 }
+
+@mixin cursive() {
+  font-family: $font-family-text;
+  color: $grey-600;
+  font-style: italic;
+  font-size: $font-size-regular;
+}
