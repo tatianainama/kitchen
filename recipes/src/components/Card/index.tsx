@@ -30,13 +30,14 @@ type CBKCardProps = {
   }[],
   onClick: (event: React.MouseEvent) => void,
   className?: string,
+  highlight?: boolean,
 }
 
-const CBKCard: React.FunctionComponent<CBKCardProps> = ({ title, summary, icons, actions, onClick }) => {
+const CBKCard: React.FunctionComponent<CBKCardProps> = ({ title, summary, img, icons, actions, onClick, highlight }) => {
   return (
-    <div className="cbk-card">
+    <div className={`cbk-card ${highlight ? 'cbk-card--highlight' : ''}`}>
       <div className="cbk-card__header" onClick={onClick}>
-        <div className="cbk-card__header__media" style={{backgroundImage: `url(${sample_img})`}} onLoad={(e) => { console.log("loaded", e)}}></div>
+        <div className="cbk-card__header__media" style={{backgroundImage: `url(${img ? `${API}/${img}` : sample_img})`}}></div>
         <div className="cbk-card__header__main">
           <div className="cbk-card__header__main__title" title={title}>
             <h6>{title}</h6>

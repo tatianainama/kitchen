@@ -9,7 +9,6 @@ button.mdc-icon-button.btn-small {
   height: 24px;
   padding: 6px;
   font-size: 12px;
-
   .material-icons {
     font-size: 12px;
   }
@@ -19,6 +18,7 @@ button.mdc-icon-button.btn-small {
 button.cbk-btn {
   @include button-reset();
   @include button();
+  white-space: nowrap;
   margin: 0 .5em;
   -webkit-font-smoothing: antialiased;
   outline: 0;

@@ -29,7 +29,7 @@ import { UiState, Display } from "types/ui";
 interface RecipeListProps extends RouteComponentProps {
   data: DBRecipe[],
   isFetching: boolean,
-  selectedRecipe: any | undefined,
+  selectedRecipe: DBRecipe | undefined,
   ui: UiState,
   fetchRecipes: (query: string) => undefined,
   receiveRecipes: (recipes: DBRecipe[]) => undefined,
@@ -157,7 +157,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
         }
         <Grid>
           <Row>
-            <Cell columns={6} phoneColumns={4} tabletColumns={8}>
+            <Cell columns={4} phoneColumns={4} tabletColumns={8}>
               {
                 data.map((recipe, i) => {
                   return (
@@ -169,12 +169,13 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
                       actions={this.actions(recipe)}
                       icons={this.icons(recipe._id)}
                       img={recipe.image}
+                      highlight={selectedRecipe ? recipe._id === selectedRecipe._id : undefined}
                     />
                   )
                 })
               }
             </Cell>
-            <Cell columns={6} phoneColumns={4} tabletColumns={8}>
+            <Cell columns={8} phoneColumns={4} tabletColumns={8}>
               { selectedRecipe !== undefined && 
                 <RecipeCard 
                   recipe={selectedRecipe}

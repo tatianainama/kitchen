@@ -1,79 +1,149 @@
 @import 'styles/_variables.scss';
 
 .cbk-recipe-card {
-  border: 0px;
-  padding: $spacing-x-large;
-  
-  &__primary {
-    display: flex;
-    justify-content: space-between;
-
-    &__image.mdc-card__media {
-      flex-grow: 1;
-      flex-basis: 25%;
-      border-top-left-radius: 0px;
-      border-top-right-radius: 0px;
+  @include box();
+  &__header {
+    border-bottom: 3px solid $black;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 2fr 1fr;
+    &__media {
+      background-size: cover;
+      background-position: center center;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      border-right: 3px solid black;
     }
-  
-    &__title {
-      flex-grow: 999;
-      flex-basis: 75%;
-      padding-left: $spacing-regular;
-      padding-top: $spacing-regular;
-      padding-bottom: $spacing-regular;
 
+    &__name {
+      grid-column: 2 / span 2;
+      padding: $spacing-small $spacing-xs $spacing-xs $spacing-xs;
       p {
-        color: $grey-500;
-        letter-spacing: 1px;
-        text-align: justify;
+        @include cursive();
       }
+    }
 
-      ul {
+    &__information {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 $spacing-xs $spacing-small $spacing-xs;
+
+      &__author {
+        @include cursive();
+        a {
+          @include link();
+        }
+      }
+      &__recipe-data ul {
         display: flex;
-        flex-direction: row;
         
         li {
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
           align-items: center;
-          padding-right: $spacing-small;
-          color: $grey-500;
+          padding: 0px 4px;
+          font-size: $font-size-small;
+          color: $grey-600;
           .cbk-icon {
-            margin-right: 8px;
             svg > g path {
-              fill: $grey-500;
+              fill: $grey-600;
             }
           }
         }
       }
     }
   }
-
   &__content {
-    &__ingredients {
-      margin: $spacing-regular 0px;
-    }
-    &__instructions {
-      color: $grey-700;
-      ol {
-        margin: 0px;
-        padding-left: $spacing-small;
-        text-align: justify;
+    padding: $spacing-regular;
+    font-size: $font-size-large;
 
-        li {
-          margin: $spacing-small 0px;
-        }
+    &__ingredients {
+      font-weight: $font-weight-bold;
+    }
+
+    &__instructions {
+      ol {
+        padding-left: $spacing-small;
+      }
+      li {
+        font-family: $font-family-text;
+        margin-bottom: $spacing-small;
+        color: $grey-700;
+        text-align: justify;
       }
     }
   }
+  // &__primary {
+  //   display: flex;
+  //   justify-content: space-between;
 
-  @media #{$phone} {
-    padding: $spacing-small;
-    .cbk-recipe-card__primary {
-      flex-direction: column;
-    }
-    .cbk-recipe-card__primary__title {
-      padding: $spacing-regular 0;
-    }
-  }
+  //   &__image.mdc-card__media {
+  //     flex-grow: 1;
+  //     flex-basis: 25%;
+  //     border-top-left-radius: 0px;
+  //     border-top-right-radius: 0px;
+  //   }
+  
+  //   &__title {
+  //     flex-grow: 999;
+  //     flex-basis: 75%;
+  //     padding-left: $spacing-regular;
+  //     padding-top: $spacing-regular;
+  //     padding-bottom: $spacing-regular;
+
+  //     p {
+  //       color: $grey-500;
+  //       letter-spacing: 1px;
+  //       text-align: justify;
+  //     }
+
+  //     ul {
+  //       display: flex;
+  //       flex-direction: row;
+        
+  //       li {
+  //         display: flex;
+  //         flex-direction: row;
+  //         align-items: center;
+  //         padding-right: $spacing-small;
+  //         color: $grey-500;
+  //         .cbk-icon {
+  //           margin-right: 8px;
+  //           svg > g path {
+  //             fill: $grey-500;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  // &__content {
+  //   &__ingredients {
+  //     margin: $spacing-regular 0px;
+  //   }
+  //   &__instructions {
+  //     color: $grey-700;
+  //     ol {
+  //       margin: 0px;
+  //       padding-left: $spacing-small;
+  //       text-align: justify;
+
+  //       li {
+  //         margin: $spacing-small 0px;
+  //       }
+  //     }
+  //   }
+  // }
+
+  // @media #{$phone} {
+  //   padding: $spacing-small;
+  //   .cbk-recipe-card__primary {
+  //     flex-direction: column;
+  //   }
+  //   .cbk-recipe-card__primary__title {
+  //     padding: $spacing-regular 0;
+  //   }
+  // }
 }

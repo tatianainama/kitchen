@@ -43,9 +43,31 @@ $letter-spacing-enhanced: 0.5px;
   font-style: italic;
 }
 
-@mixin cursive() {
+@mixin cursive($size: $font-size-regular) {
   font-family: $font-family-text;
   color: $grey-600;
   font-style: italic;
+  font-size: $size;
+}
+
+@mixin link($color: $black, $bgColor: $yellow) {
+  color: $color;
+  background:
+     linear-gradient(
+       to bottom, $bgColor 0%,
+       $bgColor 100%
+     );
+  background-position: 0 100%;
+  background-repeat: repeat-x;
+  background-size: 4px 4px;
+  text-decoration: none;
+  transition: background-size .2s;
+  text-decoration: none;
+  font-family: $font-family-display;
   font-size: $font-size-regular;
+  letter-spacing: 0.075em;
+
+  &:hover {
+    background-size: 4px 50px;
+  }
 }

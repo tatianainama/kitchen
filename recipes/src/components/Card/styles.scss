@@ -62,4 +62,13 @@
   &:hover {
     @include shadow();
   }
+
+  &--highlight {
+    @include shadow($blue);
+    top: -4px;
+    left: -4px;
+    &:hover {
+      @include shadow($blue);
+    }
+  }
 }
