@@ -1,6 +1,6 @@
 FROM node:13.7.0-buster-slim as builder
 RUN echo 'Acquire::http::Proxy "http://proxies.labs:3142/apt-cacher/";' > /etc/apt/apt.conf.d/01proxy
-RUN apt-get update && apt-get install --no-install-recommends -y git openssh-client ca-certificates python2
+RUN apt-get update && apt-get install --no-install-recommends -y git openssh-client ca-certificates python2 make
 RUN mkdir /root/.ssh/ && chmod 700 /root/.ssh
 ADD key_for_recipes /root/.ssh/id_rsa
 RUN chmod 700 /root/.ssh/id_rsa
