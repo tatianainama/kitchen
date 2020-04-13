@@ -104,6 +104,7 @@ const getAll: Controller = (db) => ({ query }, res) => {
   const _query = Object.keys(query).reduce((q, field) => {
     return {
       ...q,
+      //@ts-ignore
       ...buildSearchQuery(field, query[field])
     }
   }, {});
