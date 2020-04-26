@@ -1,0 +1,18 @@
+{
+  "subprojects": [
+    {
+      "name": "recipes",
+      "dir": "recipes",
+      "artifacts": [
+        "build/"
+      ]
+    },
+    {
+      "name": "ktchn",
+      "dir": "ktchn",
+      "artifacts": [
+        "dist/bundle.js"
+      ]
+    }
+  ]
+}
