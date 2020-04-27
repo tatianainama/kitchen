@@ -6,7 +6,7 @@ export const config = {
 	db: {
 		uri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/api',
 	},
-	public_assets_path: process.env.PUBLIC_ASSETS_PATH || `~/public`,
+	public_assets_path: process.env.PUBLIC_ASSETS_PATH || process.env.HOME,
 };
 
 export default config;
