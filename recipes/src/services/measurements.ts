@@ -77,6 +77,12 @@ const ParseUnit = (unit: string): Measure => {
   return 'mass';
 }
 
+const FormatFloat = (n: number) => {
+  const _n = n.toFixed(2);
+  const [ integer, decimal ] = _n.split('.');
+  return decimal === '00' ? parseFloat(integer) : parseFloat(_n);
+}
+
 const MeasuresTypes = GetMeasuresTypes();
 
 export {
@@ -85,4 +91,5 @@ export {
   Convert,
   ParseUnit,
   GetMeasure,
+  FormatFloat
 };

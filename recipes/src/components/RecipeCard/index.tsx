@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
-import Recipe, { SubRecipe, Ingredient } from '../../types/recipes';
-import Card, {
-  CardMedia,
-} from "@material/react-card";
+import React from 'react';
+import Recipe from '../../types/recipes';
 import Icon from 'components/Icon';
 import { List as Ingredients } from 'components/Ingredient';
+import { ScaleTool } from 'components/Ingredient/'
 import StrikeText from 'components/StrikeText';
 import moment from 'moment';
 
@@ -74,7 +72,8 @@ const CBKRecipeCard: React.FunctionComponent<RecipeCardProps> = ({ recipe }) => 
       </div>
       <div className="cbk-recipe-card__content">
         <div className="cbk-recipe-card__content__ingredients">
-          <Ingredients ingredients={recipe.ingredients} />
+          <ScaleTool ingredients={recipe.ingredients}></ScaleTool>
+          {/* <Ingredients ingredients={recipe.ingredients} /> */}
         </div>
         <div className="cbk-recipe-card__content__instructions">
           <ol>
@@ -92,57 +91,6 @@ const CBKRecipeCard: React.FunctionComponent<RecipeCardProps> = ({ recipe }) => 
       </div>
     </div>
   );
-}
-
-function CBKRecipeCard2(props: RecipeCardProps) {
-  const { recipe } = props;
-  const prepTime = moment.duration(recipe.details.preparationTime).humanize();
-  const cookTime = moment.duration(recipe.details.cookingTime).humanize();
-  const servings = recipe.details.servings;
-
-
-  return (
-    <Card outlined className='cbk-recipe-card'>
-      <div className='cbk-recipe-card__primary'>
-        <CardMedia square imageUrl={recipe.image ? `${API}/${recipe.image}` : sample_img} className='cbk-recipe-card__primary__image'/>
-        <div className='cbk-recipe-card__primary__title'>
-          <h4>{recipe.name}</h4>
-          <p>{recipe.summary}</p>
-          <p>
-            <b>Author:</b> {recipe.author.name} {recipe.details.url && (<a href={recipe.details.url}>(website)</a>)}
-          </p>
-          <ul>
-            <li>
-              <Icon width={32} height={32} icon='preparation' />
-              <label>{prepTime}</label>
-            </li>
-            <li>
-              <Icon width={32} height={32} icon='cooking' />
-              <label>{cookTime}</label>
-            </li>
-            <li>
-              <Icon width={32} height={32} icon='servings' />
-              <label>{servings}</label>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className='cbk-recipe-card__content'>
-        <div className='cbk-recipe-card__content__ingredients'>
-          <Ingredients ingredients={recipe.ingredients} />
-        </div>
-        <div className='cbk-recipe-card__content__instructions'>
-          <ol>
-            {
-              recipe.instructions.map((instruction, i) => (
-                <li key={i}>{instruction}</li>
-              ))
-            }            
-          </ol>
-        </div>
-      </div>
-    </Card>
-  )
 }
 
 export default CBKRecipeCard;
