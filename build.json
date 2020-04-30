@@ -4,7 +4,7 @@
       "name": "recipes",
       "dir": "recipes",
       "artifacts": [
-        "build/"
+        "frontend.tar.gz"
       ]
     },
     {
