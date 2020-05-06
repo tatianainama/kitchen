@@ -149,6 +149,12 @@ button.cbk-btn {
     }
   }
 
+  &--small {
+    line-height: 1rem;
+    font-size: 0.8rem;
+    font-weight: lighter;
+  }
+
   &:last-child {
     margin-right: 0;
   }
