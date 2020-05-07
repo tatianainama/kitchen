@@ -7,7 +7,7 @@ import StrikeText from 'components/StrikeText';
 import moment from 'moment';
 
 import sample_img from "components/Card/sample.png";
-const API: string = process.env.REACT_APP_API || '';
+const API: string = process.env.REACT_APP_IMG || '';
 
 import './styles.scss';
 
@@ -73,7 +73,6 @@ const CBKRecipeCard: React.FunctionComponent<RecipeCardProps> = ({ recipe }) => 
       <div className="cbk-recipe-card__content">
         <div className="cbk-recipe-card__content__ingredients">
           <ScaleTool ingredients={recipe.ingredients}></ScaleTool>
-          {/* <Ingredients ingredients={recipe.ingredients} /> */}
         </div>
         <div className="cbk-recipe-card__content__instructions">
           <ol>
