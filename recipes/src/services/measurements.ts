@@ -78,9 +78,11 @@ const ParseUnit = (unit: string): Measure => {
 }
 
 const FormatFloat = (n: number) => {
-  const _n = n.toFixed(2);
+  const _n = n.toFixed(1);
   const [ integer, decimal ] = _n.split('.');
-  return decimal === '00' ? parseFloat(integer) : parseFloat(_n);
+  //     do not show .00 decimals or decimals for numbers greater than 100 => negligible
+  return decimal === '00' || integer.length >= 3 ? 
+          parseFloat(integer) : parseFloat(_n);
 }
 
 const MeasuresTypes = GetMeasuresTypes();
