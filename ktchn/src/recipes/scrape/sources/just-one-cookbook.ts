@@ -79,7 +79,7 @@ const JOC_CONFIG = {
     tags: (getText($)(SELECTORS.TAGS)).split(',').map(R.trim),
     course: [getText($)(SELECTORS.COURSE)],
     summary: getText($)(SELECTORS.SUMMARY),
-    image: $(SELECTORS.IMAGE).attr('nitro-lazy-src')
+    image: $(SELECTORS.IMAGE).attr('src')
   })
 }
 
