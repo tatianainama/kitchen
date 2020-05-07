@@ -1,0 +1,18 @@
+{
+  "subprojects": [
+    {
+      "name": "recipes",
+      "dir": "recipes",
+      "artifacts": [
+        "frontend.tar.gz"
+      ]
+    },
+    {
+      "name": "ktchn",
+      "dir": "ktchn",
+      "artifacts": [
+        "dist/bundle.js"
+      ]
+    }
+  ]
+}
