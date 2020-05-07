@@ -3,6 +3,7 @@ export interface Ingredient {
   quantity: number,
   unit: string,
   _original: string,
+  notes?: string,
   suggestions?: Suggestion[],
 }
 
