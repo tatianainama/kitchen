@@ -11,7 +11,7 @@ import '@material/react-card/dist/card.min.css';
 import '@material/react-button/dist/button.min.css';
 
 import './styles.scss';
-import sample_img from "./sample.png";
+import sample_img from "sample.png";
 const API: string = process.env.REACT_APP_IMG || '';
 
 type CBKCardProps = {

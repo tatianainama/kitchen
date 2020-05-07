@@ -6,7 +6,7 @@ import { ScaleTool } from 'components/Ingredient/'
 import StrikeText from 'components/StrikeText';
 import moment from 'moment';
 
-import sample_img from "components/Card/sample.png";
+import sample_img from "sample.png";
 const API: string = process.env.REACT_APP_IMG || '';
 
 import './styles.scss';
@@ -22,7 +22,7 @@ const CBKRecipeCard: React.FunctionComponent<RecipeCardProps> = ({ recipe }) => 
   return (
     <div className="cbk-recipe-card">
       <div className="cbk-recipe-card__header">
-        <div className="cbk-recipe-card__header__media" style={recipe.image ? {backgroundImage: `url(${API}/${recipe.image})`} : undefined}></div>
+        <div className="cbk-recipe-card__header__media" style={{backgroundImage: `url(${recipe.image ? `${API}/${recipe.image}` : sample_img})`}}></div>
         <div className="cbk-recipe-card__header__name">
           <h4>
             { recipe.name }
