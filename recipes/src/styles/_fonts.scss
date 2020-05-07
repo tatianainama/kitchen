@@ -50,7 +50,7 @@ $letter-spacing-enhanced: 0.5px;
   font-size: $size;
 }
 
-@mixin link($color: $black, $bgColor: $yellow) {
+@mixin link($color: $black, $bgColor: $yellow, $activeColor: $black) {
   color: $color;
   background:
      linear-gradient(
@@ -59,15 +59,20 @@ $letter-spacing-enhanced: 0.5px;
      );
   background-position: 0 100%;
   background-repeat: repeat-x;
-  background-size: 4px 4px;
+  background-size: 2px 2px;
   text-decoration: none;
-  transition: background-size .2s;
+  transition: background-size .2s, color .2s;
   text-decoration: none;
   font-family: $font-family-display;
   font-size: $font-size-regular;
   letter-spacing: 0.075em;
 
   &:hover {
-    background-size: 4px 50px;
+    background-size: 2px 50px;
+    color: $activeColor;
+  }
+  #{if(&, '&.active', '.link--active')} {
+    background-size: 2px 50px;
+    color: $activeColor;
   }
 }

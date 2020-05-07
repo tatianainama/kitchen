@@ -150,9 +150,13 @@ button.cbk-btn {
   }
 
   &--small {
-    line-height: 1rem;
+    line-height: 1.2rem;
     font-size: 0.8rem;
     font-weight: lighter;
+  }
+
+  &--link {
+    @include link($white, $yellow, $black);
   }
 
   &:last-child {

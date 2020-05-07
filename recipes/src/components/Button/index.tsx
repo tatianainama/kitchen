@@ -16,6 +16,8 @@ type CBKButtonProps = {
   raised?: boolean,
   outlined?: boolean,
   icon?: string,
+  link?: boolean,
+  active?: boolean,
   onClick?: (e: any) => void,
   small?: boolean,
   type?: 'button' | 'submit' | 'reset';
@@ -31,7 +33,10 @@ export default function CBKButton(props: CBKButtonProps) {
     'cbk-btn--outlined': props.outlined,
     'cbk-btn--disabled': props.disabled,
     'cbk-btn--small': props.small,
+    'cbk-btn--link': props.link,
+    'cbk-btn--active active': props.active,
   })
+
   if (props.icon) {
     return (
       <IconButton
