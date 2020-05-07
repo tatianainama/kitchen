@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { SubRecipe } from 'src/types/recipes';
+import { SubRecipe, Ingredient } from 'src/types/recipes';
 import Button from 'components/Button';
 import Input from 'components/Input';
 
@@ -25,23 +25,26 @@ const ScaleTool: React.FunctionComponent<Props> = ({ ingredients }) => {
     multiplier: 1,
   });
 
-  const humanized = (value: number) => {
-    return value.toFixed(2);
-  }
+  const scales: [number, string][] = [[2, '2'], [1, '1'], [0.5, '1/2'], [0.33, '1/3'], [0.25, '1/4']];
 
-  const changeMultiplier = (multiplier: number) => {
-    if (mode === MODE.Custom) {
-      setMode(MODE.Predefined);
-    }
-    setMultiplier(multiplier)
+  const changeMultiplier = (multiplier: number, _mode: MODE) => {
+    setMode(_mode);
+    setMultiplier(multiplier);
   }
 
   const setStickMultiplier = (newValue: number) => {
-    setStick({
-      ...stick,
-      value: newValue,
-      multiplier: (newValue || 1) / stick.original
-    })
+    if (!isNaN(newValue)) {
+      setStick({
+        ...stick,
+        value: newValue,
+        multiplier: (newValue || 1) / stick.original
+      })
+    } else {
+      setStick({
+        ...stick,
+        value: newValue,
+      })
+    }
   }
 
   const setNewStick = (value: number, key: string) => {
@@ -53,15 +56,26 @@ const ScaleTool: React.FunctionComponent<Props> = ({ ingredients }) => {
     })
   }
 
+  const activeMultiplier = (m: number) => {
+    return mode === MODE.Predefined &&  m === multiplier;
+  }
+
   return (
     <div className="cbk-scale-tool">
       <div className="cbk-scale-tool__actions">
-        <Button link small active onClick={() => { changeMultiplier(2) }}>x 2</Button>
-        <Button link small onClick={() => { changeMultiplier(1) }}>x 1</Button>
-        <Button link small onClick={() => { changeMultiplier(0.5) }}>x 1/2</Button>
-        <Button link small onClick={() => { changeMultiplier(0.33) }} >x 1/3</Button>
-        <Button link small onClick={() => { changeMultiplier(0.25) }}>x 1/4</Button>
-        <Button link small onClick={() => { setMode(MODE.Custom) }}>with stick</Button>
+        {
+          scales.map(([multiplier, label] ) => (
+            <Button
+              key={multiplier}
+              link
+              small
+              onClick={() => {changeMultiplier(multiplier, MODE.Predefined)}}
+              active={activeMultiplier(multiplier)}>
+                <span>x{label}</span>
+            </Button>
+          ))
+        }
+        <Button link small active={mode === MODE.Custom} onClick={() => { changeMultiplier(1, MODE.Custom) }}>with stick</Button>
       </div>
       <div className="cbk-scale-tool__ingredients">
         {
@@ -69,7 +83,7 @@ const ScaleTool: React.FunctionComponent<Props> = ({ ingredients }) => {
             <ul key={subrecipeKey}>
               {
                 subrecipe.name ? (
-                  <li>{ subrecipe.name }</li>
+                  <li className="cbk-scale-tool__ingredients__title">{ subrecipe.name }</li>
                 ) : null
               }
               {
@@ -78,23 +92,25 @@ const ScaleTool: React.FunctionComponent<Props> = ({ ingredients }) => {
                   return mode === MODE.Predefined ? (
                     (
                       <li key={key}>
-                        { FormatFloat(ingredient.quantity * multiplier) }{ ingredient.unit } { ingredient.name }
+                        <IngredientItem ingredient={{
+                          ...ingredient,
+                          quantity: FormatFloat(ingredient.quantity * multiplier)
+                        }}/>
                       </li>
                     )
                   ) : (
                     (
-                      <li key={key}>
-                        <input type="radio" value={key} checked={stick.key === key} onChange={e => { setNewStick(ingredient.quantity, key)}}/>
+                      <li key={key} onClick={e => {setNewStick(ingredient.quantity, key)}} className={stick.key === key ? 'stick-ingredient' : ''}>
                         {
                           stick.key === key ? (
-                            <span>
-                              <input min={1} value={stick.value} type='number' onChange={e => {setStickMultiplier(parseInt(e.currentTarget.value))}}/>
-                              {ingredient.unit} {ingredient.name}
-                            </span>
+                            <IngredientItem ingredient={ingredient}>
+                              <Input min={1} value={isNaN(stick.value) ? '' : stick.value} style={{width: `${JSON.stringify(stick.value).length + 1}ch`}} type='number' onChange={e => {setStickMultiplier(parseInt(e.currentTarget.value))}}/>
+                            </IngredientItem>
                           ) : (
-                            <span>
-                              { FormatFloat(ingredient.quantity * stick.multiplier) }{ ingredient.unit } { ingredient.name }
-                            </span>
+                            <IngredientItem ingredient={{
+                              ...ingredient,
+                              quantity: FormatFloat(ingredient.quantity * stick.multiplier)
+                            }} />
                           )
                         }
                       </li>
@@ -107,8 +123,27 @@ const ScaleTool: React.FunctionComponent<Props> = ({ ingredients }) => {
         }
       </div>
     </div>
-
   )
 };
+
+const IngredientItem: React.FunctionComponent<{ ingredient: Ingredient }> = ({ ingredient, children }) => {
+  return (
+    <>
+      {
+        children ? ( children ) : (
+          <div className="cbk-scale-tool__ingredients__qty">
+            { ingredient.quantity }
+          </div>
+        )
+      }
+      <div className="cbk-scale-tool__ingredients__unit">
+        { ingredient.unit }
+      </div>
+      <div className="cbk-scale-tool__ingredients__name">
+        { ingredient.name } <span className="cbk-scale-tool__ingredients__name__notes">{ingredient.notes}</span>
+      </div>
+    </>
+  )
+}
 
 export default ScaleTool;

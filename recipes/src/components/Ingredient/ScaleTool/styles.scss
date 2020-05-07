@@ -1,6 +1,69 @@
+@import 'styles/_variables.scss';
+
 .cbk-scale-tool {
   &__actions {
     display: flex;
     justify-content: center;
+  }
+
+  &__ingredients {
+    font-weight: normal;
+    display: flex;
+    justify-content: center;
+    padding: $spacing-small 0;
+    $ingredients: &;
+    flex-wrap: wrap;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      margin: $spacing-small $spacing-xs;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    li {
+      @include display();
+      display: flex;
+      flex-wrap: nowrap;
+      margin-bottom: 0.875rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      #{$ingredients}__unit {
+        margin-left: 1ch;
+      }
+
+      #{$ingredients}__name {
+        margin-left: 1ch;
+        &__notes {
+          font-style: italic;
+          font-weight: 500;
+        }
+      }
+
+      &#{$ingredients}__title {
+        border-bottom: 1px dashed black;
+      }
+
+      &.stick-ingredient {
+        .cbk-light-input {
+          width: auto;
+          margin: 0;
+        }
+        display: flex;
+        background-color: #eec71a ;
+        input {
+          @include display();
+          padding: 0;   
+        }
+      }
+      
+    }
   }
 }
