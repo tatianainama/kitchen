@@ -11,7 +11,7 @@ export interface IIngredient {
   quantity: number;
   unit: string;
   state?: string;
-  note?: string;
+  notes?: string;
   _original?: string;
 }
 
