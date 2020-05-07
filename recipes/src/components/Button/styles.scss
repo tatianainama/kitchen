@@ -156,7 +156,8 @@ button.cbk-btn {
   }
 
   &--link {
-    @include link($white, $yellow, $black);
+    @include link();
+    font-weight: 600;
   }
 
   &:last-child {

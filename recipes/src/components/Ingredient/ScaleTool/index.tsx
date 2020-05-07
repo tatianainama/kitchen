@@ -56,12 +56,12 @@ const ScaleTool: React.FunctionComponent<Props> = ({ ingredients }) => {
   return (
     <div className="cbk-scale-tool">
       <div className="cbk-scale-tool__actions">
-        <Button onClick={() => { changeMultiplier(2) }}>x 2</Button>
-        <Button onClick={() => { changeMultiplier(1) }}>x 1</Button>
-        <Button onClick={() => { changeMultiplier(0.5) }}>x 1/2</Button>
-        <Button onClick={() => { changeMultiplier(0.33) }} >x 1/3</Button>
-        <Button onClick={() => { changeMultiplier(0.25) }}>x 1/4</Button>
-        <Button onClick={() => { setMode(MODE.Custom) }}>with stick</Button>
+        <Button link small active onClick={() => { changeMultiplier(2) }}>x 2</Button>
+        <Button link small onClick={() => { changeMultiplier(1) }}>x 1</Button>
+        <Button link small onClick={() => { changeMultiplier(0.5) }}>x 1/2</Button>
+        <Button link small onClick={() => { changeMultiplier(0.33) }} >x 1/3</Button>
+        <Button link small onClick={() => { changeMultiplier(0.25) }}>x 1/4</Button>
+        <Button link small onClick={() => { setMode(MODE.Custom) }}>with stick</Button>
       </div>
       <div className="cbk-scale-tool__ingredients">
         {

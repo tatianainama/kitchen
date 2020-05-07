@@ -55,14 +55,16 @@
     }
   }
   &__content {
-    padding: $spacing-regular;
     font-size: $font-size-large;
 
     &__ingredients {
+      padding: $spacing-regular;
       font-weight: $font-weight-bold;
+      border-bottom: 3px solid black;
     }
 
     &__instructions {
+      padding: $spacing-regular;
       ol {
         padding-left: $spacing-small;
       }
@@ -74,76 +76,4 @@
       }
     }
   }
-  // &__primary {
-  //   display: flex;
-  //   justify-content: space-between;
-
-  //   &__image.mdc-card__media {
-  //     flex-grow: 1;
-  //     flex-basis: 25%;
-  //     border-top-left-radius: 0px;
-  //     border-top-right-radius: 0px;
-  //   }
-  
-  //   &__title {
-  //     flex-grow: 999;
-  //     flex-basis: 75%;
-  //     padding-left: $spacing-regular;
-  //     padding-top: $spacing-regular;
-  //     padding-bottom: $spacing-regular;
-
-  //     p {
-  //       color: $grey-500;
-  //       letter-spacing: 1px;
-  //       text-align: justify;
-  //     }
-
-  //     ul {
-  //       display: flex;
-  //       flex-direction: row;
-        
-  //       li {
-  //         display: flex;
-  //         flex-direction: row;
-  //         align-items: center;
-  //         padding-right: $spacing-small;
-  //         color: $grey-500;
-  //         .cbk-icon {
-  //           margin-right: 8px;
-  //           svg > g path {
-  //             fill: $grey-500;
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-  // &__content {
-  //   &__ingredients {
-  //     margin: $spacing-regular 0px;
-  //   }
-  //   &__instructions {
-  //     color: $grey-700;
-  //     ol {
-  //       margin: 0px;
-  //       padding-left: $spacing-small;
-  //       text-align: justify;
-
-  //       li {
-  //         margin: $spacing-small 0px;
-  //       }
-  //     }
-  //   }
-  // }
-
-  // @media #{$phone} {
-  //   padding: $spacing-small;
-  //   .cbk-recipe-card__primary {
-  //     flex-direction: column;
-  //   }
-  //   .cbk-recipe-card__primary__title {
-  //     padding: $spacing-regular 0;
-  //   }
-  // }
 }
