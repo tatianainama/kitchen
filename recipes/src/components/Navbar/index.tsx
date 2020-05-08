@@ -1,5 +1,7 @@
 import React, { ReactElement } from 'react';
-import Button from '@material/react-button';
+import { Button } from '@rmwc/button';
+
+import '@rmwc/button/styles';
 import './styles.scss';
 
 type NavbarProps = {
