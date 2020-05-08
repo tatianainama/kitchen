@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-import { Recipe, IIngredient, IngredientSuggestion, RecipeDB } from './model';
+import { Recipe, IIngredient, IngredientSuggestion, ScrapedRecipe } from './model';
 import { IMongoService } from '../mongo';
 import { FilterQuery, ObjectID } from 'mongodb';
 import Scrape from './scrape/index';
-import { ScrapedRecipe } from './model';
 import Ingredient from '../ingredients/model';
 import { dissoc } from 'ramda';
 import request from 'request-promise';
@@ -21,11 +20,19 @@ type Controller = (db: IMongoService) => (req: Request, res: Response, next: Nex
 type ChainPController<T, U> = (req: Request, res: Response, next: NextFunction) => (result: T) => Promise<U>;
 
 const getSuggestions = (db: IMongoService) => async function(ingredient: IIngredient): Promise<IngredientSuggestion> {
-  // @ts-ignore: yes
-  const suggestions = await db.find<Ingredient>({$text: {$search: ingredient.name}}, { score: { $meta: "textScore" } });
-  return {
-    ...ingredient,
-    suggestions,
+  try {
+    //@ts-ignore
+    const suggestions = await db.find<Ingredient>({$text: {$search: ingredient.name}}, { score: { $meta: "textScore" } });
+    return {
+      ...ingredient,
+      suggestions,
+    }
+  } catch (e) {
+    console.error(e);
+    return {
+      ...ingredient,
+      suggestions: []
+    }
   }
 }
 
