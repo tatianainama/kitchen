@@ -3,7 +3,6 @@ import Dialog from 'components/Dialog';
 import { GetMeasure, Convert, Measure } from 'services/measurements';
 import Button from 'components/Button';
 
-import '@material/react-dialog/dist/dialog.min.css';
 import './styles.scss';
 
 type Data = {
