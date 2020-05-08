@@ -1,7 +1,11 @@
 import React, { useState, forwardRef } from 'react';
 
 import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe, DBRecipe, _recipe } from 'types/recipes';
-import { Grid, Row, Cell } from '@material/react-layout-grid';
+import {
+  Grid, 
+  GridCell as Cell, 
+  GridRow as Row
+} from '@rmwc/grid';
 import { Field, FieldArray, Formik, useField, Form, FieldArrayRenderProps, FormikValues } from 'formik';
 import { MeasuresTypes } from 'services/measurements';
 import { Input, Textarea, ControlledInput } from 'components/Input';
@@ -13,6 +17,7 @@ import TagInput from 'components/TagInput';
 import DurationPicker from 'components/DurationPicker';
 import Dialog from 'components/Dialog';
 
+import '@rmwc/grid/styles';
 import './styles.scss';
 
 type RecipeFormProps<T> = {
@@ -140,7 +145,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
           <Grid>
             <Form className='cbk-recipe-form' encType="multipart/form-data">
             <Row>
-              <Cell columns={2}>
+              <Cell span={2}>
                 <ImageUploader
                   initialValue={initialValues.image}
                   onChange={(image)=> {
@@ -148,7 +153,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
                   }}
                 />
               </Cell>
-              <Cell columns={10}>
+              <Cell span={10}>
                 <FormikInput name='name' label='name' />
                 <FormikTextarea name='summary' label='summary' />
               </Cell>
@@ -157,10 +162,10 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
             <h5>Author Information</h5>
             <section>
               <Row>
-                <Cell columns={3}>
+                <Cell span={3}>
                   <FormikInput name='author.name' label='name' required/>
                 </Cell>
-                <Cell columns={3}>
+                <Cell span={3}>
                   <FormikInput name='author.website' label='website' />
                 </Cell>
               </Row>
@@ -169,32 +174,32 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
             <h5>Recipe Information</h5>
             <section>
               <Row>
-                <Cell columns={2}>
+                <Cell span={2}>
                   <DurationPicker
                     initialValue={values.details.preparationTime}
                     onChange={(duration)=>{ setFieldValue('details.preparationTime', duration)}} 
                     label='preparation time'
                   />
                 </Cell>
-                <Cell columns={2}>
+                <Cell span={2}>
                   <DurationPicker
                     initialValue={values.details.cookingTime}
                     onChange={(duration)=>{ setFieldValue('details.cookingTime', duration)}} 
                     label='cooking time'
                   />
                 </Cell>
-                <Cell columns={2}>
+                <Cell span={2}>
                   <FormikInput name='details.servings' label='servings' type='number' />
                 </Cell>
-                <Cell columns={3}>
+                <Cell span={3}>
                   <FormikInput name='details.url' label='recipe url' />
                 </Cell>
-                <Cell columns={3}>
+                <Cell span={3}>
                   <FormikInput name='details.video' label='recipe video' />
                 </Cell>
               </Row>
               <Row>
-                <Cell columns={12}>
+                <Cell span={12}>
                   <TagInput
                     tags={values.tags}
                     label='tags'
@@ -203,7 +208,7 @@ const RecipeForm = <T extends Recipe|DBRecipe>({ initialValues, onSubmit, onCanc
                 </Cell>
               </Row>
               <Row>
-                <Cell columns={12}>
+                <Cell span={12}>
                   <TagInput
                     tags={values.course}
                     label='dish course'
