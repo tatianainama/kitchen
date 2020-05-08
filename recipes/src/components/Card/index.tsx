@@ -1,14 +1,5 @@
 import React from 'react';
-import Card, {
-  CardActions,
-  CardActionButtons,
-  CardPrimaryContent,
-  CardMedia,
-  CardActionIcons
-} from "@material/react-card";
 import Button from "components/Button";
-import '@material/react-card/dist/card.min.css';
-import '@material/react-button/dist/button.min.css';
 
 import './styles.scss';
 import sample_img from "sample.png";
