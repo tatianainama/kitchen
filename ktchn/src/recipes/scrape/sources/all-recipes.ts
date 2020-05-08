@@ -51,23 +51,65 @@ function getIngredients($: CheerioSelector): ISubRecipe[] {
   return ingredients;
 }
 
+function getIngredientsNew($: CheerioSelector): ISubRecipe[] {
+  let ingredients: ISubRecipe[] = [{
+    name: '',
+    ingredients: []
+  }];
+
+  const subRecipes = $('section.recipe-ingredients-new fieldset.ingredients-section__fieldset');
+
+  subRecipes.each((i, element) => {
+    ingredients[i] = {
+      name: $(element).find('legend').text().trim(),
+      ingredients: $(element).find('.ingredients-item-name').map((j, e) => parseIngredients($(e).text().trim())).get()
+    }
+  })
+  return ingredients;
+}
+
 const AR_CONFIG = {
   name: 'All Recipes',
   domain: 'allrecipes',
   website: 'https://www.allrecipes.com',
-  scrapeRecipe: ($: CheerioSelector): Recipe => ({
-    name: getText($)(SELECTORS.TITLE),
-    author: {
-      name: getText($)(SELECTORS.AUTHOR),
-      website: 'https://www.allrecipes.com',
-    },
-    details: getRecipeDetails($),
-    ingredients: getIngredients($),
-    instructions: getTextList($)(SELECTORS.INSTRUCTIONS),
-    tags: $(SELECTORS.TAGS).map((i, e) => $(e).attr('content')).get(),
-    summary: getAttr($)(SELECTORS.SUMMARY, SELECTORS.CONTENT),
-    image:  $(SELECTORS.IMAGE).attr('src')
-  }),
+  scrapeRecipe: ($: CheerioSelector): Recipe => {
+    
+    const jsonData = $('script[type="application/ld+json"]').html();
+    if (jsonData) {
+      const recipe = JSON.parse(jsonData).find((x: any) => x['@type'] === 'Recipe');
+      return {
+        name: recipe.name,
+        author: {
+          name: recipe.author.name || '',
+          website: 'https://www.allrecipes.com',
+        },
+        summary: recipe.description || '',
+        image: recipe.image.url || '',
+        details: {
+          preparationTime: recipe.prepTime,
+          cookingTime: recipe.cookTime,
+          servings: 1
+        },
+        tags: recipe.recipeCategory,
+        instructions: recipe.recipeInstructions.map((i: any) => i.text),
+        ingredients: getIngredientsNew($)
+
+      };
+    }
+    return {
+      name: getText($)(SELECTORS.TITLE),
+      author: {
+        name: getText($)(SELECTORS.AUTHOR),
+        website: 'https://www.allrecipes.com',
+      },
+      details: getRecipeDetails($),
+      ingredients: getIngredients($),
+      instructions: getTextList($)(SELECTORS.INSTRUCTIONS),
+      tags: $(SELECTORS.TAGS).map((i, e) => $(e).attr('content')).get(),
+      summary: getAttr($)(SELECTORS.SUMMARY, SELECTORS.CONTENT),
+      image:  $(SELECTORS.IMAGE).attr('src')
+    }
+  },
 }
 
 export default AR_CONFIG;
