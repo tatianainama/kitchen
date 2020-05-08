@@ -1,10 +1,14 @@
 
 import React, { Component, useState, FunctionComponent } from 'react';
-import { ChipSet, Chip } from '@material/react-chips';
-import MaterialIcon from '@material/react-material-icon';
+import {
+  ChipSet,
+  Chip
+} from '@rmwc/chip';
+
 import { Input } from 'components/Input';
 import { uniq } from 'ramda';
 
+import '@rmwc/chip/styles';
 import './styles.scss';
 
 type TagInputProps = {
@@ -39,8 +43,7 @@ export const TagInput:FunctionComponent<TagInputProps> = ({ label, onNewTag, tag
         onKeyDown={handleKeyDown}
       />
       <ChipSet
-        input
-        updateChips={(chips) => updateTags(chips.map(chip => chip.label || ''))}
+        // updateChips={(chips) => updateTags(chips.map(chip => chip.label || ''))}
       >
         {tags && tags.map((tag) => {
           const id = mkTagId(tag);
@@ -49,7 +52,7 @@ export const TagInput:FunctionComponent<TagInputProps> = ({ label, onNewTag, tag
               id={id}
               key={id}
               label={tag}
-              trailingIcon={<MaterialIcon icon='cancel' />}
+              trailingIcon="close"
             />
           )
         }
