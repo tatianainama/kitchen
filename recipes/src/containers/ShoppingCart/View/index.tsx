@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import Button from 'components/Button';
 import Dialog from 'components/Dialog';
 import List from 'components/List';
-import { CBKSelect2 as Select } from 'components/Select';
+import { CBKSelect as Select } from 'components/Select';
 
 import shoppingCartActions, { fetchCartActionCreator, saveCartActionCreator } from 'containers/ShoppingCart/actions';
 
