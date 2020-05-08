@@ -6,12 +6,18 @@ import ViewRecipe from 'containers/Recipes/View';
 import EditRecipe from 'containers/Recipes/Edit';
 import ShoppingList from 'containers/ShoppingCart/List';
 import PlannerContainer from 'containers/Planner';
+import { Redirect } from 'react-router-dom';
 
 const emptyRoute = (title: string) => (props: any) => {
   return (<h1>{title} {props.match.params && props.match.params.id}</h1>);
 };
 
 const routes = [
+  {
+    path: '/',
+    exact: true,
+    component: () => (<Redirect to='/recipes'/>)
+  },
   {
     path: '/recipes',
     component: RecipesContainer,
