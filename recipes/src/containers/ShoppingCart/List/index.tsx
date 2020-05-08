@@ -3,13 +3,10 @@ import { RouteComponentProps } from 'react-router';
 import { AppState } from 'store/configureStore';
 import { connect } from 'react-redux';
 import Navbar from 'components/Navbar';
-import { Grid, Row, Cell } from '@material/react-layout-grid';
-import List from 'components/List';
 import ShoppingItem from 'src/types/shopping-cart';
 import { addRecipeToCart, removeItemFromCart, removeAll } from './../actions';
 import Dialog from 'components/Dialog';
 import Button from 'components/Button';
-import { DBRecipe } from 'src/types/recipes';
 
 type ActionsType = {
   addToCart: typeof addRecipeToCart,

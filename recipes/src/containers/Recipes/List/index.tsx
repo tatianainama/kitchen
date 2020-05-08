@@ -12,7 +12,12 @@ import {
 import plannerActions from 'containers/Planner/actions';
 
 import { connect } from "react-redux";
-import { Grid, Row, Cell } from "@material/react-layout-grid";
+import {
+  Grid,
+  GridCell as Cell,
+  GridRow as Row
+} from '@rmwc/grid';
+
 import Button from "components/Button";
 import Card from 'components/Card';
 import RecipeCard from 'components/RecipeCard';
@@ -23,6 +28,7 @@ import Input from 'components/Input';
 import { throttle } from 'throttle-debounce';
 import Spinner from 'components/Spinner';
 
+import '@rmwc/grid/styles';
 import './styles.scss';
 import { UiState, Display } from "types/ui";
 
@@ -157,7 +163,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
         }
         <Grid>
           <Row>
-            <Cell columns={4} phoneColumns={4} tabletColumns={8}>
+            <Cell span={4} phone={4} tablet={8}>
               {
                 data.map((recipe, i) => {
                   return (
@@ -175,7 +181,7 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
                 })
               }
             </Cell>
-            <Cell columns={8} phoneColumns={4} tabletColumns={8}>
+            <Cell span={8} phone={4} tablet={8}>
               { selectedRecipe !== undefined && 
                 <RecipeCard 
                   recipe={selectedRecipe}

@@ -5,7 +5,6 @@ import CBKDrawer from './components/Drawer';
 import Toast from 'components/Toast';
 import configureStore from 'store/configureStore';
 import './styles/app.scss';
-import "@material/react-layout-grid/dist/layout-grid.min.css";
 
 import Routes, { RouteWithSubRoutes } from 'route.config';
 
