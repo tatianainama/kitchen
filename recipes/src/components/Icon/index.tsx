@@ -1,9 +1,9 @@
 import React from 'react';
 import Svgs from 'svgs';
 import ReactSVG from 'react-svg';
-import MaterialIcon from '@material/react-material-icon';
+import { Icon as MaterialIcon } from '@rmwc/icon';
 
-import '@material/react-material-icon/dist/material-icon.css';
+import '@rmwc/icon/styles';
 
 export type IconProps = {
   icon: string,

@@ -1,11 +1,10 @@
 import React, { ReactElement } from 'react';
 import Icon from 'components/Icon';
-import IconButton from '@material/react-icon-button';
+import { IconButton } from '@rmwc/icon-button';
 
 import classnames from 'classnames';
 
-import '@material/react-button/dist/button.css';
-import '@material/react-icon-button/dist/icon-button.css'
+import '@rmwc/icon-button/styles';
 
 import './styles.scss';
 
@@ -40,19 +39,17 @@ export default function CBKButton(props: CBKButtonProps) {
   if (props.icon) {
     return (
       <IconButton
+        icon={
+          <Icon material icon={props.icon}/>
+        }
         onClick={props.onClick}
-        unelevated={props.unelevated}
-        raised={props.raised}
-        outlined={props.outlined}
         className={classnames({
           'btn-small': props.small,
         }, props.className)}
-        type={props.type || 'button'}
         disabled={props.disabled}
         style={props.style}
-      >
-        <Icon material icon={props.icon}/>
-      </IconButton>
+        ripple
+      />
     );
   } else {
     return (
