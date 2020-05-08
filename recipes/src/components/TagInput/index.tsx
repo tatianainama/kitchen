@@ -35,6 +35,10 @@ export const TagInput:FunctionComponent<TagInputProps> = ({ label, onNewTag, tag
     }
   }
 
+  const removeTag = (tag: string) => {
+    updateTags(tags.filter(t => t !== tag))
+  }
+
   return (
     <div className="cbk-tag-input">
       <Input
@@ -44,16 +48,16 @@ export const TagInput:FunctionComponent<TagInputProps> = ({ label, onNewTag, tag
         onKeyDown={handleKeyDown}
       />
       <ChipSet
-        // updateChips={(chips) => updateTags(chips.map(chip => chip.label || ''))}
       >
         {tags && tags.map((tag) => {
           const id = mkTagId(tag);
           return (
             <Chip
-              id={id}
+              id={tag}
               key={id}
               label={tag}
               trailingIcon="close"
+              onRemove={(evt) => { removeTag(evt.detail.chipId) }}
             />
           )
         }
