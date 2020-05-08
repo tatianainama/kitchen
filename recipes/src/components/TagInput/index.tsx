@@ -30,6 +30,7 @@ export const TagInput:FunctionComponent<TagInputProps> = ({ label, onNewTag, tag
   const handleKeyDown = (e: any) => {
     const label = e.target.value;
     if (!!label && e.key === 'Enter') {
+      e.preventDefault();
       updateTags(uniq([...tags, label]));
     }
   }
