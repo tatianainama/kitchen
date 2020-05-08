@@ -1,10 +1,11 @@
 import React from 'react';
-import Dialog, {
+import {
+  Dialog,
   DialogContent
-} from '@material/react-dialog';
+} from '@rmwc/dialog';
 import Button from 'components/Button';
 
-import '@material/react-dialog/dist/dialog.min.css';
+import '@rmwc/dialog/styles';
 import './styles.scss'
 
 interface DialogProps {
@@ -21,10 +22,14 @@ interface DialogProps {
 const CBK_Dialog = ({ isOpen, actions, children }: DialogProps) => {
   return (
     <Dialog
-      scrimClickAction={''}
-      escapeKeyAction={''}
       open={isOpen}
-      onClose={(action: string) => actions[action] && actions[action].onSelect() }
+      onClose={
+        (evt) => {
+          if (evt.detail.action) {
+            return actions[evt.detail.action] && actions[evt.detail.action].onSelect()
+          }
+        }
+      }
       className='cbk-dialog'
     >
       <DialogContent className='cbk-dialog__content'>

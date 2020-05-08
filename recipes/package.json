@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@rmwc/dialog": "^6.1.0",
     "@rmwc/icon": "^6.0.14",
     "@rmwc/icon-button": "^6.0.14",
     "@types/classnames": "^2.2.9",
