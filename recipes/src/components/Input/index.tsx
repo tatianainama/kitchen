@@ -2,15 +2,6 @@ import React, { InputHTMLAttributes, ChangeEvent, forwardRef } from 'react';
 
 import './styles.scss';
 
-export const Input2: React.FunctionComponent<InputHTMLAttributes<{}>> = (props) => (
-	<div className='cbk-input-2'>
-		<input
-			{...props}
-		/>
-		<span></span>
-	</div>
-)
-
 type InputProps = {
 	[x: string]: any,
 	label?: string,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { DBRecipe } from 'types/recipes';
 
-import { Input2 as Input} from 'components/Input';
+import { Input } from 'components/Input';
 import List from 'components/List';
 
 import { getRecipes } from 'containers/Recipes/services';
@@ -83,9 +83,9 @@ class RecipeSearch extends React.Component<Props, State> {
     })
   }
 
-  changeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+  changeQuery = (event: React.FormEvent<HTMLInputElement>) => {
     this.setState({
-      search: event.target.value,
+      search: event.currentTarget.value,
       openResult: true,
     }, () => {
       this.autocompleteSearch(this.state.search)
