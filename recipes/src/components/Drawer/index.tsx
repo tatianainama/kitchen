@@ -1,20 +1,20 @@
-import React, { ReactNode, ReactChildren, createElement } from 'react';
-import ReactDOMServer from 'react-dom/server';
-import Drawer, {
+import React from 'react';
+
+import {
+  Drawer,
   DrawerHeader,
   DrawerTitle,
-  DrawerContent,
-} from '@material/react-drawer';
-import List, { ListItem } from '@material/react-list';
-import { ReactComponent as Logo } from 'svgs/logo.svg';
+  DrawerContent
+} from '@rmwc/drawer';
+import {
+  List,
+  ListItem
+} from '@rmwc/list';
 import { ReactNodeArray } from 'prop-types';
 import Icon from 'components/Icon';
-import Svgs from 'svgs';
-import ReactSVG from 'react-svg';
 
-import '@material/react-drawer/dist/drawer.min.css';
-import '@material/react-list/dist/list.min.css';
-
+import '@rmwc/drawer/styles';
+import '@rmwc/list/styles';
 import './styles.scss';
 
 type CBKDrawerProps = {
