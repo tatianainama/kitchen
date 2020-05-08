@@ -1,7 +1,5 @@
 import React, { InputHTMLAttributes, ChangeEvent, forwardRef } from 'react';
-import {FieldProps} from 'formik';
 
-import '@material/react-text-field/dist/text-field.css';
 import './styles.scss';
 
 export const Input2: React.FunctionComponent<InputHTMLAttributes<{}>> = (props) => (
