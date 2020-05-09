@@ -51,6 +51,11 @@ class CreateRecipe extends React.Component<any, CreateRecipeState> {
               course: recipe.course || [],
             }
           })
+        }).catch(e => {
+          toast.error("There was an error scraping the recipe: " + e);
+          this.setState({
+            scrapingRecipe: false
+          })
         })
       })
     }
