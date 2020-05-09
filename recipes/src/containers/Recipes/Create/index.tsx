@@ -46,7 +46,9 @@ class CreateRecipe extends React.Component<any, CreateRecipeState> {
               details: {
                 ...recipe.details,
                 url: this.state.scrapeUrl,
-              }
+              },
+              tags: recipe.tags || [],
+              course: recipe.course || [],
             }
           })
         })
