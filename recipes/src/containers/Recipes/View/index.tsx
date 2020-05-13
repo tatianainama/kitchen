@@ -5,6 +5,8 @@ import { RouteComponentProps } from 'react-router';
 import RecipeCard from 'components/RecipeCard';
 import Recipe, { _recipe } from 'types/recipes';
 
+import './styles.scss';
+
 interface ViewRecipeProps extends RouteComponentProps<{id: string}>{
 
 }
