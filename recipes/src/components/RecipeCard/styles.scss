@@ -2,6 +2,8 @@
 
 .cbk-recipe-card {
   @include box();
+  position: sticky;
+  top: 0;
   &__header {
     border-bottom: 3px solid $black;
     display: grid;
