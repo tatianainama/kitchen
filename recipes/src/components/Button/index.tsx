@@ -16,6 +16,7 @@ type CBKButtonProps = {
   outlined?: boolean,
   icon?: string,
   link?: boolean,
+  custom?:boolean,
   active?: boolean,
   onClick?: (e: any) => void,
   small?: boolean,
@@ -40,7 +41,7 @@ export default function CBKButton(props: CBKButtonProps) {
     return (
       <IconButton
         icon={
-          <Icon material icon={props.icon}/>
+          <Icon material={!props.custom} icon={props.icon}/>
         }
         onClick={props.onClick}
         className={classnames({

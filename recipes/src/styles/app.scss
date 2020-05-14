@@ -97,6 +97,16 @@ code {
 
 }
 
+.cbk-app-content {
+  padding: $spacing-regular 0;
+}
+
+.cbk-burger {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+}
+
 input,
 label,
 textarea

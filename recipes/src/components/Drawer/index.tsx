@@ -6,10 +6,12 @@ import {
   DrawerTitle,
   DrawerContent
 } from '@rmwc/drawer';
+
 import {
   List,
   ListItem
 } from '@rmwc/list';
+
 import { ReactNodeArray } from 'prop-types';
 import Icon from 'components/Icon';
 
@@ -18,12 +20,13 @@ import '@rmwc/list/styles';
 import './styles.scss';
 
 type CBKDrawerProps = {
+  open?: boolean,
   children: ReactNodeArray,
 }
 
 function CBKDrawer(props: CBKDrawerProps) {
   return (
-    <Drawer className='cbk-drawer'>
+    <Drawer dismissible open={props.open} className='cbk-drawer'>
       <DrawerHeader>
         <Icon icon='logo' />
         <DrawerTitle tag='h1'>

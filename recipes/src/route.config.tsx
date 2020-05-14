@@ -31,27 +31,32 @@ const routes = [
     {
       path: '/recipes/edit/:id',
       component: EditRecipe,
-    }]
+    }],
+    title: 'recipes'
   }, {
     path: '/planner',
     component: PlannerContainer,
     routes: [{
       path: '/planner/lala',
       component: emptyRoute('planner lala'),
-    }]
+    }],
+    title: 'planner'
   }, {
     path: '/shoplist',
     component: ShoppingList,
+    title: 'shoplist'
   }
 ];
 
-export const RouteWithSubRoutes = (route: any) => (
-  <Route
-    path={route.path}
-    render={props => (
-      <route.component location={props.location} routes={route.routes} {...props} />
-    )}
-  />
-);
+export const RouteWithSubRoutes = (route: any) => {
+  return (
+    <Route
+      path={route.path}
+      render={props => (
+        <route.component location={props.location} routes={route.routes} {...props} />
+      )}
+    />
+  );
+}
 
 export default routes;

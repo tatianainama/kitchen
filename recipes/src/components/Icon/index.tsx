@@ -16,22 +16,36 @@ export type IconProps = {
 
 export function Icon({ width, height, fill, icon, className, material }: IconProps) {
   const styles = {
-    width: width || 64,
-    height: height || 'auto',
+    width: width,
+    height: height,
     fill: fill,
   };
 
-  return material ? (
-    <MaterialIcon icon={icon} className='material-icons-outlined' />
-  ) : (
-    <ReactSVG
-      // @ts-ignore
-      src={Svgs[icon]}
-      className='cbk-icon'
-      svgClassName={className}
-      svgStyle={styles}
-    />
+  const i = material ? icon : (<ReactSVG
+    // @ts-ignore
+    src={Svgs[icon]}
+    className='cbk-icon'
+    svgClassName={className}
+    svgStyle={styles}
+  />);
+
+  return (
+    <MaterialIcon
+    icon={i}
+    className={`material-icons-outlined`}
+  />
   )
+  // return material ? (
+  //   <MaterialIcon icon={icon} className='material-icons-outlined' />
+  // ) : (
+  //   <ReactSVG
+  //     // @ts-ignore
+  //     src={Svgs[icon]}
+  //     className='cbk-icon'
+  //     svgClassName={className}
+  //     svgStyle={styles}
+  //   />
+  // )
 }
 
 export default Icon;

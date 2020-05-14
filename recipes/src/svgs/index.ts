@@ -4,9 +4,11 @@ export const availableIcons = reqSvgs.keys().map(
   key => key.slice(2, -4)
 );
 
-const svgs = reqSvgs
+const svgs: {
+  [key: string]: any
+} = reqSvgs
   .keys()
-  .reduce((images, path) => {
+  .reduce<{[key: string]: any}>((images, path) => {
     images[path.slice(2, -4)] = reqSvgs(path)
     return images
   }, {} );
