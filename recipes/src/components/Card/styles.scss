@@ -64,11 +64,11 @@
   }
 
   &--highlight {
-    @include shadow($blue);
+    @include shadow($orange);
     top: -4px;
     left: -4px;
     &:hover {
-      @include shadow($blue);
+      @include shadow($orange);
     }
   }
 }
