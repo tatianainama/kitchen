@@ -71,8 +71,7 @@ code {
 
 #root {
   display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
+  flex-direction: column;
   height: 100vh;
 }
 
