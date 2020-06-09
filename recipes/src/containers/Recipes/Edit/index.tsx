@@ -56,7 +56,6 @@ class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
 
   render() {
     const { form, loadingRecipe } = this.state;
-    console.log("loading", loadingRecipe)
     return (
       <div>
         { loadingRecipe && (<Spinner/>)}
