@@ -37,13 +37,20 @@ export default function CBKButton(props: CBKButtonProps) {
     'cbk-btn--active active': props.active,
   })
 
+  const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+    if(props.onClick) {
+      props.onClick(event);
+    }
+  }
+
   if (props.icon) {
     return (
       <IconButton
         icon={
           <Icon material={!props.custom} icon={props.icon}/>
         }
-        onClick={props.onClick}
+        onClick={onClick}
         className={classnames({
           'btn-small': props.small,
         }, props.className)}
