@@ -30,13 +30,12 @@ class EditRecipe extends React.Component<EditRecipeProps, EditRecipeState> {
   }
 
   componentDidMount = () => {
-    getRecipeById(this.props.match.params.id).then(recipe => 
+    getRecipeById(this.props.match.params.id).then(recipe => {
       this.setState({
         form: recipe,
-      }, () => {
-        this.setState({ loadingRecipe: false })
-      }))
-
+        loadingRecipe: false
+      });
+    });
   }
 
   saveRecipe = (recipe: DBRecipe) => {

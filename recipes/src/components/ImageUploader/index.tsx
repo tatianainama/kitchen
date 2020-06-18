@@ -18,7 +18,7 @@ export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ ini
     image: ''
   });
 
-  const isBase64 = (file: string): boolean => !!file.indexOf('base64');
+  const isBase64 = (file: string): boolean => file.indexOf('base64') !== -1;
 
   const fileInput: React.RefObject<HTMLInputElement> = useRef(null);
 
@@ -41,8 +41,8 @@ export const ImageUploader: React.FunctionComponent<ImageUploaderProps> = ({ ini
   useEffect(() => {
     if(initialValue) {
       setFile({
-        image: isBase64(initialValue) ? initialValue : `${API}/${initialValue}`,
-        name: ''
+        name: '',
+        image: isBase64(initialValue) ? initialValue : `${API}/${initialValue}`
       })
     }
   }, [initialValue])
