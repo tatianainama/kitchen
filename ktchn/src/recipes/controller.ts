@@ -72,11 +72,15 @@ const saveImage = async (recipe: Recipe, _id: ObjectID) => {
   if (recipe.image) {
     try {
       const [ prefix, base64Img ] = recipe.image.split(',');
-      const filename = `${_id}.${prefix.replace('data:image/', '').split(';', 1)}`;
-      fs.writeFileSync(`${config.public_assets_path}/${filename}`, base64Img, { encoding: 'base64'});
-      return {
-        ...recipe,
-        image: filename
+      if (base64Img) {
+        const filename = `${_id}.${prefix.replace('data:image/', '').split(';', 1)}`;
+        fs.writeFileSync(`${config.public_assets_path}/${filename}`, base64Img, { encoding: 'base64'});
+        return {
+          ...recipe,
+          image: filename
+        }
+      } else {
+        return recipe;
       }
     } catch (e) {
       throw Error(e);
