@@ -55,7 +55,24 @@
         }
       }
     }
+    @media #{$small-device} {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1.5fr 1fr 0.5fr;
+      max-height: 40vh;
+      &__media,
+      &__name,
+      &__information {
+        grid-column: unset;
+        grid-row: unset;
+      }
+
+      &__media {
+        border-right: 0;
+        border-bottom: 3px solid black;
+      }
+    }
   }
+  
   &__content {
     font-size: $font-size-large;
 
