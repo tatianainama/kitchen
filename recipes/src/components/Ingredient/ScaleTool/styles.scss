@@ -4,7 +4,16 @@
   &__actions {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    
+    button {
+      @media #{$small-device} {
+        margin: $spacing-xs 0;
+      }
+    
+    }
   }
+  
 
   &__ingredients {
     font-weight: normal;
