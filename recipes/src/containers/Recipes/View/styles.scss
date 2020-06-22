@@ -2,4 +2,8 @@
 
 .cbk-recipe-viewer {
   padding: $spacing-regular;
+  
+  @media #{$small-device} {
+    padding: $spacing-regular $spacing-xs;
+  }
 }
