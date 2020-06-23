@@ -19,9 +19,9 @@ export type Weekday =
 
 export type DayPlan = {
   date: Moment,
-  [Meal.Lunch]?: RecipePlan,
-  [Meal.Dinner]?: RecipePlan,
-  [Meal.Dessert]?: RecipePlan
+  [Meal.Lunch]?: RecipePlan | string,
+  [Meal.Dinner]?: RecipePlan | string,
+  [Meal.Dessert]?: RecipePlan | string
 }
 
 export type WeekPlan = {
@@ -34,8 +34,9 @@ export interface WeeklyPlanner extends WeekPlan {
 
 export interface Plan {
   date: Date,
-  recipe: ObjectID,
   meal: Meal
+  recipe?: ObjectID,
+  custom?: string,
 }
 
 export default interface PlanDB extends Plan {
@@ -48,5 +49,6 @@ export interface RecipePlan {
 }
 
 export interface CompletePlanDB extends Omit<PlanDB, 'recipe'> {
-  recipe: RecipePlan
+  recipe: RecipePlan,
+  custom?: string
 }

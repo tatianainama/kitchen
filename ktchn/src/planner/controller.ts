@@ -9,14 +9,15 @@ type Controller<U, T> = (db: IMongoService) => ChainPController<U, T>;
 export const getWeekDay = (day: Moment): Weekday => day.format('dddd').toLowerCase() as Weekday;
 
 const validPlan = (mbPlan: any): Promise<Plan> => {
-  if (mbPlan.date && mbPlan.week && mbPlan.recipe && mbPlan.meal) {
+  if (mbPlan.date && mbPlan.week && (mbPlan.recipe || mbPlan.custom) && mbPlan.meal) {
     return Promise.resolve({
       ...mbPlan,
       date: new Date(mbPlan.date),
-      recipe: new ObjectId(mbPlan.recipe)
+      ...mbPlan.recipe && { recipe: new ObjectId(mbPlan.recipe) },
+      ...mbPlan.custom && { custom: mbPlan.custom }
     } as Plan)
   } else {
-    return Promise.reject('Required fields: day, week, recipe and meal');
+    return Promise.reject('Required fields: day, week, meal and recipe/custom');
   }
 }
 
@@ -43,7 +44,8 @@ const getPlannerByRange: Controller<{from: Date, to: Date}, WeeklyPlanner> = db 
       }
     }, {
       '$unwind': {
-        'path': '$recipe'
+        'path': '$recipe',
+        'preserveNullAndEmptyArrays': true
       }
     }, {
       '$project': {
@@ -61,7 +63,7 @@ const getPlannerByRange: Controller<{from: Date, to: Date}, WeeklyPlanner> = db 
       [getWeekDay(date)]: {
         ...planner[getWeekDay(date)],
         date: date,
-        [plan.meal]: plan.recipe
+        [plan.meal]: plan.custom || plan.recipe
       }
     };
   }, { week: moment(from).isoWeek() } as WeeklyPlanner))
@@ -81,7 +83,8 @@ type PlannerRequest = {
 const toPlan = (plan: any): Plan => ({
   ...plan,
   date: new Date(plan.date),
-  recipe: new ObjectId(plan.recipe),
+  ...plan.recipe && { recipe: new ObjectId(plan.recipe) },
+  ...plan.custom && { custom: plan.custom }
 })
 
 const validatePlanner: Controller<any, PlannerRequest> = () => ({ body }) => async () => {
