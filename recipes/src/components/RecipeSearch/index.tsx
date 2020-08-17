@@ -98,6 +98,12 @@ class RecipeSearch extends React.Component<Props, State> {
     })
   }
 
+  toggleResults = (visibility: boolean) => (event: any) => {
+    this.setState({
+      openResult: visibility
+    })
+  }
+
   render() {
     const { results, search, cursor, openResult } = this.state;
     return (
@@ -107,7 +113,8 @@ class RecipeSearch extends React.Component<Props, State> {
         value={search}
         onChange={this.changeQuery}
         onKeyDown={this.onKeyDown}
-        onBlur={this.closeResults}
+        onBlur={this.toggleResults(false)}
+        onFocus={this.toggleResults(true)}
       />
         {
           results.length && openResult ? (
@@ -119,6 +126,7 @@ class RecipeSearch extends React.Component<Props, State> {
               render={(recipe: DBRecipe) => (
                 <div
                   className='cbk-recipe-search__results__item'
+                  onMouseDown={(e) => { e.preventDefault(); }}
                   onClick={() => this.selectRecipe(recipe)}
                 >
                   {recipe.name}
