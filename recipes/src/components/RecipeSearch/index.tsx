@@ -48,7 +48,6 @@ class RecipeSearch extends React.Component<Props, State> {
   decrementCursor = () => this.state.results.length && this.state.cursor > 0 ? this.state.cursor - 1 : (this.state.results.length - 1);
 
   onKeyDown = (event: React.KeyboardEvent) => {
-    
     if (event.keyCode === Key.Down) {
       const cursor = this.incrementCursor();
       this.setState({
@@ -65,7 +64,8 @@ class RecipeSearch extends React.Component<Props, State> {
     }
 
     if (event.keyCode === Key.Enter) {
-      this.selectRecipe(this.state.results[this.state.cursor])
+      const selectedRecipe = this.state.results[this.state.cursor];
+      this.selectRecipe(selectedRecipe || this.state.search);
     }
 
     if (event.keyCode === Key.Esc) {
@@ -74,7 +74,7 @@ class RecipeSearch extends React.Component<Props, State> {
       })
     }
   }
-
+  
   selectRecipe = (recipe: DBRecipe) => {
     this.props.onSelect(recipe);
     this.setState({
