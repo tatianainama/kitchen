@@ -24,9 +24,9 @@ export type RecipePlan = {
 
 export type DayPlan = {
   date: Moment,
-  [Meal.Lunch]?: RecipePlan,
-  [Meal.Dinner]?: RecipePlan,
-  [Meal.Dessert]?: RecipePlan
+  [Meal.Lunch]?: RecipePlan | string,
+  [Meal.Dinner]?: RecipePlan | string,
+  [Meal.Dessert]?: RecipePlan | string
 };
 
 export type WeekPlan = {
@@ -53,8 +53,9 @@ export interface PlannerState {
 
 export interface DBDayPlan {
   date: string,
-  recipe: string,
   meal: Meal
+  recipe?: string,
+  custom?: string
 }
 
 export interface DBPlanner extends WeekPlan {

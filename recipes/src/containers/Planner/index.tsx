@@ -85,13 +85,17 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
   }
 
   getRecipes = (planner: WeekPlan): RecipePlan[] => {
-    const nonEmpty = (recipe: RecipePlan | undefined): recipe is RecipePlan => recipe !== undefined;
+    const nonEmpty = (recipe: RecipePlan | undefined | string): recipe is RecipePlan => recipe !== undefined && typeof recipe !== 'string' && recipe._id !== undefined;
     return Object.entries(planner).reduce((recipes, [weekday, dayplan]) => {
       return [
         ...recipes,
         ...Meals.map(meal => dayplan[meal]).filter(nonEmpty),
       ];
     }, [] as RecipePlan[]);
+  }
+
+  showRecipe = (recipe: string | RecipePlan) => {
+    return typeof recipe === 'string' ? recipe : recipe.name;
   }
 
   render () {
@@ -164,6 +168,10 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
   }
 }
 
+const isCustomRecipe = (recipe: string | RecipePlan): recipe is string => {
+  return typeof recipe === 'string';
+}
+
 const DisplayPlanner: React.SFC<{
   week: Weekday[],
   planner: WeekPlan,
@@ -198,9 +206,15 @@ const DisplayPlanner: React.SFC<{
                     return (
                       <div className='day-meal' key={meal}>
                         {
-                          recipe && (
-                            <h5 onClick={() => goTo(recipe._id)} title={recipe.name}>{ recipe.name }</h5>
-                          )
+                          recipe !== undefined && (isCustomRecipe(recipe) ? (
+                            <h5> { recipe } </h5>
+                          ) : (
+                            <h5
+                              onClick={() => goTo(recipe._id)}
+                              title={recipe.name}>
+                                { recipe.name }
+                            </h5>
+                          ))
                         }
                       </div>
                     )
@@ -210,7 +224,13 @@ const DisplayPlanner: React.SFC<{
                     return recipe ? (
                       <div className='day-meal day-meal--edit' key={meal}>
                         <Button icon='clear' onClick={() => removeMeal(day, meal)} small></Button>
-                        <h5 title={recipe && recipe.name}>{ recipe && recipe.name }</h5>
+                        {
+                          isCustomRecipe(recipe) ? (
+                            <h5> {recipe} </h5>
+                          ) : (
+                            <h5 title={recipe && recipe.name}>{ recipe && recipe.name }</h5>
+                          )
+                        }
                       </div>
                     ) : (
                       <div className='day-meal' key={meal}>
@@ -260,9 +280,11 @@ const MobileDisplayPlanner: React.SFC<{
                       className={`day-schedule__meals--${meal}`}
                     >
                       {
-                        recipe ? (
+                        recipe && (isCustomRecipe(recipe) ? (
+                          <h5>{recipe}</h5>
+                        ) : (
                           <h5 onClick={() => goTo(recipe._id)}>{ recipe.name }</h5>
-                        ) : null
+                        ))
                       }
                     </div>
                   )

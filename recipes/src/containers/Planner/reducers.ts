@@ -1,5 +1,5 @@
 import { PlannerActions } from './actions';
-import { PlannerState, DBPlanner, WeekPlan, Weekday, PlannerMode } from 'types/planner';
+import { PlannerState, DBPlanner, WeekPlan, Weekday, PlannerMode, RecipePlan } from 'types/planner';
 import { getWeekNumber, mkWeekDay } from 'services/time';
 import { Reducer } from 'redux';
 import { merge, uniqBy } from 'ramda';
@@ -15,6 +15,10 @@ const initialState: PlannerState = {
   week: getWeekNumber(),
   planner: mkPlanner(),
   backlog: []
+}
+
+const isRecipe = (meal: string | RecipePlan | undefined): meal is RecipePlan => {
+  return meal !== undefined && typeof meal != 'string' && meal._id !== undefined;
 }
 
 const joinPlanner = (old: WeekPlan, updated: DBPlanner): WeekPlan => Object.keys(old).reduce((_oldPlanner, day) => ({
@@ -56,8 +60,7 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
       }
     case 'REMOVE_MEAL':
       const meal = state.planner[action.day][action.meal];
-      const inBacklog = meal && state.backlog.find(r => r._id === meal._id) !== undefined;
-      return {
+      let newState = {
         ...state,
         planner: {
           ...state.planner,
@@ -65,8 +68,17 @@ const PlannerReducer: Reducer<PlannerState, PlannerActions> = (
             ...state.planner[action.day],
             [action.meal]: undefined
           }
-        },
-        backlog: meal && !inBacklog ? state.backlog.concat([meal]) : state.backlog
+        }
+      };
+
+      if (isRecipe(meal)) {
+        const inBacklog = meal && typeof meal !== 'string' && state.backlog.find(r => r._id === meal._id) !== undefined;
+        return {
+          ...newState,
+          backlog: meal && !inBacklog ? state.backlog.concat([meal]) : state.backlog
+        }
+      } else {
+        return newState
       }
     case 'REQUEST_PLANNER':
       return {

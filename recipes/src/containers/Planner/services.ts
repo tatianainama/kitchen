@@ -10,12 +10,25 @@ const toDBPlan = (weekplan: WeekPlan) => {
   const planner = Object.keys(weekplan).map((weekday) => weekplan[weekday as Weekday]);
   const mkPlan = (day: DayPlan, meal: Meal): Array<DBDayPlan> => {
     const dish = day[meal];
-    const date = moment(day.date);
-    return dish ? [{
-      recipe: dish._id,
-      meal: meal,
-      date: date.format()
-    }] : []
+    const date = moment(day.date).format();
+
+    if (dish === undefined) {
+      return []
+    } else {
+      if (typeof dish === 'string') {
+        return [{
+          meal,
+          date,
+          custom: dish
+        }]
+      } else {
+        return [{
+          recipe: dish._id,
+          meal: meal,
+          date: date
+        }]
+      }
+    }
   } 
   return planner.reduce((acc, day)=> {
     return [

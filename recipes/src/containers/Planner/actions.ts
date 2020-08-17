@@ -45,11 +45,11 @@ const removeFromBacklog = (recipe: RecipePlan): RemoveFromBacklogAction => ({
 });
 
 export interface AssignToDayAction extends Action<'ASSIGN_TO_DAY'> {
-  recipe: RecipePlan,
+  recipe: RecipePlan | string,
   day: Weekday,
   meal: Meal
 }
-const assignToDay = (recipe: RecipePlan, day: Weekday, meal: Meal): AssignToDayAction => ({
+const assignToDay = (recipe: RecipePlan | string, day: Weekday, meal: Meal): AssignToDayAction => ({
   type: ASSIGN_TO_DAY,
   recipe,
   day,
