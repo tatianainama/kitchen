@@ -1,18 +1,22 @@
 @import 'styles/_variables.scss';
 
-button.mdc-icon-button.btn-small {
-  align-self: center;
-  --mdc-ripple-fg-size: 14px;
-  --mdc-ripple-left: 5px;
-  --mdc-ripple-top: 5px;
-  width: 24px;
-  height: 24px;
-  padding: 6px;
-  font-size: 12px;
-  .material-icons {
+button.mdc-icon-button {
+  &.btn-small {
+    align-self: center;
+    --mdc-ripple-fg-size: 14px;
+    --mdc-ripple-left: 5px;
+    --mdc-ripple-top: 5px;
+    width: 24px;
+    height: 24px;
+    padding: 6px;
     font-size: 12px;
+    .material-icons {
+      font-size: 12px;
+    }
   }
-
+  &.cbk-icon--active {
+    color: $yellow;
+  }
 }
 
 button.cbk-btn {
