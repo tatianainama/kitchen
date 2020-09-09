@@ -1,5 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import Recipe from 'types/recipes';
+import { Layout } from 'types/ui';
 import { getRecipes, deleteRecipe } from '../services';
 import { Action, ActionCreator, Dispatch } from 'redux';
 
@@ -11,51 +12,83 @@ export const DELETE_RECIPE = 'DELETE_RECIPE';
 export const CONFIRM_DELETE_RECIPE = 'CONFIRM_DELETE_RECIPE';
 export const REJECT_DELETE_RECIPE = 'REJECT_DELETE_RECIPE';
 
-export const requestRecipes = (query: string) => ({
-  type: REQUEST_RECIPES,
-  isFetching: true,
-});
+export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 
-export const receiveRecipes = (json: Recipe[]) => ({
-  type: RECEIVE_RECIPES,
-  isFetching: false,
-  payload: json,
-});
+export interface ReceiveRecipeAction extends Action<'RECEIVE_RECIPES'> {
+  isFetching: boolean,
+  payload: Recipe[]
+}
 
-export const selectRecipe = (recipe?: Recipe) => ({
-  type: SELECT_RECIPE,
-  payload: recipe,
-});
+export interface RequestRecipeAction extends Action<'REQUEST_RECIPES'> {
+  isFetching: boolean
+}
+
+export interface SelectRecipeAction extends Action<'SELECT_RECIPE'> {
+  payload: Recipe
+}
 
 export interface DeleteRecipeAction extends Action<'DELETE_RECIPE'> {
   id: string,
 }
 
-export const pendingDeleteRecipe = (id: string): DeleteRecipeAction => ({
-  type: DELETE_RECIPE,
-  id,
-})
-
 export interface ResultDeleteRecipeAction extends Action<'CONFIRM_DELETE_RECIPE'|'REJECT_DELETE_RECIPE'> {
   result: any
 }
 
-export const confirmDeleteRecipe = (result: any): ResultDeleteRecipeAction => ({
+export interface ChangeLayoutAction extends Action<'CHANGE_LAYOUT'> {
+  layout: Layout
+}
+
+export type RecipeListActionTypes =
+  ReceiveRecipeAction |
+  RequestRecipeAction |
+  SelectRecipeAction |
+  DeleteRecipeAction |
+  ResultDeleteRecipeAction |
+  ChangeLayoutAction;
+
+export const requestRecipes = (query: string): RecipeListActionTypes => ({
+  type: REQUEST_RECIPES,
+  isFetching: true,
+});
+
+export const receiveRecipes = (json: Recipe[]): RecipeListActionTypes => ({
+  type: RECEIVE_RECIPES,
+  isFetching: false,
+  payload: json,
+});
+
+export const selectRecipe = (recipe: Recipe): RecipeListActionTypes => ({
+  type: SELECT_RECIPE,
+  payload: recipe,
+});
+
+export const pendingDeleteRecipe = (id: string): RecipeListActionTypes => ({
+  type: DELETE_RECIPE,
+  id,
+})
+
+export const confirmDeleteRecipe = (result: any): RecipeListActionTypes => ({
   type: CONFIRM_DELETE_RECIPE,
   result,
 });
 
-export const rejectDeleteRecipe = (result: any): ResultDeleteRecipeAction => ({
+export const rejectDeleteRecipe = (result: any): RecipeListActionTypes => ({
   type: REJECT_DELETE_RECIPE,
   result,
 })
 
+export const changeLayout = (layout: Layout): RecipeListActionTypes => ({
+  type: CHANGE_LAYOUT,
+  layout
+})
+
 export const deleteRecipeActionCreator: ActionCreator<
   ThunkAction<
-    Promise<ResultDeleteRecipeAction>,
+    Promise<RecipeListActionTypes>,
     any,
     any,
-    ResultDeleteRecipeAction
+    RecipeListActionTypes
   >
 > = (id: string) => {
   return async (dispatch: Dispatch) => {
