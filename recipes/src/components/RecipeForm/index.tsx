@@ -1,15 +1,14 @@
 import React, { useState, forwardRef } from 'react';
 
-import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe, DBRecipe, _recipe } from 'types/recipes';
+import Recipe, { Ingredient, Suggestion, _ingredient, _subRecipe, DBRecipe } from 'types/recipes';
 import {
   Grid, 
   GridCell as Cell, 
   GridRow as Row
 } from '@rmwc/grid';
-import { Field, FieldArray, Formik, useField, Form, FieldArrayRenderProps, FormikValues } from 'formik';
+import { Field, FieldArray, Formik, useField, Form } from 'formik';
 import { MeasuresTypes } from 'services/measurements';
 import { Input, Textarea, ControlledInput } from 'components/Input';
-import { values, isEmpty } from 'ramda';
 import ImageUploader from 'components/ImageUploader';
 import Button from 'components/Button';
 import DialogConverter from 'components/DialogConverter';

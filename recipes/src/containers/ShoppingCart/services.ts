@@ -30,7 +30,7 @@ const combineItems = (a: ShoppingItem, b: ShoppingItem): ShoppingItem => {
       }
     }
     if (a.unit !== b.unit) {
-      throw Error(`cannot sum this units: ${b.unit, a.unit}`)
+      throw Error(`cannot sum this units: ${b.unit}, ${a.unit}`)
     } else {
       return {
         ...a,

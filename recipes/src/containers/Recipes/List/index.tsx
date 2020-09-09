@@ -1,4 +1,4 @@
-import React, { Component, ReactEventHandler } from "react";
+import React, { Component } from "react";
 import {
   fetchIfNeeded as fetch,
   receiveRecipes as receive,
@@ -21,7 +21,7 @@ import {
 import Button from "components/Button";
 import Card from 'components/Card';
 import RecipeCard from 'components/RecipeCard';
-import Recipe, { DBRecipe } from 'types/recipes';
+import { DBRecipe } from 'types/recipes';
 import Navbar from 'components/Navbar';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import Input from 'components/Input';
@@ -46,12 +46,25 @@ interface RecipeListProps extends RouteComponentProps {
   deleteRecipe: (id: string) => undefined
 };
 
-class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, search: string}> {
+enum Layout {
+  VerticalSplit,
+  Module,
+  List
+}
+
+type RecipeListState = {
+  phoneDisplay: boolean,
+  search: string,
+  view: Layout
+}
+
+class RecipeList extends Component<RecipeListProps, RecipeListState> {
   constructor(props: RecipeListProps) {
     super(props);
     this.state = {
       phoneDisplay: this.props.ui.display === Display.Mobile,
       search: '',
+      view: Layout.Module
     }
   }
 
@@ -155,8 +168,12 @@ class RecipeList extends Component<RecipeListProps, {phoneDisplay: boolean, sear
           <Link to='/recipes/create'>
             <Button unelevated>
               Create Recipe
+              
             </Button>
           </Link>
+          <Button icon="view_module" active></Button>
+          <Button icon="view_list"></Button>
+          <Button icon="view_sidebar"></Button>
         </Navbar>
         {
           isFetching && (<Spinner/>)

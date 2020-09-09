@@ -4,7 +4,7 @@ import RecipeForm from 'components/RecipeForm';
 
 import './styles.scss';
 
-import { _recipe, _subRecipe, _ingredient, Ingredient, DBRecipe } from 'types/recipes';
+import { _recipe, DBRecipe } from 'types/recipes';
 import { getRecipeById, updateRecipe } from '../services';
 import { RouteComponentProps } from 'react-router';
 import Spinner from 'components/Spinner';

@@ -1,4 +1,4 @@
-import axios, { AxiosPromise } from 'axios';
+import axios from 'axios';
 import Recipe, { DBRecipe } from 'types/recipes';
 
 //@ts-ignore

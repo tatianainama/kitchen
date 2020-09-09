@@ -1,12 +1,10 @@
 import React from 'react';
-import { ReactComponent as LoadingIcon } from 'svgs/loading.svg';
 
 import './styles.scss';
 
 export const CBKSpinner: React.FC<{}> = () => {
   return (
     <div className="cbk-spinner">
-      {/* <LoadingIcon/> */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"

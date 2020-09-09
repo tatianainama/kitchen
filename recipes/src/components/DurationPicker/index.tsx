@@ -22,7 +22,7 @@ export const DurationPicker: React.SFC<DurationPickerProps> = ({ initialValue = 
   useEffect(() => {
     setMinutes(initial.minutes())
     setHours(initial.hours())
-  }, [initialValue])
+  }, [initialValue, initial])
 
   return (
     <div className='cbk-duration'>

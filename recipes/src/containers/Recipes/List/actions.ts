@@ -1,5 +1,4 @@
 import { ThunkAction } from 'redux-thunk';
-import axios from 'axios';
 import Recipe from 'types/recipes';
 import { getRecipes, deleteRecipe } from '../services';
 import { Action, ActionCreator, Dispatch } from 'redux';

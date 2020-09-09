@@ -1,4 +1,4 @@
-import Recipe, { Ingredient, SubRecipe } from './recipes';
+import { Ingredient, SubRecipe } from './recipes';
 
 export interface ShoppingItem extends Ingredient {
   recipeId?: string,

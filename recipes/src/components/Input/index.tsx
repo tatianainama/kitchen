@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, ChangeEvent, forwardRef } from 'react';
+import React, { ChangeEvent, forwardRef } from 'react';
 
 import './styles.scss';
 

@@ -1,5 +1,5 @@
 
-import React, { Component, useState, FunctionComponent } from 'react';
+import React, { useState, FunctionComponent } from 'react';
 import {
   ChipSet,
   Chip

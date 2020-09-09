@@ -23,20 +23,6 @@ interface ShoppingListState {
   openRemoveAll: boolean,
 }
 
-const renderItem = (actions: ActionsType) => (props: ShoppingItem) => (
-  <>
-    <span>
-      <span className='primary-text'>{props.name}</span>
-      <span className='secondary-text'>{props.recipeName && props.recipeName.join(', ')}</span>
-    </span>
-    <span className='actions'>
-      <Button icon='delete' style={{flexBasis: '20%'}} onClick={() => actions.removeItemFromCart(props.name)}/>
-      <input type='number' style={{flexBasis: '60%'}} value={props.quantity} readOnly/>
-      <span style={{flexBasis: '20%'}}>{props.unit}</span>
-    </span>
-  </>
-);
-
 class ShoppingList extends Component<ShoppingListProps, ShoppingListState> {
   constructor(props: ShoppingListProps) {
     super(props);
@@ -45,7 +31,7 @@ class ShoppingList extends Component<ShoppingListProps, ShoppingListState> {
     };
   }
   render () {
-    const { addToCart, removeItemFromCart, removeAll } = this.props;
+    const { removeAll } = this.props;
     return (
       <div className='cbk-shopping-list'>
         <Navbar
@@ -63,15 +49,6 @@ class ShoppingList extends Component<ShoppingListProps, ShoppingListState> {
           >
             <p>Are you sure you want to remove all items from shopping list ?</p>
           </Dialog>
-          {/* <List
-            dense
-            nonInteractive
-            items={this.props.items}
-            render={renderItem({
-              addToCart,
-              removeItemFromCart,
-            })}
-          /> */}
         </div>
       </div>
     )

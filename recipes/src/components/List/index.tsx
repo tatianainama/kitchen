@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { includes } from 'ramda';
 
@@ -17,7 +17,7 @@ type ListProps<T> = {
   onClick?: (item: T, index: number) => void,
 }
 
-const CBKList = <T extends any>(props: ListProps<T>) => {
+const CBKList = <T extends any>({onClick = () => {}, ...props}: ListProps<T>) => {
   return (
     <ul className={
       classnames({
@@ -36,7 +36,7 @@ const CBKList = <T extends any>(props: ListProps<T>) => {
                 'cbk-list__item--focus': index === props.focus || item.focused || (props.focusMultiple && includes(item, props.focusMultiple))
               })
             }
-            onClick={() => { props.onClick ? props.onClick(item, index) : null }}
+            onClick={() => onClick(item, index)}
           >
             {props.render(item, index)}
           </li>

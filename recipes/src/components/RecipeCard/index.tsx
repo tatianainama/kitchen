@@ -1,15 +1,14 @@
 import React from 'react';
 import Recipe from '../../types/recipes';
 import Icon from 'components/Icon';
-import { List as Ingredients } from 'components/Ingredient';
 import { ScaleTool } from 'components/Ingredient/'
 import StrikeText from 'components/StrikeText';
 import moment from 'moment';
 
 import sample_img from "sample.png";
-const API: string = process.env.REACT_APP_IMG || '';
-
 import './styles.scss';
+
+const API: string = process.env.REACT_APP_IMG || '';
 
 type RecipeCardProps = {
   recipe: Recipe,

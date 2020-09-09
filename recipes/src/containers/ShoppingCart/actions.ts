@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { ShoppingRecipe, DBShoppingCart, ShoppingItem, SortType } from 'types/shopping-cart';
-import { bindActionCreators, Action, ActionCreator, Dispatch } from 'redux';
+import { Action, ActionCreator, Dispatch } from 'redux';
 import { fetchShoppingCart, saveShoppingCart } from './services';
 
 export const ADD_RECIPE_TO_CART = 'ADD_ RECIPE_TO_CART';

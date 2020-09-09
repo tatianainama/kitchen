@@ -15,7 +15,6 @@ import shoppingCartActions, { fetchCartActionCreator, saveCartActionCreator } fr
 import { ShoppingItem, ShoppingCartState, SortType } from 'types/shopping-cart';
 import { AppState } from 'store/configureStore';
 
-import { combineMultipleItems } from '../services';
 import { GetMeasure } from 'services/measurements';
 
 import './styles.scss';
@@ -98,7 +97,6 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
     const { selected, selectedMeasure } = this.state;
     if (selectedMeasure && selected.every(item => selectedMeasure.values.includes(item.unit))) {
       try {
-        const result = this.props.mergeItemsCart(this.state.selected, combineMultipleItems(this.state.selected));
         this.clearSelection(() => {
           this.setState({
             saveDisabled: false

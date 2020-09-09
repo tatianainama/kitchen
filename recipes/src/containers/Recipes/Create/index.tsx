@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 import './styles.scss';
 
-import Recipe, { SubRecipe, Author, Details, _recipe, _subRecipe, _ingredient, Ingredient } from 'types/recipes';
+import Recipe, { _recipe } from 'types/recipes';
 import { scrapeRecipe, saveRecipe } from '../services';
 
 interface CreateRecipeProps {
