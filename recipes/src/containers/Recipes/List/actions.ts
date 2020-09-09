@@ -1,8 +1,8 @@
 import { ThunkAction } from 'redux-thunk';
-import Recipe from 'types/recipes';
-import { Layout } from 'types/ui';
+import { DBRecipe } from 'types/recipes';
 import { getRecipes, deleteRecipe } from '../services';
-import { Action, ActionCreator, Dispatch } from 'redux';
+import { ActionCreator, Dispatch } from 'redux';
+import { RecipeListActionTypes, Layout } from './types';
 
 export const RECEIVE_RECIPES = 'RECEIVE_RECIPES';
 export const REQUEST_RECIPES = 'REQUEST_RECIPES';
@@ -14,51 +14,18 @@ export const REJECT_DELETE_RECIPE = 'REJECT_DELETE_RECIPE';
 
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 
-export interface ReceiveRecipeAction extends Action<'RECEIVE_RECIPES'> {
-  isFetching: boolean,
-  payload: Recipe[]
-}
-
-export interface RequestRecipeAction extends Action<'REQUEST_RECIPES'> {
-  isFetching: boolean
-}
-
-export interface SelectRecipeAction extends Action<'SELECT_RECIPE'> {
-  payload: Recipe
-}
-
-export interface DeleteRecipeAction extends Action<'DELETE_RECIPE'> {
-  id: string,
-}
-
-export interface ResultDeleteRecipeAction extends Action<'CONFIRM_DELETE_RECIPE'|'REJECT_DELETE_RECIPE'> {
-  result: any
-}
-
-export interface ChangeLayoutAction extends Action<'CHANGE_LAYOUT'> {
-  layout: Layout
-}
-
-export type RecipeListActionTypes =
-  ReceiveRecipeAction |
-  RequestRecipeAction |
-  SelectRecipeAction |
-  DeleteRecipeAction |
-  ResultDeleteRecipeAction |
-  ChangeLayoutAction;
-
 export const requestRecipes = (query: string): RecipeListActionTypes => ({
   type: REQUEST_RECIPES,
   isFetching: true,
 });
 
-export const receiveRecipes = (json: Recipe[]): RecipeListActionTypes => ({
+export const receiveRecipes = (json: DBRecipe[]): RecipeListActionTypes => ({
   type: RECEIVE_RECIPES,
   isFetching: false,
   payload: json,
 });
 
-export const selectRecipe = (recipe: Recipe): RecipeListActionTypes => ({
+export const selectRecipe = (recipe?: DBRecipe): RecipeListActionTypes => ({
   type: SELECT_RECIPE,
   payload: recipe,
 });
@@ -114,7 +81,7 @@ export function fetchRecipes(query: string) {
   }
 }
 
-function shouldFetch(recipes: Recipe[]) {
+function shouldFetch(recipes: DBRecipe[]) {
   return recipes.length ? false : true;
 }
 

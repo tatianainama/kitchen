@@ -1,16 +1,6 @@
-import { Layout } from 'types/ui';
-import { RecipeListActionTypes, RECEIVE_RECIPES, SELECT_RECIPE, REQUEST_RECIPES, DELETE_RECIPE, CONFIRM_DELETE_RECIPE, REJECT_DELETE_RECIPE, CHANGE_LAYOUT } from './actions';
-import Recipe from 'types/recipes';
 
-type RecipeState = {
-  isFetching: boolean,
-  data: Recipe[],
-  selectedRecipe?: Recipe,
-  shoppingCart: [],
-  id: string,
-  result: any,
-  layout: Layout
-};
+import { RECEIVE_RECIPES, SELECT_RECIPE, REQUEST_RECIPES, DELETE_RECIPE, CONFIRM_DELETE_RECIPE, REJECT_DELETE_RECIPE, CHANGE_LAYOUT } from './actions';
+import { RecipeState, Layout, RecipeListActionTypes } from './types';
 
 const initialState: RecipeState = {
   isFetching: false,

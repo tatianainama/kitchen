@@ -1,9 +1,14 @@
 import React, { Component } from "react";
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { throttle } from 'throttle-debounce';
+import { connect } from "react-redux";
+
 import {
   fetchIfNeeded as fetch,
   receiveRecipes as receive,
   selectRecipe as select,
   deleteRecipeActionCreator as deleteRecipe,
+  changeLayout,
 } from "containers/Recipes/List/actions";
 import {
   addRecipeToCart,
@@ -11,7 +16,6 @@ import {
 } from 'containers/ShoppingCart/actions';
 import plannerActions from 'containers/Planner/actions';
 
-import { connect } from "react-redux";
 import {
   Grid,
   GridCell as Cell,
@@ -21,36 +25,33 @@ import {
 import Button from "components/Button";
 import Card from 'components/Card';
 import RecipeCard from 'components/RecipeCard';
-import { DBRecipe } from 'types/recipes';
 import Navbar from 'components/Navbar';
-import { Link, RouteComponentProps } from 'react-router-dom';
 import Input from 'components/Input';
-import { throttle } from 'throttle-debounce';
 import Spinner from 'components/Spinner';
+
+import { DBRecipe } from 'types/recipes';
+import { UiState, Display } from "types/ui";
+import { Layout } from './types';
+import { AppState } from "store/configureStore";
 
 import '@rmwc/grid/styles';
 import './styles.scss';
-import { UiState, Display } from "types/ui";
 
 interface RecipeListProps extends RouteComponentProps {
   data: DBRecipe[],
   isFetching: boolean,
-  selectedRecipe: DBRecipe | undefined,
+  selectedRecipe?: DBRecipe,
   ui: UiState,
-  fetchRecipes: (query: string) => undefined,
-  receiveRecipes: (recipes: DBRecipe[]) => undefined,
-  selectRecipe: (recipe?: DBRecipe) => undefined,
-  removeFromCart: (recipe: DBRecipe) => undefined,
-  addRecipeToCart: (recipe: DBRecipe) => undefined,
-  addRecipeToPlanner: (recipe: DBRecipe) => undefined,
-  deleteRecipe: (id: string) => undefined
+  layout: Layout,
+  fetchRecipes: (query: string) => void,
+  receiveRecipes: (recipes: DBRecipe[]) => void,
+  selectRecipe: (recipe?: DBRecipe) => void,
+  removeFromCart: (recipe: DBRecipe) => void,
+  addRecipeToCart: (recipe: DBRecipe) => void,
+  addRecipeToPlanner: (recipe: DBRecipe) => void,
+  deleteRecipe: (id: string) => void,
+  changeLayout: (layout: Layout) => void
 };
-
-enum Layout {
-  VerticalSplit,
-  Module,
-  List
-}
 
 type RecipeListState = {
   phoneDisplay: boolean,
@@ -59,6 +60,10 @@ type RecipeListState = {
 }
 
 class RecipeList extends Component<RecipeListProps, RecipeListState> {
+  layoutButtons: {
+    icon: string,
+    layout: Layout
+  }[];
   constructor(props: RecipeListProps) {
     super(props);
     this.state = {
@@ -66,6 +71,16 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
       search: '',
       view: Layout.Module
     }
+    this.layoutButtons = [{
+      icon: 'view_module',
+      layout: Layout.Module
+    }, {
+      icon: 'view_list',
+      layout: Layout.List
+    }, {
+      icon: 'view_sidebar',
+      layout: Layout.VerticalSplit
+    }];
   }
 
   componentDidMount() {
@@ -149,7 +164,7 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
   }]
 
   render() {
-    const {data, selectedRecipe, isFetching} = this.props;
+    const {data, selectedRecipe, isFetching, changeLayout } = this.props;
     return(
       <div className='cbk-recipes-list'>
         <Navbar
@@ -168,12 +183,17 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
           <Link to='/recipes/create'>
             <Button unelevated>
               Create Recipe
-              
             </Button>
           </Link>
-          <Button icon="view_module" active></Button>
-          <Button icon="view_list"></Button>
-          <Button icon="view_sidebar"></Button>
+          <div>
+            {
+              this.layoutButtons.map(({icon, layout}) => {
+                return (
+                  <Button icon={icon} key={icon} onClick={() => {changeLayout(layout)} } active={layout === this.props.layout}></Button>
+                );
+              })
+            }
+          </div>
         </Navbar>
         {
           isFetching && (<Spinner/>)
@@ -212,11 +232,11 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
   return {
     ...state.recipes,
     ui: state.ui,
-    shoppingCart: state.shoppingCart.cart
+    shoppingCart: state.shoppingCart
   };
 }
 
@@ -228,7 +248,7 @@ const mapDispatchToProps = (dispatch: any) => {
     receiveRecipes: (recipes: DBRecipe[]) => {
       dispatch(receive(recipes))
     },
-    selectRecipe: (recipe: DBRecipe) => {
+    selectRecipe: (recipe?: DBRecipe) => {
       dispatch(select(recipe))
     },
     addRecipeToCart: (recipe: DBRecipe) => {
@@ -242,6 +262,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     deleteRecipe: (id: string) => {
       dispatch(deleteRecipe(id))
+    },
+    changeLayout: (layout: Layout) => {
+      dispatch(changeLayout(layout))
     }
   }
 }
