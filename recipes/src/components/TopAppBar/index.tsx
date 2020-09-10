@@ -1,12 +1,13 @@
 import React from 'react';
 import {
   TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle,
-
 } from '@rmwc/top-app-bar';
 import { Icon } from 'components/Icon';
 import { NavLink } from 'react-router-dom';
 
+import '@rmwc/top-app-bar/styles';
 import './styles.scss';
+
 type CBKTopAppBarProp = {
   routes: {
     path: string,
