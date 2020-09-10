@@ -8,7 +8,7 @@ import '@rmwc/icon-button/styles';
 
 import './styles.scss';
 
-type CBKButtonProps = {
+export type CBKButtonProps = {
   children?: string|ReactElement,
   className?: string,
   unelevated?: boolean,

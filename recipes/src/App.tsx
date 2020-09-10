@@ -3,11 +3,11 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import Toast from 'components/Toast';
 import configureStore from 'store/configureStore';
-import './styles/app.scss';
 import TopBar from 'components/TopAppBar';
 import Routes, { navbarRoutes } from 'route.config';
 import { Display } from "./types/ui";
 
+import './styles/app.scss';
 
 
 const store = configureStore();
