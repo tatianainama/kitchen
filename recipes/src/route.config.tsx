@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent } from 'react';
+import React from 'react';
 import { Route } from 'react-router';
 import RecipesContainer from 'containers/Recipes';
 import CreateRecipe from 'containers/Recipes/Create';
@@ -6,7 +6,7 @@ import ViewRecipe from 'containers/Recipes/View';
 import EditRecipe from 'containers/Recipes/Edit';
 import ShoppingList from 'containers/ShoppingCart/List';
 import PlannerContainer from 'containers/Planner';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 const emptyRoute = (title: string) => (props: any) => {
   return (<h1>{title} {props.match.params && props.match.params.id}</h1>);
