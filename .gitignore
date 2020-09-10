@@ -4,3 +4,4 @@ lib
 ktchn/.env
 ktchn/src/public
 ktchn/dist
+recipes/.env*
