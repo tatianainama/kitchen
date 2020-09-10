@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@types/ramda": "github:types/npm-ramda#dist",
+    "@types/webpack-env": "^1.15.2",
     "redux-devtools-extension": "^2.13.8"
   }
 }

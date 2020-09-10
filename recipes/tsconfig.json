@@ -20,9 +20,7 @@
     "jsx": "preserve"
   },
   "include": [
-    "src",
-    ".storybook/button.stories.js",
-    "src/components/Card/.stories.js"
+    "src"
   ],
   "extends": "./tsconfig.paths.json"
 }
