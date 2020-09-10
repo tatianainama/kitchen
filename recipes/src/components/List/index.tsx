@@ -6,7 +6,7 @@ import './styles.scss';
 
 type ItemProps = { focused?: boolean } ;
 
-type ListProps<T> = {
+type ListProps<T extends any> = {
   nonInteractive?: boolean,
   focusOnClick?: boolean,
   dense?: boolean,
@@ -33,7 +33,7 @@ const CBKList = <T extends any>({onClick = () => {}, ...props}: ListProps<T>) =>
             className={
               classnames({
                 'cbk-list__item': true,
-                'cbk-list__item--focus': index === props.focus || item.focused || (props.focusMultiple && includes(item, props.focusMultiple))
+                'cbk-list__item--focus': index === props.focus || (props.focusMultiple && includes(item, props.focusMultiple))
               })
             }
             onClick={() => onClick(item, index)}

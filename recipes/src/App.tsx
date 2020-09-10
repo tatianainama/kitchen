@@ -5,7 +5,7 @@ import Toast from 'components/Toast';
 import configureStore from 'store/configureStore';
 import './styles/app.scss';
 import TopBar from 'components/TopAppBar';
-import Routes from 'route.config';
+import Routes, { navbarRoutes } from 'route.config';
 import { Display } from "./types/ui";
 
 
@@ -29,18 +29,16 @@ const RouteWithSubRoutes = (route: any) => {
     <Route
       path={route.path}
       render={props => (
-        <route.component location={props.location} routes={route.routes} {...props} />
+        <route.component routes={route.routes} {...props} />
       )}
     />
   );
 }
 
 const AppRouterConf: React.FunctionComponent<{ display: Display }> = () => {
-  const routes = Routes.filter(route => !!route.title);
-
+  const routes = navbarRoutes;
   return (
     <>
-      //@ts-ignore
       <TopBar routes={routes}/>
       <div className="cbk-app-content">
         <Switch>
