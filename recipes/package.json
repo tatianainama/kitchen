@@ -36,7 +36,7 @@
     "react-dom": "^16.8.4",
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "2.1.8",
+    "react-scripts": "^3.4.3",
     "react-svg": "^9.0.4",
     "react-toastify": "^5.4.0",
     "redux": "^4.0.4",
