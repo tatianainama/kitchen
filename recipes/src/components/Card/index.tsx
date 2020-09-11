@@ -5,12 +5,10 @@ import './styles.scss';
 import sample_img from "sample.png";
 const API: string = process.env.REACT_APP_IMG || '';
 
-type CBKCardProps = {
-  withImg?: boolean,
+export type CBKCardProps = {
   title: string,
   summary?: string,
   img?: string,
-  noMedia?: boolean,
   actions?: {
     label: string,
     handler: (event: React.MouseEvent) => void,
