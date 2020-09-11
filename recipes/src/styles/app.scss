@@ -108,6 +108,10 @@
   -webkit-font-smoothing: antialiased;
 }
 
+:root {
+  --mdc-theme-primary: #eec71a;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -128,7 +132,6 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-
 }
 
 h1 {
