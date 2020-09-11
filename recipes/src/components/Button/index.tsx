@@ -45,14 +45,10 @@ export default function CBKButton(props: CBKButtonProps) {
   }
 
   if (props.icon) {
+    let icon = props.custom ? <Icon material={false} icon={props.icon} /> : props.icon;
     return (
       <IconButton
-        icon={
-          <Icon 
-            material={!props.custom} 
-            icon={props.icon}
-          />
-        }
+        icon={icon}
         onClick={onClick}
         className={classnames({
           'btn-small': props.small,

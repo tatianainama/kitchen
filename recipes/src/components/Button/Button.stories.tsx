@@ -7,40 +7,46 @@ import Button, { CBKButtonProps as ButttonProps } from './index';
 export default {
   title: 'Components/Button',
   component: Button,
-  argTypes: {
-    backgroundColor: { control: 'color' },
-  },
   decorators: [
     story => <div>{story()}</div>
   ]
 } as Meta;
 
-const Template: (label: string) => Story<ButttonProps> = label => (args) => <Button {...args}>{label}</Button>;
+const Template: Story<ButttonProps> = (args) => <Button {...args}>{args.children}</Button>;
 
-export const Raised = Template('raised').bind({});
+export const Raised = Template.bind({});
 Raised.args = {
   raised: true,
+  children: 'raised'
 };
 
-export const Unelevated = Template('unelevated').bind({});
+export const Unelevated = Template.bind({});
 Unelevated.args = {
   unelevated: true,
+  children: 'unelevated'
 };
 
-export const Outlined = Template('outlined').bind({});
+export const Outlined = Template.bind({});
 Outlined.args = {
   outlined: true,
+  children: 'outlined'
 };
 
-export const Link = Template('link').bind({});
+export const Link = Template.bind({});
 Link.args = {
   link: true,
   active: false,
+  children: 'link'
 };
 
-export const IconButton = Template('').bind({});
-IconButton.args = {
+export const ButtonWithIcon = Template.bind({});
+ButtonWithIcon.args = {
   icon: 'favorite',
-  onClick: () => {},
-  small: true
+  active: true
 };
+
+export const ButtonWithCustomIcon = Template.bind({});
+ButtonWithCustomIcon.args = {
+  custom: true,
+  icon: 'carrots'
+}
