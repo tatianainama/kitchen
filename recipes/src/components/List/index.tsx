@@ -1,49 +1,43 @@
-import React from 'react';
-import classnames from 'classnames';
-import { includes } from 'ramda';
+import React, { FunctionComponent, CSSProperties } from 'react';
+import cx from 'classnames';
+import {
+  List as RMWCList,
+  ListProps as RMWCListProps,
+  SimpleListItem,
+  SimpleListItemProps as ListItemProps
+} from '@rmwc/list';
 
+import '@rmwc/list/styles';
 import './styles.scss';
 
-type ItemProps = { focused?: boolean } ;
-
-type ListProps<T extends any> = {
-  nonInteractive?: boolean,
-  focusOnClick?: boolean,
-  dense?: boolean,
-  focusMultiple?: T[],
-  focus?: number,
-  items: T[],
-  render: (item: T, index: number) => React.ComponentElement<T, any>,
-  onClick?: (item: T, index: number) => void,
+export interface ListProps extends RMWCListProps {
+  items: ListItemProps[],
+  className?: string,
+  listItemClassName?: string,
+  style?: CSSProperties
 }
 
-const CBKList = <T extends any>({onClick = () => {}, ...props}: ListProps<T>) => {
+export const List: FunctionComponent<ListProps> = ({ items, className, listItemClassName, ...props }) => {
+  
   return (
-    <ul className={
-      classnames({
-        'cbk-list': true,
-        'cbk-list--non-interactive': props.nonInteractive,
-        'cbk-list--dense': props.dense
-      })
-    }>
+    <RMWCList
+      {...props}
+      twoLine={items.some(item => item.secondaryText)}
+      className={cx('cbk-list', className)}
+    >
       {
-        props.items.map((item, index) => (
-          <li
-            key={index}
-            className={
-              classnames({
-                'cbk-list__item': true,
-                'cbk-list__item--focus': index === props.focus || (props.focusMultiple && includes(item, props.focusMultiple))
-              })
-            }
-            onClick={() => onClick(item, index)}
-          >
-            {props.render(item, index)}
-          </li>
-        ))
+        items.map((item, i) => {
+          return (
+            <SimpleListItem
+              { ...item }
+              key={i}
+              className={cx(listItemClassName, 'cbk-list__item')}
+            />
+          )
+        })
       }
-    </ul>
-  );
+    </RMWCList>
+  )
 };
 
-export default CBKList
+export default List;

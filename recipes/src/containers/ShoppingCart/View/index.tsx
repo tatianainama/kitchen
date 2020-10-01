@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { bindActionCreators } from 'redux';
-import { remove, equals } from 'ramda';
+import { remove, equals, includes } from 'ramda';
 import { toast } from "react-toastify";
 
 import Button from 'components/Button';
@@ -190,24 +190,13 @@ class ShoppingCartView extends React.Component<ShoppingCartViewProps, ShoppingCa
                   <div className='cbk-shopping-list'>
                     <List
                       dense
-                      focusMultiple={this.state.selected}
-                      items={this.props.items}
-                      render={ item => (
-                        <div className='cbk-shopping-list__item'>
-                          <div className='cbk-shopping-list__item__name'>
-                            {item.name}
-                            <div className='cbk-shopping-list__item__name__recipes'>
-                              {
-                                item.recipeName && item.recipeName.join(', ')
-                              }
-                            </div>
-                          </div>
-                          <div className='cbk-shopping-list__item__quantity'>
-                            {item.quantity} {item.unit}
-                          </div>
-                        </div>
-                      )}
-                      onClick={ item => this.selectItem(item) }
+                      items={this.props.items.map(item => ({
+                        selected: includes(item, this.state.selected),
+                        text: item.name,
+                        secondaryText: item.recipeName.join(', '),
+                        meta: `${item.quantity} ${item.unit}`
+                      }))}
+                      onAction={({ detail }) => this.selectItem(this.props.items[detail.index])}
                     />
                   </div>
                 </div>

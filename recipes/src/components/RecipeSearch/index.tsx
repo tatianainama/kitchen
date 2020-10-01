@@ -118,22 +118,24 @@ class RecipeSearch extends React.Component<Props, State> {
       />
         {
           results.length && openResult ? (
-          <div className='cbk-recipe-search__results'>
-            <List<DBRecipe>
+            <List
+              items={results.map((recipe, i) => ({
+                children: (
+                  <div 
+                    className="cbk-recipe-search__results__item" title={recipe.name}
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    { recipe.name }
+                  </div>
+                ),
+                selected: cursor === i
+              }))}
+              onAction={(e) => this.selectRecipe(results[e.detail.index])}
               dense
-              items={results}
-              focus={cursor}
-              render={(recipe: DBRecipe) => (
-                <div
-                  className='cbk-recipe-search__results__item'
-                  onMouseDown={(e) => { e.preventDefault(); }}
-                  onClick={() => this.selectRecipe(recipe)}
-                >
-                  {recipe.name}
-                </div>
-              )}
-            />
-            </div>
+              className="cbk-recipe-search__results"
+            >
+
+            </List>
           ) : null
         }
     </div>

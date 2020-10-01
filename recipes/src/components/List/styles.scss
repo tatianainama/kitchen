@@ -1,47 +1,22 @@
-@import 'styles/_variables';
+@import 'styles/_variables.scss';
 
-.cbk-list {
-  padding: 8px 0;
-  width: 100%;
-
-  &__item {
-    display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: space-between;
-    height: 48px;
-    padding: 0 16px;
-    overflow: hidden;
-    cursor: pointer;
-    &:hover,
-    &--focus {
-      background-color: $yellow
-      ;
+.cbk-list.mdc-list {
+  .mdc-list-item {
+    font-family: $font-family-text;
+    font-weight: 400;
+    
+    &--selected,
+    &--activated {
+      background-color: $yellow;
+      color: $black;
     }
-    .primary-text,
-    .secondary-text {
-      display: block
+    
+    &__primary-text {
+      font-weight: 600;
     }
-    .secondary-text {
-      font-size: 0.75rem;
+    &__secondary-text {
       font-style: italic;
-      color: $grey-500;
     }
-    .actions { 
-      display: flex;
-      align-items: center;
-      width: 20%;
-    }
-  }
-  &--dense {
-    padding: 0;
-    .cbk-list__item {
-      height: auto;
-    }
-  }
-  &--non-interactive {
-    .cbk-list__item {
-      cursor: default;
-    }
+    
   }
 }
