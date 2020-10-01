@@ -9,19 +9,37 @@ import {
 
 import '@rmwc/list/styles';
 import './styles.scss';
+import SAMPLE from 'sample.png';
+
+interface Item extends ListItemProps {
+  img?: string,
+}
 
 export interface ListProps extends RMWCListProps {
-  items: ListItemProps[],
+  items: Item[],
   className?: string,
   listItemClassName?: string,
   style?: CSSProperties
 }
 
-export const List: FunctionComponent<ListProps> = ({ items, className, listItemClassName, ...props }) => {
+const AvatarGraphic: FunctionComponent<{
+  img?: string,
+}> = ({ img }) => (
+  <div style={{
+    width: 48,
+    height: 24,
+    backgroundImage: `url(${img || SAMPLE})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center'
+  }}></div>
+);
+
+export const List: FunctionComponent<ListProps> = ({ items, className, listItemClassName, avatarList, ...props }) => {
   
   return (
     <RMWCList
       {...props}
+      avatarList={avatarList}
       twoLine={items.some(item => item.secondaryText)}
       className={cx('cbk-list', className)}
     >
@@ -30,6 +48,9 @@ export const List: FunctionComponent<ListProps> = ({ items, className, listItemC
           return (
             <SimpleListItem
               { ...item }
+              graphic={avatarList ? (
+                <AvatarGraphic img={item.img}/>
+              ) : undefined }
               key={i}
               className={cx(listItemClassName, 'cbk-list__item')}
             />

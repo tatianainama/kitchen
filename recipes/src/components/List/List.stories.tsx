@@ -3,6 +3,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 
 import List, { ListProps } from './index';
 import { ListOnActionEventT } from '@rmwc/list';
+import SAMPLE from '../../sample.png';
 
 const items = new Array(10).fill({}).map((_, i) => ({
   text: `list item ${i}`,
@@ -56,4 +57,12 @@ WithMetaIconsAndGraphic.args = {
   }))
 }
 
+export const WithImgAsGraphic = Template.bind({});
+WithImgAsGraphic.args = {
+  avatarList: true,
+  items: items.map(item => ({
+    ...item,
+    img: SAMPLE
+  }))
+}
 
