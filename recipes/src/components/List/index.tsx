@@ -35,7 +35,6 @@ const AvatarGraphic: FunctionComponent<{
 );
 
 export const List: FunctionComponent<ListProps> = ({ items, className, listItemClassName, avatarList, ...props }) => {
-  
   return (
     <RMWCList
       {...props}
@@ -44,12 +43,12 @@ export const List: FunctionComponent<ListProps> = ({ items, className, listItemC
       className={cx('cbk-list', className)}
     >
       {
-        items.map((item, i) => {
+        items.map(({img, ...item}, i) => {
           return (
             <SimpleListItem
               { ...item }
               graphic={avatarList ? (
-                <AvatarGraphic img={item.img}/>
+                <AvatarGraphic img={img} />
               ) : undefined }
               key={i}
               className={cx(listItemClassName, 'cbk-list__item')}
