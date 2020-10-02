@@ -1,13 +1,19 @@
 @import 'styles/_variables.scss';
 
 .cbk-recipes-list {
+  .cbk-navbar {
+    padding: $spacing-small $spacing-large;
+  }
   &__search {
     flex-basis: 30%;
     padding-right: $spacing-regular;
   }
-
+  
   .cbk-recipes-list__results {
     padding: 0 $spacing-large;
+    @media #{$small-device} {
+      padding: 0;
+    }
   }
 
   &__list {
@@ -16,8 +22,15 @@
     li.cbk-list__item.mdc-list-item {
       font-weight: 600;
       font-family: $font-family-display;
+      .cbk-list__item__name {
+        flex: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
       .mdc-list-item__meta {
         color: $black;
+        display: flex;
       }
     }
   }
@@ -33,5 +46,9 @@
     &__preview {
       flex: 1;
     }
+  }
+
+  @media #{$small-device} {
+
   }
 }

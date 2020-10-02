@@ -218,7 +218,7 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
                 avatarList
                 onAction={({ detail }) => { this.openRecipe(data[detail.index]._id)}}
                 items={data.map((recipe) => ({
-                  text: recipe.name,
+                  text: (<div className="cbk-list__item__name">{recipe.name}</div>),
                   img: recipe.image ? `${API}/${recipe.image}` : undefined,
                   meta: (<div>
                     <Button icon='add_shopping_cart' onClick={this.handleAddToShopping(recipe)}/>
