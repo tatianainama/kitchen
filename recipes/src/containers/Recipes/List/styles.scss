@@ -5,4 +5,33 @@
     flex-basis: 30%;
     padding-right: $spacing-regular;
   }
+
+  .cbk-recipes-list__results {
+    padding: 0 $spacing-large;
+  }
+
+  &__list {
+    padding: 0;
+    @include box();
+    li.cbk-list__item.mdc-list-item {
+      font-weight: 600;
+      font-family: $font-family-display;
+      .mdc-list-item__meta {
+        color: $black;
+      }
+    }
+  }
+
+  &__vertical-split {
+    display: flex;
+    gap: $spacing-small;
+    padding: $spacing-small;
+
+    &__list {
+      flex: 1;
+    }
+    &__preview {
+      flex: 1;
+    }
+  }
 }

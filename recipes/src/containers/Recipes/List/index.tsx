@@ -16,18 +16,13 @@ import {
 } from 'containers/ShoppingCart/actions';
 import plannerActions from 'containers/Planner/actions';
 
-import {
-  Grid,
-  GridCell as Cell,
-  GridRow as Row
-} from '@rmwc/grid';
-
 import Button from "components/Button";
 import Card from 'components/Card';
 import RecipeCard from 'components/RecipeCard';
 import Navbar from 'components/Navbar';
 import Input from 'components/Input';
 import Spinner from 'components/Spinner';
+import List from 'components/List';
 
 import { DBRecipe } from 'types/recipes';
 import { UiState, Display } from "types/ui";
@@ -36,6 +31,8 @@ import { AppState } from "store/configureStore";
 
 import '@rmwc/grid/styles';
 import './styles.scss';
+
+const API: string = process.env.REACT_APP_IMG || '';
 
 interface RecipeListProps extends RouteComponentProps {
   data: DBRecipe[],
@@ -56,7 +53,6 @@ interface RecipeListProps extends RouteComponentProps {
 type RecipeListState = {
   phoneDisplay: boolean,
   search: string,
-  view: Layout
 }
 
 class RecipeList extends Component<RecipeListProps, RecipeListState> {
@@ -69,7 +65,6 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
     this.state = {
       phoneDisplay: this.props.ui.display === Display.Mobile,
       search: '',
-      view: Layout.Module
     }
     this.layoutButtons = [{
       icon: 'view_module',
@@ -112,32 +107,38 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
     this.props.selectRecipe();
   }
 
-  handleRecipeSelection(recipe: DBRecipe) {
-    return (event: React.MouseEvent) => {
-      if (this.state.phoneDisplay) {
-        this.props.history.push('/recipes/view/' + recipe._id)
-        this.cleanRecipeSelection();
-      } else {
-        this.props.selectRecipe(recipe) 
-      }
-    };
+  handleRecipeSelection = (recipe: DBRecipe) => {
+    if (this.state.phoneDisplay) {
+      this.props.history.push('/recipes/view/' + recipe._id)
+      this.cleanRecipeSelection();
+    } else {
+      this.props.selectRecipe(recipe) 
+    }
   }
 
   handleEditRecipe = (id = '') => (event: React.MouseEvent) => {
+    event.stopPropagation();
     this.props.history.push('/recipes/edit/' + id)
     this.cleanRecipeSelection();
   }
 
   handleAddToShopping = (recipe: DBRecipe) => (event: React.MouseEvent) => {
+    event.stopPropagation();
     this.props.addRecipeToCart(recipe)
   }
 
   handleAddToPlanner = (recipe: DBRecipe) => (event: React.MouseEvent) => {
+    event.stopPropagation();
     this.props.addRecipeToPlanner(recipe)
   }
 
   handleDeleteRecipe = (id: string) => (event: React.MouseEvent) => {
-    this.props.deleteRecipe(id)
+    event.stopPropagation();
+    this.props.deleteRecipe(id);
+  }
+
+  openRecipe = (id: string) => {
+    this.props.history.push(`/recipes/view/${id}`)
   }
 
   handler = (event: React.MouseEvent) => {
@@ -185,7 +186,7 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
               Create Recipe
             </Button>
           </Link>
-          <div>
+          <div style={{display: 'flex'}}>
             {
               this.layoutButtons.map(({icon, layout}) => {
                 return (
@@ -198,39 +199,88 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
         {
           isFetching && (<Spinner/>)
         }
-        <Grid>
-          <Row>
-            <Cell span={4} phone={4} tablet={8}>
-              {
-                data.map((recipe, i) => {
-                  return (
-                    <Card
-                      key={i}
-                      title={recipe.name}
-                      onClick={this.handleRecipeSelection(recipe)}
-                      summary={recipe.summary}
-                      actions={this.actions(recipe)}
-                      icons={this.icons(recipe._id)}
-                      img={recipe.image}
-                      highlight={selectedRecipe ? recipe._id === selectedRecipe._id : undefined}
-                    />
-                  )
-                })
-              }
-            </Cell>
-            <Cell span={8} phone={4} tablet={8}>
-              { selectedRecipe !== undefined && 
-                <RecipeCard 
-                  recipe={selectedRecipe}
-                />
-              }
-            </Cell>
-          </Row>
-        </Grid>
+        <div className="cbk-recipes-list__results">
+          {
+            this.props.layout === Layout.VerticalSplit ? (
+              <VerticalSplitMode
+                data={data}
+                handleRecipeSelection={this.handleRecipeSelection}
+                actions={this.actions}
+                icons={this.icons}
+                selectedRecipe={selectedRecipe}
+              />
+            ) : 
+            this.props.layout === Layout.List ? (
+              <List
+                twoLine
+                bordered
+                className="cbk-recipes-list__list"
+                avatarList
+                onAction={({ detail }) => { this.openRecipe(data[detail.index]._id)}}
+                items={data.map((recipe) => ({
+                  text: recipe.name,
+                  img: recipe.image ? `${API}/${recipe.image}` : undefined,
+                  meta: (<div>
+                    <Button icon='add_shopping_cart' onClick={this.handleAddToShopping(recipe)}/>
+                    <Button icon='edit' onClick={this.handleEditRecipe(recipe._id)}/>
+                    <Button icon='delete' onClick={this.handleDeleteRecipe(recipe._id)}/>
+                  </div>)
+                }))}
+              />
+            ) : null
+          }
+        </div>
       </div>
     )
   }
 }
+
+// VerticalSplit,
+// Module,
+// List
+type VerticalSplitModeProps = {
+  data: DBRecipe[],
+  handleRecipeSelection: (recipe: DBRecipe) => void,
+  actions: (recipe: DBRecipe) => {
+    label: string;
+    handler: (event: React.MouseEvent<Element, MouseEvent>) => void;
+  }[],
+  icons: (id?: string) => {
+    icon: string;
+    handler: (event: React.MouseEvent<Element, MouseEvent>) => void;
+  }[],
+  selectedRecipe?: DBRecipe,
+}
+
+const VerticalSplitMode: React.FunctionComponent<VerticalSplitModeProps> = ({ data, handleRecipeSelection, actions, icons, selectedRecipe }) => (
+  <div className="cbk-recipes-list__vertical-split">
+    <div className="cbk-recipes-list__vertical-split__list">
+      {
+        data.map((recipe, i) => {
+          return (
+            <Card
+              key={i}
+              title={recipe.name}
+              onClick={() => {handleRecipeSelection(recipe)}}
+              summary={recipe.summary}
+              actions={actions(recipe)}
+              icons={icons(recipe._id)}
+              img={recipe.image}
+              highlight={selectedRecipe ? recipe._id === selectedRecipe._id : undefined}
+            />
+          )
+        })
+      }
+    </div>
+    <div className="cbk-recipes-list__vertical-split__preview">
+      { selectedRecipe !== undefined && 
+        <RecipeCard 
+          recipe={selectedRecipe}
+        />
+      }
+    </div>
+  </div>
+)
 
 const mapStateToProps = (state: AppState) => {
   return {
