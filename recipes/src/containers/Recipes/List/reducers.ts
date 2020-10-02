@@ -9,7 +9,7 @@ const initialState: RecipeState = {
   shoppingCart: [],
   id: '',
   result: undefined,
-  layout: Layout.VerticalSplit
+  layout: Layout.List
 };
 
 export const recipesReducer = (
