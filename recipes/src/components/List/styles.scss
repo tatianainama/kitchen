@@ -1,6 +1,11 @@
 @import 'styles/_variables.scss';
 
 .cbk-list.mdc-list {
+  &.cbk-list--bordered {
+    .cbk-list__item:not(:last-child) {
+      border-bottom: 1px solid $grey-300;
+    }
+  }
   .mdc-list-item {
     font-family: $font-family-text;
     font-weight: 400;
@@ -17,6 +22,18 @@
     &__secondary-text {
       font-style: italic;
     }
-    
+    .cbk-list__item__avatar {
+      width: 48px;
+      height: 24px;
+      background-size: cover;
+      background-position: center;
+    }
+  }
+  &.mdc-list--two-line.mdc-list--avatar-list {
+    .mdc-list-item__graphic, 
+    .cbk-list__item__avatar {
+      width: 60px;
+      height: 40px;
+    }
   }
 }

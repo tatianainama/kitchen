@@ -19,28 +19,32 @@ export interface ListProps extends RMWCListProps {
   items: Item[],
   className?: string,
   listItemClassName?: string,
-  style?: CSSProperties
+  style?: CSSProperties,
+  bordered?: boolean,
 }
 
 const AvatarGraphic: FunctionComponent<{
   img?: string,
 }> = ({ img }) => (
-  <div style={{
-    width: 48,
-    height: 24,
-    backgroundImage: `url(${img || SAMPLE})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center'
-  }}></div>
+  <div 
+    className="cbk-list__item__avatar"
+    style={{
+      backgroundImage: `url(${img || SAMPLE})`
+    }}
+  ></div>
 );
 
-export const List: FunctionComponent<ListProps> = ({ items, className, listItemClassName, avatarList, ...props }) => {
+export const List: FunctionComponent<ListProps> = ({ items, className, listItemClassName, avatarList, bordered, ...props }) => {
   return (
     <RMWCList
       {...props}
       avatarList={avatarList}
-      twoLine={items.some(item => item.secondaryText)}
-      className={cx('cbk-list', className)}
+      twoLine={items.some(item => item.secondaryText) || props.twoLine}
+      className={cx(
+        'cbk-list',
+        {'cbk-list--bordered': bordered},
+        className
+      )}
     >
       {
         items.map(({img, ...item}, i) => {

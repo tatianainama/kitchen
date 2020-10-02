@@ -60,6 +60,7 @@ WithMetaIconsAndGraphic.args = {
 export const WithImgAsGraphic = Template.bind({});
 WithImgAsGraphic.args = {
   avatarList: true,
+  twoLine: true,
   items: items.map(item => ({
     ...item,
     img: SAMPLE
