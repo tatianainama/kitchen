@@ -5,7 +5,7 @@ import '@rmwc/button/styles';
 import './styles.scss';
 
 type NavbarProps = {
-  title: string,
+  title?: string,
   actions?: {
     label: string,
     onClick: () => void,
@@ -16,9 +16,11 @@ type NavbarProps = {
 export default function Navbar(props: NavbarProps){
   return (
     <div className='cbk-navbar'>
-      <div>
-        <h4>{props.title}</h4>
-      </div>
+      {props.title && (
+        <div>
+          <h4>{props.title}</h4>
+        </div>
+      )}
       {
         props.actions ? (
           <div>

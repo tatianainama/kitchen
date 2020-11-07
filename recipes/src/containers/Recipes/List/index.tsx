@@ -168,32 +168,34 @@ class RecipeList extends Component<RecipeListProps, RecipeListState> {
     const {data, selectedRecipe, isFetching, changeLayout } = this.props;
     return(
       <div className='cbk-recipes-list'>
-        <Navbar
-          title="Recipes"
-        >
-          <Input
-            value={this.state.search}
-            label='search'
-            onChange={(e) => this.changeQuery(e.currentTarget.value)}
-            button={{
-              icon: 'clear',
-              onClick: () => this.changeQuery('')
-            }}
-            className='cbk-recipes-list__search'
-          />
-          <Link to='/recipes/create'>
-            <Button unelevated>
-              Create Recipe
-            </Button>
-          </Link>
-          <div style={{display: 'flex'}}>
-            {
-              this.layoutButtons.map(({icon, layout}) => {
-                return (
-                  <Button icon={icon} key={icon} onClick={() => {changeLayout(layout)} } active={layout === this.props.layout}></Button>
-                );
-              })
-            }
+        <Navbar>
+          <div className='cbk-recipes-list__navbar'>
+            <div className='cbk-recipes-list__navbar__actions'>
+              <Input
+                value={this.state.search}
+                label='search'
+                onChange={(e) => this.changeQuery(e.currentTarget.value)}
+                button={{
+                  icon: 'clear',
+                  onClick: () => this.changeQuery('')
+                }}
+                className='cbk-recipes-list__navbar__actions__search'
+              />
+            </div>
+            <div className='cbk-recipes-list__navbar__layout'>
+              {
+                this.layoutButtons.map(({icon, layout}) => {
+                  return (
+                    <Button icon={icon} key={icon} onClick={() => {changeLayout(layout)} } active={layout === this.props.layout}></Button>
+                  );
+                })
+              }
+              <Link to='/recipes/create'  className='cbk-recipes-list__navbar__actions__create'>
+                <Button unelevated>
+                  Create Recipe
+                </Button>
+              </Link>
+            </div>
           </div>
         </Navbar>
         {
