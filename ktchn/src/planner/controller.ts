@@ -1,6 +1,6 @@
 import { IMongoService, IDBDocument } from '../mongo';
 import { ChainPController } from '../promise-all-middleware';
-import PlanDB, { CompletePlanDB, Weekday, Plan, WeeklyPlanner } from './model';
+import PlanDB, { CompletePlanDB, Weekday, Plan, WeeklyPlanner, SimpleWeekPlan } from './model';
 import moment, { Moment } from 'moment';
 import { ObjectId } from 'bson';
 
@@ -29,11 +29,11 @@ const validateRange: Controller<void, {from: Date, to: Date}> = () => req => () 
     Promise.reject('Invalid date range');
 }
 
-const getPlannerByRange: Controller<{from: Date, to: Date}, WeeklyPlanner> = db => () => ({ from, to }) => {
+const PlannerQueryByRange = (db: IMongoService, from: Date, to: Date) => {
   return db.aggregate<CompletePlanDB>([
     {
       '$match': {
-        'date': {'$gte': from, '$lte': to}
+        'date': {'$gte': moment(from).startOf('day').toDate(), '$lte': moment(to).endOf('day').toDate()}
       }
     }, {
       '$lookup': {
@@ -56,7 +56,11 @@ const getPlannerByRange: Controller<{from: Date, to: Date}, WeeklyPlanner> = db 
         }
       }
     }
-  ]).then(plans => plans.reduce((planner, plan) => {
+  ]);
+}
+
+const getPlannerByRange: Controller<{from: Date, to: Date}, WeeklyPlanner> = db => () => ({ from, to }) => {
+  return PlannerQueryByRange(db, from, to).then(plans => plans.reduce((planner, plan) => {
     const date = moment(plan.date);
     return {
       ...planner,
@@ -67,6 +71,27 @@ const getPlannerByRange: Controller<{from: Date, to: Date}, WeeklyPlanner> = db 
       }
     };
   }, { week: moment(from).isoWeek() } as WeeklyPlanner))
+}
+
+const getSimplifyPlannerByRange: Controller<{from: Date, to: Date}, SimpleWeekPlan> = db => () => ({ from, to }) => {
+  return PlannerQueryByRange(db, from, to).then(data => {
+    return data.reduce((planner, plan) => {
+      const weekday = getWeekDay(moment(plan.date));
+      const meals = planner[weekday]?.meals || [];
+      return {
+        ...planner,
+        [weekday]: {
+          meals: [
+            ...meals,
+            {
+              type: plan.meal,
+              recipe: plan.custom || plan.recipe
+            }
+          ]
+        }
+      }
+    }, {} as SimpleWeekPlan);
+  });
 }
 
 const savePlan: Controller<void, PlanDB> = db => req => prevResult => {
@@ -118,5 +143,6 @@ export {
   saveWeekPlanner,
   validatePlanner,
   validateRange,
-  getPlannerByRange
+  getPlannerByRange,
+  getSimplifyPlannerByRange
 }

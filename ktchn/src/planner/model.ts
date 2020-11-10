@@ -28,6 +28,16 @@ export type WeekPlan = {
   [day in Weekday]: DayPlan;
 };
 
+export type SimpleWeekPlan = {
+  [day in Weekday]: {
+    date: Moment,
+    meals: [{
+      type: Meal,
+      recipe: RecipePlan
+    }]
+  };
+}
+
 export interface WeeklyPlanner extends WeekPlan {
   week: number;
 }
