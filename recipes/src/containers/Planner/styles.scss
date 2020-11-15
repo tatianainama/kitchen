@@ -6,6 +6,8 @@
     padding: 0 $spacing-small;
     padding-top: $spacing-small;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
   &__shopping {
     &__actions {
@@ -22,7 +24,6 @@
     padding: $spacing-small;
     &__planner {
       display: flex;
-      min-height: 16rem;
       @include box();
       .week {
         display: flex;
@@ -90,6 +91,9 @@
               margin-top: $spacing-small/2;
             }
           }
+        }
+        @media (max-width: 840px) {
+          flex-direction: column;
         }
       }
     }

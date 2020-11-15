@@ -7,7 +7,6 @@ import { ThunkDispatch } from 'redux-thunk';
 
 import { ShoppingCartState } from 'types/shopping-cart';
 import { PlannerState, Weekday, Meal, PlannerMode, RecipePlan, WeekPlan, Meals, WeekShift } from 'types/planner';
-import { Display, UiState} from 'types/ui';
 
 import PlannerActions, { fetchPlannerActionCreator, savePlannerActionCreator, changePlannerRangeActionCreator } from './actions';
 import ShoppingCartActions from 'containers/ShoppingCart/actions';
@@ -27,7 +26,7 @@ import './styles.scss';
 type Actions = typeof PlannerActions;
 type ShoppingCartActionsType = typeof ShoppingCartActions;
 
-interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions, ShoppingCartActionsType, UiState, ShoppingCartState {
+interface PlannerContainerProps extends RouteComponentProps, PlannerState, Actions, ShoppingCartActionsType, ShoppingCartState {
   fetch: typeof fetchPlannerActionCreator,
   save: typeof savePlannerActionCreator
   changeRange: typeof changePlannerRangeActionCreator
@@ -101,68 +100,53 @@ class PlannerContainer extends Component<PlannerContainerProps, PlannerContainer
   render () {
     return (
       <div className='cbk-planner'>
-        {
-          this.props.display === Display.Desktop ?
-          (
-            <>
-              <Navbar title='Planner'>
-              {
-                this.props.mode === PlannerMode.View ? (
-                  <Button raised onClick={() => this.changeMode(PlannerMode.Edit)}>Edit</Button>
-                  ) : (
-                    <div>
-                      <Button raised onClick={() => {
-                        this.props.save(this.props.planner, this.props.from, this.props.to)
-                        this.changeMode(PlannerMode.View)
-                      }}>Save</Button>
-                      <Button outlined raised onClick={() => {
-                        this.cancel();
-                        this.changeMode(PlannerMode.View)
-                      }}> Cancel </Button>
-                    </div>
-                )
-              }
-              </Navbar>
-              <div className='cbk-planner__actions'>
+        <Navbar title='Planner'>
+          {
+            this.props.mode === PlannerMode.View ? (
+              <Button raised onClick={() => this.changeMode(PlannerMode.Edit)}>Edit</Button>
+              ) : (
                 <div>
-                  <Sticker>
-                    Week {this.props.week}
-                  </Sticker>
+                  <Button raised onClick={() => {
+                    this.props.save(this.props.planner, this.props.from, this.props.to)
+                    this.changeMode(PlannerMode.View)
+                  }}>Save</Button>
+                  <Button outlined raised onClick={() => {
+                    this.cancel();
+                    this.changeMode(PlannerMode.View)
+                  }}> Cancel </Button>
                 </div>
-                <div>
-                  <Button outlined onClick={() => this.changeWeek(WeekShift.Prev)}>Prev</Button>
-                  <Button outlined onClick={() => this.changeWeek()}>Current</Button>
-                  <Button outlined onClick={() => this.changeWeek(WeekShift.Next)}>Next</Button>
-                </div>
+            )
+          }
+          </Navbar>
+          <div className='cbk-planner__actions'>
+            <div>
+              <Sticker>
+                Week {this.props.week}
+              </Sticker>
+            </div>
+            <div>
+              <Button outlined onClick={() => this.changeWeek(WeekShift.Prev)}>Prev</Button>
+              <Button outlined onClick={() => this.changeWeek()}>Current</Button>
+              <Button outlined onClick={() => this.changeWeek(WeekShift.Next)}>Next</Button>
+            </div>
 
-              </div>
-              <DisplayPlanner
-                week={this.state.week.map(([day]) => day)}
-                planner={this.props.planner}
-                mode={this.props.mode}
-                assignToDay={this.props.assignToDay}
-                removeMeal={this.removeMeal}
-                goTo={this.goToRecipe}
-              />
-              <div className='cbk-planner__shopping'>
-                <div className='cbk-planner__shopping__actions'>
-                  <Sticker>Shopping Cart</Sticker>
-                  <Button outlined onClick={() => { this.props.addAll(this.getRecipes(this.props.planner))}}>Add to shopping</Button>
-                </div>
-                <ShoppingCartView
-                />
-              </div>
-            </>
-          ) 
-          :(<MobileDisplayPlanner 
-              week={this.state.week}
-              weekNumber={this.props.week}
-              planner={this.props.planner}
-              changeWeek={this.changeWeek}
-              goTo={this.goToRecipe}
-            />)
-        }
-        
+          </div>
+          <WeeklyPlanner
+            week={this.state.week.map(([day]) => day)}
+            planner={this.props.planner}
+            mode={this.props.mode}
+            assignToDay={this.props.assignToDay}
+            removeMeal={this.removeMeal}
+            goTo={this.goToRecipe}
+          />
+          <div className='cbk-planner__shopping'>
+            <div className='cbk-planner__shopping__actions'>
+              <Sticker>Shopping Cart</Sticker>
+              <Button outlined onClick={() => { this.props.addAll(this.getRecipes(this.props.planner))}}>Add to shopping</Button>
+            </div>
+            <ShoppingCartView
+            />
+          </div>
       </div>
     );
   }
@@ -172,131 +156,68 @@ const isCustomRecipe = (recipe: string | RecipePlan): recipe is string => {
   return typeof recipe === 'string';
 }
 
-const DisplayPlanner: React.SFC<{
+const WeeklyPlanner: React.FunctionComponent<{
   week: Weekday[],
   planner: WeekPlan,
   mode: PlannerMode,
   removeMeal: typeof PlannerActions.removeMeal,
   assignToDay: typeof PlannerActions.assignToDay,
   goTo: (recipeId: string) => void,
-}> = ({ week, planner, mode, removeMeal, assignToDay, goTo }) => (
-  <section className='cbk-planner__body'>
+}> = ({ week, planner, mode, removeMeal, assignToDay, goTo}) => {
+  return (
+    <section className='cbk-planner__body'>
     <div className='cbk-planner__body__planner'>
       <div className='week'>
-        <div className='day meal'>
-          <div className='meal-placeholder'> x </div>
-          {
-            Meals.map(meal => (
-              <div className='meal-name' key={meal}>
-                <h5 className='meal-name--style'>{Meal[meal].toLowerCase()}</h5>
-              </div>
-            ))
-          }
-        </div>
         {
-          week.map(day => (
-            <div className='day' key={day}>
-              <div className='day-date'>
-                <h5>{planner[day].date.format('ddd DD.MM')}</h5>
+          week.map(day => {
+            const recipe = planner[day][Meal.Dinner];
+            return (
+              <div className='day' key={day}>
+                <div className='day-date'>
+                  <h5>{planner[day].date.format('ddd DD.MM')}</h5>
+                </div>
+                {
+                  mode === PlannerMode.View ? (
+                  <div className='day-meal'>
+                    {
+                      recipe !== undefined && (isCustomRecipe(recipe) ? (
+                        <h5> { recipe } </h5>
+                      ) : (
+                        <h5
+                          onClick={() => goTo(recipe._id)}
+                          title={recipe.name}>
+                            { recipe.name }
+                        </h5>
+                      ))
+                    }
+                  </div>) : recipe ? (
+                    <div className='day-meal day-meal--edit'>
+                      <Button icon='clear' onClick={() => removeMeal(day, Meal.Dinner)} small></Button>
+                      {
+                        isCustomRecipe(recipe) ? (
+                          <h5> {recipe} </h5>
+                        ) : (
+                          <h5 title={recipe && recipe.name}>{ recipe && recipe.name }</h5>
+                        )
+                      }
+                    </div>
+                  ) : (
+                    <div className='day-meal'>
+                      <RecipeSearch
+                        onSelect={(selected) => assignToDay(selected, day, Meal.Dinner)}
+                      />
+                    </div>
+                  )
+                }
               </div>
-              {
-                mode === PlannerMode.View ?
-                  Meals.map(meal => {
-                    const recipe = planner[day][meal];
-                    return (
-                      <div className='day-meal' key={meal}>
-                        {
-                          recipe !== undefined && (isCustomRecipe(recipe) ? (
-                            <h5> { recipe } </h5>
-                          ) : (
-                            <h5
-                              onClick={() => goTo(recipe._id)}
-                              title={recipe.name}>
-                                { recipe.name }
-                            </h5>
-                          ))
-                        }
-                      </div>
-                    )
-                  }) :
-                  Meals.map(meal => {
-                    const recipe = planner[day][meal];
-                    return recipe ? (
-                      <div className='day-meal day-meal--edit' key={meal}>
-                        <Button icon='clear' onClick={() => removeMeal(day, meal)} small></Button>
-                        {
-                          isCustomRecipe(recipe) ? (
-                            <h5> {recipe} </h5>
-                          ) : (
-                            <h5 title={recipe && recipe.name}>{ recipe && recipe.name }</h5>
-                          )
-                        }
-                      </div>
-                    ) : (
-                      <div className='day-meal' key={meal}>
-                        <RecipeSearch
-                          onSelect={(selected) => assignToDay(selected, day, meal)}
-                        />
-                      </div>
-                    )
-                  })
-              }
-            </div>
-          ))
+            )
+          })
         }
       </div>
     </div>
   </section>
-)
-
-const MobileDisplayPlanner: React.SFC<{
-  week: [Weekday, string][],
-  weekNumber: number,
-  planner: WeekPlan,
-  changeWeek: (shift?: WeekShift) => void,
-  goTo: (recipeId: string) => void
-}> = ({ weekNumber, week, planner, changeWeek, goTo}) => (
-  <section className='cbk-planner-mobile__body'>
-    <div className='cbk-planner-mobile__body__actions'>
-      <Button onClick={() => changeWeek(WeekShift.Prev)}>Prev</Button>
-      Week {weekNumber}
-      <Button onClick={() => changeWeek()}>Current</Button>
-      <Button onClick={() => changeWeek(WeekShift.Next)}>Next</Button>
-    </div>
-    <div className='cbk-planner-mobile__body__calendar'>
-      {
-        week.map(([weekday], dayNumber)=>(
-          <div key={dayNumber} className='day-schedule'>
-            <div className='day-schedule__day'>
-              <h5>{planner[weekday].date.format('ddd DD.MM') || weekday}</h5>
-            </div>
-            <div className='day-schedule__meals'>
-              {
-                Meals.map((meal, key) => {
-                  const recipe = planner[weekday][meal];
-                  return (
-                    <div
-                      key={key}
-                      className={`day-schedule__meals--${meal}`}
-                    >
-                      {
-                        recipe && (isCustomRecipe(recipe) ? (
-                          <h5>{recipe}</h5>
-                        ) : (
-                          <h5 onClick={() => goTo(recipe._id)}>{ recipe.name }</h5>
-                        ))
-                      }
-                    </div>
-                  )
-                })
-              }
-            </div>
-          </div>
-        ))
-      }
-    </div>
-  </section>
-)
+  )
+}
 
 const mapStateToProps = (state: AppState) => {
   return {
