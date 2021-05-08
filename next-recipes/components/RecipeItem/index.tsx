@@ -14,7 +14,7 @@ export const RecipeItem: FC<RecipeItemProps> = ({ tagName, recipe }) => {
       <h3>{recipe.name}</h3>
     </Tag>
   )
-}
+};
 
 RecipeItem.defaultProps = {
   tagName: 'div',
