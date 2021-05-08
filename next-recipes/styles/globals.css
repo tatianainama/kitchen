@@ -1,20 +1,56 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@font-face {
+  font-family: "Lekton";
+  src: url("/fonts/Lekton-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Lekton";
+  src: url("/fonts/Lekton-Bold.ttf") format("truetype");
+  font-weight: 800;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/fonts/Raleway-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/fonts/Raleway-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/fonts/Raleway-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
 
-html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  @apply font-default;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+h1 {
+  @apply font-display text-7xl leading-none;
 }
 
-* {
-  box-sizing: border-box;
+h2 {
+  @apply font-display text-6xl leading-none tracking-tight;
+}
+
+h3 {
+  @apply font-display;
+  font-size: 3.375rem;
+}
+
+h4 {
+  @apply font-display tracking-wide;
+  font-size: 2.375rem;
+}
+
+h5 {
+  @apply font-default font-medium;
+  font-size: 1.75rem;
+}
+
+h6 {
+  @apply font-default font-semibold uppercase text-xl;
+  letter-spacing: 0.75px;
 }
