@@ -1,5 +1,5 @@
 import { Recipe } from '@/types/recipes';
-import { FunctionComponent, FC } from 'react';
+import { FC } from 'react';
 import styles from './RecipeItem.module.css';
 
 type RecipeItemProps = {

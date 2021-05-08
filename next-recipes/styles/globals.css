@@ -1,22 +1,31 @@
+html,
+body {
+  @apply m-0;
+}
+
 @font-face {
   font-family: "Lekton";
   src: url("/fonts/Lekton-Regular.ttf") format("truetype");
 }
+
 @font-face {
   font-family: "Lekton";
   src: url("/fonts/Lekton-Bold.ttf") format("truetype");
   font-weight: 800;
 }
+
 @font-face {
   font-family: "Raleway";
   src: url("/fonts/Raleway-Regular.ttf") format("truetype");
   font-weight: 400;
 }
+
 @font-face {
   font-family: "Raleway";
   src: url("/fonts/Raleway-Medium.ttf") format("truetype");
   font-weight: 500;
 }
+
 @font-face {
   font-family: "Raleway";
   src: url("/fonts/Raleway-SemiBold.ttf") format("truetype");

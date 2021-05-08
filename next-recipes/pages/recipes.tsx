@@ -18,12 +18,8 @@ const Recipes = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <Layout>
-      <p>
-        No aliquip repudiare vis, consul deterruisset ne est, nec aliquid
-        mediocrem argumentum at. Nec malis saepe in. Legere nostrum eu eos, nam
-        ea facer diceret repudiare. Ad dicta omnes has. Ut tale brute vis, usu
-        ei solet dolores. Fuisset periculis in has.
-      </p>
+      <div>
+      </div>
       <h1>Recipes</h1>
       {recipeList.map((recipe, index) => (
         <RecipeItem recipe={recipe} key={index} />
