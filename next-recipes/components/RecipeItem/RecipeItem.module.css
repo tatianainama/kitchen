@@ -1,0 +1,38 @@
+.recipeItem {
+  @apply bg-grey-50 flex py-2 pr-4;
+}
+
+.recipeItem.recipeItemClickeable {
+  @apply cursor-pointer;
+}
+
+.recipeItem.recipeItemClickeable:hover {
+  @apply bg-grey-100;
+}
+
+.recipeItem.recipeItemClickeable:active,
+.recipeItem.recipeItemClickeable:focus {
+  @apply bg-grey-200;
+}
+
+.recipeItemMedia {
+  @apply bg-grey-200 mr-4 relative;
+  width: 100px;
+  height: 56px;
+}
+
+.recipeItemContent {
+  @apply flex-1 truncate mr-4;
+}
+
+.recipeItemContentDescription svg {
+  @apply inline mr-1;
+}
+
+.recipeItemAction {
+  @apply self-center;
+}
+
+.recipeItem+.recipeItem {
+  @apply my-2;
+}

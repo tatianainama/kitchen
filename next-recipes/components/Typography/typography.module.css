@@ -1,0 +1,8 @@
+.subtitle {
+  @apply text-lg font-extrabold normal-case font-display;
+
+}
+
+.subtitleAlt {
+  @apply text-lg normal-case tracking-comfy;
+}

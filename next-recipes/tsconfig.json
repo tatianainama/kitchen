@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["components/*"],
-      "@/types/*": ["types/*"]
+      "@/types/*": ["types/*"],
+      "@/utils/*": ["utils/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -19,6 +20,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"],
   "exclude": ["node_modules"]
 }
