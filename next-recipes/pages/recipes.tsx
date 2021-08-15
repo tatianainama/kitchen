@@ -4,6 +4,7 @@ import { Recipe } from "types/recipes";
 import { Subtitle } from 'components/Typography';
 import RecipeItem from "components/RecipeItem";
 import { TextInput } from "@/components/Forms";
+import { Button } from "@/components/Button";
 
 export const getStaticProps = async () => {
   const res = await fetch("http://localhost:3000/recipes/all/");
