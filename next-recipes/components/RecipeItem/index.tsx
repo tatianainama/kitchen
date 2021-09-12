@@ -20,18 +20,19 @@ type RecipeItemProps = {
 
 export const RecipeItem: FC<RecipeItemProps> = ({ tagName, recipe, onClick }) => {
   const Tag = tagName as keyof JSX.IntrinsicElements;
+  const cookingTime = dayjs.duration(recipe.details.cookingTime).add(recipe.details.preparationTime).asMinutes();
   return (
     <Tag className={classNames(styles.recipeItem, {
       [styles.recipeItemClickeable]: !!onClick,
     })} onClick={onClick}>
       <div className={styles.recipeItemMedia}>
-        {recipe.image && <Image src={`http://localhost:3000/${recipe.image}`} alt={recipe.name} layout='fill' />}
+        {recipe.image && <Image src={`${process.env.API}/${recipe.image}`} alt={recipe.name} layout='fill' />}
       </div>
       <div className={styles.recipeItemContent}>
         <Subtitle alternative>{recipe.name}</Subtitle>
         <p className={styles.recipeItemContentDescription}>
           <Time />
-          {`${dayjs.duration(recipe.details.cookingTime).add(recipe.details.preparationTime).asMinutes()}'` || '-'}</p>
+          {cookingTime || '-'}</p>
       </div>
       <div className={styles.recipeItemAction}>
         <Heart />
