@@ -5,12 +5,14 @@ import Heart from '@/components/Icon/heart';
 import { Subtitle } from '@/components/Typography';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import styles from './RecipeItem.module.css';
 import Time from '../Icon/time';
 import classNames from 'classnames';
 
 dayjs.extend(duration);
+dayjs.extend(relativeTime)
 
 type RecipeItemProps = {
   tagName?: keyof JSX.IntrinsicElements,
@@ -20,7 +22,8 @@ type RecipeItemProps = {
 
 export const RecipeItem: FC<RecipeItemProps> = ({ tagName, recipe, onClick }) => {
   const Tag = tagName as keyof JSX.IntrinsicElements;
-  const cookingTime = dayjs.duration(recipe.details.cookingTime).add(recipe.details.preparationTime).asMinutes();
+  const cookingTime = recipe.details.cookingTime || recipe.details.preparationTime ? dayjs.duration(recipe.details.cookingTime).add(recipe.details.preparationTime).humanize() : '-';
+
   return (
     <Tag className={classNames(styles.recipeItem, {
       [styles.recipeItemClickeable]: !!onClick,
@@ -32,7 +35,7 @@ export const RecipeItem: FC<RecipeItemProps> = ({ tagName, recipe, onClick }) =>
         <Subtitle alternative>{recipe.name}</Subtitle>
         <p className={styles.recipeItemContentDescription}>
           <Time />
-          {cookingTime || '-'}</p>
+          {cookingTime}</p>
       </div>
       <div className={styles.recipeItemAction}>
         <Heart />
