@@ -6,7 +6,8 @@
     "dev": "next dev -p 3005",
     "build": "next build",
     "start": "next start",
-    "clean": "rm -rf .next/"
+    "clean": "rm -rf .next/",
+    "lint": "yarn eslint"
   },
   "dependencies": {
     "classnames": "^2.3.1",
@@ -18,8 +19,15 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.4",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
+    "@typescript-eslint/parser": "^4.31.2",
     "autoprefixer": "^10.2.5",
-    "eslint": "^7.26.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-autofix": "^1.0.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.26.0",
     "postcss": "^8.2.13",
     "prettier": "2.2.1",
     "tailwindcss": "^2.1.2",
