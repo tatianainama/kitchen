@@ -1,3 +1,5 @@
+import { FC } from 'react';
+import { useRouter } from 'next/router';
 import { Chip, ChipGroup, TextInput } from '@/components/Forms';
 import { getAllRecipes, getAllTags } from '@/utils/api';
 import Container from '@/components/Layout/Container';
@@ -22,23 +24,28 @@ export const getStaticProps = async () => {
 
 };
 
-const Recipes = ({
+const Recipes: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   recipeList = [],
   tags
-}: InferGetStaticPropsType<typeof getStaticProps>) => <Layout>
-  <Header>
-    <TextInput placeholder="search" id="recipe-search" />
-    <ChipGroup>
-      {tags.map((tag) => <Chip key={tag} label={tag} color="primary" />)}
-    </ChipGroup>
-  </Header>
-  <Container>
-    <Subtitle>Favorites</Subtitle>
-  </Container>
-  <Container>
-    <Subtitle>All</Subtitle>
-    {recipeList.map((recipe, index) => <RecipeItem recipe={recipe} key={recipe._id} onClick={() => console.log(recipe._id)} />)}
-  </Container>
-</Layout>;
+}) => {
+  const router = useRouter();
+  return (
+    <Layout>
+      <Header>
+        <TextInput placeholder="search" id="recipe-search" />
+        <ChipGroup>
+          {tags.map((tag) => <Chip key={tag} label={tag} color="primary" />)}
+        </ChipGroup>
+      </Header>
+      <Container>
+        <Subtitle>Favorites</Subtitle>
+      </Container>
+      <Container>
+        <Subtitle>All</Subtitle>
+        {recipeList.map((recipe) => <RecipeItem recipe={recipe} key={recipe._id} onClick={() => router.push(`/recipes/${recipe._id}/`)}/>)}
+      </Container>
+    </Layout>
+  );
+};
 
 export default Recipes;
