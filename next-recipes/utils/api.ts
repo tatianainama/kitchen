@@ -1,35 +1,37 @@
-import { Recipe } from "@/types/recipes";
+import { Recipe } from '@/types/recipes';
 
-async function api<T>(url: string): Promise<T> {
+type Api = <T>(url: string) => Promise<T>;
+
+const api: Api = async (url) => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-  return await response.json();
-}
+  return response.json();
+};
 
-async function mockAPI<T>(data: T): Promise<T> {
-  return new Promise((resolve) => {
-    resolve(data);
-  })
-}
+const mockAPI = <T> (data: T): Promise<T> => new Promise((resolve) => {
+  resolve(data);
 
-export const getAllRecipes = () => api<Recipe[]>(`${process.env.API_RECIPES}/all/`)
+});
+
+export const getAllRecipes = (): Promise<Recipe[]> => api<Recipe[]>(`${process.env.API_RECIPES}/all/`);
+
+export const getRecipeById = (id: string | string[]): Promise<Recipe> => api<Recipe>(`${process.env.API_RECIPES}/id/${id}`);
 
 type Tag = {
   name: string,
 };
 
-export const getAllTags = () => mockAPI<Tag[]>(
-  [
-    { name: 'Dinner' },
-    { name: 'Snack' },
-    { name: 'Dessert' },
-    { name: 'Lunch' }
-  ]
-);
+export const getAllTags = (): Promise<Tag[]> => mockAPI<Tag[]>([
+  { name: 'Dinner' },
+  { name: 'Snack' },
+  { name: 'Dessert' },
+  { name: 'Lunch' }
+]);
 
 export default {
   getAllRecipes,
   getAllTags,
+  getRecipeById
 };
