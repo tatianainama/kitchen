@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Recipe {
+  id           Int                @id @default(autoincrement())
+  name         String
+  summary      String
+  tags         String[]
+  course       String[]
+  Author       Author             @relation(fields: [authorId], references: [id])
+  authorId     Int
+  instructions String[]
+  ingredients  RecipeIngredient[]
+}
+
+model Author {
+  id      Int      @id @default(autoincrement())
+  name    String
+  website String
+  recipe  Recipe[]
+}
+
+model RecipeIngredient {
+  id           Int        @id @default(autoincrement())
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId Int
+  quantity     Float
+  unit         Unit       @relation(fields: [unitName], references: [name])
+  unitName     UnitName
+  note         String
+  Recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  recipeId     Int
+}
+
+model Ingredient {
+  id               Int                @id @default(autoincrement())
+  name             String
+  variants         String[]
+  preferredUnit    Unit               @relation(fields: [unitName], references: [name])
+  unitName         UnitName
+  density          Float
+  RecipeIngredient RecipeIngredient[]
+}
+
+model Unit {
+  name             UnitName           @id
+  type             UnitType
+  Ingredient       Ingredient[]
+  RecipeIngredient RecipeIngredient[]
+}
+
+enum UnitType {
+  MASS
+  VOL
+}
+
+enum UnitName {
+  CUP
+  TBSP
+  TSP
+  STICK
+  G
+  ML
+  L
+  OZ
+  LB
+  PINT
+  GAL
+  UNIT
+  PINCH
+  TO_TASTE
+}
