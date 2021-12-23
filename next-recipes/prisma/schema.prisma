@@ -16,7 +16,7 @@ model Recipe {
   summary      String
   tags         String[]
   course       String[]
-  Author       Author             @relation(fields: [authorId], references: [id])
+  author       Author             @relation(fields: [authorId], references: [id])
   authorId     Int
   instructions String[]
   ingredients  RecipeIngredient[]

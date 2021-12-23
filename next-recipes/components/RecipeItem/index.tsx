@@ -1,7 +1,6 @@
 import { FC, MouseEventHandler } from 'react';
 import Heart from '@/components/Icon/heart';
-import Image from 'next/image';
-import { Recipe } from '@/types/recipes';
+import { Recipe, RecipeIngredient, Author } from '@prisma/client';
 import { Subtitle } from '@/components/Typography';
 import Time from '../Icon/time';
 
@@ -17,16 +16,22 @@ dayjs.extend(relativeTime);
 type RecipeItemProps = {
   tagName?: keyof JSX.IntrinsicElements,
   onClick?: MouseEventHandler,
-  recipe: Recipe,
+  recipe: Recipe & {
+    ingredients: RecipeIngredient[];
+    author: Author;
+  },
 };
 
 export const RecipeItem: FC<RecipeItemProps> = ({ tagName, recipe, onClick }) => {
 
   const Tag = tagName as keyof JSX.IntrinsicElements;
-  const cookingTime = recipe.details.cookingTime || recipe.details.preparationTime
-    ? dayjs.duration(recipe.details.cookingTime).add(recipe.details.preparationTime).
-      humanize()
-    : '-';
+
+  /*
+   * Const cookingTime = recipe.details.cookingTime || recipe.details.preparationTime
+   *   ? dayjs.duration(recipe.details.cookingTime).add(recipe.details.preparationTime).
+   *     humanize()
+   *   : '-';
+   */
 
   return (
     <Tag className={classNames(
@@ -36,13 +41,11 @@ export const RecipeItem: FC<RecipeItemProps> = ({ tagName, recipe, onClick }) =>
       }
     )} onClick={onClick}>
       <div className={styles.recipeItemMedia}>
-        {recipe.image && <Image src={`${process.env.API}/${recipe.image}`} alt={recipe.name} layout="fill" />}
       </div>
       <div className={styles.recipeItemContent}>
         <Subtitle alternative>{recipe.name}</Subtitle>
         <p className={styles.recipeItemContentDescription}>
           <Time />
-          {cookingTime}
         </p>
       </div>
       <div className={styles.recipeItemAction}>

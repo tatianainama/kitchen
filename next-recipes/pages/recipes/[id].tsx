@@ -1,35 +1,19 @@
 import { Chip, ChipGroup } from '@/components/Forms';
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
+import { GetServerSideProps } from 'next';
 import Container from '@/components/Layout/Container';
-import { getAllRecipes, getRecipeById } from '@/utils/api';
+import { Recipe as RecipeType, Author, RecipeIngredient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { FC } from 'react';
 import Layout from '@/components/Layout';
-import { Recipe as RecipeType } from '@/types/recipes';
+
 import { Title } from '@/components/Typography/Title';
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const recipes = await getAllRecipes(),
-    paths = recipes.map(({ _id }) => ({
-      'params': {
-        'id': _id
-      }
-    }));
-  return {
-    paths,
-    fallback: false
-  };
+type RecipeProps = RecipeType & {
+  ingredients: RecipeIngredient[];
+  author: Author;
+}
 
-};
-
-export const getStaticProps: GetStaticProps<RecipeType> = async ({ params }) => {
-  const recipeData = await getRecipeById(params.id);
-  return {
-    'props': recipeData
-  };
-
-};
-
-export const Recipe: FC<InferGetStaticPropsType<typeof getStaticProps>> = (recipe) => <Layout>
+export const Recipe: FC<RecipeProps> = (recipe) => <Layout>
   <Container>
     <Title>{recipe.name}</Title>
     <ChipGroup>
@@ -37,4 +21,20 @@ export const Recipe: FC<InferGetStaticPropsType<typeof getStaticProps>> = (recip
     </ChipGroup>
   </Container>
 </Layout>;
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const recipe = await prisma.recipe.findUnique({
+    where: {
+      id: Number(params?.id || -1)
+    },
+    include: {
+      ingredients: true,
+      author: true
+    }
+  });
+  return {
+    props: recipe
+  };
+};
+
 export default Recipe;

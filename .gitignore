@@ -1,6 +1,5 @@
 node_modules
 ktchn/node_modules
-lib
 ktchn/.env
 ktchn/src/public
 ktchn/dist

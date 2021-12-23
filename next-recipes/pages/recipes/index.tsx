@@ -1,31 +1,24 @@
 import { FC } from 'react';
 import { useRouter } from 'next/router';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { getAllTags } from '@/utils/api';
+import prisma from '@/lib/prisma';
+
 import { Chip, ChipGroup, TextInput } from '@/components/Forms';
-import { getAllRecipes, getAllTags } from '@/utils/api';
 import Container from '@/components/Layout/Container';
 import Header from '@/components/Layout/Header';
-import { InferGetStaticPropsType } from 'next';
 import Layout from '@/components/Layout';
+import RecipeItem from '@/components/RecipeItem';
+import { Subtitle } from '@/components/Typography';
+import { Recipe, RecipeIngredient, Author } from '@prisma/client';
 
-import RecipeItem from 'components/RecipeItem';
-import { Subtitle } from 'components/Typography';
-
-
-export const getStaticProps = async () => {
-
-  const recipeList = await getAllRecipes(),
-    tags = await getAllTags();
-  return {
-    'props': {
-      recipeList,
-      'tags': tags.map((tag) => tag.name)
-    }
-  };
-
-};
+type RecipeResult = Recipe & {
+  ingredients: RecipeIngredient[];
+  author: Author;
+}
 
 const Recipes: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
-  recipeList = [],
+  recipeList,
   tags
 }) => {
   const router = useRouter();
@@ -42,10 +35,28 @@ const Recipes: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </Container>
       <Container>
         <Subtitle>All</Subtitle>
-        {recipeList.map((recipe) => <RecipeItem recipe={recipe} key={recipe._id} onClick={() => router.push(`/recipes/${recipe._id}/`)}/>)}
+        {recipeList.map((recipe) => <RecipeItem recipe={recipe} key={recipe.id} onClick={() => router.push(`/recipes/${recipe.id}/`)}/>)}
       </Container>
     </Layout>
   );
+};
+
+export const getStaticProps: GetStaticProps<{ recipeList: RecipeResult[], tags: string[]}> = async () => {
+  const recipeList = await prisma.recipe.findMany({
+    include: {
+      ingredients: true,
+      author: true
+    }
+  });
+
+  const tags = await getAllTags();
+
+  return {
+    props: {
+      recipeList,
+      tags: tags.map((tag) => tag.name)
+    }
+  };
 };
 
 export default Recipes;
