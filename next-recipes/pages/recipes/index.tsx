@@ -35,7 +35,7 @@ const Recipes: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </Container>
       <Container>
         <Subtitle>All</Subtitle>
-        {recipeList.map((recipe) => <RecipeItem recipe={recipe} key={recipe.id} onClick={() => router.push(`/recipes/${recipe.id}/`)}/>)}
+        {recipeList.map((recipe) => <RecipeItem recipe={recipe} key={recipe.id} onClick={() => router.push(`/recipes/${recipe.slug}/`)}/>)}
       </Container>
     </Layout>
   );
