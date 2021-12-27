@@ -14,6 +14,10 @@ model Recipe {
   id           Int                @id @default(autoincrement())
   name         String
   summary      String
+  prepTime     String
+  cookTime     String
+  totalTime    String
+  yields       Int
   tags         String[]
   course       String[]
   author       Author             @relation(fields: [authorId], references: [id])
