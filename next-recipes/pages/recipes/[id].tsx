@@ -1,7 +1,7 @@
 import { Chip, ChipGroup } from '@/components/Forms';
 import { GetServerSideProps } from 'next';
 import Container from '@/components/Layout/Container';
-import { Recipe as RecipeType, Author, RecipeIngredient } from '@prisma/client';
+import { Recipe as RecipeType, Author, Ingredient } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { FC } from 'react';
 import Layout from '@/components/Layout';
@@ -9,7 +9,7 @@ import Layout from '@/components/Layout';
 import { Title } from '@/components/Typography/Title';
 
 type RecipeProps = RecipeType & {
-  ingredients: RecipeIngredient[];
+  ingredients: Ingredient[];
   author: Author;
 }
 
