@@ -25,7 +25,7 @@ export const Recipe: FC<RecipeProps> = (recipe) => <Layout>
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const recipe = await prisma.recipe.findUnique({
     where: {
-      slug: params.slug || ''
+      slug: params.slug.toString() || ''
     },
     include: {
       ingredients: true,

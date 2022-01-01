@@ -1,9 +1,14 @@
-import React, { FC } from 'react';
+/* eslint-disable max-lines-per-function */
+import React, { FC, useState } from 'react';
 import { Button } from '@/components/Button';
 import Layout from '@/components/Layout';
 import { Prisma } from '@prisma/client';
 
 const CreateRecipe: FC = () => {
+  const [
+    url,
+    setUrl
+  ] = useState('');
   const submitData = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
@@ -22,10 +27,31 @@ const CreateRecipe: FC = () => {
     }
   };
 
+  const scrapeData = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    try {
+      const result = await fetch(
+        '/api/scrape',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        }
+      );
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Layout>
+      <form onSubmit={scrapeData}>
+        <input id="scrape-url" onChange={(ev) => setUrl(ev.target.value)} type="text" value={url} />
+        <Button type="submit">Scrape</Button>
+      </form>
       <form onSubmit={submitData}>
-        <Button type="submit">Create</Button>
+        <Button type="submit">Create from Mock</Button>
       </form>
     </Layout>
   );
