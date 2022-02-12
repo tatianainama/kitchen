@@ -22,6 +22,7 @@
         "autofix"
     ],
     "rules": {
+        "@typescript-eslint/no-shadow": "error",
         "react/display-name": "off",
         "autofix/no-debugger": "error",
         "react/react-in-jsx-scope": "off",
@@ -120,7 +121,7 @@
         "no-lonely-if": "error",
         "no-loop-func": "error",
         "no-loss-of-precision": "error",
-        "no-magic-numbers": ["error", { "ignore": [1, -1, 0] }],
+        "@typescript-eslint/no-magic-numbers": ["error", { "ignore": [1, -1, 0], "ignoreEnums": true }],
         "no-mixed-operators": "error",
         "no-multi-assign": "error",
         "no-multi-spaces": "error",
@@ -148,7 +149,7 @@
         "no-script-url": "error",
         "no-self-compare": "error",
         "no-sequences": "error",
-        "no-shadow": "error",
+        "no-shadow": "off",
         "no-tabs": "error",
         "no-template-curly-in-string": "error",
         "no-ternary": "off",

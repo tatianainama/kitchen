@@ -1,12 +1,12 @@
+import { ParsedIngredient } from './../utils/api/scrape/parser/ingredients';
 import { Prisma } from '@prisma/client';
 
 type Recipe = Prisma.RecipeCreateInput & {
   ingredients: Prisma.IngredientCreateInput[]
 }
 
-export type ScrapedIngredient = {
+export type ScrapedIngredient = ParsedIngredient & {
   group: '' | string,
-  original: string,
 }
 
 export type ScrapedRecipe = {

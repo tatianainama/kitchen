@@ -1,5 +1,6 @@
 /* eslint-disable max-statements */
 import { ScrapingSource, ScrapedIngredient } from '@/types/scraper';
+import parseIngredient from '../parser/ingredients';
 import slugify from '@/utils/slugify';
 
 const LITK: ScrapingSource = {
@@ -31,10 +32,10 @@ const parseInstructions = (instructions: string): string[] => instructions.split
   filter((x) => x !== '');
 
 const parseIngredients = ($): ScrapedIngredient[] => {
-  const list = $('#recipe-ingredients > ul').children().toArray();
+  const list = $('#recipe-ingredients > ul').children().toArray() as {tagName: string}[];
   const isNewGroup = (tagName: string): boolean => tagName === 'span';
   return list.reduce(
-    (acc: ScrapedIngredient[], rawIngredient: { tagName: string; }) => {
+    (acc, rawIngredient) => {
       const last = acc.length === 0
         ? 0
         : acc.length - 1;
@@ -62,8 +63,11 @@ const parseIngredients = ($): ScrapedIngredient[] => {
       acc[last].group ??= '';
       return acc;
     },
-    []
-  );
+    [] as {original: string, group: string}[]
+  ).map((ingredient) => ({
+    ...ingredient,
+    ...parseIngredient(ingredient.original)
+  }));
 };
 
 export default LITK;
