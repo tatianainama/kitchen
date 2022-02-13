@@ -94,7 +94,7 @@
         "no-await-in-loop": "error",
         "no-bitwise": "error",
         "no-caller": "error",
-        "no-confusing-arrow": "error",
+        "no-confusing-arrow": "off",
         "no-console": "error",
         "no-constructor-return": "error",
         "no-continue": "error",

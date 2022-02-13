@@ -23,5 +23,5 @@ export type ScrapedRecipe = {
 export interface ScrapingSource {
   name: string,
   domain: string,
-  scrapeRecipe($: T): ScrapedRecipe,
+  scrapeRecipe($: cheerio.Root): ScrapedRecipe,
 }
