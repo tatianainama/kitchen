@@ -11,15 +11,15 @@ const scrape = async (url: string): Promise<ScrapedRecipe> => {
   const jsonLdData = parseFromJsonLd($);
   const scrapingSource = getScrapingSource(url);
 
-  console.log(jsonLdData);
-
   if (!jsonLdData && !scrapingSource) {
     throw Error(`Couldn't scrape recipe from url: ${url}`);
   }
 
-  return scrapingSource.scrapeRecipe($);
+  return scrapingSource
+    ? { ...jsonLdData,
+      ...scrapingSource.scrapeRecipe($) }
+    : jsonLdData;
 
-  throw new Error('Scrapping source not found');
 };
 
 export default scrape;

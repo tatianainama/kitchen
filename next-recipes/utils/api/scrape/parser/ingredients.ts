@@ -4,7 +4,7 @@ export type ParsedIngredient = {
   quantity: string;
   unit: string;
   ingredient: string;
-  notes: string;
+  note: string;
   original: string;
 }
 
@@ -18,21 +18,21 @@ const sanitizeIngredient = (ingredient: string): string => (ingredient.startsWit
 
 const parentheticalReg = /(?<text>.*?)\((?<parenthetical>.*?)\)/u;
 
-const getNotes = (ingredient: string): { ingredient: string, notes: string} => {
+const getNotes = (ingredient: string): { ingredient: string, note: string} => {
   if (parentheticalReg.test(ingredient)) {
     const { groups } = ingredient.match(parentheticalReg);
     return {
       ingredient: groups.text.trim(),
-      notes: groups.parenthetical
+      note: groups.parenthetical
     };
   }
   const [
     text,
-    notes
+    note
   ] = ingredient.split(', ');
   return {
     ingredient: text,
-    notes
+    note
   };
 };
 
@@ -41,25 +41,25 @@ const parseIngredient = (ingredientString: string): ParsedIngredient => {
     const parsedIngredient = parse(ingredientString);
     const {
       ingredient,
-      notes
+      note
     } = getNotes(parsedIngredient.ingredient);
     return {
       quantity: parsedIngredient.quantity,
       unit: parsedIngredient.unit,
       ingredient: sanitizeIngredient(ingredient),
-      notes,
+      note,
       original: ingredientString
     };
   } catch (e) {
     const {
       ingredient,
-      notes
+      note
     } = getNotes(ingredientString);
     return {
       quantity: null,
       unit: null,
       ingredient: sanitizeIngredient(ingredient),
-      notes,
+      note,
       original: ingredientString
     };
   }

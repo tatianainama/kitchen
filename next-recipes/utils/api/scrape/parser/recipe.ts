@@ -1,21 +1,11 @@
 /* eslint-disable consistent-return */
+import { ScrapedRecipe } from '@/types/scraper';
 import slugify from '@/utils/slugify';
 import { Recipe as RecipeJsonLd } from 'schema-dts';
-import parseIngredient, { ParsedIngredient } from './ingredients';
+import parseIngredient from './ingredients';
 
-type ParsedFromJson = {
-  name: string;
-  slug: string;
-  instructions: string[];
-  ingredients: ParsedIngredient[];
-  prepTime: string;
-  cookTime: string;
-  yields: string;
-  tags: string[];
-  course: string[];
-}
 
-export const parseFromJsonLd = ($: cheerio.Root): ParsedFromJson => {
+export const parseFromJsonLd = ($: cheerio.Root): ScrapedRecipe => {
   try {
     const jsonData = $('script[type="application/ld+json"]').html();
     const data = JSON.parse(jsonData);
@@ -31,6 +21,7 @@ export const parseFromJsonLd = ($: cheerio.Root): ParsedFromJson => {
       ingredients: sanitizeIngredients(toArray(rawRecipe.recipeIngredient))
     };
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.info(`Couldn't fetch JSON from recipe: ${e}`);
     return {
       name: '',
@@ -99,5 +90,6 @@ const sanitizeIngredients = (rawIngredients?: string[]) => {
     return [];
   }
 
-  return rawIngredients.map((ingredient) => parseIngredient(ingredient));
+  return rawIngredients.map((ingredient) => ({ ...parseIngredient(ingredient),
+    group: '' }));
 };

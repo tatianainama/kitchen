@@ -5,19 +5,20 @@ type Recipe = Prisma.RecipeCreateInput & {
   ingredients: Prisma.IngredientCreateInput[]
 }
 
-export type ScrapedIngredient = ParsedIngredient & {
-  group: '' | string,
+export type ScrapedRecipe = {
+  name: string;
+  slug: string;
+  instructions: string[];
+  ingredients: ScrapedIngredient[];
+  prepTime: string;
+  cookTime: string;
+  yields: string;
+  tags: string[];
+  course: string[];
 }
 
-export type ScrapedRecipe = {
-  name: string,
-  slug: string,
-  prepTime?: string,
-  cookTime?: string,
-  yields?: string,
-  video?: string,
-  ingredients: ScrapedIngredient[],
-  instructions: string[],
+export type ScrapedIngredient = ParsedIngredient & {
+  group: '' | string,
 }
 
 export interface ScrapingSource {
