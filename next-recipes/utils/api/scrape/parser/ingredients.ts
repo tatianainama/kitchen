@@ -16,13 +16,33 @@ const sanitizeIngredient = (ingredient: string): string => (ingredient.startsWit
   )
   : ingredient);
 
+const parentheticalReg = /(?<text>.*?)\((?<parenthetical>.*?)\)/u;
+
+const getNotes = (ingredient: string): { ingredient: string, notes: string} => {
+  if (parentheticalReg.test(ingredient)) {
+    const { groups } = ingredient.match(parentheticalReg);
+    return {
+      ingredient: groups.text.trim(),
+      notes: groups.parenthetical
+    };
+  }
+  const [
+    text,
+    notes
+  ] = ingredient.split(', ');
+  return {
+    ingredient: text,
+    notes
+  };
+};
+
 const parseIngredient = (ingredientString: string): ParsedIngredient => {
   try {
     const parsedIngredient = parse(ingredientString);
-    const [
+    const {
       ingredient,
       notes
-    ] = parsedIngredient.ingredient.split(', ');
+    } = getNotes(parsedIngredient.ingredient);
     return {
       quantity: parsedIngredient.quantity,
       unit: parsedIngredient.unit,
@@ -31,10 +51,10 @@ const parseIngredient = (ingredientString: string): ParsedIngredient => {
       original: ingredientString
     };
   } catch (e) {
-    const [
+    const {
       ingredient,
       notes
-    ] = ingredientString.split(', ');
+    } = getNotes(ingredientString);
     return {
       quantity: null,
       unit: null,
