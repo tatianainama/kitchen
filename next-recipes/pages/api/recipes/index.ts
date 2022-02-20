@@ -4,7 +4,7 @@ import slugify from '@/utils/slugify';
 import fs from 'fs';
 
 const handler: NextApiHandler = async (req, res) => {
-  const { name, summary, prepTime, cookTime, yields, tags, course, instructions, ingredients, ...recipe } = req.body;
+  const { ingredients, author, ...recipe } = req.body;
   const slug = recipe.slug || slugify(recipe.name);
   const image = saveImage(
     recipe.image,
@@ -12,18 +12,19 @@ const handler: NextApiHandler = async (req, res) => {
   );
   const createRecipeAndIngredients = await prisma.recipe.create({
     data: {
-      name,
-      summary,
-      prepTime,
-      cookTime,
-      yields,
-      tags,
-      course,
-      instructions,
+      ...recipe,
       image,
       slug,
       ingredients: {
-        create: [...ingredients]
+        create: ingredients
+      },
+      author: {
+        connectOrCreate: {
+          where: {
+            website: author.website
+          },
+          create: author
+        }
       }
     },
     include: {
@@ -34,6 +35,7 @@ const handler: NextApiHandler = async (req, res) => {
   res.json(createRecipeAndIngredients);
 };
 
+// Optimize image before saving
 const saveImage = (image: string, name: string) => {
   try {
     const [
@@ -44,10 +46,14 @@ const saveImage = (image: string, name: string) => {
       const filename = `${name}.${prefix.replace(
         'data:image/',
         ''
+      ).replace(
+        '"',
+        ''
       ).split(
         ';',
         1
-      )}`;
+      ).
+        toString()}`;
       const location = `${process.env.PUBLIC_ASSETS_PATH}/${filename}`;
       fs.writeFileSync(
         location,
