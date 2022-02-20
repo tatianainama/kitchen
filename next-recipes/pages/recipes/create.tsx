@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import { Button } from '@/components/Button';
 import Layout from '@/components/Layout';
 import { Prisma } from '@prisma/client';
@@ -9,23 +9,56 @@ const CreateRecipe: FC = () => {
     url,
     setUrl
   ] = useState('');
+
+  const [
+    scrapedRecipe,
+    setScrapedRecipe
+  ] = useState<Recipe>(null);
+
+  const [
+    postResult,
+    setPostResult
+  ] = useState(null);
+
+  const [
+    file,
+    setFile
+  ] = useState(null);
+  const fileInput: React.RefObject<HTMLInputElement> = useRef(null);
+
   const submitData = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
-      const recipe = RECIPE;
       const result = await fetch(
         '/api/recipes',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(recipe)
+          body: JSON.stringify({ ...scrapedRecipe,
+            image: file })
         }
-      );
-      console.log(result);
+      ).then((res) => res.json());
+      setPostResult(result);
     } catch (error) {
-      console.error(error);
+      setPostResult(`Error! ${error}`);
     }
   };
+
+  const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e);
+    if (e.target.files && e.target.files.length > 0) {
+      const uploadedFile = e.target.files.item(0);
+      console.log(uploadedFile);
+      const reader = new FileReader();
+      reader.readAsDataURL(uploadedFile);
+      reader.onload = () => {
+        const { result } = reader;
+        console.log(JSON.stringify(result));
+        setFile(JSON.stringify(result));
+      };
+    }
+  };
+
 
   const scrapeData = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -37,8 +70,12 @@ const CreateRecipe: FC = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url })
         }
-      );
-      console.log(result);
+      ).then((response) => response.json());
+      setScrapedRecipe({ ...result,
+        author: {
+          name: 'Laura Vitale',
+          website: 'https://laurainthekitchen.com/'
+        } });
     } catch (error) {
       console.error(error);
     }
@@ -51,69 +88,35 @@ const CreateRecipe: FC = () => {
         <Button type="submit">Scrape</Button>
       </form>
       <form onSubmit={submitData}>
-        <Button type="submit">Create from Mock</Button>
+        <input type="file" id="recipe-image" accept="image/*" onChange={onChangeFile} ref={fileInput} />
+        <Button type="submit" disabled={!scrapedRecipe || !file}>Submit</Button>
       </form>
+      {
+        postResult && <pre>{JSON.stringify(
+          postResult,
+          null,
+          2
+        )}</pre>
+      }
+      {
+        scrapedRecipe &&
+          <pre>
+            {JSON.stringify(
+              scrapedRecipe,
+              null,
+              2
+            )}
+          </pre>
+
+      }
     </Layout>
   );
 };
-
-const INGREDIENTS: Prisma.IngredientCreateInput[] = [
-  {
-    name: 'Cremini Mushroom',
-    quantity: 1,
-    unit: 'LB',
-    note: 'cleaned, trimmed and roughly chopped'
-  },
-  {
-    name: 'Shallot',
-    quantity: 2,
-    unit: 'UNIT',
-    note: 'roughly chopped'
-  },
-  {
-    name: 'Garlic',
-    quantity: 3,
-    unit: 'CLOVES',
-    note: 'roughly chopped'
-  },
-  {
-    name: 'Thyme',
-    quantity: 1,
-    unit: 'TBSP',
-    note: 'leaves picked from the stem'
-  }
-];
 
 type Recipe = Prisma.RecipeCreateInput & {
   ingredients: Prisma.IngredientCreateInput[],
   author: Prisma.AuthorCreateInput,
 }
-
-const RECIPE: Recipe = {
-  name: 'Beef Wellington',
-  summary: '',
-  prepTime: 'PT45M',
-  cookTime: 'PT1H0M',
-  totalTime: 'PT1H45M',
-  yields: 8,
-  tags: [
-    'beef',
-    'fancy'
-  ],
-  course: ['main'],
-  url: 'https://laurainthekitchen.com/recipes/ultimate-beef-wellington/',
-  author: {
-    name: 'Laura in the Kitchen',
-    website: 'https://laurainthekitchen.com/'
-  },
-  instructions: [
-    'In the bowl of a food processor, add the mushrooms, shallots and garlic and pulse until very finely chopped (you might need to do this in batches) cook in the butter and olive oil along with the thyme and salt and pepper and cook on medium heat until all the moisture cooks out and the mushroom mixture has cooked down by about half, set aside to cool completely.',
-    'While the mushrooms are cooking, season the beef really well on all sides with plenty of salt and pepper then sear in a screaming hot cast iron skillet with a touch of neutral oil until very deeply browned, set aside to cool. Once the beef is cooled, brush evenly on all sides with the mustard.',
-    'Lay a couple sheets of plastic wrap on your work surface (overlapping) and lay out the prosciutto in a single layer (large enough to roll the beef in) then carefully smear the cooled mushrooms mixture on the prosciutto, place the beef on one end and roll tightly with the prosciutto using the plastic wrap as your guide.',
-    'Wrap the beef tightly in the plastic wrap, refrigerate for 30 minutes.'
-  ],
-  ingredients: INGREDIENTS
-};
 
 
 export default CreateRecipe;

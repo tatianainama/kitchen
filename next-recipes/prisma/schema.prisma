@@ -14,17 +14,18 @@ model Recipe {
   id           Int          @id @default(autoincrement())
   name         String
   slug         String       @unique
+  image        String?
   summary      String?
   url          String?
   video        String?
   prepTime     String
   cookTime     String
-  totalTime    String
-  yields       Int
+  totalTime    String?
+  yields       String
   tags         String[]
   course       String[]
   author       Author?      @relation(fields: [authorId], references: [id])
-  authorId     Int
+  authorId     Int?
   instructions String[]
   ingredients  Ingredient[]
 
@@ -39,14 +40,14 @@ model Author {
 }
 
 model Ingredient {
-  id       Int      @id @default(autoincrement())
-  name     String
-  quantity Float
-  unit     UnitName
-  note     String
-  group    String
-  original String
-  Recipe   Recipe[]
+  id         Int      @id @default(autoincrement())
+  ingredient String
+  quantity   String? // change to Float when implemented
+  unit       String? // Change to UnitName when implmemented
+  note       String
+  group      String
+  original   String
+  recipes    Recipe[]
 }
 
 enum UnitType {

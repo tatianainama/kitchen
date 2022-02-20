@@ -18,6 +18,23 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Prisma
+
+Prisma is a next-generation ORM that can be used to access a database in Node.js and TypeScript applications.
+
+To run Prisma Studio's interface:
+
+```bash
+yarn prisma studio
+```
+
+To update prisma db after schema change:
+
+```bash
+yarn prisma generate
+```
+
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
