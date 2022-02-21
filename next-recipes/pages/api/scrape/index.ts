@@ -1,10 +1,6 @@
 import { NextApiHandler } from 'next';
 import scrape from '@/utils/api/scrape';
-
-enum HttpStatus {
-  BadRequest = 400,
-  ServerError = 500,
-}
+import { HttpStatus } from '@/types/server';
 
 const handler: NextApiHandler = async (req, res) => {
   const { url } = req.body;
