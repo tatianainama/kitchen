@@ -1,38 +1,45 @@
+import { HttpStatus } from '@/types/server.d';
 import { NextApiHandler } from 'next';
+import { Ingredient, Recipe } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import slugify from '@/utils/slugify';
 import fs from 'fs';
 
-const handler: NextApiHandler = async (req, res) => {
-  const { ingredients, author, ...recipe } = req.body;
-  const slug = recipe.slug || slugify(recipe.name);
-  const image = saveImage(
-    recipe.image,
-    slug
-  );
-  const createRecipeAndIngredients = await prisma.recipe.create({
-    data: {
-      ...recipe,
-      image,
-      slug,
-      ingredients: {
-        create: ingredients
-      },
-      author: {
-        connectOrCreate: {
-          where: {
-            website: author.website
-          },
-          create: author
+type CreateResponse = Recipe & { ingredients: Ingredient[] };
+const handler: NextApiHandler<CreateResponse> = async (req, res) => {
+  try {
+    const { ingredients, author, ...recipe } = req.body;
+    const slug = recipe.slug || slugify(recipe.name);
+    const image = saveImage(
+      recipe.image,
+      slug
+    );
+    const createRecipeAndIngredients = await prisma.recipe.create({
+      data: {
+        ...recipe,
+        image,
+        slug,
+        ingredients: {
+          create: ingredients
+        },
+        author: {
+          connectOrCreate: {
+            where: {
+              website: author.website
+            },
+            create: author
+          }
         }
+      },
+      include: {
+        ingredients: true
       }
-    },
-    include: {
-      ingredients: true
-    }
-  });
+    });
 
-  res.json(createRecipeAndIngredients);
+    res.status(HttpStatus.Success).json(createRecipeAndIngredients);
+  } catch (e) {
+    res.status(HttpStatus.ServerError).send(e);
+  }
 };
 
 // Optimize image before saving
@@ -64,6 +71,7 @@ const saveImage = (image: string, name: string) => {
     }
     return '';
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(
       'Error while saving image',
       error
@@ -71,5 +79,14 @@ const saveImage = (image: string, name: string) => {
     return '';
   }
 };
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '1mb'
+    }
+  }
+};
+
 export default handler;
 
