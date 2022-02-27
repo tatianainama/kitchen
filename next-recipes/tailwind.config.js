@@ -1,5 +1,79 @@
 const colors = require('tailwindcss/colors');
 
+const screenREM = {
+  sm: 37.5,
+  md: 56.5,
+  lg: 77.5,
+  xl: 90
+};
+
+const REM = 16;
+
+const screen = Object.entries(screenREM).reduce(
+  (screens, [
+    name,
+    value
+  ]) => ({
+    ...screens,
+    [name]: `${value * REM}px`
+  }),
+  {}
+);
+
+const headers = {
+  'h1': {
+    min: 2.5,
+    max: 4,
+    letterSpacing: '-1.5px'
+  },
+  'h2': {
+    min: 2,
+    max: 3.375,
+    letterSpacing: '-0.5px'
+  },
+  'h3': {
+    min: 1.75,
+    max: 3,
+    letterSpacing: '0px'
+  },
+  'h4': {
+    min: 1.5,
+    max: 2.375,
+    letterSpacing: '0.25px'
+  },
+  'h5': {
+    min: 1.25,
+    max: 1.75,
+    letterSpacing: '0px'
+  },
+  'h6': {
+    min: 1.125,
+    max: 1.375,
+    letterSpacing: '0.15px'
+  }
+};
+
+const SCREEN_DIFF = screenREM.lg - screenREM.sm;
+
+const clamp = ({ min, max }) => {
+  const sizeDiff = max - min;
+  return `clamp(${min}rem, calc(${min}rem + ${sizeDiff} * ((100vw - ${screenREM.sm}rem) / ${SCREEN_DIFF})), ${max}rem)`;
+};
+
+const headersFontSizes = Object.entries(headers).reduce(
+  (fontSizes, [
+    key,
+    { letterSpacing, ...values }
+  ]) => ({
+    ...fontSizes,
+    [key]: [
+      clamp(values),
+      { letterSpacing }
+    ]
+  }),
+  {}
+);
+
 module.exports = {
   purge: [
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -101,7 +175,9 @@ module.exports = {
       spacing: {
         '1.5': '0.375rem'
       },
+      screen,
       fontSize: {
+        ...headersFontSizes,
         '7xl': '5rem'
       },
       boxShadow: {
