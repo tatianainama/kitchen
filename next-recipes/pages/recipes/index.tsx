@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { getAllTags } from '@/utils/api';
 import prisma from '@/lib/prisma';
 
 import { Chip, ChipGroup, TextInput } from '@/components/Forms';
@@ -10,12 +9,7 @@ import Header from '@/components/Layout/Header';
 import Layout from '@/components/Layout';
 import RecipeItem from '@/components/RecipeItem';
 import { Subtitle } from '@/components/Typography';
-import { Recipe, RecipeIngredient, Author } from '@prisma/client';
-
-type RecipeResult = Recipe & {
-  ingredients: RecipeIngredient[];
-  author: Author;
-}
+import { RecipeTypes } from 'additional';
 
 const Recipes: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   recipeList,
@@ -41,7 +35,7 @@ const Recipes: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   );
 };
 
-export const getStaticProps: GetStaticProps<{ recipeList: RecipeResult[], tags: string[]}> = async () => {
+export const getStaticProps: GetStaticProps<{ recipeList: RecipeTypes.Recipe[], tags: string[]}> = async () => {
   const recipeList = await prisma.recipe.findMany({
     include: {
       ingredients: true,
@@ -49,12 +43,10 @@ export const getStaticProps: GetStaticProps<{ recipeList: RecipeResult[], tags: 
     }
   });
 
-  const tags = await getAllTags();
-
   return {
     props: {
       recipeList,
-      tags: tags.map((tag) => tag.name)
+      tags: []
     }
   };
 };

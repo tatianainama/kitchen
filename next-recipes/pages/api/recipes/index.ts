@@ -1,12 +1,12 @@
-import { HttpStatus } from '@/types/server.d';
 import { NextApiHandler } from 'next';
 import { Ingredient, Recipe } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import slugify from '@/utils/slugify';
 import fs from 'fs';
+import { ServerResponses } from 'additional';
 
 type CreateResponse = Recipe & { ingredients: Ingredient[] };
-const handler: NextApiHandler<CreateResponse> = async (req, res) => {
+const handler: NextApiHandler<CreateResponse|{error:string}> = async (req, res) => {
   try {
     const { ingredients, author, ...recipe } = req.body;
     const slug = recipe.slug || slugify(recipe.name);
@@ -36,9 +36,9 @@ const handler: NextApiHandler<CreateResponse> = async (req, res) => {
       }
     });
 
-    res.status(HttpStatus.Success).json(createRecipeAndIngredients);
-  } catch (e) {
-    res.status(HttpStatus.ServerError).send(e);
+    res.status(ServerResponses.HttpStatus.Success).json(createRecipeAndIngredients);
+  } catch (error) {
+    res.status(ServerResponses.HttpStatus.ServerError).json({ error: `Error while creating recipe ${error}` });
   }
 };
 

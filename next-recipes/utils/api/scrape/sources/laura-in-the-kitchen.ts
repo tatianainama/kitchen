@@ -1,9 +1,9 @@
 /* eslint-disable max-statements */
-import { ScrapingSource, ScrapedIngredient } from '@/types/scraper';
+import { RecipeTypes } from 'additional';
 import parseIngredient from '../parser/ingredients';
 import slugify from '@/utils/slugify';
 
-const LITK: ScrapingSource = {
+const LITK: RecipeTypes.ScrapingSource = {
   name: 'Laura in the Kitchen',
   domain: 'laurainthekitchen',
   scrapeRecipe: ($) => {
@@ -31,7 +31,7 @@ const LITK: ScrapingSource = {
 const parseInstructions = (instructions: string): string[] => instructions.split(/\d+[)]/u).map((x) => x.trim()).
   filter((x) => x !== '');
 
-const parseIngredients = ($): ScrapedIngredient[] => {
+const parseIngredients = ($): RecipeTypes.ScrapedIngredient[] => {
   const list = $('#recipe-ingredients > ul').children().toArray() as {tagName: string}[];
   const isNewGroup = (tagName: string): boolean => tagName === 'span';
   return list.reduce(

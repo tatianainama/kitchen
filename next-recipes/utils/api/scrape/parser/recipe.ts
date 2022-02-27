@@ -1,11 +1,21 @@
 /* eslint-disable consistent-return */
-import { ScrapedRecipe } from '@/types/scraper';
 import slugify from '@/utils/slugify';
-import { Recipe as RecipeJsonLd } from 'schema-dts';
+import { Recipe, ImageObject, Person } from 'schema-dts';
 import parseIngredient from './ingredients';
+import { RecipeTypes } from 'additional';
 
+type AuthorJsonLd = {
+  '@type': 'Person',
+  name: string,
+  url: string
+}
 
-export const parseFromJsonLd = ($: cheerio.Root): ScrapedRecipe => {
+type RecipeJsonLd = Recipe & {
+  image?: ImageObject,
+  author?: Person | AuthorJsonLd | AuthorJsonLd[],
+}
+
+export const parseFromJsonLd = ($: cheerio.Root): RecipeTypes.ScrapedRecipe => {
   try {
     const jsonData = $('script[type="application/ld+json"]').html();
     const data = JSON.parse(jsonData);
@@ -15,6 +25,7 @@ export const parseFromJsonLd = ($: cheerio.Root): ScrapedRecipe => {
     const slug = slugify(name);
     return {
       ...sanitizeRecipeDetails(rawRecipe),
+      author: sanitizeAuthor(rawRecipe.author),
       name,
       slug,
       instructions: sanitizeInstructions(rawRecipe.recipeInstructions),
@@ -66,9 +77,37 @@ export const sanitizeInstructions = (JsonLdInstructions: unknown): string[] => A
   })
   : [];
 
+const sanitizeAuthor = (author: Person | AuthorJsonLd | AuthorJsonLd[]): {name: string, website?: string} | null => {
+  if (typeof author === 'string') {
+    return {
+      name: author
+    };
+  }
+
+  if (Array.isArray(author)) {
+    const data = author.find((element) => element['@type'] === 'Person');
+    return data
+      ? {
+        name: data.name,
+        website: data.url
+      }
+      : null;
+  }
+
+  return author['@type'] === 'Person'
+    ? {
+      name: toString(author.name),
+      website: toString(author?.url)
+    }
+    : null;
+};
+
 const sanitizeRecipeDetails = (recipe: RecipeJsonLd) => ({
+  summary: toString(recipe.description),
   prepTime: toString(recipe.prepTime),
   cookTime: toString(recipe.cookTime),
+  totalTime: toString(recipe.totalTime),
+  image: toString(recipe.image?.url),
   yields: toString(recipe.recipeYield),
   tags: [
     ...toArray(recipe.keywords),
@@ -82,7 +121,7 @@ const toArray = (data: unknown): string[] => Array.isArray(data)
   : toString(data).split(',').map((text) => text.trim());
 
 const toString = (data: unknown): string => data
-  ? data.toString() || String(data) || ''
+  ? (data.toString() || String(data) || '').trim()
   : '';
 
 const sanitizeIngredients = (rawIngredients?: string[]) => {

@@ -1,6 +1,6 @@
 import { FC, MouseEventHandler } from 'react';
 import Heart from '@/components/Icon/heart';
-import { Recipe, RecipeIngredient, Author } from '@prisma/client';
+import { RecipeTypes } from 'additional';
 import { Subtitle } from '@/components/Typography';
 import Time from '../Icon/time';
 
@@ -16,22 +16,12 @@ dayjs.extend(relativeTime);
 type RecipeItemProps = {
   tagName?: keyof JSX.IntrinsicElements,
   onClick?: MouseEventHandler,
-  recipe: Recipe & {
-    ingredients: RecipeIngredient[];
-    author: Author;
-  },
+  recipe: RecipeTypes.Recipe,
 };
 
 export const RecipeItem: FC<RecipeItemProps> = ({ tagName, recipe, onClick }) => {
 
   const Tag = tagName as keyof JSX.IntrinsicElements;
-
-  /*
-   * Const cookingTime = recipe.details.cookingTime || recipe.details.preparationTime
-   *   ? dayjs.duration(recipe.details.cookingTime).add(recipe.details.preparationTime).
-   *     humanize()
-   *   : '-';
-   */
 
   return (
     <Tag className={classNames(

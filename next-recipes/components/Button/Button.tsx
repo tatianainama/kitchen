@@ -8,19 +8,20 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: MouseEventHandler<HTMLButtonElement>,
 }
 
-export const Button: FunctionComponent<ButtonProps> = ({ children, onClick, color, size, type, ...props }) => (
-  <button
-    className={classnames(styles.button, styles[`${color}Color`], styles[`${size}Size`])}
-    onClick={onClick}
-    type={type}
-    {...props}
-  >
-    {children}
-  </button>
-);
-
+export const Button: FunctionComponent<ButtonProps> = ({ children, onClick, color, size, type, ...props }) => <button
+  className={classnames(
+    styles.button,
+    styles[`${color}Color`],
+    styles[`${size}Size`]
+  )}
+  onClick={onClick}
+  type={type}
+  {...props}
+>
+  {children}
+</button>;
 Button.defaultProps = {
   color: 'default',
   size: 'medium',
   type: 'button'
-}
+};

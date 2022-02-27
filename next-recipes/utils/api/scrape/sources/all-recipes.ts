@@ -1,9 +1,9 @@
-import { ScrapingSource, ScrapedIngredient } from '@/types/scraper';
 import { parseFromJsonLd, sanitizeInstructions } from './utils';
 import slugify from '@/utils/slugify';
 import parseIngredient from '../parser/ingredients';
+import { RecipeTypes } from 'additional';
 
-const ALL_RECIPES: ScrapingSource = {
+const ALL_RECIPES: RecipeTypes.ScrapingSource = {
   name: 'All Recipes',
   domain: 'allrecipes',
   scrapeRecipe: ($: cheerio.Root) => {
@@ -21,7 +21,7 @@ const ALL_RECIPES: ScrapingSource = {
   }
 };
 
-const parseIngredients = ($: cheerio.Root): ScrapedIngredient[] => {
+const parseIngredients = ($: cheerio.Root): RecipeTypes.ScrapedIngredient[] => {
   const rawData = $('section.recipe-ingredients fieldset').toArray();
   return rawData.reduce(
     (acc, fieldset) => {

@@ -2,7 +2,7 @@
 import React, { FC, useState, useRef } from 'react';
 import { Button } from '@/components/Button';
 import Layout from '@/components/Layout';
-import { Prisma } from '@prisma/client';
+import { RecipeTypes } from 'additional';
 
 const CreateRecipe: FC = () => {
   const [
@@ -13,7 +13,7 @@ const CreateRecipe: FC = () => {
   const [
     scrapedRecipe,
     setScrapedRecipe
-  ] = useState<Recipe>(null);
+  ] = useState<RecipeTypes.ScrapedRecipe>(null);
 
   const [
     postResult,
@@ -45,15 +45,12 @@ const CreateRecipe: FC = () => {
   };
 
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
     if (e.target.files && e.target.files.length > 0) {
       const uploadedFile = e.target.files.item(0);
-      console.log(uploadedFile);
       const reader = new FileReader();
       reader.readAsDataURL(uploadedFile);
       reader.onload = () => {
         const { result } = reader;
-        console.log(JSON.stringify(result));
         setFile(JSON.stringify(result));
       };
     }
@@ -112,11 +109,5 @@ const CreateRecipe: FC = () => {
     </Layout>
   );
 };
-
-type Recipe = Prisma.RecipeCreateInput & {
-  ingredients: Prisma.IngredientCreateInput[],
-  author: Prisma.AuthorCreateInput,
-}
-
 
 export default CreateRecipe;
