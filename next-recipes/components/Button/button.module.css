@@ -9,7 +9,7 @@
 
 /* Button */
 .button {
-  @apply font-semibold tracking-wider uppercase text-base border-3 px-2 transition-box-shadow;
+  @apply tracking-wider uppercase text-base border-3 px-2 transition-box-shadow;
 }
 
 /* Colors  */

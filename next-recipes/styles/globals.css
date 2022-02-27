@@ -5,65 +5,60 @@ body {
   @apply m-0;
 }
 
-@font-face {
-  font-family: "Lekton";
-  src: url("/fonts/Lekton-Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Lekton";
-  src: url("/fonts/Lekton-Bold.ttf") format("truetype");
-  font-weight: 800;
-}
-
-@font-face {
-  font-family: "Raleway";
-  src: url("/fonts/Raleway-Regular.ttf") format("truetype");
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: "Raleway";
-  src: url("/fonts/Raleway-Medium.ttf") format("truetype");
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: "Raleway";
-  src: url("/fonts/Raleway-SemiBold.ttf") format("truetype");
-  font-weight: 600;
-}
-
 body {
   @apply font-default;
 }
 
-h1 {
-  @apply font-bold font-display text-7xl;
-}
+@layer base {
+  @font-face {
+    font-family: "Lekton";
+    src: url("/fonts/Lekton-Regular.woff2") format("woff2");
+  }
+  
+  @font-face {
+    font-family: "Lekton";
+    font-weight: 800;
+    src: url("/fonts/Lekton-Bold.woff2") format("woff2");
+  }
+  
+  @font-face {
+    font-family: "Noto Sans";
+    src: url("/fonts/NotoSans-Regular.woff2") format("woff2");
+  }
+  
+  @font-face {
+    font-family: "Noto Sans";
+    font-weight: 800;
+    src: url("/fonts/NotoSans-Bold.woff2") format("woff2");
+  }
 
-h2 {
-  @apply font-bold font-display text-6xl tracking-tight;
-}
-
-h3 {
-  @apply font-bold font-display;
-  font-size: 3.375rem;
-}
-
-h4 {
-  @apply font-bold font-display tracking-wide;
-  font-size: 2.375rem;
-}
-
-h5 {
-  @apply font-medium;
-  font-size: 1.75rem;
-}
-
-h6 {
-  @apply font-semibold uppercase text-xl;
-  letter-spacing: 0.75px;
+  h1 {
+    @apply font-bold font-display text-7xl;
+  }
+  
+  h2 {
+    @apply font-bold font-display text-6xl tracking-tight;
+  }
+  
+  h3 {
+    @apply font-bold font-display;
+    font-size: 3.375rem;
+  }
+  
+  h4 {
+    @apply font-bold font-display tracking-wide;
+    font-size: 2.375rem;
+  }
+  
+  h5 {
+    @apply font-medium;
+    font-size: 1.75rem;
+  }
+  
+  h6 {
+    @apply font-semibold uppercase text-xl;
+    letter-spacing: 0.75px;
+  }
 }
 
 ::selection {

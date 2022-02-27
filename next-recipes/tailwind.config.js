@@ -1,62 +1,114 @@
-const colors = require("tailwindcss/colors");
+const colors = require('tailwindcss/colors');
 
 module.exports = {
-  purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
-  darkMode: false, // or 'media' or 'class'
+  purge: [
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}'
+  ],
+  darkMode: false,
   theme: {
     colors: {
       black: colors.black,
       white: colors.white,
       grey: {
-        ...colors.coolGray,
-        'DEFAULT': colors.coolGray[300],
+        50: '#F5F5F5',
+        100: '#E9E9E9',
+        200: '#D9D9D9',
+        300: '#C4C4C4',
+        400: '#9D9D9D',
+        'DEFAULT': '#9D9D9D',
+        500: '#7B7B7B',
+        600: '#555555',
+        700: '#434343',
+        800: '#262626',
+        900: '#000000'
       },
       primary: {
-        ...colors.yellow,
-        'DEFAULT': colors.yellow[400],
+        50: '#FFF7DD',
+        100: '#FFEBAD',
+        200: '#FFDD7C',
+        300: '#FED250',
+        400: '#FFC636',
+        'DEFAULT': '#FFC636',
+        500: '#FFBC30',
+        600: '#FFAD2D',
+        700: '#FF992A',
+        800: '#FF8728',
+        900: '#FF6623'
       },
       secondary: {
-        '50': '#efe9ff',
-        '100': '#d5c9fe',
-        '200': '#b8a5fe',
-        '300': '#987fff',
-        'DEFAULT': '#5b44fd',
-        '400': '#7B61FF',
-        '500': '#5b44fd',
-        '600': '#4c3ff6',
-        '700': '#3237ed',
-        '800': '#0031e7',
-        '900': '#0026d8'
+        50: '#EEE9FD',
+        100: '#D3CAFA',
+        200: '#B5A8F8',
+        300: '#9483F7',
+        DEFAULT: '#9483F7',
+        400: '#7667F6',
+        500: '#554DF3',
+        600: '#4847ED',
+        700: '#3040E4',
+        800: '#063ADE',
+        900: '#0030CF'
       },
+      terciary: {
+        50: '#DCFAF3',
+        100: '#ABF3DF',
+        200: '#1AEEC7',
+        DEFAULT: '#1AEEC7',
+        300: '#63DEB3',
+        400: '#5CD1A2',
+        500: '#58C592',
+        600: '#50B683',
+        700: '#48A473',
+        800: '#409464',
+        900: '#317545'
+      }
     },
     borderWidth: {
       '2': '2px',
       '3': '3px'
     },
     fontFamily: {
-      default: ["Raleway", "sans-serif"],
-      display: ["Lekton"],
+      default: [
+        'NotoSans',
+        'ui-sans-serif',
+        'system-ui',
+        '-apple-system',
+        'Segoe UI',
+        'Roboto',
+        'sans-serif'
+      ],
+      display: [
+        'Lekton',
+        'ui-monospace',
+        'SFMono-Regular',
+        'Menlo',
+        'Monaco',
+        'Consolas',
+        'Liberation Mono',
+        'Courier New',
+        'monospace'
+      ]
     },
     letterSpacing: {
-      tightest: "-.05em",
-      tight: "-.05px",
-      comfy: ".15px",
-      wide: ".25px",
-      wider: "1.25px",
-      widest: "1.5px",
+      tightest: '-.05em',
+      tight: '-.05px',
+      comfy: '.15px',
+      wide: '.25px',
+      wider: '1.25px',
+      widest: '1.5px'
     },
     extend: {
       spacing: {
         '1.5': '0.375rem'
       },
       fontSize: {
-        "7xl": "5rem",
+        '7xl': '5rem'
       },
       boxShadow: {
         strong: '4px 4px 0 0 #000000',
         'strong-primary': '4px 4px 0 0 rgb(250, 204, 21)',
         'strong-primary-dark': '4px 4px 0 0 rgb(202, 138, 4)',
-        'strong-secondary': '4px 4px 0 0 #987fff',
+        'strong-secondary': '4px 4px 0 0 #987fff'
       },
       outline: {
         white: '2px solid #FFFFFF',
@@ -68,7 +120,7 @@ module.exports = {
       transitionProperty: {
         'box-shadow': 'transform, box-shadow'
       }
-    },
+    }
   },
-  plugins: [],
+  plugins: []
 };
