@@ -24,7 +24,7 @@ const secondary = [
 ];
 
 const Navbar:FC = () => <nav className="h-16 text-white bg-black">
-  <div className="flex justify-between max-w-container mx-auto items-center h-full">
+  <div className="flex justify-between layout-container items-center h-full">
     <ul className="flex">
       {main.map(([
         label,

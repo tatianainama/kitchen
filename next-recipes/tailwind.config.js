@@ -10,11 +10,11 @@ const screenREM = {
 const REM = 16;
 
 const screens = Object.entries(screenREM).reduce(
-  (screens, [
+  (acc, [
     name,
     value
   ]) => ({
-    ...screens,
+    ...acc,
     [name]: `${value * REM}px`
   }),
   {}
@@ -68,7 +68,8 @@ const headersFontSizes = Object.entries(headers).reduce(
     ...fontSizes,
     [key]: [
       clamp(values),
-      { letterSpacing }
+      { letterSpacing,
+        lineHeight: 1 }
     ]
   }),
   {}
@@ -136,7 +137,12 @@ module.exports = {
         900: '#317545'
       }
     },
+    backgroundImage: {
+      'dot-pattern': 'url(\'/dot-bg.svg\')'
+    },
     borderWidth: {
+      '0': '0px',
+      DEFAULT: '1px',
       '2': '2px',
       '3': '3px'
     },
@@ -175,11 +181,19 @@ module.exports = {
         '1.5': '0.375rem'
       },
       screens,
+      width: {
+        'with-padding': 'calc(100% - 2rem)'
+      },
+      minHeight: {
+        'main': 'calc(100vh - 4rem)'
+      },
       maxWidth: {
-        'container': '67rem'
+        'container': '54.5rem',
+        'lg-container': '67rem'
       },
       fontSize: {
         ...headersFontSizes,
+        'xxs': '0.625rem',
         '7xl': '5rem'
       },
       boxShadow: {
