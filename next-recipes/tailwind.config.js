@@ -9,7 +9,7 @@ const screenREM = {
 
 const REM = 16;
 
-const screen = Object.entries(screenREM).reduce(
+const screens = Object.entries(screenREM).reduce(
   (screens, [
     name,
     value
@@ -174,13 +174,17 @@ module.exports = {
       spacing: {
         '1.5': '0.375rem'
       },
-      screen,
+      screens,
+      maxWidth: {
+        'container': '67rem'
+      },
       fontSize: {
         ...headersFontSizes,
         '7xl': '5rem'
       },
       boxShadow: {
         strong: '4px 4px 0 0 #000000',
+        'strong-small': '2px 2px 0 0 #000000',
         'strong-primary': '4px 4px 0 0 rgb(250, 204, 21)',
         'strong-primary-dark': '4px 4px 0 0 rgb(202, 138, 4)',
         'strong-secondary': '4px 4px 0 0 #987fff'

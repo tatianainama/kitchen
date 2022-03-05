@@ -6,7 +6,7 @@ const Home: NextPage = () => <Layout>
   <h1>Components</h1>
   <section>
     <h2>Buttons</h2>
-    <button className="h-9 border-2 uppercase text-sm font-bold tracking-wider px-6">Button</button>
+    <button className="btn-outline"><span className="relative">Button</span></button>
   </section>
 </Layout>;
 
