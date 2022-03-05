@@ -21,9 +21,9 @@ model Recipe {
   yields       String
   tags         String[]
   course       String[]
-  author       Author?      @relation(fields: [authorId], references: [id])
   authorId     Int?
   instructions String[]
+  author       Author?      @relation(fields: [authorId], references: [id])
   ingredients  Ingredient[]
 
   @@unique([name, authorId])
@@ -39,8 +39,8 @@ model Author {
 model Ingredient {
   id         Int      @id @default(autoincrement())
   ingredient String
-  quantity   String? // change to Float when implemented
-  unit       String? // Change to UnitName when implmemented
+  quantity   String?
+  unit       String?
   note       String?
   group      String
   original   String

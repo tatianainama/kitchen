@@ -1,10 +1,7 @@
-import { Chip, ChipGroup } from '@/components/Forms';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import Container from '@/components/Layout/Container';
 import prisma from '@/lib/prisma';
 import Layout from '@/components/Layout';
 
-import { Title } from '@/components/Typography/Title';
 import { FC } from 'react';
 import { Author, Ingredient, Recipe as RecipeType } from '@prisma/client';
 
@@ -15,13 +12,8 @@ type RecipeProps = RecipeType & {
 }
 
 export const Recipe: FC<RecipeProps> = (recipe) => <Layout>
-  <Container>
-    <Title>{recipe.name}</Title>
-    <p>{recipe.summary}</p>
-    <ChipGroup>
-      {recipe.tags?.map((tag, index) => <Chip label={tag} key={index} />)}
-    </ChipGroup>
-  </Container>
+  <h1>{recipe.name}</h1>
+  <p>{recipe.summary}</p>
 </Layout>;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {

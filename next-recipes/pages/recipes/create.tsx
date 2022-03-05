@@ -1,6 +1,5 @@
 /* eslint-disable max-lines-per-function */
 import React, { FC, useState, useRef } from 'react';
-import { Button } from '@/components/Button';
 import Layout from '@/components/Layout';
 import { RecipeTypes } from 'additional';
 
@@ -82,11 +81,11 @@ const CreateRecipe: FC = () => {
     <Layout>
       <form onSubmit={scrapeData}>
         <input id="scrape-url" onChange={(ev) => setUrl(ev.target.value)} type="text" value={url} />
-        <Button type="submit">Scrape</Button>
+        <button type="submit">Scrape</button>
       </form>
       <form onSubmit={submitData}>
         <input type="file" id="recipe-image" accept="image/*" onChange={onChangeFile} ref={fileInput} />
-        <Button type="submit" disabled={!scrapedRecipe || !file}>Submit</Button>
+        <button type="submit" disabled={!scrapedRecipe || !file}>Submit</button>
       </form>
       {
         postResult && <pre>{JSON.stringify(

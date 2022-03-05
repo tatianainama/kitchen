@@ -75,11 +75,10 @@ const headersFontSizes = Object.entries(headers).reduce(
 );
 
 module.exports = {
-  purge: [
+  content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}'
   ],
-  darkMode: false,
   theme: {
     colors: {
       black: colors.black,
