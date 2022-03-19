@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 
 import { FC } from 'react';
 import { Author, Ingredient, Recipe as RecipeType } from '@prisma/client';
+import IngredientList from '@/components/IngredientList';
 
 
 type RecipeProps = RecipeType & {
@@ -18,11 +19,13 @@ export const Recipe: FC<RecipeProps> = (recipe) => <Layout className="md:py-8">
       </div>
       <div className="relative py-6 px-4 border-t-2 bg-white sm:-mt-14 sm:w-with-padding sm:border-2 sm:mx-auto md:mt-0 md:border-none md:w-7/12 md:p-6">
         <h1>{recipe.name}</h1>
-        <ul className="flex absolute top-0 right-2 -translate-y-1/2 space-x-2 sm:relative sm:my-4 sm:translate-y-0 sm:inset-0">
-          {recipe.tags.map((tag) => <li key={tag} className="border border-black text-overline bg-primary py-1.5 px-2 shadow-strong-small">
-            {tag}
-          </li>)}
-        </ul>
+        {recipe.tags.length
+          ? <ul className="flex absolute top-0 right-2 -translate-y-1/2 space-x-2 sm:relative sm:my-4 sm:translate-y-0 sm:inset-0">
+            {recipe.tags.map((tag) => <li key={tag} className="border border-black text-overline bg-primary py-1.5 px-2 shadow-strong-small">
+              {tag}
+            </li>)}
+          </ul>
+          : null}
         <div className="text-sm flex flex-col-reverse sm:flex-row justify-between my-4">
           {recipe.author &&
             <a href={recipe.author.website}>By <strong className="font-display">{recipe.author.name}</strong></a>
@@ -36,6 +39,12 @@ export const Recipe: FC<RecipeProps> = (recipe) => <Layout className="md:py-8">
         <p className="hidden sm:block">{recipe.summary}</p>
       </div>
     </header>
+    <div className="bg-white border-t-2 py-6 px-4 sm:w-with-padding sm:mx-auto sm:border-2 sm:border-t-0 md:w-full md:p-6">
+      <section>
+        <h2>Ingredients</h2>
+        <IngredientList recipe={recipe} />
+      </section>
+    </div>
   </div>
 </Layout>;
 
