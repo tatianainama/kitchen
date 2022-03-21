@@ -5,15 +5,15 @@ import parseIngredient from './ingredients';
 import { RecipeTypes } from 'additional';
 
 type AuthorJsonLd = {
-  '@type': 'Person',
-  name: string,
-  url: string
-}
+  '@type': 'Person';
+  name: string;
+  url: string;
+};
 
 type RecipeJsonLd = Recipe & {
-  image?: ImageObject,
-  author?: Person | AuthorJsonLd | AuthorJsonLd[],
-}
+  image?: ImageObject;
+  author?: Person | AuthorJsonLd | AuthorJsonLd[];
+};
 
 export const parseFromJsonLd = ($: cheerio.Root): RecipeTypes.ScrapedRecipe => {
   try {
@@ -62,22 +62,31 @@ const getRecipe = (rawJson: unknown): RecipeJsonLd | undefined => {
   }
 };
 
-export const sanitizeInstructions = (JsonLdInstructions: unknown): string[] => Array.isArray(JsonLdInstructions)
-  ? JsonLdInstructions.map((instruction) => {
-    if (typeof instruction === 'string') {
-      return instruction;
-    }
-    if (instruction['@type'] === 'HowToStep') {
-      return instruction.text;
-    }
-    if (instruction['@type'] === 'HowToSection' && instruction.itemListElement) {
-      return instruction.itemListElement[0].text || instruction.itemListElement[0].name;
-    }
-    return '';
-  })
-  : [];
+export const sanitizeInstructions = (JsonLdInstructions: unknown): string[] =>
+  Array.isArray(JsonLdInstructions)
+    ? JsonLdInstructions.map((instruction) => {
+        if (typeof instruction === 'string') {
+          return instruction;
+        }
+        if (instruction['@type'] === 'HowToStep') {
+          return instruction.text;
+        }
+        if (
+          instruction['@type'] === 'HowToSection' &&
+          instruction.itemListElement
+        ) {
+          return (
+            instruction.itemListElement[0].text ||
+            instruction.itemListElement[0].name
+          );
+        }
+        return '';
+      })
+    : [];
 
-const sanitizeAuthor = (author: Person | AuthorJsonLd | AuthorJsonLd[]): {name: string, website?: string} | null => {
+const sanitizeAuthor = (
+  author: Person | AuthorJsonLd | AuthorJsonLd[]
+): { name: string; website?: string } | null => {
   if (typeof author === 'string') {
     return {
       name: author
@@ -88,17 +97,17 @@ const sanitizeAuthor = (author: Person | AuthorJsonLd | AuthorJsonLd[]): {name: 
     const data = author.find((element) => element['@type'] === 'Person');
     return data
       ? {
-        name: data.name,
-        website: data.url
-      }
+          name: data.name,
+          website: data.url
+        }
       : null;
   }
 
   return author['@type'] === 'Person'
     ? {
-      name: toString(author.name),
-      website: toString(author?.url)
-    }
+        name: toString(author.name),
+        website: toString(author?.url)
+      }
     : null;
 };
 
@@ -109,26 +118,29 @@ const sanitizeRecipeDetails = (recipe: RecipeJsonLd) => ({
   totalTime: toString(recipe.totalTime),
   image: toString(recipe.image?.url),
   yields: toString(recipe.recipeYield),
-  tags: [
-    ...toArray(recipe.keywords),
-    ...toArray(recipe.recipeCuisine)
-  ].filter(Boolean),
+  tags: [...toArray(recipe.keywords), ...toArray(recipe.recipeCuisine)].filter(
+    Boolean
+  ),
   course: toArray(recipe.recipeCategory)
 });
 
-const toArray = (data: unknown): string[] => Array.isArray(data)
-  ? data
-  : toString(data).split(',').map((text) => text.trim());
+const toArray = (data: unknown): string[] =>
+  Array.isArray(data)
+    ? data
+    : toString(data)
+        .split(',')
+        .map((text) => text.trim());
 
-const toString = (data: unknown): string => data
-  ? (data.toString() || String(data) || '').trim()
-  : '';
+const toString = (data: unknown): string =>
+  data ? (data.toString() || String(data) || '').trim() : '';
 
 const sanitizeIngredients = (rawIngredients?: string[]) => {
   if (!rawIngredients) {
     return [];
   }
 
-  return rawIngredients.map((ingredient) => ({ ...parseIngredient(ingredient),
-    group: '' }));
+  return rawIngredients.map((ingredient) => ({
+    ...parseIngredient(ingredient),
+    group: ''
+  }));
 };

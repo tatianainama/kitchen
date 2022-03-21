@@ -6,19 +6,15 @@ export type ParsedIngredient = {
   ingredient: string;
   note: string;
   original: string;
-}
+};
 
 // eslint-disable-next-line no-extra-parens
-const sanitizeIngredient = (ingredient: string): string => (ingredient.startsWith('of')
-  ? ingredient.replace(
-    'of ',
-    ''
-  )
-  : ingredient);
+const sanitizeIngredient = (ingredient: string): string =>
+  ingredient.startsWith('of') ? ingredient.replace('of ', '') : ingredient;
 
 const parentheticalReg = /(?<text>.*?)\((?<parenthetical>.*?)\)/u;
 
-const getNotes = (ingredient: string): { ingredient: string, note: string} => {
+const getNotes = (ingredient: string): { ingredient: string; note: string } => {
   if (parentheticalReg.test(ingredient)) {
     const { groups } = ingredient.match(parentheticalReg);
     return {
@@ -26,10 +22,7 @@ const getNotes = (ingredient: string): { ingredient: string, note: string} => {
       note: groups.parenthetical
     };
   }
-  const [
-    text,
-    note
-  ] = ingredient.split(', ');
+  const [text, note] = ingredient.split(', ');
   return {
     ingredient: text,
     note
@@ -39,10 +32,7 @@ const getNotes = (ingredient: string): { ingredient: string, note: string} => {
 const parseIngredient = (ingredientString: string): ParsedIngredient => {
   try {
     const parsedIngredient = parse(ingredientString);
-    const {
-      ingredient,
-      note
-    } = getNotes(parsedIngredient.ingredient);
+    const { ingredient, note } = getNotes(parsedIngredient.ingredient);
     return {
       quantity: parsedIngredient.quantity,
       unit: parsedIngredient.unit,
@@ -51,10 +41,7 @@ const parseIngredient = (ingredientString: string): ParsedIngredient => {
       original: ingredientString
     };
   } catch (e) {
-    const {
-      ingredient,
-      note
-    } = getNotes(ingredientString);
+    const { ingredient, note } = getNotes(ingredientString);
     return {
       quantity: null,
       unit: null,

@@ -16,11 +16,8 @@ const scrape = async (url: string): Promise<RecipeTypes.ScrapedRecipe> => {
   }
 
   return scrapingSource
-    ? { ...jsonLdData,
-      ...scrapingSource.scrapeRecipe($) }
+    ? { ...jsonLdData, ...scrapingSource.scrapeRecipe($) }
     : jsonLdData;
-
 };
 
 export default scrape;
-

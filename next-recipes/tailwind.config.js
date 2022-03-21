@@ -10,10 +10,7 @@ const screenREM = {
 const REM = 16;
 
 const screens = Object.entries(screenREM).reduce(
-  (acc, [
-    name,
-    value
-  ]) => ({
+  (acc, [name, value]) => ({
     ...acc,
     [name]: `${value * REM}px`
   }),
@@ -21,32 +18,32 @@ const screens = Object.entries(screenREM).reduce(
 );
 
 const headers = {
-  'h1': {
+  h1: {
     min: 2.5,
     max: 4,
     letterSpacing: '-1.5px'
   },
-  'h2': {
+  h2: {
     min: 2,
     max: 3.375,
     letterSpacing: '-0.5px'
   },
-  'h3': {
+  h3: {
     min: 1.75,
     max: 3,
     letterSpacing: '0px'
   },
-  'h4': {
+  h4: {
     min: 1.5,
     max: 2.375,
     letterSpacing: '0.25px'
   },
-  'h5': {
+  h5: {
     min: 1.25,
     max: 1.75,
     letterSpacing: '0px'
   },
-  'h6': {
+  h6: {
     min: 1.125,
     max: 1.375,
     letterSpacing: '0.15px'
@@ -61,16 +58,9 @@ const clamp = ({ min, max }) => {
 };
 
 const headersFontSizes = Object.entries(headers).reduce(
-  (fontSizes, [
-    key,
-    { letterSpacing, ...values }
-  ]) => ({
+  (fontSizes, [key, { letterSpacing, ...values }]) => ({
     ...fontSizes,
-    [key]: [
-      clamp(values),
-      { letterSpacing,
-        lineHeight: 1 }
-    ]
+    [key]: [clamp(values), { letterSpacing, lineHeight: 1 }]
   }),
   {}
 );
@@ -90,7 +80,7 @@ module.exports = {
         200: '#D9D9D9',
         300: '#C4C4C4',
         400: '#9D9D9D',
-        'DEFAULT': '#9D9D9D',
+        DEFAULT: '#9D9D9D',
         500: '#7B7B7B',
         600: '#555555',
         700: '#434343',
@@ -103,7 +93,7 @@ module.exports = {
         200: '#FFDD7C',
         300: '#FED250',
         400: '#FFC636',
-        'DEFAULT': '#FFC636',
+        DEFAULT: '#FFC636',
         500: '#FFBC30',
         600: '#FFAD2D',
         700: '#FF992A',
@@ -138,13 +128,13 @@ module.exports = {
       }
     },
     backgroundImage: {
-      'dot-pattern': 'url(\'/dot-bg.svg\')'
+      'dot-pattern': "url('/dot-bg.svg')"
     },
     borderWidth: {
-      '0': '0px',
+      0: '0px',
       DEFAULT: '1px',
-      '2': '2px',
-      '3': '3px'
+      2: '2px',
+      3: '3px'
     },
     fontFamily: {
       default: [
@@ -178,22 +168,22 @@ module.exports = {
     },
     extend: {
       spacing: {
-        '1.5': '0.375rem'
+        1.5: '0.375rem'
       },
       screens,
       width: {
         'with-padding': 'calc(100% - 2rem)'
       },
       minHeight: {
-        'main': 'calc(100vh - 4rem)'
+        main: 'calc(100vh - 4rem)'
       },
       maxWidth: {
-        'container': '54.5rem',
+        container: '54.5rem',
         'lg-container': '67rem'
       },
       fontSize: {
         ...headersFontSizes,
-        'xxs': '0.625rem',
+        xxs: '0.625rem',
         '7xl': '5rem'
       },
       boxShadow: {

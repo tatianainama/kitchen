@@ -7,7 +7,8 @@ const ALL_RECIPES: RecipeTypes.ScrapingSource = {
   name: 'All Recipes',
   domain: 'allrecipes',
   scrapeRecipe: ($: cheerio.Root) => {
-    const { cookTime, prepTime, recipeYield, recipeInstructions } = parseFromJsonLd($);
+    const { cookTime, prepTime, recipeYield, recipeInstructions } =
+      parseFromJsonLd($);
     const name = $('h1').text().trim();
     return {
       name,
@@ -23,18 +24,13 @@ const ALL_RECIPES: RecipeTypes.ScrapingSource = {
 
 const parseIngredients = ($: cheerio.Root): RecipeTypes.ScrapedIngredient[] => {
   const rawData = $('section.recipe-ingredients fieldset').toArray();
-  return rawData.reduce(
-    (acc, fieldset) => {
+  return rawData
+    .reduce((acc, fieldset) => {
       const group = $(fieldset).children('legend').text();
-      const ingredients = $(fieldset).children('ul').children('li').
-        toArray();
+      const ingredients = $(fieldset).children('ul').children('li').toArray();
 
-      const groupName = group === 'Ingredient Checklist'
-        ? ''
-        : group.trim().replace(
-          ':',
-          ''
-        );
+      const groupName =
+        group === 'Ingredient Checklist' ? '' : group.trim().replace(':', '');
 
       return [
         ...acc,
@@ -43,14 +39,11 @@ const parseIngredients = ($: cheerio.Root): RecipeTypes.ScrapedIngredient[] => {
           original: $(i).text().trim()
         }))
       ];
-    },
-    [] as { group: string, original: string}[]
-  ).map((ingredient) => ({
-    group: ingredient.group,
-    ...parseIngredient(ingredient.original)
-  }));
+    }, [] as { group: string; original: string }[])
+    .map((ingredient) => ({
+      group: ingredient.group,
+      ...parseIngredient(ingredient.original)
+    }));
 };
 
 export default ALL_RECIPES;
-
-

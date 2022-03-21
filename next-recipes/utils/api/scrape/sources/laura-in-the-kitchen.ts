@@ -7,14 +7,14 @@ const LITK: RecipeTypes.ScrapingSource = {
   name: 'Laura in the Kitchen',
   domain: 'laurainthekitchen',
   scrapeRecipe: ($) => {
-    const jsonData =
-      $('script[type="application/ld+json"]').
-        html();
+    const jsonData = $('script[type="application/ld+json"]').html();
 
-    const { cookTime, prepTime, recipeInstructions, recipeYield }: {[key: string]: string} = JSON.parse(jsonData.replace(
-      /\n/ug,
-      ' '
-    ));
+    const {
+      cookTime,
+      prepTime,
+      recipeInstructions,
+      recipeYield
+    }: { [key: string]: string } = JSON.parse(jsonData.replace(/\n/gu, ' '));
     const name = $('h1').text().trim();
     return {
       name,
@@ -28,17 +28,20 @@ const LITK: RecipeTypes.ScrapingSource = {
   }
 };
 
-const parseInstructions = (instructions: string): string[] => instructions.split(/\d+[)]/u).map((x) => x.trim()).
-  filter((x) => x !== '');
+const parseInstructions = (instructions: string): string[] =>
+  instructions
+    .split(/\d+[)]/u)
+    .map((x) => x.trim())
+    .filter((x) => x !== '');
 
 const parseIngredients = ($): RecipeTypes.ScrapedIngredient[] => {
-  const list = $('#recipe-ingredients > ul').children().toArray() as {tagName: string}[];
+  const list = $('#recipe-ingredients > ul').children().toArray() as {
+    tagName: string;
+  }[];
   const isNewGroup = (tagName: string): boolean => tagName === 'span';
-  return list.reduce(
-    (acc, rawIngredient) => {
-      const last = acc.length === 0
-        ? 0
-        : acc.length - 1;
+  return list
+    .reduce((acc, rawIngredient) => {
+      const last = acc.length === 0 ? 0 : acc.length - 1;
       const text: string = $(rawIngredient).text().trim();
       // Skipping empty ingredients
       if (!text) {
@@ -62,14 +65,11 @@ const parseIngredients = ($): RecipeTypes.ScrapedIngredient[] => {
       acc[last].original = text;
       acc[last].group ??= '';
       return acc;
-    },
-    [] as {original: string, group: string}[]
-  ).map((ingredient) => ({
-    ...ingredient,
-    ...parseIngredient(ingredient.original)
-  }));
+    }, [] as { original: string; group: string }[])
+    .map((ingredient) => ({
+      ...ingredient,
+      ...parseIngredient(ingredient.original)
+    }));
 };
 
 export default LITK;
-
-

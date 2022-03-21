@@ -10,14 +10,15 @@ export const parseFromJsonLd = ($: cheerio.Root): RecipeJsonLd => {
 };
 
 // eslint-disable-next-line no-confusing-arrow
-export const sanitizeInstructions = (JsonLdInstructions: unknown): string[] => Array.isArray(JsonLdInstructions)
-  ? JsonLdInstructions.map((instruction) => {
-    if (typeof instruction === 'string') {
-      return instruction;
-    }
-    if (instruction['@type'] === 'HowToStep') {
-      return instruction.text;
-    }
-    return '';
-  })
-  : [];
+export const sanitizeInstructions = (JsonLdInstructions: unknown): string[] =>
+  Array.isArray(JsonLdInstructions)
+    ? JsonLdInstructions.map((instruction) => {
+        if (typeof instruction === 'string') {
+          return instruction;
+        }
+        if (instruction['@type'] === 'HowToStep') {
+          return instruction.text;
+        }
+        return '';
+      })
+    : [];

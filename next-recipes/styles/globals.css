@@ -13,47 +13,47 @@ body {
 
 @layer base {
   @font-face {
-    font-family: "Lekton";
-    src: url("/fonts/Lekton-Regular.woff2") format("woff2");
+    font-family: 'Lekton';
+    src: url('/fonts/Lekton-Regular.woff2') format('woff2');
   }
-  
+
   @font-face {
-    font-family: "Lekton";
+    font-family: 'Lekton';
     font-weight: 800;
-    src: url("/fonts/Lekton-Bold.woff2") format("woff2");
+    src: url('/fonts/Lekton-Bold.woff2') format('woff2');
   }
-  
+
   @font-face {
-    font-family: "Noto Sans";
-    src: url("/fonts/NotoSans-Regular.woff2") format("woff2");
+    font-family: 'Noto Sans';
+    src: url('/fonts/NotoSans-Regular.woff2') format('woff2');
   }
-  
+
   @font-face {
-    font-family: "Noto Sans";
+    font-family: 'Noto Sans';
     font-weight: 800;
-    src: url("/fonts/NotoSans-Bold.woff2") format("woff2");
+    src: url('/fonts/NotoSans-Bold.woff2') format('woff2');
   }
 
   h1 {
     @apply font-bold font-display text-h1;
   }
-  
+
   h2 {
     @apply font-bold font-display text-h2;
   }
-  
+
   h3 {
     @apply font-bold font-display text-h3;
   }
-  
+
   h4 {
     @apply font-bold font-display text-h4;
   }
-  
+
   h5 {
     @apply font-bold font-display text-h5;
   }
-  
+
   h6 {
     @apply font-bold font-display text-h6;
   }
