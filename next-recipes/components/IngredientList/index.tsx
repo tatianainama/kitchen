@@ -32,7 +32,7 @@ const IngredientList: FC<IngredientListProps> = ({ recipe }) => {
       <li>
         {Object.entries(groupedList).map(([groupName, ingredients]) => (
           <React.Fragment key={groupName}>
-            {groupName && <h6 className="text-lg my-4">{groupName}</h6>}
+            {groupName && <h6 className="text-lg mt-6">{groupName}</h6>}
             <ul className="text-sm leading-relaxed mb-6">
               {ingredients.map(({ id, quantity, unit, ingredient, note }) => (
                 <li key={id} className="py-1">

@@ -25,22 +25,22 @@ const headers = {
   },
   h2: {
     min: 2,
-    max: 3.375,
+    max: 2.5,
     letterSpacing: '-0.5px'
   },
   h3: {
     min: 1.75,
-    max: 3,
+    max: 2,
     letterSpacing: '0px'
   },
   h4: {
     min: 1.5,
-    max: 2.375,
+    max: 1.785,
     letterSpacing: '0.25px'
   },
   h5: {
     min: 1.25,
-    max: 1.75,
+    max: 1.5,
     letterSpacing: '0px'
   },
   h6: {
