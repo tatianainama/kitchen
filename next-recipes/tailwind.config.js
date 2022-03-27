@@ -178,8 +178,7 @@ module.exports = {
         main: 'calc(100vh - 4rem)'
       },
       maxWidth: {
-        container: '54.5rem',
-        'lg-container': '67rem'
+        container: '67rem',
       },
       fontSize: {
         ...headersFontSizes,

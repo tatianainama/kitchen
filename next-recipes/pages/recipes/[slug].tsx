@@ -14,7 +14,7 @@ type RecipeProps = RecipeType & {
 
 export const Recipe: FC<RecipeProps> = (recipe) => (
   <Layout className="md:py-8">
-    <div className="layout-container">
+    <div className="layout-container md:w-with-padding">
       <header className="relative flex flex-col md:flex-row md:border-2">
         <div
           style={{ backgroundImage: `url(${recipe.image})` }}

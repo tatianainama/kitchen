@@ -74,6 +74,6 @@ body {
     @apply h-9 relative border-2 text-btn px-4 hover:shadow-strong active:bg-grey-50 active:shadow-strong-small active:translate-x-0.5 active:translate-y-0.5;
   }
   .layout-container {
-    @apply md:max-w-container lg:max-w-lg-container mx-auto;
+    @apply max-w-container mx-auto;
   }
 }
