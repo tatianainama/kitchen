@@ -175,7 +175,10 @@ module.exports = {
         'with-padding': 'calc(100% - 2rem)'
       },
       minHeight: {
-        main: 'calc(100vh - 4rem)'
+        main: 'calc(100vh - 4rem)',
+      },
+      maxHeight: {
+        tabs: 'calc(100vh - 2.5rem)',
       },
       maxWidth: {
         container: '67rem',

@@ -71,7 +71,7 @@ body {
     @apply uppercase text-xxs tracking-widest leading-none;
   }
   .btn-outline {
-    @apply h-9 relative border-2 text-btn px-4 hover:shadow-strong active:bg-grey-50 active:shadow-strong-small active:translate-x-0.5 active:translate-y-0.5;
+    @apply h-9 relative border-2 text-btn px-4 hover:shadow-strong-small active:bg-grey-50 active:shadow-strong-small active:translate-x-0.5 active:translate-y-0.5 md:hover:shadow-strong;
   }
   .layout-container {
     @apply max-w-container mx-auto;

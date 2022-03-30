@@ -28,24 +28,24 @@ const IngredientList: FC<IngredientListProps> = ({ recipe }) => {
   );
 
   return (
-    <ul className="">
-      <li>
-        {Object.entries(groupedList).map(([groupName, ingredients]) => (
-          <React.Fragment key={groupName}>
-            {groupName && <h6 className="text-lg mt-6">{groupName}</h6>}
-            <ul className="text-sm leading-relaxed mb-6">
-              {ingredients.map(({ id, quantity, unit, ingredient, note }) => (
-                <li key={id} className="py-1">
-                  {quantity} {unit}{' '}
-                  <span className="font-semibold">{ingredient}</span>{' '}
-                  {note && <span className="text-grey-500">{note}</span>}
-                </li>
-              ))}
-            </ul>
-          </React.Fragment>
-        ))}
-      </li>
-    </ul>
+    <React.Fragment>
+      {Object.entries(groupedList).map(([groupName, ingredients]) => (
+        <React.Fragment key={groupName}>
+          {groupName && (
+            <h6 className="text-lg mt-6 first-of-type:mt-0">{groupName}</h6>
+          )}
+          <ul className="text-sm leading-relaxed mb-6">
+            {ingredients.map(({ id, quantity, unit, ingredient, note }) => (
+              <li key={id} className="py-1">
+                {quantity} {unit}{' '}
+                <span className="font-semibold">{ingredient}</span>{' '}
+                {note && <span className="text-grey-500">{note}</span>}
+              </li>
+            ))}
+          </ul>
+        </React.Fragment>
+      ))}
+    </React.Fragment>
   );
 };
 
