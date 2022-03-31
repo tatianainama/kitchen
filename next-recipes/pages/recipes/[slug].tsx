@@ -1,11 +1,11 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import prisma from '@/lib/prisma';
 import Layout from '@/components/Layout';
-
 import { FC, useEffect, useRef } from 'react';
 import { Author, Ingredient, Recipe as RecipeType } from '@prisma/client';
 import IngredientList from '@/components/IngredientList';
 import InstructionList from '@/components/InstructionList';
+import durationInMinutes from '@/utils/duration';
 
 type RecipeProps = RecipeType & {
   ingredients: Ingredient[];
@@ -79,9 +79,15 @@ export const Recipe: FC<RecipeProps> = (recipe) => {
                 </a>
               )}
               <ul className="flex space-x-2">
-                <li>{recipe.prepTime}</li>
-                <li>{recipe.cookTime}</li>
-                <li>{recipe.yields}</li>
+                <li>
+                  <strong>prep.</strong> {recipe.prepTime}
+                </li>
+                <li>
+                  <strong>cooking</strong> {recipe.cookTime}
+                </li>
+                <li>
+                  <strong>{recipe.yields}</strong>
+                </li>
               </ul>
             </div>
             <p className="hidden sm:block">{recipe.summary}</p>
@@ -153,7 +159,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       throw new Error(`Couldn't find recipe with slug: ${slug}`);
     }
     return {
-      props: recipe
+      props: {
+        ...recipe,
+        prepTime: `${durationInMinutes(recipe.prepTime)}'`,
+        cookTime: `${durationInMinutes(recipe.cookTime)}'`
+      }
     };
   } catch (err) {
     return {
