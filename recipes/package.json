@@ -28,7 +28,7 @@
     "cssnano": "^4.1.10",
     "dot-prop": "^5.3.0",
     "formik": "2.1.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "npm": "^6.11.2",
