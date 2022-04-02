@@ -4,22 +4,28 @@ import prisma from '@/lib/prisma';
 import { RecipeTypes } from 'additional';
 import Layout from '@/components/Layout';
 import Link from 'next/link';
+import RecipeCard from '@/components/RecipeCard';
 
 const Recipes: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   recipeList,
   tags
 }) => (
   <Layout>
-    <h1>recipes</h1>
-    <ul>
-      {recipeList.map((recipe) => (
-        <li key={recipe.id}>
-          <Link href={`/recipes/${encodeURIComponent(recipe.slug)}`}>
-            <a>{recipe.name}</a>
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <div className="layout-container md:w-with-padding">
+      <nav>
+        <Link href={`/recipes/create`}>
+          <a className="btn-outline">Create Recipe</a>
+        </Link>
+      </nav>
+      <h1>recipes</h1>
+      <ul className="flex flex-wrap gap-5">
+        {recipeList.map((recipe) => (
+          <li key={recipe.id}>
+            <RecipeCard recipe={recipe} className="h-full"></RecipeCard>
+          </li>
+        ))}
+      </ul>
+    </div>
   </Layout>
 );
 export const getStaticProps: GetStaticProps<{
