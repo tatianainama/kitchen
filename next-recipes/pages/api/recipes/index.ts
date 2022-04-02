@@ -3,7 +3,7 @@ import { Ingredient, Recipe } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import slugify from '@/utils/slugify';
 import fs from 'fs';
-import { ServerResponses } from 'additional';
+import { ServerResponses } from 'additional.d.ts';
 
 type CreateResponse = Recipe & { ingredients: Ingredient[] };
 const handler: NextApiHandler<CreateResponse | { error: string }> = async (
@@ -58,7 +58,7 @@ const saveImage = (image: string, name: string) => {
         .toString()}`;
       const location = `${process.env.PUBLIC_ASSETS_PATH}/${filename}`;
       fs.writeFileSync(location, base64Img, { encoding: 'base64' });
-      return location;
+      return filename;
     }
     return '';
   } catch (error) {

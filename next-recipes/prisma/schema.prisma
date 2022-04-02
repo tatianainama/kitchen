@@ -18,7 +18,8 @@ model Recipe {
   prepTime     String
   cookTime     String
   totalTime    String?
-  yields       String
+  yields       Int
+  serves       String?
   tags         String[]
   course       String[]
   authorId     Int?

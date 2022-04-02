@@ -1,3 +1,4 @@
+import { parseYields } from './../parser/recipe';
 import { parseFromJsonLd, sanitizeInstructions } from './utils';
 import slugify from '@/utils/slugify';
 import parseIngredient from '../parser/ingredients';
@@ -14,7 +15,8 @@ const ALL_RECIPES: RecipeTypes.ScrapingSource = {
       name,
       cookTime: cookTime?.toString() || '',
       prepTime: prepTime?.toString() || '',
-      yields: recipeYield?.toString() || '',
+      yields: parseYields(recipeYield?.toString() || ''),
+      serves: recipeYield?.toString() || '',
       ingredients: parseIngredients($),
       instructions: sanitizeInstructions(recipeInstructions),
       slug: slugify(name)

@@ -41,7 +41,8 @@ export const parseFromJsonLd = ($: cheerio.Root): RecipeTypes.ScrapedRecipe => {
       ingredients: [],
       prepTime: '',
       cookTime: '',
-      yields: '',
+      yields: 0,
+      serves: '',
       tags: [],
       course: []
     };
@@ -111,13 +112,20 @@ const sanitizeAuthor = (
     : null;
 };
 
+const getNumbers = /(\d+)/;
+
+export const parseYields = (yields: string): number => {
+  return parseInt(yields.match(getNumbers)[0]) || 0
+}
+
 const sanitizeRecipeDetails = (recipe: RecipeJsonLd) => ({
   summary: toString(recipe.description),
   prepTime: toString(recipe.prepTime),
   cookTime: toString(recipe.cookTime),
   totalTime: toString(recipe.totalTime),
   image: toString(recipe.image?.url),
-  yields: toString(recipe.recipeYield),
+  yields: parseYields(toString(recipe.recipeYield)),
+  serves: toString(recipe.recipeYield),
   tags: [...toArray(recipe.keywords), ...toArray(recipe.recipeCuisine)].filter(
     Boolean
   ),

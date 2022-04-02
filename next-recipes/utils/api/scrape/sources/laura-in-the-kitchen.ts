@@ -1,3 +1,4 @@
+import { parseYields } from './../parser/recipe';
 /* eslint-disable max-statements */
 import { RecipeTypes } from 'additional';
 import parseIngredient from '../parser/ingredients';
@@ -20,7 +21,8 @@ const LITK: RecipeTypes.ScrapingSource = {
       name,
       cookTime,
       prepTime,
-      yields: recipeYield,
+      yields: parseYields(recipeYield),
+      serves: recipeYield,
       ingredients: parseIngredients($),
       instructions: parseInstructions(recipeInstructions),
       slug: slugify(name)

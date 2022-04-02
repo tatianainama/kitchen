@@ -1,6 +1,6 @@
 import { NextApiHandler } from 'next';
 import scrape from '@/utils/api/scrape';
-import { ServerResponses } from 'additional';
+import { ServerResponses } from 'additional.d.ts';
 
 const handler: NextApiHandler = async (req, res) => {
   const { url } = req.body;
@@ -14,6 +14,7 @@ const handler: NextApiHandler = async (req, res) => {
     const result = await scrape(url);
     res.json(result);
   } catch (e) {
+    console.error(e);
     res
       .status(ServerResponses.HttpStatus.ServerError)
       .json({ error: `Error while scraping url ${url}: ${e}` });
