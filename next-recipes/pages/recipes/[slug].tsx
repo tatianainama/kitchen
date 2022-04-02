@@ -54,7 +54,7 @@ export const Recipe: FC<RecipeProps> = (recipe) => {
       <div className="layout-container md:w-with-padding">
         <header className="relative flex flex-col md:flex-row md:border-2">
           <div
-            style={{ backgroundImage: `url(${recipe.image})` }}
+            style={{ backgroundImage: `url(/uploads/${recipe.image})` }}
             className="h-48 w-full bg-cover bg-center sm:h-96 sm:border-b-2 md:border-r-2 md:border-b-0 md:h-auto md:min-h-[18rem] md:w-4/12"
           ></div>
           <div className="relative py-9 px-4 border-t-2 bg-white sm:-mt-14 sm:w-with-padding sm:border-2 sm:mx-auto md:mt-0 md:border-none md:w-8/12 md:p-6">
