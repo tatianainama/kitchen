@@ -136,13 +136,12 @@ const IngredientInputs: FC = () => {
             {...register(`ingredients.${index}.quantity` as const)}
           />
           <select
-            placeholder="unit"
             className="input flex-1 sm:flex-auto sm:w-1/12"
             defaultValue=""
             {...register(`ingredients.${index}.unit` as const)}
           >
             <option value="" disabled>
-              unit
+              ---
             </option>
             {Object.values(UnitName).map((unit) => (
               <option key={unit} value={unit}>
@@ -175,7 +174,7 @@ const IngredientInputs: FC = () => {
       ))}
       <button
         type="button"
-        className="btn-outline"
+        className="btn-outline mr-2"
         onClick={() => {
           append(
             {
@@ -324,7 +323,11 @@ const CreateRecipe: FC = () => {
                 {...methods.register('summary')}
               ></textarea>
               <div className="flex flex-col md:flex-row gap-4">
-                <input placeholder="Recipe url" className="input flex-1" />
+                <input
+                  placeholder="Recipe url"
+                  className="input flex-1"
+                  {...methods.register('url')}
+                />
                 <input
                   placeholder="Slug"
                   className="input flex-1"
