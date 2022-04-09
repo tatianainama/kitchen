@@ -8,6 +8,9 @@ import {
 
 export namespace RecipeTypes {
   export type RecipeInput = Prisma.RecipeCreateInput & {
+    instructions: string[],
+    tags: string[],
+    course: string[],
     ingredients: Prisma.IngredientCreateInput[];
     author: Prisma.AuthorCreateInput;
   };

@@ -8,8 +8,7 @@ import {
   SubmitHandler,
   FormProvider,
   useFormContext,
-  useFieldArray,
-  useWatch
+  useFieldArray
 } from 'react-hook-form';
 
 type ScrapeInput = {
@@ -134,8 +133,43 @@ const IngredientInputs: FC = () => {
     </fieldset>
   );
 };
-    }
-  };
+
+const InstructionsInputs: FC = () => {
+  const { register } = useFormContext<RecipeTypes.RecipeInput>();
+
+  const { fields, append, remove } = useFieldArray({ name: 'instructions' });
+
+  return (
+    <fieldset>
+      {fields.map(({ id }, index) => (
+        <div key={id} className="flex gap-2 mb-4">
+          <textarea
+            rows={1}
+            className="input w-full"
+            {...register(`instructions.${index}` as const)}
+          />
+          <button
+            type="button"
+            className="focus:focus"
+            tabIndex={-1}
+            onClick={() => remove(index)}
+          >
+            <img src={iconClear.src} />
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        className="btn-outline"
+        onClick={() =>
+          append('', { focusName: `instructions.${fields.length}` })
+        }
+      >
+        Add new
+      </button>
+    </fieldset>
+  );
+};
 
 const CreateRecipe: FC = () => {
   const methods = useForm<RecipeTypes.RecipeInput>({
@@ -158,7 +192,7 @@ const CreateRecipe: FC = () => {
           ingredient: ''
         }
       ],
-      instructions: ['']
+      instructions: [' ']
     }
   });
 
@@ -321,6 +355,7 @@ const CreateRecipe: FC = () => {
           </div>
           <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6">
             <h2 className="text-grey-500 mb-2">Instructions</h2>
+            <InstructionsInputs />
           </div>
           <div className="border-t-2 flex flex-col sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6 md:flex-row ">
             <button type="reset" className="btn-outline">
