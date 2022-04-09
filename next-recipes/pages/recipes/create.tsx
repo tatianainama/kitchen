@@ -62,7 +62,10 @@ const IngredientInputs: FC = () => {
   return (
     <fieldset>
       {controlledFields.map((field, index) => (
-        <div key={field.id} className="flex flex-col sm:flex-row gap-2 mb-4">
+        <div
+          key={field.id}
+          className="flex flex-wrap sm:flex-nowrap sm:flex-row gap-2 mb-4"
+        >
           <input
             placeholder="group"
             className="input w-full sm:w-2/12"
@@ -70,12 +73,12 @@ const IngredientInputs: FC = () => {
           />
           <input
             placeholder="qty"
-            className="input w-full sm:w-1/12"
+            className="input flex-1 sm:flex-auto sm:w-1/12"
             {...register(`ingredients.${index}.quantity` as const)}
           />
           <input
             placeholder="unit"
-            className="input w-full sm:w-1/12"
+            className="input flex-1 sm:flex-auto sm:w-1/12"
             {...register(`ingredients.${index}.unit` as const)}
           />
           <input
@@ -92,8 +95,9 @@ const IngredientInputs: FC = () => {
           />
           <button
             type="button"
-            className="focus:focus"
+            className="disabled:opacity-30"
             tabIndex={-1}
+            disabled={fields.length === 1}
             onClick={() => remove(index)}
           >
             <img src={iconClear.src} />
@@ -144,14 +148,15 @@ const InstructionsInputs: FC = () => {
       {fields.map(({ id }, index) => (
         <div key={id} className="flex gap-2 mb-4">
           <textarea
-            rows={1}
+            rows={2}
             className="input w-full"
             {...register(`instructions.${index}` as const)}
           />
           <button
             type="button"
-            className="focus:focus"
+            className="disabled:opacity-30"
             tabIndex={-1}
+            disabled={fields.length === 1}
             onClick={() => remove(index)}
           >
             <img src={iconClear.src} />
