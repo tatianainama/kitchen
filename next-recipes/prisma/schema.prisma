@@ -38,10 +38,10 @@ model Author {
 }
 
 model Ingredient {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   ingredient String
   quantity   String?
-  unit       String?
+  unit       UnitName?
   note       String?
   group      String
   original   String
