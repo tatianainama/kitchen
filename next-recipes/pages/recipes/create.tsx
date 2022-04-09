@@ -10,6 +10,7 @@ import {
   useFormContext,
   useFieldArray
 } from 'react-hook-form';
+import { UnitName } from '@prisma/client';
 
 type ScrapeInput = {
   url: string;
@@ -36,7 +37,7 @@ const ScrapeRecipeForm: FC<{
   return (
     <form onSubmit={handleSubmit(scrapeData)} className={className}>
       <input
-        className="text-xs tracking-wide ring-2 ring-grey-100 bg-grey-100 p-2 w-1/3 focus:outline-none focus:ring-black"
+        className="text-xs tracking-wide ring-2 ring-grey-50 bg-grey-50 p-2 w-1/3 focus:outline-none focus:ring-black"
         {...register('url', { required: true })}
       />
       <button type="submit" className="btn-outline bg-white">
@@ -76,11 +77,21 @@ const IngredientInputs: FC = () => {
             className="input flex-1 sm:flex-auto sm:w-1/12"
             {...register(`ingredients.${index}.quantity` as const)}
           />
-          <input
+          <select
             placeholder="unit"
             className="input flex-1 sm:flex-auto sm:w-1/12"
+            defaultValue=""
             {...register(`ingredients.${index}.unit` as const)}
-          />
+          >
+            <option value="" disabled>
+              unit
+            </option>
+            {Object.values(UnitName).map((unit) => (
+              <option key={unit} value={unit}>
+                {unit.replace('_', ' ')}
+              </option>
+            ))}
+          </select>
           <input
             placeholder="name"
             className="input w-full sm:w-4/12"
@@ -112,7 +123,7 @@ const IngredientInputs: FC = () => {
             {
               group: fields.slice(-1)[0].group,
               quantity: '',
-              unit: '',
+              unit: null,
               ingredient: '',
               note: ''
             },
@@ -127,7 +138,13 @@ const IngredientInputs: FC = () => {
         className="btn-outline"
         onClick={() => {
           append(
-            { group: '', quantity: '', unit: '', ingredient: '', note: '' },
+            {
+              group: '',
+              quantity: '',
+              unit: null,
+              ingredient: '',
+              note: ''
+            },
             { focusName: `ingredients.${fields.length}.group` }
           );
         }}
@@ -193,7 +210,7 @@ const CreateRecipe: FC = () => {
         {
           group: '',
           quantity: '',
-          unit: '',
+          unit: null,
           ingredient: ''
         }
       ],
@@ -207,7 +224,7 @@ const CreateRecipe: FC = () => {
 
   return (
     <Layout>
-      <div className="bg-grey-50">
+      <div className="bg-white border-b-2 border-grey-200">
         <ScrapeRecipeForm
           setScrapedRecipe={(scraped) => {
             console.log(scraped);
