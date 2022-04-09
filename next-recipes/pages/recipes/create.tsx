@@ -17,10 +17,11 @@ type ScrapeInput = {
 };
 
 const TagInput: FC<{
-  className: string;
   field: 'course' | 'tags';
+  className?: string;
   label?: string;
-}> = ({ className, field, label }) => {
+  placeholder?: string;
+}> = ({ className, field, label, placeholder }) => {
   const { setValue, watch } = useFormContext<RecipeTypes.RecipeInput>();
   const tags = watch(field);
 
@@ -37,9 +38,10 @@ const TagInput: FC<{
 
   return (
     <div className={className}>
-      {label && <label className="block">{label}</label>}
-      <div className="flex gap-4 flex-col sm:flex-row">
+      {label && <label className="font-display font-bold block">{label}</label>}
+      <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row">
         <input
+          placeholder={placeholder}
           type="text"
           className="input md:w-2/12"
           onKeyPress={(e) => {
@@ -49,19 +51,24 @@ const TagInput: FC<{
             }
           }}
         />
-        <ul className="flex gap-2 items-center overflow-x-auto">
-          {tags.map((tag, index) => (
-            <li
-              key={tag}
-              className="bg-secondary-50 text-xs pr-2 py-1 rounded-full flex gap-1 pl-3 items-center"
-            >
-              <span className="whitespace-nowrap">{tag}</span>
-              <button onClick={() => removeItem(index)} className="w-3 h-full">
-                <img src={iconClear.src} width={12} height={12} />
-              </button>
-            </li>
-          ))}
-        </ul>
+        {tags.length !== 0 && (
+          <ul className="flex gap-2 items-center overflow-x-auto">
+            {tags.map((tag, index) => (
+              <li
+                key={tag}
+                className="bg-secondary-50 text-xs pr-2 py-1 rounded-full flex gap-1 pl-3 items-center"
+              >
+                <span className="whitespace-nowrap">{tag}</span>
+                <button
+                  onClick={() => removeItem(index)}
+                  className="w-3 h-full"
+                >
+                  <img src={iconClear.src} width={12} height={12} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
@@ -329,7 +336,7 @@ const CreateRecipe: FC = () => {
           <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6">
             <h2 className="text-grey-500 mb-2">Details</h2>
             <fieldset name="author">
-              <legend>Author</legend>
+              <legend className="font-display font-bold">Author</legend>
               <div className="flex flex-col gap-4 md:flex-row mb-4">
                 <input
                   id="recipe-author"
@@ -347,7 +354,7 @@ const CreateRecipe: FC = () => {
             </fieldset>
             <div className="flex flex-col gap-4 md:flex-row mb-4">
               <fieldset name="prep-time" className="flex gap-2 flex-1">
-                <legend>Prep. time</legend>
+                <legend className="font-display font-bold">Prep. time</legend>
                 <input
                   id="detail-prep-time-h"
                   name="prep-time-h"
@@ -368,7 +375,7 @@ const CreateRecipe: FC = () => {
                 />
               </fieldset>
               <fieldset name="cook-time" className="flex gap-2 flex-1">
-                <legend>Cook time</legend>
+                <legend className="font-display font-bold">Cook time</legend>
                 <input
                   id="detail-cook-time-h"
                   name="cook-time-h"
@@ -389,7 +396,10 @@ const CreateRecipe: FC = () => {
                 />
               </fieldset>
               <div className="flex-1">
-                <label htmlFor="yields" className="block">
+                <label
+                  htmlFor="yields"
+                  className="font-display font-bold block"
+                >
                   Yields
                 </label>
                 <input
@@ -399,7 +409,10 @@ const CreateRecipe: FC = () => {
                 />
               </div>
               <div className="flex-1">
-                <label htmlFor="servings" className="block">
+                <label
+                  htmlFor="servings"
+                  className="font-display font-bold block"
+                >
                   Servings
                 </label>
                 <input
@@ -409,8 +422,13 @@ const CreateRecipe: FC = () => {
                 />
               </div>
             </div>
-            <TagInput className="mb-4" field="tags" label="Tags" />
-            <TagInput field="course" label="Course" />
+            <TagInput
+              className="mb-4"
+              field="tags"
+              label="Tags"
+              placeholder="mexican"
+            />
+            <TagInput field="course" label="Course" placeholder="dessert" />
           </div>
           <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6">
             <h2 className="text-grey-500 mb-2">Ingredients</h2>
