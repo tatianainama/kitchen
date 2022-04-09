@@ -16,6 +16,57 @@ type ScrapeInput = {
   url: string;
 };
 
+const TagInput: FC<{
+  className: string;
+  field: 'course' | 'tags';
+  label?: string;
+}> = ({ className, field, label }) => {
+  const { setValue, watch } = useFormContext<RecipeTypes.RecipeInput>();
+  const tags = watch(field);
+
+  const addNewTag = (target: HTMLInputElement) => {
+    setValue(field, Array.from(new Set([...tags, target.value])));
+    target.value = '';
+  };
+
+  const removeItem = (index: number) => {
+    const newValues = Array.from(tags);
+    newValues.splice(index, 1);
+    setValue(field, newValues);
+  };
+
+  return (
+    <div className={className}>
+      {label && <label className="block">{label}</label>}
+      <div className="flex gap-4 flex-col sm:flex-row">
+        <input
+          type="text"
+          className="input md:w-2/12"
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              addNewTag(e.target as HTMLInputElement);
+            }
+          }}
+        />
+        <ul className="flex gap-2 items-center overflow-x-auto">
+          {tags.map((tag, index) => (
+            <li
+              key={tag}
+              className="bg-secondary-50 text-xs pr-2 py-1 rounded-full flex gap-1 pl-3 items-center"
+            >
+              <span className="whitespace-nowrap">{tag}</span>
+              <button onClick={() => removeItem(index)} className="w-3 h-full">
+                <img src={iconClear.src} width={12} height={12} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 const ScrapeRecipeForm: FC<{
   setScrapedRecipe: (recipe: RecipeTypes.ScrapedRecipe) => void;
   className: string;
@@ -358,18 +409,8 @@ const CreateRecipe: FC = () => {
                 />
               </div>
             </div>
-            <div className="mb-4">
-              <label className="block">Tags</label>
-              <div className="flex">
-                <input type="text" className="input md:w-2/12" />
-              </div>
-            </div>
-            <div className="">
-              <label className="block">Course</label>
-              <div className="flex">
-                <input type="text" className="input md:w-2/12" />
-              </div>
-            </div>
+            <TagInput className="mb-4" field="tags" label="Tags" />
+            <TagInput field="course" label="Course" />
           </div>
           <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6">
             <h2 className="text-grey-500 mb-2">Ingredients</h2>
