@@ -4,12 +4,17 @@ import { RecipeTypes } from 'additional';
 import parseIngredient from '../parser/ingredients';
 import slugify from '@/utils/slugify';
 
-const LITK: RecipeTypes.ScrapingSource = {
+const DATA = {
   name: 'Laura in the Kitchen',
   domain: 'laurainthekitchen',
+  website: 'https://laurainthekitchen.com'
+};
+
+const LITK: RecipeTypes.ScrapingSource = {
+  name: DATA.name,
+  domain: DATA.domain,
   scrapeRecipe: ($) => {
     const jsonData = $('script[type="application/ld+json"]').html();
-
     const {
       cookTime,
       prepTime,
@@ -19,6 +24,10 @@ const LITK: RecipeTypes.ScrapingSource = {
     const name = $('h1').text().trim();
     return {
       name,
+      author: {
+        name: DATA.name,
+        website: DATA.website
+      },
       cookTime,
       prepTime,
       yields: parseYields(recipeYield),

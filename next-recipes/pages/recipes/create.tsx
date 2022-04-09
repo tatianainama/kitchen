@@ -342,16 +342,15 @@ const CreateRecipe: FC = () => {
               <legend className="font-display font-bold">Author</legend>
               <div className="flex flex-col gap-4 md:flex-row mb-4">
                 <input
-                  id="recipe-author"
-                  name="author-name"
                   type="text"
                   className="input flex-1"
                   placeholder="Name"
+                  {...methods.register('author.name')}
                 />
                 <input
-                  id="recipe-author-website"
                   className="input flex-1"
                   placeholder="Website"
+                  {...methods.register('author.website')}
                 />
               </div>
             </fieldset>
