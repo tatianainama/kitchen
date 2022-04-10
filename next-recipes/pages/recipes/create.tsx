@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { RecipeTypes } from 'additional';
 import iconClear from '@/components/Icons/clear.svg';
@@ -8,9 +8,11 @@ import {
   SubmitHandler,
   FormProvider,
   useFormContext,
-  useFieldArray
+  useFieldArray,
+  Controller
 } from 'react-hook-form';
 import { UnitName } from '@prisma/client';
+import { mkDuration } from '@/utils/duration';
 
 type ScrapeInput = {
   url: string;
@@ -212,6 +214,62 @@ const IngredientInputs: FC = () => {
   );
 };
 
+const DurationInput: FC<{
+  name: string;
+  label?: string;
+  className?: string;
+  onChange: (value: string) => void;
+  value: string;
+}> = ({ name, label, className, onChange, value }) => {
+  const initial = mkDuration(value);
+  const [minutes, setMinutes] = useState(initial.minutes());
+  const [hours, setHours] = useState(initial.hours());
+
+  useEffect(() => {
+    const newValue = mkDuration(value);
+    if (newValue.minutes() !== minutes) {
+      setMinutes(newValue.minutes());
+    }
+    if (newValue.hours() !== hours) {
+      setHours(newValue.hours());
+    }
+  }, [value]);
+
+  return (
+    <fieldset name={name} className={className}>
+      {label && <legend className="font-display font-bold">{label}</legend>}
+      <input
+        id={`${name}-h`}
+        type="number"
+        value={hours}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const h = parseInt(e.target.value);
+          setHours(h);
+          onChange(mkDuration({ hours: h, minutes }).toISOString());
+        }}
+        min={0}
+        max={100}
+        className="input flex-1"
+        placeholder="h"
+      />
+      <input
+        id={`${name}-m`}
+        type="number"
+        value={minutes}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const m = parseInt(e.target.value);
+          setMinutes(m);
+          onChange(mkDuration({ hours, minutes: m }).toISOString());
+        }}
+        min={0}
+        max={60}
+        className="input flex-1"
+        placeholder="m"
+      />
+    </fieldset>
+  );
+};
+
 const InstructionsInputs: FC = () => {
   const { register } = useFormContext<RecipeTypes.RecipeInput>();
 
@@ -355,48 +413,26 @@ const CreateRecipe: FC = () => {
               </div>
             </fieldset>
             <div className="flex flex-col gap-4 md:flex-row mb-4">
-              <fieldset name="prep-time" className="flex gap-2 flex-1">
-                <legend className="font-display font-bold">Prep. time</legend>
-                <input
-                  id="detail-prep-time-h"
-                  name="prep-time-h"
-                  type="number"
-                  min={0}
-                  max={60}
-                  className="input flex-1"
-                  placeholder="h"
-                />
-                <input
-                  id="detail-prep-time-m"
-                  name="prep-time-m"
-                  type="number"
-                  min={0}
-                  max={60}
-                  className="input flex-1"
-                  placeholder="m"
-                />
-              </fieldset>
-              <fieldset name="cook-time" className="flex gap-2 flex-1">
-                <legend className="font-display font-bold">Cook time</legend>
-                <input
-                  id="detail-cook-time-h"
-                  name="cook-time-h"
-                  type="number"
-                  min={0}
-                  max={60}
-                  className="input flex-1"
-                  placeholder="h"
-                />
-                <input
-                  id="detail-cook-time-m"
-                  name="cook-time-m"
-                  type="number"
-                  min={0}
-                  max={60}
-                  className="input flex-1"
-                  placeholder="m"
-                />
-              </fieldset>
+              <Controller
+                name="prepTime"
+                render={({ field: { ref, ...rest } }) => (
+                  <DurationInput
+                    className="flex gap-2 flex-1"
+                    label="Prep. time"
+                    {...rest}
+                  />
+                )}
+              />
+              <Controller
+                name="cookTime"
+                render={({ field: { ref, ...rest } }) => (
+                  <DurationInput
+                    className="flex gap-2 flex-1"
+                    label="Cook time"
+                    {...rest}
+                  />
+                )}
+              />
               <div className="flex-1">
                 <label
                   htmlFor="yields"
