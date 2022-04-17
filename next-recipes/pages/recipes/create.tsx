@@ -1,80 +1,24 @@
-import { FC, useState, useEffect } from 'react';
+import { FC } from 'react';
 import Layout from '@/components/Layout';
 import { RecipeTypes } from 'additional';
 import iconClear from '@/components/Icons/clear.svg';
-
+import DurationInput from '@/components/Form/DurationInput';
+import ImageInput from '@/components/Form/ImageInput';
+import TagInput from '@/components/Form/TagInput';
+import toBase64 from '@/utils/toBase64';
 import {
   useForm,
   SubmitHandler,
   FormProvider,
   useFormContext,
   useFieldArray,
-  Controller,
-  useController
+  Controller
 } from 'react-hook-form';
 import { UnitName } from '@prisma/client';
 import { mkDuration } from '@/utils/duration';
 
 type ScrapeInput = {
   url: string;
-};
-
-const TagInput: FC<{
-  field: 'course' | 'tags';
-  className?: string;
-  label?: string;
-  placeholder?: string;
-}> = ({ className, field, label, placeholder }) => {
-  const { setValue, watch } = useFormContext<RecipeTypes.RecipeInput>();
-  const tags = watch(field);
-
-  const addNewTag = (target: HTMLInputElement) => {
-    setValue(field, Array.from(new Set([...tags, target.value])));
-    target.value = '';
-  };
-
-  const removeItem = (index: number) => {
-    const newValues = Array.from(tags);
-    newValues.splice(index, 1);
-    setValue(field, newValues);
-  };
-
-  return (
-    <div className={className}>
-      {label && <label className="font-display font-bold block">{label}</label>}
-      <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row">
-        <input
-          placeholder={placeholder}
-          type="text"
-          className="input md:w-2/12"
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              addNewTag(e.target as HTMLInputElement);
-            }
-          }}
-        />
-        {tags.length !== 0 && (
-          <ul className="flex gap-2 items-center overflow-x-auto">
-            {tags.map((tag, index) => (
-              <li
-                key={tag}
-                className="bg-secondary-50 text-xs pr-2 py-1 rounded-full flex gap-1 pl-3 items-center"
-              >
-                <span className="whitespace-nowrap">{tag}</span>
-                <button
-                  onClick={() => removeItem(index)}
-                  className="w-3 h-full"
-                >
-                  <img src={iconClear.src} width={12} height={12} />
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
 };
 
 const ScrapeRecipeForm: FC<{
@@ -215,62 +159,6 @@ const IngredientInputs: FC = () => {
   );
 };
 
-const DurationInput: FC<{
-  name: string;
-  label?: string;
-  className?: string;
-  onChange: (value: string) => void;
-  value: string;
-}> = ({ name, label, className, onChange, value }) => {
-  const initial = mkDuration(value);
-  const [minutes, setMinutes] = useState(initial.minutes());
-  const [hours, setHours] = useState(initial.hours());
-
-  useEffect(() => {
-    const newValue = mkDuration(value);
-    if (newValue.minutes() !== minutes) {
-      setMinutes(newValue.minutes());
-    }
-    if (newValue.hours() !== hours) {
-      setHours(newValue.hours());
-    }
-  }, [value]);
-
-  return (
-    <fieldset name={name} className={className}>
-      {label && <legend className="font-display font-bold">{label}</legend>}
-      <input
-        id={`${name}-h`}
-        type="number"
-        value={hours}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const h = parseInt(e.target.value);
-          setHours(h);
-          onChange(mkDuration({ hours: h, minutes }).toISOString());
-        }}
-        min={0}
-        max={100}
-        className="input flex-1"
-        placeholder="h"
-      />
-      <input
-        id={`${name}-m`}
-        type="number"
-        value={minutes}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const m = parseInt(e.target.value);
-          setMinutes(m);
-          onChange(mkDuration({ hours, minutes: m }).toISOString());
-        }}
-        min={0}
-        max={60}
-        className="input flex-1"
-        placeholder="m"
-      />
-    </fieldset>
-  );
-};
-
 const InstructionsInputs: FC = () => {
   const { register } = useFormContext<RecipeTypes.RecipeInput>();
 
@@ -309,64 +197,6 @@ const InstructionsInputs: FC = () => {
   );
 };
 
-const PreviewImage: FC<{ image: string | File | null }> = ({ image }) => {
-  const getPreview = (data: string | File) =>
-    typeof data === 'string' ? data : URL.createObjectURL(data);
-  return image ? (
-    <img src={getPreview(image)} className="w-full h-full object-cover" />
-  ) : null;
-};
-
-const ImageInput: FC = () => {
-  const {
-    field: { value, onChange }
-  } = useController({ name: 'image', defaultValue: '' });
-
-  const update = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
-    if (file) {
-      onChange(file);
-    }
-  };
-
-  return (
-    <div className="relative w-full h-full">
-      <PreviewImage image={value} />
-      {value ? (
-        <button
-          className="absolute bottom-2 right-2 p-2 bg-primary bg-opacity-30 rounded-full hover:bg-opacity-80"
-          type="button"
-          onClick={() => onChange('')}
-        >
-          <img src={iconClear.src} width={20} height={20} className="" />
-        </button>
-      ) : (
-        <>
-          <input
-            type="file"
-            id="recipe-image"
-            name="recipe-image"
-            accept="image/*"
-            className="w-px h-px opacity-0 overflow-hidden absolute -z-10"
-            onChange={update}
-          />
-          <label
-            htmlFor="recipe-image"
-            className="absolute bottom-2 right-2 p-2 bg-primary bg-opacity-30 rounded-full hover:bg-opacity-80 cursor-pointer"
-          >
-            <img
-              src={iconClear.src}
-              width={20}
-              height={20}
-              className="rotate-45"
-            />
-          </label>
-        </>
-      )}
-    </div>
-  );
-};
-
 const CreateRecipe: FC = () => {
   const methods = useForm<RecipeTypes.RecipeInput>({
     defaultValues: {
@@ -401,13 +231,6 @@ const CreateRecipe: FC = () => {
     const totalTime = mkDuration(data.prepTime)
       .add(mkDuration(data.cookTime))
       .toJSON();
-    const toBase64 = (file: File) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
 
     const imageBlob =
       typeof data.image === 'string' ? null : await toBase64(data.image);
@@ -441,7 +264,12 @@ const CreateRecipe: FC = () => {
               id="image-input"
               className="h-48 w-full bg-cover bg-center sm:h-72 sm:border-b-2 md:border-r-2 md:border-b-0 md:h-auto md:min-h-[15rem] md:w-1/4"
             >
-              <ImageInput />
+              <Controller
+                name="image"
+                render={({ field: { onChange, value } }) => (
+                  <ImageInput onChange={onChange} value={value} />
+                )}
+              />
             </div>
             <div className="relative py-9 px-4 border-t-2 bg-white sm:-mt-14 sm:w-with-padding sm:border-2 sm:mx-auto md:mt-0 md:border-none md:w-3/4 md:p-6">
               <textarea
@@ -536,13 +364,29 @@ const CreateRecipe: FC = () => {
                 />
               </div>
             </div>
-            <TagInput
-              className="mb-4"
-              field="tags"
-              label="Tags"
-              placeholder="mexican"
+            <Controller
+              name="tags"
+              render={({ field: { value, onChange } }) => (
+                <TagInput
+                  className="mb-4"
+                  tags={value}
+                  onChange={onChange}
+                  label="Tags"
+                  placeholder="mexican"
+                />
+              )}
             />
-            <TagInput field="course" label="Course" placeholder="dessert" />
+            <Controller
+              name="course"
+              render={({ field: { value, onChange } }) => (
+                <TagInput
+                  tags={value}
+                  onChange={onChange}
+                  label="Course"
+                  placeholder="dessert"
+                />
+              )}
+            />
           </div>
           <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6">
             <h2 className="text-grey-500 mb-2">Ingredients</h2>
