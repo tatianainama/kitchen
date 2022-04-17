@@ -74,7 +74,7 @@ body {
     @apply h-9 relative border-2 text-btn px-4 hover:shadow-strong-small active:bg-grey-50 active:shadow-strong-small active:translate-x-0.5 active:translate-y-0.5 md:hover:shadow-strong focus:outline-none focus:bg-grey-100;
   }
   .btn-default {
-    @apply h-9 relative border-2 border-black text-btn px-4 bg-black text-white hover:shadow-strong-small active:shadow-primary-500 active:shadow-strong-small active:translate-x-0.5 active:translate-y-0.5 md:hover:shadow-strong focus:outline-none focus:ring-2 focus:ring-primary focus:active:ring-0 focus:hover:ring-0;
+    @apply h-9 relative border-2 border-black text-btn px-4 bg-black text-white hover:shadow-strong-small-primary active:shadow-primary active:shadow-strong-small-primary active:translate-x-0.5 active:translate-y-0.5 md:hover:shadow-strong-primary focus:outline-none focus:ring-2 focus:ring-primary focus:active:ring-0 focus:hover:ring-0;
   }
   .layout-container {
     @apply max-w-container mx-auto;

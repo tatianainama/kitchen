@@ -1,12 +1,18 @@
 import { FC } from 'react';
 import iconClear from '@/components/Icons/clear.svg';
+import defaultImage from '@/components/Icons/chicken.svg';
 
 const PreviewImage: FC<{ image: string | File | null }> = ({ image }) => {
   const getPreview = (data: string | File) =>
     typeof data === 'string' ? data : URL.createObjectURL(data);
   return image ? (
     <img src={getPreview(image)} className="w-full h-full object-cover" />
-  ) : null;
+  ) : (
+    <img
+      src={defaultImage.src}
+      className="w-1/2 h-full object-center opacity-30 mx-auto"
+    />
+  );
 };
 
 type ImageType = string | File | null;
@@ -24,11 +30,11 @@ const ImageInput: FC<ImageInputProps> = ({ value, onChange }) => {
   };
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full bg-grey-50">
       <PreviewImage image={value} />
       {value ? (
         <button
-          className="absolute bottom-2 right-2 p-2 bg-primary bg-opacity-30 rounded-full hover:bg-opacity-80"
+          className="absolute bottom-2 right-2 p-2 bg-secondary bg-opacity-30 rounded-full hover:bg-opacity-70"
           type="button"
           onClick={() => onChange('')}
         >
@@ -41,12 +47,12 @@ const ImageInput: FC<ImageInputProps> = ({ value, onChange }) => {
             id="recipe-image"
             name="recipe-image"
             accept="image/*"
-            className="w-px h-px opacity-0 overflow-hidden absolute -z-10"
+            className="w-px h-px opacity-0 overflow-hidden absolute -z-10 peer"
             onChange={update}
           />
           <label
             htmlFor="recipe-image"
-            className="absolute bottom-2 right-2 p-2 bg-primary bg-opacity-30 rounded-full hover:bg-opacity-80 cursor-pointer"
+            className="absolute bottom-2 right-2 p-2 bg-secondary bg-opacity-30 rounded-full hover:bg-opacity-70 cursor-pointer peer-focus:bg-opacity-50"
           >
             <img
               src={iconClear.src}

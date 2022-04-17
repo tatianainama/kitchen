@@ -192,6 +192,7 @@ module.exports = {
         strong: '4px 4px 0 0 #000000',
         'strong-small': '2px 2px 0 0 #000000',
         'strong-primary': '4px 4px 0 0 rgb(250, 204, 21)',
+        'strong-small-primary': '2px 2px 0 0 rgb(250, 204, 21)',
         'strong-primary-dark': '4px 4px 0 0 rgb(202, 138, 4)',
         'strong-secondary': '4px 4px 0 0 #987fff'
       },

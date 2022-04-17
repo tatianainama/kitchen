@@ -21,6 +21,32 @@ type ScrapeInput = {
   url: string;
 };
 
+const INITIAL_STATE = {
+  name: '',
+  summary: '',
+  image: '',
+  url: '',
+  slug: '',
+  prepTime: '',
+  cookTime: '',
+  yields: 0,
+  serves: '',
+  tags: [],
+  course: [],
+  ingredients: [
+    {
+      group: '',
+      quantity: '',
+      unit: null,
+      ingredient: ''
+    }
+  ],
+  instructions: [' '],
+  author: {
+    website: '',
+    name: ''
+  }
+};
 const ScrapeRecipeForm: FC<{
   setScrapedRecipe: (recipe: RecipeTypes.ScrapedRecipe) => void;
   className: string;
@@ -199,28 +225,7 @@ const InstructionsInputs: FC = () => {
 
 const CreateRecipe: FC = () => {
   const methods = useForm<RecipeTypes.RecipeInput>({
-    defaultValues: {
-      name: '',
-      summary: '',
-      image: '',
-      url: '',
-      slug: '',
-      prepTime: '',
-      cookTime: '',
-      yields: 0,
-      serves: '',
-      tags: [],
-      course: [],
-      ingredients: [
-        {
-          group: '',
-          quantity: '',
-          unit: null,
-          ingredient: ''
-        }
-      ],
-      instructions: [' ']
-    }
+    defaultValues: INITIAL_STATE
   });
 
   const onSubmit: SubmitHandler<RecipeTypes.RecipeInput> = async (
@@ -401,7 +406,14 @@ const CreateRecipe: FC = () => {
             <InstructionsInputs />
           </div>
           <div className="border-t-2 flex flex-col sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6 md:flex-row ">
-            <button type="reset" className="btn-outline">
+            <button
+              type="reset"
+              className="btn-outline"
+              onClick={(e) => {
+                e.preventDefault();
+                methods.reset(INITIAL_STATE);
+              }}
+            >
               Reset
             </button>
             <button type="submit" className="btn-default">
