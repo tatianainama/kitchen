@@ -281,13 +281,13 @@ const CreateRecipe: FC = () => {
                 placeholder="Name"
                 rows={1}
                 className="input font-display font-bold text-h1 p-2 pb-0 w-full mb-4 md:min-h-[4.5rem]"
-                {...methods.register('name')}
+                {...methods.register('name', { required: true })}
               ></textarea>
               <textarea
                 placeholder="Summary"
                 rows={3}
                 className="input w-full mb-4 md:min-h-[3.5rem]"
-                {...methods.register('summary')}
+                {...methods.register('summary', { required: true })}
               ></textarea>
               <div className="flex flex-col md:flex-row gap-4">
                 <input
@@ -298,7 +298,7 @@ const CreateRecipe: FC = () => {
                 <input
                   placeholder="Slug"
                   className="input flex-1"
-                  {...methods.register('slug')}
+                  {...methods.register('slug', { required: true })}
                 />
               </div>
             </div>
@@ -356,7 +356,7 @@ const CreateRecipe: FC = () => {
                 <input
                   type="number"
                   className="input w-full"
-                  {...methods.register('yields')}
+                  {...methods.register('yields', { required: true })}
                 />
               </div>
               <div className="flex-1">
