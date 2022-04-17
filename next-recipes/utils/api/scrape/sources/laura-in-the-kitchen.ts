@@ -19,7 +19,8 @@ const LITK: RecipeTypes.ScrapingSource = {
       cookTime,
       prepTime,
       recipeInstructions,
-      recipeYield
+      recipeYield,
+      image
     }: { [key: string]: string } = JSON.parse(jsonData.replace(/\n/gu, ' '));
     const name = $('h1').text().trim();
     return {
@@ -28,6 +29,7 @@ const LITK: RecipeTypes.ScrapingSource = {
         name: DATA.name,
         website: DATA.website
       },
+      image,
       cookTime,
       prepTime,
       yields: parseYields(recipeYield),

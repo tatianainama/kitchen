@@ -21,6 +21,7 @@ export const parseFromJsonLd = ($: cheerio.Root): RecipeTypes.ScrapedRecipe => {
     const data = JSON.parse(jsonData);
 
     const rawRecipe = getRecipe(data);
+
     const name = rawRecipe.name?.toString() || '';
     const slug = slugify(name);
     return {
@@ -115,15 +116,15 @@ const sanitizeAuthor = (
 const getNumbers = /(\d+)/;
 
 export const parseYields = (yields: string): number => {
-  return parseInt(yields.match(getNumbers)[0]) || 0
-}
+  return parseInt(yields.match(getNumbers)[0]) || 0;
+};
 
 const sanitizeRecipeDetails = (recipe: RecipeJsonLd) => ({
   summary: toString(recipe.description),
   prepTime: toString(recipe.prepTime),
   cookTime: toString(recipe.cookTime),
   totalTime: toString(recipe.totalTime),
-  image: toString(recipe.image?.url),
+  image: toString(sanitizeImage(recipe)),
   yields: parseYields(toString(recipe.recipeYield)),
   serves: toString(recipe.recipeYield),
   tags: [...toArray(recipe.keywords), ...toArray(recipe.recipeCuisine)].filter(
@@ -151,4 +152,19 @@ const sanitizeIngredients = (rawIngredients?: string[]) => {
     ...parseIngredient(ingredient),
     group: ''
   }));
+};
+
+const sanitizeImage = (rawRecipe: RecipeJsonLd) => {
+  if (rawRecipe.image) {
+    if (typeof rawRecipe.image === 'string') {
+      return rawRecipe.image;
+    }
+    if (Array.isArray(rawRecipe.image)) {
+      return rawRecipe.image[0];
+    }
+    if (rawRecipe.image.url) {
+      return rawRecipe.image.url;
+    }
+  }
+  return '';
 };

@@ -38,3 +38,6 @@ yarn-error.log*
 
 # image uploads
 /public/uploads/
+
+.vscode
+*.code-workspace

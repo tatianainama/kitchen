@@ -9,7 +9,8 @@ import {
   FormProvider,
   useFormContext,
   useFieldArray,
-  Controller
+  Controller,
+  useController
 } from 'react-hook-form';
 import { UnitName } from '@prisma/client';
 import { mkDuration } from '@/utils/duration';
@@ -308,11 +309,70 @@ const InstructionsInputs: FC = () => {
   );
 };
 
+const PreviewImage: FC<{ image: string | File | null }> = ({ image }) => {
+  const getPreview = (data: string | File) =>
+    typeof data === 'string' ? data : URL.createObjectURL(data);
+  return image ? (
+    <img src={getPreview(image)} className="w-full h-full object-cover" />
+  ) : null;
+};
+
+const ImageInput: FC = () => {
+  const {
+    field: { value, onChange }
+  } = useController({ name: 'image', defaultValue: '' });
+
+  const update = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files[0];
+    if (file) {
+      onChange(file);
+    }
+  };
+
+  return (
+    <div className="relative w-full h-full">
+      <PreviewImage image={value} />
+      {value ? (
+        <button
+          className="absolute bottom-2 right-2 p-2 bg-primary bg-opacity-30 rounded-full hover:bg-opacity-80"
+          type="button"
+          onClick={() => onChange('')}
+        >
+          <img src={iconClear.src} width={20} height={20} className="" />
+        </button>
+      ) : (
+        <>
+          <input
+            type="file"
+            id="recipe-image"
+            name="recipe-image"
+            accept="image/*"
+            className="w-px h-px opacity-0 overflow-hidden absolute -z-10"
+            onChange={update}
+          />
+          <label
+            htmlFor="recipe-image"
+            className="absolute bottom-2 right-2 p-2 bg-primary bg-opacity-30 rounded-full hover:bg-opacity-80 cursor-pointer"
+          >
+            <img
+              src={iconClear.src}
+              width={20}
+              height={20}
+              className="rotate-45"
+            />
+          </label>
+        </>
+      )}
+    </div>
+  );
+};
+
 const CreateRecipe: FC = () => {
   const methods = useForm<RecipeTypes.RecipeInput>({
     defaultValues: {
       name: '',
       summary: '',
+      image: '',
       url: '',
       slug: '',
       prepTime: '',
@@ -333,8 +393,31 @@ const CreateRecipe: FC = () => {
     }
   });
 
-  const onSubmit: SubmitHandler<RecipeTypes.RecipeInput> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<RecipeTypes.RecipeInput> = async (
+    data,
+    event
+  ) => {
+    event.preventDefault();
+    const totalTime = mkDuration(data.prepTime)
+      .add(mkDuration(data.cookTime))
+      .toJSON();
+    const toBase64 = (file: File) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+
+    const imageBlob =
+      typeof data.image === 'string' ? null : await toBase64(data.image);
+    const result = {
+      ...data,
+      totalTime,
+      image: imageBlob ? null : data.image,
+      imageBlob
+    };
+    console.log(result);
   };
 
   return (
@@ -358,14 +441,7 @@ const CreateRecipe: FC = () => {
               id="image-input"
               className="h-48 w-full bg-cover bg-center sm:h-72 sm:border-b-2 md:border-r-2 md:border-b-0 md:h-auto md:min-h-[15rem] md:w-1/4"
             >
-              {/* <input
-                type="file"
-                id="recipe-image"
-                accept="image/*"
-                className="w-full"
-                onChange={onChangeFile}
-                ref={fileInput}
-              /> */}
+              <ImageInput />
             </div>
             <div className="relative py-9 px-4 border-t-2 bg-white sm:-mt-14 sm:w-with-padding sm:border-2 sm:mx-auto md:mt-0 md:border-none md:w-3/4 md:p-6">
               <textarea
