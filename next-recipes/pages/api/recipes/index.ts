@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import slugify from '@/utils/slugify';
 import fs from 'fs';
 import { ServerResponses } from 'additional.d.ts';
+import axios from 'axios';
 
 type CreateResponse = Recipe & { ingredients: Ingredient[] };
 const handler: NextApiHandler<CreateResponse | { error: string }> = async (
@@ -11,9 +12,15 @@ const handler: NextApiHandler<CreateResponse | { error: string }> = async (
   res
 ) => {
   try {
-    const { ingredients, author, ...recipe } = req.body;
+    const { ingredients, author, imageBlob, ...recipe } = req.body;
     const slug = recipe.slug || slugify(recipe.name);
-    const image = saveImage(recipe.image, slug);
+    const image = imageBlob
+      ? await saveImage(imageBlob, slug)
+      : recipe.image
+      ? await downloadImage(recipe.image, slug)
+      : '';
+
+    console.log(image);
     const createRecipeAndIngredients = await prisma.recipe.create({
       data: {
         ...recipe,
@@ -40,13 +47,38 @@ const handler: NextApiHandler<CreateResponse | { error: string }> = async (
       .status(ServerResponses.HttpStatus.Success)
       .json(createRecipeAndIngredients);
   } catch (error) {
+    console.error(error);
     res
       .status(ServerResponses.HttpStatus.ServerError)
       .json({ error: `Error while creating recipe ${error}` });
   }
 };
 
-// Optimize image before saving
+// TODO: Optimize image before saving
+const downloadImage = async (url: string, name: string) => {
+  try {
+    const extension = url.split('/').at(-1).split('.').at(-1);
+    const filename = `${name}.${extension}`;
+    const path = `${process.env.PUBLIC_ASSETS_PATH}/${filename}`;
+
+    const response = await axios({
+      url,
+      responseType: 'stream'
+    });
+
+    return new Promise((resolve, reject) => {
+      response.data
+        .pipe(fs.createWriteStream(path))
+        .on('finish', () => resolve(filename))
+        .on('error', (e) => reject(e));
+    });
+  } catch (e) {
+    console.error('Error while downloading image', e);
+    return '';
+  }
+};
+
+// TODO: Optimize image before saving
 const saveImage = (image: string, name: string) => {
   try {
     const [prefix, base64Img] = image.split(',');

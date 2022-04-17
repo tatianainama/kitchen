@@ -239,13 +239,22 @@ const CreateRecipe: FC = () => {
 
     const imageBlob =
       typeof data.image === 'string' ? null : await toBase64(data.image);
-    const result = {
+    const recipeInput = {
       ...data,
       totalTime,
       image: imageBlob ? null : data.image,
       imageBlob
     };
-    console.log(result);
+    try {
+      const result = await fetch('/api/recipes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(recipeInput)
+      }).then((response) => response.json());
+      console.log('CREATED', result);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -287,7 +296,7 @@ const CreateRecipe: FC = () => {
                 placeholder="Summary"
                 rows={3}
                 className="input w-full mb-4 md:min-h-[3.5rem]"
-                {...methods.register('summary', { required: true })}
+                {...methods.register('summary')}
               ></textarea>
               <div className="flex flex-col md:flex-row gap-4">
                 <input
