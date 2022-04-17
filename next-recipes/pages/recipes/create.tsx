@@ -319,21 +319,25 @@ const CreateRecipe: FC = () => {
             <div className="flex flex-col gap-4 md:flex-row mb-4">
               <Controller
                 name="prepTime"
-                render={({ field: { ref, ...rest } }) => (
+                render={({ field: { name, onChange, value } }) => (
                   <DurationInput
                     className="flex gap-2 flex-1"
                     label="Prep. time"
-                    {...rest}
+                    onChange={onChange}
+                    value={value}
+                    name={name}
                   />
                 )}
               />
               <Controller
                 name="cookTime"
-                render={({ field: { ref, ...rest } }) => (
+                render={({ field: { onChange, value, name } }) => (
                   <DurationInput
                     className="flex gap-2 flex-1"
                     label="Cook time"
-                    {...rest}
+                    name={name}
+                    onChange={onChange}
+                    value={value}
                   />
                 )}
               />

@@ -7,18 +7,20 @@ const DurationInput: FC<{
   className?: string;
   onChange: (value: string) => void;
   value: string;
-}> = ({ name, label, className, onChange, value }) => {
+}> = ({ name, label, className, onChange, value = '' }) => {
   const initial = mkDuration(value);
   const [minutes, setMinutes] = useState(initial.minutes());
   const [hours, setHours] = useState(initial.hours());
 
   useEffect(() => {
-    const newValue = mkDuration(value);
-    if (newValue.minutes() !== minutes) {
-      setMinutes(newValue.minutes());
-    }
-    if (newValue.hours() !== hours) {
-      setHours(newValue.hours());
+    if (value) {
+      const newValue = mkDuration(value);
+      if (newValue.minutes() !== minutes) {
+        setMinutes(newValue.minutes());
+      }
+      if (newValue.hours() !== hours) {
+        setHours(newValue.hours());
+      }
     }
   }, [value]);
 
@@ -28,7 +30,7 @@ const DurationInput: FC<{
       <input
         id={`${name}-h`}
         type="number"
-        value={hours}
+        value={hours || '0'}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           const h = parseInt(e.target.value);
           setHours(h);
@@ -42,7 +44,7 @@ const DurationInput: FC<{
       <input
         id={`${name}-m`}
         type="number"
-        value={minutes}
+        value={minutes || '0'}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           const m = parseInt(e.target.value);
           setMinutes(m);
