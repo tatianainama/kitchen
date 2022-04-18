@@ -1,6 +1,14 @@
+@import 'react-toastify/dist/ReactToastify.min.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --toastify-icon-color-success: theme(colors.terciary.DEFAULT);
+  --toastify-icon-color-error: theme(colors.error.DEFAULT);
+  --toastify-icon-color-info: theme(colors.info.DEFAULT);
+  --toastify-toast-width: 400px;
+}
 
 html,
 body {
@@ -82,4 +90,20 @@ body {
   .input {
     @apply text-xs p-1 bg-grey-50 rounded-none ring-2 ring-grey-50 focus:outline-none focus:ring-black appearance-none;
   }
+}
+
+.toast {
+  @apply rounded-none border-2 border-black font-default shadow-strong text-black;
+}
+
+.Toastify__toast--error.toast {
+  @apply shadow-strong-error;
+}
+
+.Toastify__toast--success.toast {
+  @apply shadow-strong-terceriary;
+}
+
+.Toastify__toast--info.toast {
+  @apply shadow-strong-info;
 }

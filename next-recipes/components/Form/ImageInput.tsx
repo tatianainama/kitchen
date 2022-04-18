@@ -34,7 +34,7 @@ const ImageInput: FC<ImageInputProps> = ({ value, onChange }) => {
       <PreviewImage image={value} />
       {value ? (
         <button
-          className="absolute bottom-2 right-2 p-2 bg-secondary bg-opacity-30 rounded-full hover:bg-opacity-70"
+          className="absolute bottom-2 right-2 p-2 bg-white bg-opacity-40 rounded-full hover:bg-opacity-70"
           type="button"
           onClick={() => onChange('')}
         >
@@ -52,7 +52,7 @@ const ImageInput: FC<ImageInputProps> = ({ value, onChange }) => {
           />
           <label
             htmlFor="recipe-image"
-            className="absolute bottom-2 right-2 p-2 bg-secondary bg-opacity-30 rounded-full hover:bg-opacity-70 cursor-pointer peer-focus:bg-opacity-50"
+            className="absolute bottom-2 right-2 p-2 bg-white bg-opacity-30 rounded-full hover:bg-opacity-70 cursor-pointer peer-focus:bg-opacity-50"
           >
             <img
               src={iconClear.src}

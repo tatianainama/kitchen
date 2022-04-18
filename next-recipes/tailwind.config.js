@@ -125,6 +125,32 @@ module.exports = {
         700: '#48A473',
         800: '#409464',
         900: '#317545'
+      },
+      error: {
+        50: '#FBEBF0',
+        100: '#F8CDD6',
+        200: '#E69AA1',
+        300: '#DB737D',
+        400: '#E5535F',
+        500: '#EC414A',
+        600: '#DD3747',
+        DEFAULT: '#DD3747',
+        700: '#CC2D40',
+        800: '#BF2738',
+        900: '#B2242D'
+      },
+      info: {
+        50: '#E5F4FC',
+        100: '#BDE4F8',
+        200: '#94D4F2',
+        300: '#70C3ED',
+        400: '#5AB5EB',
+        500: '#4CA9E8',
+        DEFAULT: '#4CA9E8',
+        600: '#459CD9',
+        700: '#3B89C6',
+        800: '#3478B3',
+        900: '#235991'
       }
     },
     backgroundImage: {
@@ -194,7 +220,10 @@ module.exports = {
         'strong-primary': '4px 4px 0 0 rgb(250, 204, 21)',
         'strong-small-primary': '2px 2px 0 0 rgb(250, 204, 21)',
         'strong-primary-dark': '4px 4px 0 0 rgb(202, 138, 4)',
-        'strong-secondary': '4px 4px 0 0 #987fff'
+        'strong-secondary': '4px 4px 0 0 #987fff',
+        'strong-terceriary': '4px 4px 0 0 #1AEEC7',
+        'strong-error': '4px 4px 0 0 #DD3747',
+        'strong-info': '4px 4px 0 0 #4CA9E8',
       },
       outline: {
         white: '2px solid #FFFFFF',

@@ -4,7 +4,7 @@ import { ServerResponses } from 'additional.d.ts';
 
 const handler: NextApiHandler = async (req, res) => {
   const { url } = req.body;
-  if (!url) {
+  if (!url || url.trim() === '') {
     res
       .status(ServerResponses.HttpStatus.BadRequest)
       .json({ error: 'Invalid param url, cannot be empty' });
@@ -17,7 +17,7 @@ const handler: NextApiHandler = async (req, res) => {
     console.error(e);
     res
       .status(ServerResponses.HttpStatus.ServerError)
-      .json({ error: `Error while scraping url ${url}: ${e}` });
+      .json({ error: `cannot scrape url: ${e}` });
   }
 };
 

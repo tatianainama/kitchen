@@ -16,6 +16,7 @@ import {
 } from 'react-hook-form';
 import { UnitName } from '@prisma/client';
 import { mkDuration } from '@/utils/duration';
+import { toast } from 'react-toastify';
 
 type ScrapeInput = {
   url: string;
@@ -59,10 +60,15 @@ const ScrapeRecipeForm: FC<{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: data.url })
-      }).then((response) => response.json());
-      setScrapedRecipe(result);
+      });
+      const response = await result.json();
+      if (!result.ok) {
+        throw new Error(response.error || result.statusText);
+      }
+      setScrapedRecipe(response);
     } catch (error) {
-      console.error(error);
+      console.log(error);
+      toast.error(error.message || error.toString());
     }
   };
   return (

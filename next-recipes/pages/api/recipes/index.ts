@@ -5,9 +5,11 @@ import slugify from '@/utils/slugify';
 import fs from 'fs';
 import { ServerResponses } from 'additional.d.ts';
 import axios from 'axios';
+import { createErrorMessage, CreateError } from '@/utils/api/errorHandler';
 
 type CreateResponse = Recipe & { ingredients: Ingredient[] };
-const handler: NextApiHandler<CreateResponse | { error: string }> = async (
+
+const handler: NextApiHandler<CreateResponse | CreateError> = async (
   req,
   res
 ) => {
@@ -15,12 +17,11 @@ const handler: NextApiHandler<CreateResponse | { error: string }> = async (
     const { ingredients, author, imageBlob, ...recipe } = req.body;
     const slug = recipe.slug || slugify(recipe.name);
     const image = imageBlob
-      ? await saveImage(imageBlob, slug)
+      ? saveImage(imageBlob, slug)
       : recipe.image
       ? await downloadImage(recipe.image, slug)
       : '';
 
-    console.log(image);
     const createRecipeAndIngredients = await prisma.recipe.create({
       data: {
         ...recipe,
@@ -47,10 +48,9 @@ const handler: NextApiHandler<CreateResponse | { error: string }> = async (
       .status(ServerResponses.HttpStatus.Success)
       .json(createRecipeAndIngredients);
   } catch (error) {
-    console.error(error);
-    res
+    return res
       .status(ServerResponses.HttpStatus.ServerError)
-      .json({ error: `Error while creating recipe ${error}` });
+      .json(createErrorMessage(error));
   }
 };
 
@@ -94,7 +94,6 @@ const saveImage = (image: string, name: string) => {
     }
     return '';
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Error while saving image', error);
     return '';
   }
