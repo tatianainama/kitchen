@@ -99,6 +99,14 @@ const IngredientInputs: FC = () => {
 
   return (
     <fieldset>
+      <legend className="hidden sm:flex sm:flex-row gap-2 mb-2 mt-4 w-full">
+        <span className="font-display font-bold block w-2/12">Group</span>
+        <span className="font-display font-bold block w-1/12">Qty</span>
+        <span className="font-display font-bold block w-1/12">Unit</span>
+        <span className="font-display font-bold block w-4/12">Name</span>
+        <span className="font-display font-bold block w-4/12">Notes</span>
+        <span className="block w-6"></span>
+      </legend>
       {controlledFields.map((field, index) => (
         <div
           key={field.id}
@@ -252,12 +260,23 @@ const CreateRecipe: FC = () => {
       imageBlob
     };
     try {
-      const result = await fetch('/api/recipes', {
+      const response = await fetch('/api/recipes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(recipeInput)
-      }).then((response) => response.json());
-      console.log('CREATED', result);
+      });
+      const result = await response.json();
+      if (result.ok) {
+        toast.success('Recipe created correctly!');
+        methods.reset(INITIAL_STATE);
+      } else {
+        toast.error(result.error);
+        if (result.target) {
+          result.target.forEach((field) =>
+            methods.setError(field, { type: 'validate', message: result.error })
+          );
+        }
+      }
     } catch (error) {
       console.error(error);
     }
@@ -305,16 +324,35 @@ const CreateRecipe: FC = () => {
                 {...methods.register('summary')}
               ></textarea>
               <div className="flex flex-col md:flex-row gap-4">
-                <input
-                  placeholder="Recipe url"
-                  className="input flex-1"
-                  {...methods.register('url')}
-                />
-                <input
-                  placeholder="Slug"
-                  className="input flex-1"
-                  {...methods.register('slug', { required: true })}
-                />
+                <div className="flex-1">
+                  <label htmlFor="url" className="font-display font-bold block">
+                    Recipe url
+                  </label>
+                  <input
+                    placeholder="Recipe url"
+                    className="input w-full"
+                    id="url"
+                    {...methods.register('url')}
+                  />
+                </div>
+                <div className="flex-1">
+                  <label
+                    htmlFor="slug"
+                    className={`font-display font-bold block ${
+                      methods.formState.errors.slug ? 'text-error' : ''
+                    }`}
+                  >
+                    Slug
+                  </label>
+                  <input
+                    id="slug"
+                    placeholder="Slug"
+                    className={`input w-full ${
+                      methods.formState.errors.slug ? 'ring-error' : ''
+                    }`}
+                    {...methods.register('slug', { required: true })}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -369,6 +407,7 @@ const CreateRecipe: FC = () => {
                   Yields
                 </label>
                 <input
+                  id="yields"
                   type="number"
                   className="input w-full"
                   {...methods.register('yields', { required: true })}
@@ -382,6 +421,7 @@ const CreateRecipe: FC = () => {
                   Servings
                 </label>
                 <input
+                  id="servings"
                   className="input w-full"
                   placeholder="2 people"
                   {...methods.register('serves')}
@@ -420,7 +460,7 @@ const CreateRecipe: FC = () => {
             <h2 className="text-grey-500 mb-2">Instructions</h2>
             <InstructionsInputs />
           </div>
-          <div className="border-t-2 flex flex-col sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6 md:flex-row ">
+          <div className="border-t-2 flex flex-col justify-between gap-4 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6 md:flex-row">
             <button
               type="reset"
               className="btn-outline"
@@ -437,8 +477,6 @@ const CreateRecipe: FC = () => {
           </div>
         </form>
       </FormProvider>
-      {/* {postResult && <pre>{JSON.stringify(postResult, null, 2)}</pre>} */}
-      {/* {scrapedRecipe && <pre>{JSON.stringify(scrapedRecipe, null, 2)}</pre>} */}
     </Layout>
   );
 };

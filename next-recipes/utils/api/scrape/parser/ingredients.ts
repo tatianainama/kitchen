@@ -67,7 +67,7 @@ const possibilities = {
 };
 
 export const parseUnit = (unitInput?: string): UnitName | null => {
-  if (!unitInput) {
+  if (!unitInput || unitInput === '') {
     return null;
   }
   const test = unitInput.toUpperCase().replaceAll(' ', '_');
