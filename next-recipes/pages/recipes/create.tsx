@@ -67,7 +67,6 @@ const ScrapeRecipeForm: FC<{
       }
       setScrapedRecipe(response);
     } catch (error) {
-      console.log(error);
       toast.error(error.message || error.toString());
     }
   };
@@ -237,6 +236,11 @@ const InstructionsInputs: FC = () => {
   );
 };
 
+const validSlug = async (slug: string) => {
+  const response = await fetch(`/api/recipes/slug/${slug}`);
+  return response.ok;
+};
+
 const CreateRecipe: FC = () => {
   const methods = useForm<RecipeTypes.RecipeInput>({
     defaultValues: INITIAL_STATE
@@ -247,6 +251,12 @@ const CreateRecipe: FC = () => {
     event
   ) => {
     event.preventDefault();
+    const isValidSlug = await validSlug(data.slug);
+    if (!isValidSlug) {
+      toast.error('Slug in use');
+      methods.setError('slug', { type: 'validate', message: 'Slug in use' });
+      return;
+    }
     const totalTime = mkDuration(data.prepTime)
       .add(mkDuration(data.cookTime))
       .toJSON();
@@ -273,12 +283,12 @@ const CreateRecipe: FC = () => {
         toast.error(result.error);
         if (result.target) {
           result.target.forEach((field) =>
-            methods.setError(field, { type: 'validate', message: result.error })
+            methods.setError(field, { message: result.error })
           );
         }
       }
     } catch (error) {
-      console.error(error);
+      toast.error(`There was an error, ${error}`);
     }
   };
 
@@ -314,9 +324,16 @@ const CreateRecipe: FC = () => {
               <textarea
                 placeholder="Name"
                 rows={1}
-                className="input font-display font-bold text-h1 p-2 pb-0 w-full mb-4 md:min-h-[4.5rem]"
+                className={`input font-display font-bold text-h1 p-2 pb-0 w-full mb-4 md:min-h-[4.5rem] ${
+                  methods.formState.errors.name ? 'ring-error' : ''
+                }`}
                 {...methods.register('name', { required: true })}
               ></textarea>
+              {methods.formState.errors.name && (
+                <p className="text-sm -mt-4 mb-4 font-semibold text-error">
+                  {methods.formState.errors.name.message}
+                </p>
+              )}
               <textarea
                 placeholder="Summary"
                 rows={3}
@@ -350,8 +367,15 @@ const CreateRecipe: FC = () => {
                     className={`input w-full ${
                       methods.formState.errors.slug ? 'ring-error' : ''
                     }`}
-                    {...methods.register('slug', { required: true })}
+                    {...methods.register('slug', {
+                      required: true
+                    })}
                   />
+                  {methods.formState.errors.slug && (
+                    <p className="text-sm mt-2 font-semibold text-error">
+                      {methods.formState.errors.slug.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

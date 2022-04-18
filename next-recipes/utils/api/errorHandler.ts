@@ -7,7 +7,7 @@ type RecipeCreateResult = Recipe & {
 
 export type CreateError = {
   error: string;
-  target?: keyof RecipeCreateResult[];
+  target?: Array<keyof RecipeCreateResult>;
 };
 
 const isClientKnownRequestError = (
@@ -19,9 +19,16 @@ export const createErrorMessage = (error: unknown): CreateError => {
   if (isClientKnownRequestError(error)) {
     if (error.code === 'P2002') {
       const message = error.message.split('\n').at(-1).trim();
+      const fields = error.meta['target'] || [];
+      if (fields.includes('name') && fields.includes('authorId')) {
+        return {
+          error: `This author already has a recipe with this name`,
+          target: ['name']
+        };
+      }
       return {
         error: message || error.message,
-        ...error.meta
+        target: fields
       };
     }
   }

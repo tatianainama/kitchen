@@ -13,44 +13,52 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
   req,
   res
 ) => {
-  try {
-    const { ingredients, author, imageBlob, ...recipe } = req.body;
-    const slug = recipe.slug || slugify(recipe.name);
-    const image = imageBlob
-      ? saveImage(imageBlob, slug)
-      : recipe.image
-      ? await downloadImage(recipe.image, slug)
-      : '';
+  switch (req.method) {
+    case 'POST': {
+      try {
+        const { ingredients, author, imageBlob, ...recipe } = req.body;
+        const slug = recipe.slug || slugify(recipe.name);
+        const image = imageBlob
+          ? saveImage(imageBlob, slug)
+          : recipe.image
+          ? await downloadImage(recipe.image, slug)
+          : '';
 
-    const createRecipeAndIngredients = await prisma.recipe.create({
-      data: {
-        ...recipe,
-        image,
-        slug,
-        ingredients: {
-          create: ingredients
-        },
-        author: {
-          connectOrCreate: {
-            where: {
-              website: author.website
+        const createRecipeAndIngredients = await prisma.recipe.create({
+          data: {
+            ...recipe,
+            image,
+            slug,
+            ingredients: {
+              create: ingredients
             },
-            create: author
+            author: {
+              connectOrCreate: {
+                where: {
+                  website: author.website
+                },
+                create: author
+              }
+            }
+          },
+          include: {
+            ingredients: true
           }
-        }
-      },
-      include: {
-        ingredients: true
-      }
-    });
+        });
 
-    res
-      .status(ServerResponses.HttpStatus.Success)
-      .json(createRecipeAndIngredients);
-  } catch (error) {
-    return res
-      .status(ServerResponses.HttpStatus.ServerError)
-      .json(createErrorMessage(error));
+        return res
+          .status(ServerResponses.HttpStatus.Success)
+          .json(createRecipeAndIngredients);
+      } catch (error) {
+        return res
+          .status(ServerResponses.HttpStatus.ServerError)
+          .json(createErrorMessage(error));
+      }
+    }
+    default: {
+      res.setHeader('Allow', ['POST']);
+      return res.status(405).end(`Method ${req.method} not allowed`);
+    }
   }
 };
 
