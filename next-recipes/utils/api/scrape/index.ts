@@ -1,3 +1,4 @@
+import { parseWpIngredients } from './parser/wpIngredients';
 import { RecipeTypes } from 'additional';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
@@ -12,18 +13,24 @@ const scrape = async (url: string): Promise<RecipeTypes.ScrapedRecipe> => {
     }
   });
   const $ = cheerio.load(response.data);
-
-  const jsonLdData = parseFromJsonLd($);
+  const recipeUrl = new URL(url);
+  const { author, ...jsonLdData } = parseFromJsonLd($);
   const scrapingSource = getScrapingSource(url);
+  const isWpRecipe = !!$('.wprm-recipe').length;
 
-  if (!jsonLdData && !scrapingSource) {
+  if (!jsonLdData && !scrapingSource && !isWpRecipe) {
     throw Error(`Couldn't scrape recipe from url: ${url}`);
   }
 
   return {
     url,
+    author: {
+      ...author,
+      website: author.website || recipeUrl.origin
+    },
     ...jsonLdData,
-    ...(scrapingSource ? scrapingSource.scrapeRecipe($) : {})
+    ...(scrapingSource ? scrapingSource.scrapeRecipe($) : {}),
+    ...(isWpRecipe ? parseWpIngredients($) : {})
   };
 };
 
