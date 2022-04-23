@@ -16,7 +16,8 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
   switch (req.method) {
     case 'POST': {
       try {
-        const { ingredients, author, imageBlob, ...recipe } = req.body;
+        const { ingredients, author, imageBlob, tags, course, ...recipe } =
+          req.body;
         const slug = recipe.slug || slugify(recipe.name);
         const image = imageBlob
           ? saveImage(imageBlob, slug)
@@ -27,6 +28,8 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
         const createRecipeAndIngredients = await prisma.recipe.create({
           data: {
             ...recipe,
+            tags: (tags || []).map((tag) => tag.toLowerCase()),
+            course: (course || []).map((course) => course.toLowerCase()),
             image,
             slug,
             ingredients: {
