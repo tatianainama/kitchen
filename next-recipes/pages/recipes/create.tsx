@@ -2,6 +2,7 @@ import { FC } from 'react';
 import Layout from '@/components/Layout';
 import { RecipeTypes } from 'additional';
 import iconClear from '@/components/Icons/clear.svg';
+import iconRaw from '@/components/Icons/raw.svg';
 import DurationInput from '@/components/Form/DurationInput';
 import ImageInput from '@/components/Form/ImageInput';
 import TagInput from '@/components/Form/TagInput';
@@ -104,12 +105,14 @@ const IngredientInputs: FC = () => {
         <span className="font-display font-bold block w-1/12">Unit</span>
         <span className="font-display font-bold block w-4/12">Name</span>
         <span className="font-display font-bold block w-4/12">Notes</span>
-        <span className="block w-6"></span>
+        <span
+          className={`block ${controlledFields[0].original ? 'w-16' : 'w-6'}`}
+        ></span>
       </legend>
       {controlledFields.map((field, index) => (
         <div
           key={field.id}
-          className="flex flex-wrap sm:flex-nowrap sm:flex-row gap-2 mb-4"
+          className="relative flex flex-wrap sm:flex-nowrap sm:flex-row gap-2 mb-4 border-b border-dashed border-grey-500 pb-2 sm:pb-0 sm:border-0"
         >
           <input
             placeholder="group"
@@ -147,15 +150,29 @@ const IngredientInputs: FC = () => {
             className="input w-full sm:w-4/12"
             {...register(`ingredients.${index}.note` as const)}
           />
-          <button
-            type="button"
-            className="disabled:opacity-30"
-            tabIndex={-1}
-            disabled={fields.length === 1}
-            onClick={() => remove(index)}
-          >
-            <img src={iconClear.src} />
-          </button>
+          <div className="flex gap-2 items-center justify-between w-full sm:w-auto">
+            {field.original && (
+              <div tabIndex={-1} className="flex gap-2 flex-1 w-6">
+                <img
+                  src={iconRaw.src}
+                  width={24}
+                  className="opacity-30 cursor-pointer inline-block peer"
+                />
+                <span className="rounded font-display text-sm leading-6 inline-block sm:shadow sm:border sm:absolute sm:invisible sm:hidden sm:-translate-y-full sm:text-right sm:right-8 sm:px-2 sm:pt-1 bg-white sm:peer-hover:visible sm:peer-hover:block">
+                  {field.original}
+                </span>
+              </div>
+            )}
+            <button
+              type="button"
+              className="disabled:opacity-30 w-6"
+              tabIndex={-1}
+              disabled={fields.length === 1}
+              onClick={() => remove(index)}
+            >
+              <img src={iconClear.src} width={24} />
+            </button>
+          </div>
         </div>
       ))}
       <button
@@ -276,7 +293,7 @@ const CreateRecipe: FC = () => {
         body: JSON.stringify(recipeInput)
       });
       const result = await response.json();
-      if (result.ok) {
+      if (response.ok) {
         toast.success('Recipe created correctly!');
         methods.reset(INITIAL_STATE);
       } else {
