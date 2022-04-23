@@ -62,8 +62,10 @@ const possibilities = {
   [UnitName.LB]: ['POUND', 'POUNDS'],
   [UnitName.OZ]: ['OUNCE', 'OUNCES'],
   [UnitName.PINCH]: ['PINCHES'],
-  [UnitName.TBSP]: ['TABLESPOON', 'TBP', 'TP'],
-  [UnitName.TSP]: ['TEASPOON', 'TS']
+  [UnitName.TBSP]: ['TABLESPOON', 'TBP', 'TP', 'TABLESPOONS'],
+  [UnitName.TSP]: ['TEASPOON', 'TEASPOONS', 'TS'],
+  [UnitName.SMALL]: ['SMALL', 'SM'],
+  [UnitName.LARGE]: ['LARGE', 'LG']
 };
 
 export const parseUnit = (unitInput?: string): UnitName | null => {

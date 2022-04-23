@@ -66,6 +66,8 @@ enum UnitName {
   PINT
   GAL
   UNIT
+  SMALL
+  LARGE
   PINCH
   TO_TASTE
   CLOVES
