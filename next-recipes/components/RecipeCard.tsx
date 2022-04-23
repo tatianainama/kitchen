@@ -8,17 +8,18 @@ const RecipeCard: FC<{ recipe: RecipeTypes.Recipe; className?: string }> = ({
   recipe
 }) => {
   return (
-    <div className={`border-2 w-96 bg-white ${className}`}>
+    <div className={`border-2 bg-white ${className}`}>
       <div
         style={{ backgroundImage: `url(/uploads/${recipe.image})` }}
         className="h-48 bg-cover w-full bg-center border-b-2"
       ></div>
       <div className="relative">
         {recipe.tags?.length ? (
-          <ul className="flex absolute top-0 left-4 -translate-y-1/2 space-x-2">
+          <ul className="flex absolute top-0 left-0 -translate-y-1/2 w-full px-4 gap-2">
             {recipe.tags.slice(0, 3).map((tag) => (
               <li
-                className="border border-black text-overline bg-primary py-1.5 px-2 shadow-strong-small"
+                title={tag}
+                className="border border-black text-overline bg-primary py-1.5 px-2 shadow-strong-small overflow-hidden text-ellipsis whitespace-nowrap"
                 key={tag}
               >
                 {tag}
