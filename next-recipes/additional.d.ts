@@ -3,21 +3,25 @@ import {
   Prisma,
   Recipe as SchemaRecipe,
   Ingredient,
-  Author
+  Author,
+  Course,
+  Tag
 } from '@prisma/client';
 
 export namespace RecipeTypes {
   export type RecipeInput = Prisma.RecipeCreateInput & {
     image: string | File;
     instructions: string[];
-    tags: string[];
-    course: string[];
+    tags: Prisma.TagCreateInput[];
+    courses: Prisma.CourseCreateInput[];
     ingredients: Prisma.IngredientCreateInput[];
     author: Prisma.AuthorCreateInput;
   };
 
   export type ScrapedRecipe = Prisma.RecipeCreateInput & {
     ingredients: Prisma.IngredientCreateInput[];
+    tags?: Prisma.TagCreateInput[];
+    courses?: Prisma.CourseCreateInput[];
     author?: {
       name?: string;
       website?: string;
@@ -35,6 +39,8 @@ export namespace RecipeTypes {
   }
 
   export type Recipe = SchemaRecipe & {
+    tags: Tag[];
+    courses: Course[];
     ingredients: Ingredient[];
     author: Author;
   };

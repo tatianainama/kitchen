@@ -2,15 +2,12 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import prisma from '@/lib/prisma';
 import Layout from '@/components/Layout';
 import { FC, useEffect, useRef } from 'react';
-import { Author, Ingredient, Recipe as RecipeType } from '@prisma/client';
+import { RecipeTypes } from 'additional';
 import IngredientList from '@/components/IngredientList';
 import InstructionList from '@/components/InstructionList';
 import durationInMinutes from '@/utils/duration';
 
-type RecipeProps = RecipeType & {
-  ingredients: Ingredient[];
-  author: Author;
-};
+type RecipeProps = RecipeTypes.Recipe;
 
 export const Recipe: FC<RecipeProps> = (recipe) => {
   const tabsRef = useRef(null);
@@ -63,10 +60,10 @@ export const Recipe: FC<RecipeProps> = (recipe) => {
               <ul className="flex absolute top-0 right-2 -translate-y-1/2 space-x-2 sm:relative sm:my-4 sm:translate-y-0 sm:inset-0">
                 {recipe.tags.map((tag) => (
                   <li
-                    key={tag}
+                    key={tag.id}
                     className="border border-black text-overline bg-primary py-1.5 px-2 shadow-strong-small"
                   >
-                    {tag}
+                    {tag.name}
                   </li>
                 ))}
               </ul>
@@ -150,6 +147,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         slug
       },
       include: {
+        tags: true,
+        courses: true,
         ingredients: true,
         author: true
       }

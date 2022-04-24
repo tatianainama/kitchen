@@ -20,8 +20,8 @@ model Recipe {
   totalTime    String?
   yields       Int
   serves       String?
-  tags         String[]
-  course       String[]
+  tags         Tag[]
+  courses      Course[]
   authorId     Int?
   instructions String[]
   author       Author?      @relation(fields: [authorId], references: [id])
@@ -35,6 +35,18 @@ model Author {
   name    String
   website String   @unique
   recipe  Recipe[]
+}
+
+model Tag {
+  id     Int      @id @default(autoincrement())
+  name   String   @unique
+  recipe Recipe[]
+}
+
+model Course {
+  id     Int      @id @default(autoincrement())
+  name   String   @unique
+  recipe Recipe[]
 }
 
 model Ingredient {

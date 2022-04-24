@@ -6,6 +6,7 @@ import fs from 'fs';
 import { ServerResponses } from 'additional.d.ts';
 import axios from 'axios';
 import { createErrorMessage, CreateError } from '@/utils/api/errorHandler';
+import { sanitizeTag } from '@/utils/api/scrape/parser/recipe';
 
 type CreateResponse = Recipe & { ingredients: Ingredient[] };
 
@@ -25,11 +26,17 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
           ? await downloadImage(recipe.image, slug)
           : '';
 
+        const mkConnectOrCreate = (array: { name: string }[]) =>
+          array.map((data) => ({
+            where: data,
+            create: data
+          }));
+
         const createRecipeAndIngredients = await prisma.recipe.create({
           data: {
             ...recipe,
-            tags: (tags || []).map((tag) => tag.toLowerCase()),
-            course: (course || []).map((course) => course.toLowerCase()),
+            tags: mkConnectOrCreate(sanitizeTag(tags || [])),
+            course: mkConnectOrCreate(sanitizeTag(course || [])),
             image,
             slug,
             ingredients: {
@@ -45,6 +52,8 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
             }
           },
           include: {
+            tags: true,
+            courses: true,
             ingredients: true
           }
         });

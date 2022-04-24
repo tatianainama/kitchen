@@ -45,7 +45,7 @@ export const parseFromJsonLd = ($: cheerio.Root): RecipeTypes.ScrapedRecipe => {
       yields: 0,
       serves: '',
       tags: [],
-      course: []
+      courses: []
     };
   }
 };
@@ -127,11 +127,16 @@ const sanitizeRecipeDetails = (recipe: RecipeJsonLd) => ({
   image: toString(sanitizeImage(recipe)),
   yields: parseYields(toString(recipe.recipeYield)),
   serves: toString(recipe.recipeYield),
-  tags: [...toArray(recipe.keywords), ...toArray(recipe.recipeCuisine)].filter(
-    Boolean
-  ),
-  course: toArray(recipe.recipeCategory)
+  tags: sanitizeTag([
+    ...toArray(recipe.keywords),
+    ...toArray(recipe.recipeCuisine)
+  ]),
+  courses: sanitizeTag(recipe.recipeCategory)
 });
+
+export const sanitizeTag = (data: unknown) => {
+  return toArray(data).map((tag) => ({ name: tag.toLowerCase() }));
+};
 
 const toArray = (data: unknown): string[] =>
   Array.isArray(data)
