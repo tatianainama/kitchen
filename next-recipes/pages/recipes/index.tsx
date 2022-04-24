@@ -75,11 +75,11 @@ const Recipes: FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
     <div className="bg-white border-b border-grey-100">
       <Search tags={tagList} />
     </div>
-    <div className="layout-container md:w-with-padding p-4 md:p-0">
-      <nav className="flex flex-col justify-between sm:flex-row sm:items-center">
-        <h1>recipes</h1>
+    <div className="layout-container md:w-with-padding p-4 md:px-0">
+      <nav className="flex flex-col justify-between sm:flex-row sm:items-center py-4">
+        <h1>Recipes</h1>
         <Link href={`/recipes/create`}>
-          <a className="btn-outline">Create Recipe</a>
+          <a className="btn-outline bg-white py-1">Create Recipe</a>
         </Link>
       </nav>
       <ul className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">

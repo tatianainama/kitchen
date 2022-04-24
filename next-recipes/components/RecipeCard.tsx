@@ -8,12 +8,12 @@ const RecipeCard: FC<{ recipe: RecipeTypes.Recipe; className?: string }> = ({
   recipe
 }) => {
   return (
-    <div className={`border-2 bg-white ${className}`}>
+    <div className={`border-2 bg-white flex flex-col ${className}`}>
       <div
         style={{ backgroundImage: `url(/uploads/${recipe.image})` }}
         className="h-48 bg-cover w-full bg-center border-b-2"
       ></div>
-      <div className="relative">
+      <div className="relative flex flex-col flex-1">
         {recipe.tags?.length ? (
           <ul className="flex absolute top-0 left-0 -translate-y-1/2 w-full px-4 gap-2">
             {recipe.tags.slice(0, 3).map((tag) => (
@@ -27,8 +27,8 @@ const RecipeCard: FC<{ recipe: RecipeTypes.Recipe; className?: string }> = ({
             ))}
           </ul>
         ) : null}
-        <header className="p-4 py-6">
-          <h4>
+        <header className="p-4 py-6 flex flex-col flex-1 gap-2">
+          <h4 className="flex-1 flex items-center">
             <Link href={`/recipes/${recipe.slug}`}>
               <a>{recipe.name}</a>
             </Link>
@@ -43,7 +43,10 @@ const RecipeCard: FC<{ recipe: RecipeTypes.Recipe; className?: string }> = ({
               <span className="block">Cook time</span>
               <strong>{durationInMinutes(recipe.cookTime)} mins</strong>
             </li>
-            <li>{recipe.yields}</li>
+            <li>
+              <span className="block">Yields</span>
+              <strong>{recipe.yields}</strong>
+            </li>
           </ul>
         </header>
       </div>

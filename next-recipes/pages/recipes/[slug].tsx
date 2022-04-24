@@ -83,10 +83,25 @@ export const Recipe: FC<RecipeProps> = (recipe) => {
                   <strong>cooking</strong> {recipe.cookTime}
                 </li>
                 <li>
-                  <strong>{recipe.yields}</strong>
+                  <strong>{recipe.serves}</strong>
                 </li>
               </ul>
             </div>
+            {recipe.courses.length && (
+              <div className="text-sm flex gap-2 items-center mb-4">
+                <strong>Course:</strong>
+                <ul className="flex flex-wrap gap-2">
+                  {recipe.courses.map((course) => (
+                    <li
+                      key={course.id}
+                      className="bg-secondary-50 text-xs px-2 py-1 rounded-full"
+                    >
+                      {course.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <p className="hidden sm:block">{recipe.summary}</p>
           </div>
         </header>
