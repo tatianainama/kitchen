@@ -1,15 +1,20 @@
 import { FC } from 'react';
 import iconClear from '@/components/Icons/clear.svg';
+import { Prisma } from '@prisma/client';
+
+type TagProp = Prisma.TagCreateInput | Prisma.CourseCreateInput;
 
 const TagInput: FC<{
-  tags?: string[];
-  onChange: (newValue: string[]) => void;
+  tags?: TagProp[];
+  onChange: (newValue: TagProp[]) => void;
   className?: string;
   label?: string;
   placeholder?: string;
-}> = ({ className, tags, onChange, label, placeholder }) => {
+}> = ({ className, tags = [], onChange, label, placeholder }) => {
   const addNewTag = (target: HTMLInputElement) => {
-    onChange(Array.from(new Set([...tags, target.value])));
+    if (!tags.find((tag) => tag.name === target.value)) {
+      onChange([...tags, { name: target.value }]);
+    }
     target.value = '';
   };
 
@@ -38,10 +43,10 @@ const TagInput: FC<{
           <ul className="flex gap-2 items-center overflow-x-auto">
             {tags.map((tag, index) => (
               <li
-                key={tag}
+                key={tag.name}
                 className="bg-secondary-50 text-xs pr-2 py-1 rounded-full flex gap-1 pl-3 items-center"
               >
-                <span className="whitespace-nowrap">{tag}</span>
+                <span className="whitespace-nowrap">{tag.name}</span>
                 <button
                   onClick={() => removeItem(index)}
                   className="w-3 h-full"

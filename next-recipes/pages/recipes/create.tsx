@@ -23,7 +23,7 @@ type ScrapeInput = {
   url: string;
 };
 
-const INITIAL_STATE = {
+const INITIAL_STATE: RecipeTypes.RecipeInput = {
   name: '',
   summary: '',
   image: '',
@@ -34,13 +34,14 @@ const INITIAL_STATE = {
   yields: 0,
   serves: '',
   tags: [],
-  course: [],
+  courses: [],
   ingredients: [
     {
       group: '',
       quantity: '',
       unit: null,
-      ingredient: ''
+      ingredient: '',
+      original: ''
     }
   ],
   instructions: [' '],
@@ -49,6 +50,7 @@ const INITIAL_STATE = {
     name: ''
   }
 };
+
 const ScrapeRecipeForm: FC<{
   setScrapedRecipe: (recipe: RecipeTypes.ScrapedRecipe) => void;
   className: string;
@@ -482,7 +484,7 @@ const CreateRecipe: FC = () => {
               )}
             />
             <Controller
-              name="course"
+              name="courses"
               render={({ field: { value, onChange } }) => (
                 <TagInput
                   tags={value}

@@ -7,8 +7,9 @@ import Link from 'next/link';
 import RecipeCard from '@/components/RecipeCard';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import { Prisma, Tag } from '@prisma/client';
 
-type SearchFormType = Pick<RecipeTypes.Recipe, 'tags'> & { name: string };
+type SearchFormType = { name: string; tags: string[] };
 
 const Search: FC<Pick<RecipeTypes.Recipe, 'tags'>> = ({ tags }) => {
   const router = useRouter();
@@ -41,16 +42,20 @@ const Search: FC<Pick<RecipeTypes.Recipe, 'tags'>> = ({ tags }) => {
         {tags.length ? (
           <div className="flex gap-2 overflow-x-auto overflow-y-hidden">
             {tags.map((tag) => (
-              <label htmlFor={tag} key={tag} className="cursor-pointer mb-2">
+              <label
+                htmlFor={tag.name}
+                key={tag.name}
+                className="cursor-pointer mb-2"
+              >
                 <input
                   type="checkbox"
-                  value={tag}
-                  id={tag}
+                  value={tag.name}
+                  id={tag.name}
                   className="appearance-none h-0 w-0 peer"
                   {...register('tags')}
                 />
                 <span className="inline border border-black text-overline bg-white py-1.5 px-2 hover:bg-grey-50 peer-checked:bg-primary font-normal select-none whitespace-nowrap">
-                  {tag}
+                  {tag.name}
                 </span>
               </label>
             ))}
@@ -90,37 +95,41 @@ const Recipes: FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
 
 export const getServerSideProps: GetServerSideProps<{
   recipeList: RecipeTypes.Recipe[];
-  tagList: string[];
+  tagList: Tag[];
 }> = async (context) => {
   const { tags, name } = context.query;
   const nameQuery = name
-    ? {
+    ? ({
         name: {
           contains: Array.isArray(name) ? name.join(' ') : name,
           mode: 'insensitive'
         }
-      }
-    : {};
-  const tagsQuery = tags
-    ? { tags: { hasSome: Array.isArray(tags) ? tags : [tags] } }
+      } as Prisma.RecipeWhereInput)
     : {};
 
-  const tagList = await prisma.recipe
-    .findMany({
-      select: {
-        tags: true
+  const tagQuery = tags
+    ? {
+        tags: {
+          some: {
+            name: {
+              in: Array.isArray(tags) ? tags : [tags]
+            }
+          }
+        }
       }
-    })
-    .then((list) =>
-      Array.from(new Set(list.map((recipe) => recipe.tags).flat()))
-    );
+    : {};
+
+  const tagList = await prisma.tag.findMany({
+    distinct: ['name']
+  });
 
   const recipeList = (await prisma.recipe.findMany({
     where: {
       ...nameQuery,
-      ...tagsQuery
+      ...tagQuery
     },
     include: {
+      tags: true,
       ingredients: true,
       author: true
     }

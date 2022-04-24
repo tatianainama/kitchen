@@ -18,11 +18,11 @@ const RecipeCard: FC<{ recipe: RecipeTypes.Recipe; className?: string }> = ({
           <ul className="flex absolute top-0 left-0 -translate-y-1/2 w-full px-4 gap-2">
             {recipe.tags.slice(0, 3).map((tag) => (
               <li
-                title={tag}
+                title={tag.name}
                 className="border border-black text-overline bg-primary py-1.5 px-2 shadow-strong-small overflow-hidden text-ellipsis whitespace-nowrap"
-                key={tag}
+                key={tag.id}
               >
-                {tag}
+                {tag.name}
               </li>
             ))}
           </ul>

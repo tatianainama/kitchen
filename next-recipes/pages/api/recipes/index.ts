@@ -6,7 +6,6 @@ import fs from 'fs';
 import { ServerResponses } from 'additional.d.ts';
 import axios from 'axios';
 import { createErrorMessage, CreateError } from '@/utils/api/errorHandler';
-import { sanitizeTag } from '@/utils/api/scrape/parser/recipe';
 
 type CreateResponse = Recipe & { ingredients: Ingredient[] };
 
@@ -17,7 +16,7 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
   switch (req.method) {
     case 'POST': {
       try {
-        const { ingredients, author, imageBlob, tags, course, ...recipe } =
+        const { ingredients, author, imageBlob, tags, courses, ...recipe } =
           req.body;
         const slug = recipe.slug || slugify(recipe.name);
         const image = imageBlob
@@ -35,8 +34,12 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
         const createRecipeAndIngredients = await prisma.recipe.create({
           data: {
             ...recipe,
-            tags: mkConnectOrCreate(sanitizeTag(tags || [])),
-            course: mkConnectOrCreate(sanitizeTag(course || [])),
+            tags: {
+              connectOrCreate: mkConnectOrCreate(tags || [])
+            },
+            courses: {
+              connectOrCreate: mkConnectOrCreate(courses || [])
+            },
             image,
             slug,
             ingredients: {
