@@ -5,16 +5,17 @@ import { RecipeTypes } from 'additional';
 import Layout from '@/components/Layout';
 import Link from 'next/link';
 import RecipeCard from '@/components/RecipeCard';
-import { Prisma, Tag } from '@prisma/client';
+import { Course, Prisma, Tag } from '@prisma/client';
 import Search from '@/components/Form/RecipeSearch';
 
 const Recipes: FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   recipeList,
-  tagList
+  tagList,
+  courseList
 }) => (
   <Layout>
     <div className="bg-white border-b border-grey-100">
-      <Search tags={tagList} />
+      <Search tags={tagList} courses={courseList} />
     </div>
     <div className="layout-container md:w-with-padding p-4 md:px-0">
       <nav className="flex flex-col justify-between sm:flex-row sm:items-center py-4">
@@ -29,48 +30,73 @@ const Recipes: FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
             <RecipeCard recipe={recipe} className="h-full"></RecipeCard>
           </li>
         ))}
+        {recipeList.length === 0 && <li>｡゜(｀Д´)゜｡</li>}
       </ul>
     </div>
   </Layout>
 );
 
-export const getServerSideProps: GetServerSideProps<{
-  recipeList: RecipeTypes.Recipe[];
-  tagList: Tag[];
-}> = async (context) => {
-  const { tags, name } = context.query;
-  const nameQuery = name
-    ? ({
-        name: {
-          contains: Array.isArray(name) ? name.join(' ') : name,
-          mode: 'insensitive'
-        }
-      } as Prisma.RecipeWhereInput)
-    : {};
+type QueryProp = {
+  property: keyof Prisma.RecipeWhereInput;
+  field: string;
+  search?: string | string[];
+};
 
-  const tagQuery = tags
+const mkListQuery = ({ property, field, search }: QueryProp) =>
+  search
     ? {
-        tags: {
+        [property]: {
           some: {
-            name: {
-              in: Array.isArray(tags) ? tags : [tags]
+            [field]: {
+              in: Array.isArray(search) ? search : [search]
             }
           }
         }
       }
     : {};
 
+const mkStringQuery = ({ property, search }: Omit<QueryProp, 'field'>) =>
+  search
+    ? {
+        [property]: {
+          contains: Array.isArray(search) ? search.join(' ') : search,
+          mode: 'insensitive'
+        } as Prisma.RecipeWhereInput
+      }
+    : {};
+
+export const getServerSideProps: GetServerSideProps<{
+  recipeList: RecipeTypes.Recipe[];
+  tagList: Tag[];
+  courseList: Course[];
+}> = async (context) => {
+  const { tags, name, courses } = context.query;
+
   const tagList = await prisma.tag.findMany({
+    distinct: ['name']
+  });
+
+  const courseList = await prisma.course.findMany({
     distinct: ['name']
   });
 
   const recipeList = (await prisma.recipe.findMany({
     where: {
-      ...nameQuery,
-      ...tagQuery
+      ...mkStringQuery({ property: 'name', search: name }),
+      ...mkListQuery({
+        property: 'tags',
+        field: 'name',
+        search: tags
+      }),
+      ...mkListQuery({
+        property: 'courses',
+        field: 'name',
+        search: courses
+      })
     },
     include: {
       tags: true,
+      courses: true,
       ingredients: true,
       author: true
     }
@@ -79,7 +105,8 @@ export const getServerSideProps: GetServerSideProps<{
   return {
     props: {
       recipeList,
-      tagList
+      tagList,
+      courseList
     }
   };
 };
