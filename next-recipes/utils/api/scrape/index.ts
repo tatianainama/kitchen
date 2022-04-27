@@ -26,7 +26,7 @@ const scrape = async (url: string): Promise<RecipeTypes.ScrapedRecipe> => {
     url,
     author: {
       ...author,
-      website: author.website || recipeUrl.origin
+      website: author?.website || recipeUrl.origin
     },
     ...jsonLdData,
     ...(scrapingSource ? scrapingSource.scrapeRecipe($) : {}),
