@@ -14,7 +14,7 @@ const scrape = async (url: string): Promise<RecipeTypes.ScrapedRecipe> => {
   });
   const $ = cheerio.load(response.data);
   const recipeUrl = new URL(url);
-  const { author, ...jsonLdData } = parseFromJsonLd($);
+  const jsonLdData = parseFromJsonLd($);
   const scrapingSource = getScrapingSource(url);
   const isWpRecipe = !!$('.wprm-recipe').length;
 
@@ -22,13 +22,15 @@ const scrape = async (url: string): Promise<RecipeTypes.ScrapedRecipe> => {
     throw Error(`Couldn't scrape recipe from url: ${url}`);
   }
 
+  const { author, ...json } = jsonLdData;
+
   return {
     url,
     author: {
       ...author,
       website: author?.website || recipeUrl.origin
     },
-    ...jsonLdData,
+    ...json,
     ...(scrapingSource ? scrapingSource.scrapeRecipe($) : {}),
     ...(isWpRecipe ? parseWpIngredients($) : {})
   };

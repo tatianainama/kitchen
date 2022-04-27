@@ -35,18 +35,7 @@ export const parseFromJsonLd = ($: cheerio.Root): RecipeTypes.ScrapedRecipe => {
   } catch (e) {
     // eslint-disable-next-line no-console
     console.info(`Couldn't fetch JSON from recipe: ${e}`);
-    return {
-      name: '',
-      slug: '',
-      instructions: [],
-      ingredients: [],
-      prepTime: '',
-      cookTime: '',
-      yields: 0,
-      serves: '',
-      tags: [],
-      courses: []
-    };
+    return null;
   }
 };
 
@@ -84,11 +73,16 @@ export const sanitizeInstructions = (JsonLdInstructions: unknown): string[] =>
         }
         return '';
       })
+    : typeof JsonLdInstructions === 'string'
+    ? JsonLdInstructions.split('\n')
     : [];
 
 const sanitizeAuthor = (
   author: Person | AuthorJsonLd | AuthorJsonLd[]
 ): { name: string; website?: string } | null => {
+  if (!author) {
+    return null;
+  }
   if (typeof author === 'string') {
     return {
       name: author
@@ -135,7 +129,9 @@ const sanitizeRecipeDetails = (recipe: RecipeJsonLd) => ({
 });
 
 export const sanitizeTag = (data: unknown) => {
-  return toArray(data).map((tag) => ({ name: tag.toLowerCase() }));
+  return toArray(data)
+    .filter((tag) => !!tag)
+    .map((tag) => ({ name: tag.toLowerCase() }));
 };
 
 const toArray = (data: unknown): string[] =>

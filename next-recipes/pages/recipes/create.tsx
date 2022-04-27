@@ -41,7 +41,8 @@ const INITIAL_STATE: RecipeTypes.RecipeInput = {
       quantity: '',
       unit: null,
       ingredient: '',
-      original: ''
+      original: '',
+      note: ''
     }
   ],
   instructions: [' '],
@@ -108,7 +109,7 @@ const IngredientInputs: FC = () => {
         <span className="font-display font-bold block w-4/12">Name</span>
         <span className="font-display font-bold block w-4/12">Notes</span>
         <span
-          className={`block ${controlledFields[0].original ? 'w-16' : 'w-6'}`}
+          className={`block ${controlledFields[0]?.original ? 'w-16' : 'w-6'}`}
         ></span>
       </legend>
       {controlledFields.map((field, index) => (
@@ -131,9 +132,7 @@ const IngredientInputs: FC = () => {
             defaultValue=""
             {...register(`ingredients.${index}.unit` as const)}
           >
-            <option value="" disabled>
-              ---
-            </option>
+            <option value="">---</option>
             {Object.values(UnitName).map((unit) => (
               <option key={unit} value={unit}>
                 {unit.replace('_', ' ')}
@@ -284,6 +283,10 @@ const CreateRecipe: FC = () => {
       typeof data.image === 'string' ? null : await toBase64(data.image);
     const recipeInput = {
       ...data,
+      ingredients: data.ingredients.map(({ unit, ...rest }) => ({
+        ...rest,
+        unit: unit === '' ? null : unit
+      })),
       totalTime,
       image: imageBlob ? null : data.image,
       imageBlob
