@@ -18,19 +18,17 @@ const scrape = async (url: string): Promise<RecipeTypes.ScrapedRecipe> => {
   const scrapingSource = getScrapingSource(url);
   const isWpRecipe = !!$('.wprm-recipe').length;
 
-  if (!jsonLdData && !scrapingSource && !isWpRecipe) {
+  if (!jsonLdData?.name && !scrapingSource && !isWpRecipe) {
     throw Error(`Couldn't scrape recipe from url: ${url}`);
   }
-
-  const { author, ...json } = jsonLdData;
 
   return {
     url,
     author: {
-      ...author,
-      website: author?.website || recipeUrl.origin
+      ...(jsonLdData.author || {}),
+      website: recipeUrl.origin
     },
-    ...json,
+    ...jsonLdData,
     ...(scrapingSource ? scrapingSource.scrapeRecipe($) : {}),
     ...(isWpRecipe ? parseWpIngredients($) : {})
   };
