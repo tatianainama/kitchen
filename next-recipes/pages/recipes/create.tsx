@@ -15,9 +15,11 @@ import {
   useFieldArray,
   Controller
 } from 'react-hook-form';
+import prisma from '@/lib/prisma';
 import { UnitName } from '@prisma/client';
 import { mkDuration } from '@/utils/duration';
 import { toast } from 'react-toastify';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 type ScrapeInput = {
   url: string;
@@ -259,7 +261,9 @@ const validSlug = async (slug: string) => {
   return response.ok;
 };
 
-const CreateRecipe: FC = () => {
+const CreateRecipe: FC<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ tags, courses }) => {
   const methods = useForm<RecipeTypes.RecipeInput>({
     defaultValues: INITIAL_STATE
   });
@@ -478,6 +482,8 @@ const CreateRecipe: FC = () => {
               name="tags"
               render={({ field: { value, onChange } }) => (
                 <TagInput
+                  name="tag"
+                  options={tags}
                   className="mb-4"
                   tags={value}
                   onChange={onChange}
@@ -490,6 +496,8 @@ const CreateRecipe: FC = () => {
               name="courses"
               render={({ field: { value, onChange } }) => (
                 <TagInput
+                  name="courses"
+                  options={courses}
                   tags={value}
                   onChange={onChange}
                   label="Course"
@@ -525,6 +533,21 @@ const CreateRecipe: FC = () => {
       </FormProvider>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const tags = await prisma.tag.findMany({
+    distinct: ['name']
+  });
+  const courses = await prisma.course.findMany({
+    distinct: ['name']
+  });
+  return {
+    props: {
+      tags,
+      courses
+    }
+  };
 };
 
 export default CreateRecipe;
