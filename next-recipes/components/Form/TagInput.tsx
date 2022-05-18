@@ -9,9 +9,30 @@ import {
 import iconClear from '@/components/Icons/clear.svg';
 
 type TagProp = { name: string };
+const OPTION_HEIGHT = 28;
 
 const relativeComplement = (xs: TagProp[], ys: TagProp[]) =>
   xs.filter((x) => !ys.some((y) => y.name === x.name));
+
+const TagOption: FC<{
+  label: string;
+  index: number;
+  focus: boolean;
+  onClick: (name: string) => void;
+}> = ({ label, index, focus, onClick }) => (
+  <li
+    role="option"
+    id={`option-${index}`}
+    aria-selected={focus}
+    tabIndex={-1}
+    className={`text-sm px-2 py-1 cursor-pointer hover:bg-grey-50 ${
+      focus ? `bg-grey-50` : ``
+    }`}
+    onClick={() => onClick(label)}
+  >
+    {label}
+  </li>
+);
 
 const TagInput: FC<{
   options: { name: string; id: string }[];
@@ -33,7 +54,7 @@ const TagInput: FC<{
   const [curatedOptions, setCuratedOptions] = useState([]);
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const [filteredOptions, setFilteredOptions] = useState(options);
-  const [focusOption, setFocusOption] = useState(-1);
+  const [focusedOption, setFocusOption] = useState(-1);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -69,8 +90,8 @@ const TagInput: FC<{
     switch (e.key) {
       case 'Enter': {
         e.preventDefault();
-        if (focusOption !== -1) {
-          addNewTag(filteredOptions[focusOption].name);
+        if (focusedOption !== -1) {
+          addNewTag(filteredOptions[focusedOption].name);
         } else {
           addNewTag(inputRef.current.value);
         }
@@ -80,7 +101,7 @@ const TagInput: FC<{
       }
       case 'ArrowDown': {
         if (filteredOptions.length === 0) break;
-        const nextOption = focusOption + 1;
+        const nextOption = focusedOption + 1;
         if (nextOption < filteredOptions.length) {
           setFocusOption(nextOption);
         } else {
@@ -89,7 +110,7 @@ const TagInput: FC<{
         break;
       }
       case 'ArrowUp': {
-        const prevOption = focusOption - 1;
+        const prevOption = focusedOption - 1;
         if (prevOption >= -1) {
           setFocusOption(prevOption);
         } else {
@@ -136,32 +157,33 @@ const TagInput: FC<{
             onFocus={() => setShowOptions(true)}
             onBlur={() => setShowOptions(false)}
             aria-activedescendant={
-              focusOption !== -1 ? `option-${focusOption}` : ''
+              focusedOption !== -1 ? `option-${focusedOption}` : ''
             }
           />
           <ul
             id={`${name}-listbox`}
-            className={`absolute w-full inset-0 translate-y-8 bg-white z-10 h-52 overflow-y-auto overflow-x-hidden ${
+            className={`absolute w-full inset-0 translate-y-8 -translate-x-1 bg-white z-10 max-h-52 overflow-y-auto overflow-x-hidden ${
               showOptions ? 'block' : 'hidden'
-            }`}
+            } block shadow-md`}
+            style={{ height: `${filteredOptions.length * OPTION_HEIGHT}px` }}
             role="listbox"
             tabIndex={-1}
           >
             {filteredOptions.map((option, i) => (
-              <li
+              <TagOption
                 key={option.id}
-                role="option"
-                id={`option-${i}`}
-                aria-selected={focusOption === i}
-                tabIndex={-1}
-                className={focusOption === i ? `bg-grey-50` : ``}
-                onClick={() => addNewTag(option.name)}
-              >
-                {option.name}
-              </li>
+                index={i}
+                focus={i === focusedOption}
+                onClick={addNewTag}
+                label={option.name}
+              />
             ))}
             {filteredOptions.length === 0 && (
-              <li aria-disabled="true" tabIndex={-1}>
+              <li
+                aria-disabled="true"
+                tabIndex={-1}
+                className="text-sm px-2 py-1 text-center"
+              >
                 No results found
               </li>
             )}
