@@ -56,10 +56,28 @@ const TagInput: FC<{
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [focusedOption, setFocusOption] = useState(-1);
   const inputRef = useRef(null);
+  const listboxRef = useRef(null);
 
   useEffect(() => {
     setCuratedOptions(relativeComplement(options, tags));
   }, [options, tags]);
+
+  useEffect(() => {
+    if (focusedOption !== -1 && listboxRef.current) {
+      const selectedOption = document.getElementById(`option-${focusedOption}`);
+      const listbox = listboxRef.current;
+      if (selectedOption && listbox.scrollHeight > listbox.clientHeight) {
+        const scrollBottom = listbox.clientHeight + listbox.scrollTop;
+        const elementBottom =
+          selectedOption.offsetTop + selectedOption.offsetHeight;
+        if (elementBottom > scrollBottom) {
+          listbox.scrollTop = elementBottom - listbox.clientHeight;
+        } else if (selectedOption.offsetTop < listbox.scrollTop) {
+          listbox.scrollTop = selectedOption.offsetTop;
+        }
+      }
+    }
+  }, [focusedOption]);
 
   const addNewTag = (value: string) => {
     if (!tags.find((tag) => tag.name === value)) {
@@ -129,10 +147,7 @@ const TagInput: FC<{
   return (
     <div className={className}>
       {label && (
-        <label
-          className="font-display font-bold block"
-          htmlFor={`${name}-input`}
-        >
+        <label className="font-display font-bold" htmlFor={`${name}-input`}>
           {label}
         </label>
       )}
@@ -168,6 +183,7 @@ const TagInput: FC<{
             style={{ height: `${filteredOptions.length * OPTION_HEIGHT}px` }}
             role="listbox"
             tabIndex={-1}
+            ref={listboxRef}
           >
             {filteredOptions.map((option, i) => (
               <TagOption
