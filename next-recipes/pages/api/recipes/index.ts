@@ -1,5 +1,6 @@
+import { RecipeTypes } from './../../../additional.d';
 import { NextApiHandler } from 'next';
-import { Ingredient, Recipe } from '@prisma/client';
+import { IngredientsOnRecipes, Recipe, Tag, Course } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import slugify from '@/utils/slugify';
 import fs from 'fs';
@@ -7,8 +8,12 @@ import { ServerResponses } from 'additional.d.ts';
 import axios from 'axios';
 import { createErrorMessage, CreateError } from '@/utils/api/errorHandler';
 
-type CreateResponse = Recipe & { ingredients: Ingredient[] };
-
+type CreateResponse = Recipe & {
+  tags: Tag[];
+  courses: Course[];
+  ingredients: IngredientsOnRecipes[];
+};
+type RecipeInputBody = RecipeTypes.RecipeInput & { imageBlob: string };
 const handler: NextApiHandler<CreateResponse | CreateError> = async (
   req,
   res
@@ -17,7 +22,7 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
     case 'POST': {
       try {
         const { ingredients, author, imageBlob, tags, courses, ...recipe } =
-          req.body;
+          req.body as RecipeInputBody;
         const slug = recipe.slug || slugify(recipe.name);
         const image = imageBlob
           ? saveImage(imageBlob, slug)
@@ -31,6 +36,35 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
             create: data
           }));
 
+        const ingredientList = ingredients
+          .filter((data) => !!data.ingredient)
+          .map((data) => data.ingredient);
+
+        await prisma.ingredient.createMany({
+          data: ingredientList.map((ingredient) => ({ ingredient })),
+          skipDuplicates: true
+        });
+
+        const connectIngredients = await prisma.ingredient
+          .findMany({
+            where: {
+              ingredient: {
+                in: ingredientList
+              }
+            }
+          })
+          .then((foundIngredients) => {
+            return foundIngredients.map(({ id, ingredient }) => {
+              const data = ingredients.find((i) => i.ingredient === ingredient);
+              return {
+                id,
+                group: data.group || '',
+                original: data.group || '',
+                ...data
+              };
+            });
+          });
+
         const createRecipeAndIngredients = await prisma.recipe.create({
           data: {
             ...recipe,
@@ -43,7 +77,10 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
             image,
             slug,
             ingredients: {
-              create: ingredients
+              create: connectIngredients.map(({ id, ingredient, ...rest }) => ({
+                ...rest,
+                ingredientId: id
+              }))
             },
             author: {
               connectOrCreate: {
@@ -78,7 +115,7 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
 };
 
 // TODO: Optimize image before saving
-const downloadImage = async (url: string, name: string) => {
+const downloadImage = async (url: string, name: string): Promise<string> => {
   try {
     const extension = url.split('/').at(-1).split('.').at(-1);
     const filename = `${name}.${extension}`;

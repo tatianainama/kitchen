@@ -1,18 +1,17 @@
 import React, { FC, useMemo } from 'react';
-import { Recipe as RecipeType, Ingredient, Author } from '@prisma/client';
+import { RecipeTypes } from 'additional';
 
 type IngredientListProps = {
-  recipe: RecipeType & {
-    ingredients: Ingredient[];
-    author: Author;
-  };
+  recipe: RecipeTypes.Recipe;
 };
 
 type IngredientGroup = {
-  [key: string]: Ingredient[];
+  [key: string]: RecipeTypes.Ingredient[];
 };
 
-const ingredientsByGroup = (ingredientList: Ingredient[]): IngredientGroup =>
+const ingredientsByGroup = (
+  ingredientList: IngredientListProps['recipe']['ingredients']
+): IngredientGroup =>
   ingredientList.reduce(
     (groups, { group, ...ingredient }) => ({
       ...groups,

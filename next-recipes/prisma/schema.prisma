@@ -8,9 +8,9 @@ datasource db {
 }
 
 model Recipe {
-  id           Int          @id @default(autoincrement())
+  id           Int                    @id @default(autoincrement())
   name         String
-  slug         String       @unique
+  slug         String                 @unique
   image        String?
   summary      String?
   url          String?
@@ -24,8 +24,8 @@ model Recipe {
   courses      Course[]
   authorId     Int?
   instructions String[]
-  author       Author?      @relation(fields: [authorId], references: [id])
-  ingredients  Ingredient[]
+  author       Author?                @relation(fields: [authorId], references: [id])
+  ingredients  IngredientsOnRecipes[]
 
   @@unique([name, authorId])
 }
@@ -50,14 +50,23 @@ model Course {
 }
 
 model Ingredient {
-  id         Int       @id @default(autoincrement())
-  ingredient String
-  quantity   String?
-  unit       UnitName?
-  note       String?
-  group      String
-  original   String
-  recipes    Recipe[]
+  id         Int                    @id @default(autoincrement())
+  ingredient String                 @unique
+  recipes    IngredientsOnRecipes[]
+}
+
+model IngredientsOnRecipes {
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId Int
+  recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  recipeId     Int
+  quantity     String?
+  unit         UnitName?
+  note         String?
+  group        String
+  original     String
+
+  @@id([recipeId, ingredientId])
 }
 
 enum UnitType {

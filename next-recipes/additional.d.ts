@@ -2,24 +2,29 @@ import { ParsedIngredient } from './utils/api/scrape/parser/ingredients';
 import {
   Prisma,
   Recipe as SchemaRecipe,
-  Ingredient,
   Author,
   Course,
-  Tag
+  Tag,
+  Ingredient as IngredientDB,
+  IngredientsOnRecipes
 } from '@prisma/client';
 
 export namespace RecipeTypes {
+  export type IngredientInput = Partial<
+    Omit<IngredientsOnRecipes & Ingredient, 'id' | 'recipeId' | 'ingredientId'>
+  > & { ingredient: string };
+  export type Ingredient = IngredientsOnRecipes & IngredientDB;
   export type RecipeInput = Prisma.RecipeCreateInput & {
     image: string | File;
     instructions: string[];
     tags: Prisma.TagCreateInput[];
     courses: Prisma.CourseCreateInput[];
-    ingredients: Prisma.IngredientCreateInput[];
+    ingredients: IngredientInput[];
     author: Prisma.AuthorCreateInput;
   };
 
   export type ScrapedRecipe = Prisma.RecipeCreateInput & {
-    ingredients: Prisma.IngredientCreateInput[];
+    ingredients: IngredientInput[];
     tags?: Prisma.TagCreateInput[];
     courses?: Prisma.CourseCreateInput[];
     author?: {

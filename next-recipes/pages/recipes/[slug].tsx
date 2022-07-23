@@ -157,17 +157,29 @@ export const Recipe: FC<RecipeProps> = (recipe) => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const slug = params?.slug?.toString();
-    const recipe = await prisma.recipe.findUnique({
-      where: {
-        slug
-      },
-      include: {
-        tags: true,
-        courses: true,
-        ingredients: true,
-        author: true
-      }
-    });
+    const recipe = await prisma.recipe
+      .findUnique({
+        where: {
+          slug
+        },
+        include: {
+          tags: true,
+          courses: true,
+          ingredients: {
+            include: { ingredient: true }
+          },
+          author: true
+        }
+      })
+      .then((recipe) => {
+        return {
+          ...recipe,
+          ingredients: recipe.ingredients.map((data) => ({
+            ...data,
+            ingredient: data.ingredient.ingredient
+          }))
+        };
+      });
 
     if (!recipe) {
       throw new Error(`Couldn't find recipe with slug: ${slug}`);
