@@ -34,10 +34,9 @@ const IngredientList: FC<IngredientListProps> = ({ recipe }) => {
             <h6 className="text-lg mt-6 first-of-type:mt-0">{groupName}</h6>
           )}
           <ul className="text-sm leading-relaxed mb-6">
-            {ingredients.map(({ id, quantity, unit, ingredient, note }) => (
+            {ingredients.map(({ id, quantity, unit, name, note }) => (
               <li key={id} className="py-1">
-                {quantity} {unit}{' '}
-                <span className="font-semibold">{ingredient}</span>{' '}
+                {quantity} {unit} <span className="font-semibold">{name}</span>{' '}
                 {note && <span className="text-grey-500">{note}</span>}
               </li>
             ))}

@@ -4,7 +4,7 @@ import { parse } from 'recipe-ingredient-parser-v2';
 export type ParsedIngredient = {
   quantity: string;
   unit: UnitName | null;
-  ingredient: string;
+  name: string;
   note: string;
   original: string;
 };
@@ -36,7 +36,7 @@ const parseIngredient = (ingredientString: string): ParsedIngredient => {
     return {
       quantity: parsedIngredient.quantity,
       unit: parseUnit(parsedIngredient.unit),
-      ingredient: sanitizeIngredient(ingredient),
+      name: sanitizeIngredient(ingredient),
       note,
       original: ingredientString
     };
@@ -45,7 +45,7 @@ const parseIngredient = (ingredientString: string): ParsedIngredient => {
     return {
       quantity: null,
       unit: UnitName.UNIT,
-      ingredient: sanitizeIngredient(ingredient),
+      name: sanitizeIngredient(ingredient),
       note,
       original: ingredientString
     };

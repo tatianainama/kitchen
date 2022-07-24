@@ -50,9 +50,9 @@ model Course {
 }
 
 model Ingredient {
-  id         Int                    @id @default(autoincrement())
-  ingredient String                 @unique
-  recipes    IngredientsOnRecipes[]
+  id      Int                    @id @default(autoincrement())
+  name    String                 @unique
+  recipes IngredientsOnRecipes[]
 }
 
 model IngredientsOnRecipes {

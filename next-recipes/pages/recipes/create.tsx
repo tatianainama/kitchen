@@ -42,7 +42,7 @@ const INITIAL_STATE: RecipeTypes.RecipeInput = {
       group: '',
       quantity: '',
       unit: null,
-      ingredient: '',
+      name: '',
       original: '',
       note: ''
     }
@@ -144,7 +144,7 @@ const IngredientInputs: FC = () => {
           <input
             placeholder="name"
             className="input w-full sm:w-4/12"
-            {...register(`ingredients.${index}.ingredient` as const, {
+            {...register(`ingredients.${index}.name` as const, {
               required: true
             })}
           />
@@ -187,7 +187,7 @@ const IngredientInputs: FC = () => {
               group: fields.slice(-1)[0].group,
               quantity: '',
               unit: null,
-              ingredient: '',
+              name: '',
               note: ''
             },
             { focusName: `ingredients.${fields.length}.quantity` }
@@ -205,7 +205,7 @@ const IngredientInputs: FC = () => {
               group: '',
               quantity: '',
               unit: null,
-              ingredient: '',
+              name: '',
               note: ''
             },
             { focusName: `ingredients.${fields.length}.group` }

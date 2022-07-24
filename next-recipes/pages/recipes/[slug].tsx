@@ -176,7 +176,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           ...recipe,
           ingredients: recipe.ingredients.map((data) => ({
             ...data,
-            ingredient: data.ingredient.ingredient
+            name: data.ingredient.name
           }))
         };
       });

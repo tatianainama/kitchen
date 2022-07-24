@@ -23,7 +23,7 @@ export const parseWpIngredients = (
             const original = el.text();
             const { quantity } = parse(original.toLowerCase());
             return {
-              ingredient: el.find('.wprm-recipe-ingredient-name').text(),
+              name: el.find('.wprm-recipe-ingredient-name').text(),
               quantity:
                 quantity || el.find('.wprm-recipe-ingredient-amount').text(),
               unit: parseUnit(el.find('.wprm-recipe-ingredient-unit').text()),

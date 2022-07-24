@@ -11,8 +11,11 @@ import {
 
 export namespace RecipeTypes {
   export type IngredientInput = Partial<
-    Omit<IngredientsOnRecipes & Ingredient, 'id' | 'recipeId' | 'ingredientId'>
-  > & { ingredient: string };
+    Omit<
+      IngredientsOnRecipes & IngredientDB,
+      'id' | 'recipeId' | 'ingredientId'
+    >
+  > & { name: string };
   export type Ingredient = IngredientsOnRecipes & IngredientDB;
   export type RecipeInput = Prisma.RecipeCreateInput & {
     image: string | File;

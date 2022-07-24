@@ -37,25 +37,25 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
           }));
 
         const ingredientList = ingredients
-          .filter((data) => !!data.ingredient)
-          .map((data) => data.ingredient);
+          .filter((data) => !!data.name)
+          .map((data) => data.name);
 
         await prisma.ingredient.createMany({
-          data: ingredientList.map((ingredient) => ({ ingredient })),
+          data: ingredientList.map((name) => ({ name })),
           skipDuplicates: true
         });
 
         const connectIngredients = await prisma.ingredient
           .findMany({
             where: {
-              ingredient: {
+              name: {
                 in: ingredientList
               }
             }
           })
           .then((foundIngredients) => {
-            return foundIngredients.map(({ id, ingredient }) => {
-              const data = ingredients.find((i) => i.ingredient === ingredient);
+            return foundIngredients.map(({ id, name }) => {
+              const data = ingredients.find((i) => i.name === name);
               return {
                 id,
                 group: data.group || '',
@@ -77,7 +77,7 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
             image,
             slug,
             ingredients: {
-              create: connectIngredients.map(({ id, ingredient, ...rest }) => ({
+              create: connectIngredients.map(({ id, name, ...rest }) => ({
                 ...rest,
                 ingredientId: id
               }))
