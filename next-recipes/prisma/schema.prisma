@@ -53,11 +53,14 @@ model Ingredient {
   id      Int                    @id @default(autoincrement())
   name    String                 @unique
   recipes IngredientsOnRecipes[]
+
+  @@unique([name, id])
 }
 
 model IngredientsOnRecipes {
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredient   Ingredient @relation(fields: [name, ingredientId], references: [name, id])
   ingredientId Int
+  name         String
   recipe       Recipe     @relation(fields: [recipeId], references: [id])
   recipeId     Int
   quantity     String?
@@ -66,7 +69,7 @@ model IngredientsOnRecipes {
   group        String
   original     String
 
-  @@id([recipeId, ingredientId])
+  @@id([recipeId, name])
 }
 
 enum UnitType {

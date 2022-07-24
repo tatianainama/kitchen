@@ -77,7 +77,7 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
             image,
             slug,
             ingredients: {
-              create: connectIngredients.map(({ id, name, ...rest }) => ({
+              create: connectIngredients.map(({ id, ...rest }) => ({
                 ...rest,
                 ingredientId: id
               }))
