@@ -30,21 +30,19 @@ const getNotes = (ingredient: string): { ingredient: string; note: string } => {
 };
 
 const parseIngredient = (ingredientString: string): ParsedIngredient => {
+  let parsedIngredient = {
+    ingredient: ingredientString.toLowerCase(),
+    quantity: '',
+    unit: ''
+  };
   try {
-    const parsedIngredient = parse(ingredientString.toLowerCase());
+    parsedIngredient = parse(ingredientString.toLowerCase());
+  } catch (e) {
+  } finally {
     const { ingredient, note } = getNotes(parsedIngredient.ingredient);
     return {
       quantity: parsedIngredient.quantity,
       unit: parseUnit(parsedIngredient.unit),
-      name: sanitizeIngredient(ingredient),
-      note,
-      original: ingredientString
-    };
-  } catch (e) {
-    const { ingredient, note } = getNotes(ingredientString);
-    return {
-      quantity: null,
-      unit: UnitName.UNIT,
       name: sanitizeIngredient(ingredient),
       note,
       original: ingredientString
@@ -72,7 +70,7 @@ export const parseUnit = (unitInput?: string): UnitName | null => {
   if (!unitInput || unitInput === '') {
     return null;
   }
-  const test = unitInput.toUpperCase().replaceAll(' ', '_');
+  const test = unitInput.toUpperCase().replace(/ /g, '_');
   const values = Object.values(UnitName);
   if (values.some((unit) => unit === test)) {
     return UnitName[test];

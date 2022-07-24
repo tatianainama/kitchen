@@ -156,7 +156,7 @@ const toArray = (data: unknown): string[] =>
 export const toString = (data: unknown): string =>
   data
     ? (data.toString() || String(data) || '')
-        .replaceAll(/(\r\n|\n|\r)/gm, '')
+        .replace(/(\r\n|\n|\r)/gm, '')
         .trim()
     : '';
 
