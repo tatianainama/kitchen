@@ -40,7 +40,7 @@ const INITIAL_STATE: RecipeTypes.RecipeInput = {
   ingredients: [
     {
       group: '',
-      quantity: '',
+      quantity: null,
       unit: null,
       name: '',
       original: '',
@@ -127,7 +127,10 @@ const IngredientInputs: FC = () => {
           <input
             placeholder="qty"
             className="input flex-1 sm:flex-auto sm:w-1/12"
-            {...register(`ingredients.${index}.quantity` as const)}
+            type="number"
+            {...register(`ingredients.${index}.quantity` as const, {
+              valueAsNumber: true
+            })}
           />
           <select
             className="input flex-1 sm:flex-auto sm:w-1/12"
@@ -185,7 +188,7 @@ const IngredientInputs: FC = () => {
           append(
             {
               group: fields.slice(-1)[0].group,
-              quantity: '',
+              quantity: null,
               unit: null,
               name: '',
               note: ''
@@ -203,7 +206,7 @@ const IngredientInputs: FC = () => {
           append(
             {
               group: '',
-              quantity: '',
+              quantity: null,
               unit: null,
               name: '',
               note: ''

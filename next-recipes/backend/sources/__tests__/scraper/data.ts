@@ -34,7 +34,7 @@ export const outputs: Outputs = {
       {
         original: '3 Large Russet Potatoes, peeled',
         group: '',
-        quantity: '3',
+        quantity: 3,
         unit: 'LARGE',
         name: 'russet potatoes',
         note: 'peeled'
@@ -42,7 +42,7 @@ export const outputs: Outputs = {
       {
         original: '3 Tbsp of Vegetable Oil',
         group: '',
-        quantity: '3',
+        quantity: 3,
         unit: 'TBSP',
         name: 'vegetable oil',
         note: undefined
@@ -50,7 +50,7 @@ export const outputs: Outputs = {
       {
         original: '3 Cloves of Garlic, minced',
         group: '',
-        quantity: '3',
+        quantity: 3,
         unit: 'CLOVES',
         name: 'garlic',
         note: 'minced'
@@ -58,7 +58,7 @@ export const outputs: Outputs = {
       {
         original: '2 Tbsp of Finely Chopped Parsley',
         group: '',
-        quantity: '2',
+        quantity: 2,
         unit: 'TBSP',
         name: 'finely chopped parsley',
         note: undefined
@@ -66,7 +66,7 @@ export const outputs: Outputs = {
       {
         original: '1/4 cup of Freshly Grated Parmiggiano (parmesan cheese)',
         group: '',
-        quantity: '0.25',
+        quantity: 0.25,
         unit: 'CUP',
         name: 'freshly grated parmiggiano',
         note: 'parmesan cheese'
@@ -119,7 +119,7 @@ export const outputs: Outputs = {
     ingredients: [
       {
         group: '',
-        quantity: '1',
+        quantity: 1,
         unit: 'CUP',
         name: 'bow-tie pasta',
         note: undefined,
@@ -127,7 +127,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '1',
+        quantity: 1,
         unit: null,
         name: '½ cups grape tomatoes',
         note: 'sliced',
@@ -135,7 +135,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '1',
+        quantity: 1,
         unit: 'CUP',
         name: 'italian dressing',
         note: 'such as kraft® tuscan house italian',
@@ -143,7 +143,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '1',
+        quantity: 1,
         unit: 'CUP',
         name: 'vegan mayonnaise',
         note: 'such as vegenaise®',
@@ -151,7 +151,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '3',
+        quantity: 3,
         unit: null,
         name: 'stalks celery',
         note: 'chopped',
@@ -159,7 +159,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '1',
+        quantity: 1,
         unit: null,
         name: 'cucumber',
         note: 'peeled and chopped',
@@ -167,7 +167,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '0.5',
+        quantity: 0.5,
         unit: 'CUP',
         name: 'pepperoncini peppers',
         note: 'minced',
@@ -175,7 +175,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '0.5',
+        quantity: 0.5,
         unit: 'CUP',
         name: 'red onion',
         note: 'diced',
@@ -183,7 +183,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '0.5',
+        quantity: 0.5,
         unit: 'CUP',
         name: 'sweet banana peppers',
         note: 'diced',
@@ -191,7 +191,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '0.5',
+        quantity: 0.5,
         unit: 'CUP',
         name: 'kalamata olives',
         note: 'pitted and chopped',
@@ -199,7 +199,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '0.5',
+        quantity: 0.5,
         unit: 'CUP',
         note: undefined,
         name: 'shredded mozzarella cheese',
@@ -207,7 +207,7 @@ export const outputs: Outputs = {
       },
       {
         group: '',
-        quantity: '0.5',
+        quantity: 0.5,
         unit: 'CUP',
         note: undefined,
         name: 'shredded parmesan cheese',
@@ -266,7 +266,7 @@ export const outputs: Outputs = {
     ingredients: [
       {
         name: 'ginger',
-        quantity: '1',
+        quantity: 1,
         unit: null,
         note: '(1 inch, 2.5 cm)',
         group: '',
@@ -274,7 +274,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'onion',
-        quantity: '1',
+        quantity: 1,
         unit: null,
         note: '(1 oz, 30 g)',
         group: '',
@@ -282,7 +282,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'boneless, skin-on chicken thighs',
-        quantity: '1',
+        quantity: 1,
         unit: 'LB',
         note: '',
         group: '',
@@ -290,7 +290,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'kosher salt (Diamond Crystal; use half for table salt)',
-        quantity: '',
+        quantity: null,
         unit: null,
         note: '',
         group: '',
@@ -298,7 +298,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'freshly ground black pepper',
-        quantity: '',
+        quantity: null,
         unit: null,
         note: '',
         group: '',
@@ -306,7 +306,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'neutral-flavored oil (vegetable, rice bran, canola, etc.)',
-        quantity: '1',
+        quantity: 1,
         unit: 'TBSP',
         note: '(for step 1 of cooking the chicken)',
         group: '',
@@ -315,7 +315,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'sake',
-        quantity: '2',
+        quantity: 2,
         unit: 'TBSP',
         note: '(for steaming)',
         group: '',
@@ -323,7 +323,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'neutral-flavored oil (vegetable, rice bran, canola, etc.)',
-        quantity: '1',
+        quantity: 1,
         unit: 'TSP',
         note: '(for step 4 of cooking the chicken)',
         group: '',
@@ -332,7 +332,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'sake',
-        quantity: '1',
+        quantity: 1,
         unit: 'TBSP',
         note: '',
         group: 'For the Teriyaki Sauce',
@@ -340,7 +340,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'mirin',
-        quantity: '1',
+        quantity: 1,
         unit: 'TBSP',
         note: '',
         group: 'For the Teriyaki Sauce',
@@ -348,7 +348,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'sugar',
-        quantity: '1',
+        quantity: 1,
         unit: 'TBSP',
         note: '',
         group: 'For the Teriyaki Sauce',
@@ -356,7 +356,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'soy sauce',
-        quantity: '2',
+        quantity: 2,
         unit: 'TBSP',
         note: '',
         group: 'For the Teriyaki Sauce',
@@ -364,7 +364,7 @@ export const outputs: Outputs = {
       },
       {
         name: 'water',
-        quantity: '2',
+        quantity: 2,
         unit: 'TBSP',
         note: '',
         group: 'For the Teriyaki Sauce',

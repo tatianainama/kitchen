@@ -63,7 +63,7 @@ model IngredientsOnRecipes {
   name         String
   recipe       Recipe     @relation(fields: [recipeId], references: [id])
   recipeId     Int
-  quantity     String?
+  quantity     Float?
   unit         UnitName?
   note         String?
   group        String

@@ -25,7 +25,9 @@ export const parseWpIngredients = (
             return {
               name: el.find('.wprm-recipe-ingredient-name').text(),
               quantity:
-                quantity || el.find('.wprm-recipe-ingredient-amount').text(),
+                parseFloat(
+                  quantity || el.find('.wprm-recipe-ingredient-amount').text()
+                ) || null,
               unit: parseUnit(el.find('.wprm-recipe-ingredient-unit').text()),
               note: el.find('.wprm-recipe-ingredient-notes').text(),
               group: groupName,

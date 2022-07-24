@@ -2,7 +2,7 @@ import { UnitName } from '@prisma/client';
 import { parse } from 'recipe-ingredient-parser-v2';
 
 export type ParsedIngredient = {
-  quantity: string;
+  quantity: number;
   unit: UnitName | null;
   name: string;
   note: string;
@@ -32,7 +32,7 @@ const getNotes = (ingredient: string): { ingredient: string; note: string } => {
 const parseIngredient = (ingredientString: string): ParsedIngredient => {
   let parsedIngredient = {
     ingredient: ingredientString.toLowerCase(),
-    quantity: '',
+    quantity: null,
     unit: ''
   };
   try {
@@ -41,7 +41,7 @@ const parseIngredient = (ingredientString: string): ParsedIngredient => {
   } finally {
     const { ingredient, note } = getNotes(parsedIngredient.ingredient);
     return {
-      quantity: parsedIngredient.quantity,
+      quantity: parseFloat(parsedIngredient.quantity) || null,
       unit: parseUnit(parsedIngredient.unit),
       name: sanitizeIngredient(ingredient),
       note,
