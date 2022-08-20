@@ -275,6 +275,7 @@ const CreateRecipe: FC<
     data,
     event
   ) => {
+    const ingredients = data.ingredients as RecipeTypes.IngredientInput[];
     event.preventDefault();
     const isValidSlug = await validSlug(data.slug);
     if (!isValidSlug) {
@@ -290,9 +291,9 @@ const CreateRecipe: FC<
       typeof data.image === 'string' ? null : await toBase64(data.image);
     const recipeInput = {
       ...data,
-      ingredients: data.ingredients.map(({ unit, ...rest }) => ({
+      ingredients: ingredients.map(({ unit, ...rest }) => ({
         ...rest,
-        unit: unit === '' ? null : unit
+        unit: unit.length === 0 ? null : unit
       })),
       totalTime,
       image: imageBlob ? null : data.image,

@@ -1,6 +1,6 @@
 import { NextApiHandler } from 'next';
 import scrape from '@/utils/api/scrape';
-import { ServerResponses } from 'additional.d.ts';
+import { ServerResponses } from 'additional';
 
 const handler: NextApiHandler = async (req, res) => {
   const { url } = req.body;

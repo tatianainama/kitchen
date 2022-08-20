@@ -4,7 +4,7 @@ import { IngredientsOnRecipes, Recipe, Tag, Course } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import slugify from '@/utils/slugify';
 import fs from 'fs';
-import { ServerResponses } from 'additional.d.ts';
+import { ServerResponses } from 'additional';
 import axios from 'axios';
 import { createErrorMessage, CreateError } from '@/utils/api/errorHandler';
 

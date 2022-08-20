@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import { NextApiHandler } from 'next';
-import { ServerResponses } from 'additional.d.ts';
+import { ServerResponses } from 'additional';
 
 const handler: NextApiHandler = async (req, res) => {
   const {
