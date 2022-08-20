@@ -4,7 +4,7 @@ import { IngredientsOnRecipes, Recipe, Tag, Course } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import slugify from '@/utils/slugify';
 import fs from 'fs';
-import { ServerResponses } from 'additional';
+import { HttpStatus } from 'backend/types/serverResponse';
 import axios from 'axios';
 import { createErrorMessage, CreateError } from '@/utils/api/errorHandler';
 
@@ -98,12 +98,10 @@ const handler: NextApiHandler<CreateResponse | CreateError> = async (
           }
         });
 
-        return res
-          .status(ServerResponses.HttpStatus.Success)
-          .json(createRecipeAndIngredients);
+        return res.status(HttpStatus.Success).json(createRecipeAndIngredients);
       } catch (error) {
         return res
-          .status(ServerResponses.HttpStatus.ServerError)
+          .status(HttpStatus.ServerError)
           .json(createErrorMessage(error));
       }
     }

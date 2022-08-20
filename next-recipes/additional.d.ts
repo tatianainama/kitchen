@@ -50,11 +50,3 @@ export namespace RecipeTypes {
     author: Author;
   };
 }
-
-export namespace ServerResponses {
-  export enum HttpStatus {
-    BadRequest = 400,
-    ServerError = 500,
-    Success = 200
-  }
-}

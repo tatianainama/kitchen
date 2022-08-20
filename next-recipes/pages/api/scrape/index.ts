@@ -1,12 +1,12 @@
 import { NextApiHandler } from 'next';
 import scrape from '@/utils/api/scrape';
-import { ServerResponses } from 'additional';
+import { HttpStatus } from 'backend/types/serverResponse';
 
 const handler: NextApiHandler = async (req, res) => {
   const { url } = req.body;
   if (!url || url.trim() === '') {
     res
-      .status(ServerResponses.HttpStatus.BadRequest)
+      .status(HttpStatus.BadRequest)
       .json({ error: 'Invalid param url, cannot be empty' });
     return;
   }
@@ -16,7 +16,7 @@ const handler: NextApiHandler = async (req, res) => {
   } catch (e) {
     console.error(e);
     res
-      .status(ServerResponses.HttpStatus.ServerError)
+      .status(HttpStatus.ServerError)
       .json({ error: `cannot scrape url: ${e}` });
   }
 };

@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import { NextApiHandler } from 'next';
-import { ServerResponses } from 'additional';
+import { HttpStatus } from 'backend/types/serverResponse';
 
 const handler: NextApiHandler = async (req, res) => {
   const {
@@ -9,7 +9,7 @@ const handler: NextApiHandler = async (req, res) => {
   } = req;
   if (!slug || slug.toString() === '') {
     return res
-      .status(ServerResponses.HttpStatus.BadRequest)
+      .status(HttpStatus.BadRequest)
       .json({ error: 'Invalid param slug, cannot be empty' });
   }
   switch (method) {
@@ -21,12 +21,10 @@ const handler: NextApiHandler = async (req, res) => {
       });
       if (slugInUse) {
         return res
-          .status(ServerResponses.HttpStatus.ServerError)
+          .status(HttpStatus.ServerError)
           .json({ error: 'Slug in use' });
       }
-      return res
-        .status(ServerResponses.HttpStatus.Success)
-        .json({ message: 'Slug available' });
+      return res.status(HttpStatus.Success).json({ message: 'Slug available' });
     }
   }
 };
