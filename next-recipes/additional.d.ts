@@ -1,4 +1,4 @@
-import { ParsedIngredient } from './utils/api/scrape/parser/ingredients';
+import { ParsedIngredient } from './backend/sources/scraper/parser/ingredients';
 import {
   Prisma,
   Recipe as SchemaRecipe,

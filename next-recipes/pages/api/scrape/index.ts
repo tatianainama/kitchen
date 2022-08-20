@@ -1,5 +1,5 @@
 import { NextApiHandler } from 'next';
-import scrape from '@/utils/api/scrape';
+import scrape from 'backend/sources/scraper';
 import { HttpStatus } from 'backend/types/serverResponse';
 
 const handler: NextApiHandler = async (req, res) => {

@@ -1,4 +1,4 @@
-import { parseYields } from './../parser/recipe';
+import { parseYields } from '../parser/recipe';
 import { parseFromJsonLd, sanitizeInstructions } from './utils';
 import slugify from '@/utils/slugify';
 import parseIngredient from '../parser/ingredients';

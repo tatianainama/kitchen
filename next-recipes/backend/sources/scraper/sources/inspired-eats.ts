@@ -1,4 +1,4 @@
-import { parseYields, sanitizeTag } from './../parser/recipe';
+import { parseYields, sanitizeTag } from '../parser/recipe';
 import slugify from '@/utils/slugify';
 import parseIngredient from '../parser/ingredients';
 import { RecipeTypes } from 'additional';

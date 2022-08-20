@@ -1,4 +1,4 @@
-import scrape from '@/utils/api/scrape';
+import scrape from 'backend/sources/scraper';
 import { inputs, outputs } from './data';
 
 test.each(inputs)('Scrapes pages correctly', async (url) => {

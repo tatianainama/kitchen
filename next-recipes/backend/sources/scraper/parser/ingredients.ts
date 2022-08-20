@@ -38,6 +38,7 @@ const parseIngredient = (ingredientString: string): ParsedIngredient => {
   try {
     parsedIngredient = parse(ingredientString.toLowerCase());
   } catch (e) {
+    console.info(`Cannot parse ingredient: ${ingredientString}, ${e}`);
   } finally {
     const { ingredient, note } = getNotes(parsedIngredient.ingredient);
     return {

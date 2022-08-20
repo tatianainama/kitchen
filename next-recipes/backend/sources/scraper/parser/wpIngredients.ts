@@ -2,6 +2,9 @@ import { Prisma } from '@prisma/client';
 import { parse } from 'recipe-ingredient-parser-v2';
 import { parseUnit } from './ingredients';
 
+/**
+ * Tailor made parser for Wordpress recipe templates
+ */
 export const parseWpIngredients = (
   $: cheerio.Root
 ): { ingredients: Prisma.IngredientCreateInput[] } => {
@@ -34,7 +37,7 @@ export const parseWpIngredients = (
               original
             };
           });
-        return [...list, ...ingredients];
+        return list.concat(...ingredients);
       }, [] as Prisma.IngredientCreateInput[]);
       return {
         ingredients: result

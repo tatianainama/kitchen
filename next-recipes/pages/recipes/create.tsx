@@ -128,9 +128,8 @@ const IngredientInputs: FC = () => {
             placeholder="qty"
             className="input flex-1 sm:flex-auto sm:w-1/12"
             type="number"
-            {...register(`ingredients.${index}.quantity` as const, {
-              valueAsNumber: true
-            })}
+            step={0.5}
+            {...register(`ingredients.${index}.quantity` as const)}
           />
           <select
             className="input flex-1 sm:flex-auto sm:w-1/12"
@@ -291,9 +290,10 @@ const CreateRecipe: FC<
       typeof data.image === 'string' ? null : await toBase64(data.image);
     const recipeInput = {
       ...data,
-      ingredients: ingredients.map(({ unit, ...rest }) => ({
+      ingredients: ingredients.map(({ unit, quantity, ...rest }) => ({
         ...rest,
-        unit: unit.length === 0 ? null : unit
+        unit: unit || null,
+        quantity: parseFloat(quantity) || 0
       })),
       totalTime,
       image: imageBlob ? null : data.image,

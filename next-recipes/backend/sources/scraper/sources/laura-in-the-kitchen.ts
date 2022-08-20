@@ -1,4 +1,4 @@
-import { parseYields } from './../parser/recipe';
+import { parseYields } from '../parser/recipe';
 /* eslint-disable max-statements */
 import { RecipeTypes } from 'additional';
 import parseIngredient from '../parser/ingredients';
