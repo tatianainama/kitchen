@@ -21,14 +21,10 @@ import { UnitName } from '@prisma/client';
 import { mkDuration } from '@/utils/duration';
 import { toast } from 'react-toastify';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { recipeSchema } from 'validators';
 import { z } from 'zod';
 
-type ScrapeInput = {
-  url: string;
-};
-
-const recipeSchema = z.object({
-  name: z.string().min(1, { message: 'Name cannot be empty' }).trim(),
+const formSchema = recipeSchema.extend({
   slug: z.string().superRefine(async (value, ctx) => {
     if (value === '') {
       ctx.addIssue({
@@ -43,52 +39,16 @@ const recipeSchema = z.object({
         message: 'Slug in use'
       });
     }
-  }),
-  summary: z.string().trim().optional(),
-  image: z.string().optional(),
-  imageBlog: z.string().nullish(),
-  url: z.string().optional(),
-  prepTime: z.string().default('P0H0M'),
-  cookTime: z.string().default('P0H0M'),
-  totalTime: z.string().default('P0H0M'),
-  yields: z.number().nonnegative(),
-  serves: z.string().optional(),
-  tags: z.array(
-    z.object({
-      id: z.string().optional(),
-      name: z.string()
-    })
-  ),
-  courses: z.array(
-    z.object({
-      id: z.string().optional(),
-      name: z.string()
-    })
-  ),
-  ingredients: z
-    .array(
-      z.object({
-        name: z.string().min(1),
-        group: z.string().default(''),
-        quantity: z.number().default(0),
-        unit: z.nativeEnum(UnitName).nullable(),
-        note: z.string().optional(),
-        original: z.string().optional()
-      })
-    )
-    .min(1),
-  instructions: z.array(z.string()),
-  author: z
-    .object({
-      website: z.string(),
-      name: z.string()
-    })
-    .optional()
+  })
 });
 
-type RecipeSchema = z.infer<typeof recipeSchema>;
+type FormSchema = z.infer<typeof formSchema>;
 
-const INITIAL_STATE: RecipeSchema = {
+type ScrapeInput = {
+  url: string;
+};
+
+const INITIAL_STATE: FormSchema = {
   name: '',
   summary: '',
   image: '',
@@ -222,7 +182,7 @@ const IngredientInputs: FC = () => {
           />
           <div className="flex gap-2 items-center justify-between w-full sm:w-auto">
             {field.original && (
-              <div tabIndex={-1} className="flex gap-2 flex-1 w-6">
+              <div tabIndex={-1} className="flex gap-2 flex-1 items-start w-6">
                 <img
                   src={iconRaw.src}
                   width={24}
@@ -245,42 +205,44 @@ const IngredientInputs: FC = () => {
           </div>
         </div>
       ))}
-      <button
-        type="button"
-        className="btn-outline mr-2"
-        onClick={() => {
-          append(
-            {
-              group: fields.slice(-1)[0].group,
-              quantity: null,
-              unit: null,
-              name: '',
-              note: ''
-            },
-            { focusName: `ingredients.${fields.length}.quantity` }
-          );
-        }}
-      >
-        Add new
-      </button>
-      <button
-        type="button"
-        className="btn-outline"
-        onClick={() => {
-          append(
-            {
-              group: '',
-              quantity: null,
-              unit: null,
-              name: '',
-              note: ''
-            },
-            { focusName: `ingredients.${fields.length}.group` }
-          );
-        }}
-      >
-        Add new Group
-      </button>
+      <div className="mt-8">
+        <button
+          type="button"
+          className="btn-outline mr-2"
+          onClick={() => {
+            append(
+              {
+                group: fields.slice(-1)[0].group,
+                quantity: null,
+                unit: null,
+                name: '',
+                note: ''
+              },
+              { focusName: `ingredients.${fields.length}.quantity` }
+            );
+          }}
+        >
+          Add new
+        </button>
+        <button
+          type="button"
+          className="btn-outline"
+          onClick={() => {
+            append(
+              {
+                group: '',
+                quantity: null,
+                unit: null,
+                name: '',
+                note: ''
+              },
+              { focusName: `ingredients.${fields.length}.group` }
+            );
+          }}
+        >
+          Add new Group
+        </button>
+      </div>
     </fieldset>
   );
 };
@@ -312,7 +274,7 @@ const InstructionsInputs: FC = () => {
       ))}
       <button
         type="button"
-        className="btn-outline"
+        className="btn-outline mt-4"
         onClick={() =>
           append('', { focusName: `instructions.${fields.length}` })
         }
@@ -326,21 +288,12 @@ const InstructionsInputs: FC = () => {
 const CreateRecipe: FC<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ tags, courses }) => {
-  const formMethods = useForm<RecipeSchema>({
+  const formMethods = useForm<FormSchema>({
     defaultValues: INITIAL_STATE,
-    // resolver: zodResolver(recipeSchema)
-    resolver: async (data, context, options) => {
-      // you can debug your validation schema here
-      console.log('formData', data);
-      console.log(
-        'validation result',
-        await zodResolver(recipeSchema)(data, context, options)
-      );
-      return zodResolver(recipeSchema)(data, context, options);
-    }
+    resolver: zodResolver(recipeSchema)
   });
 
-  const onSubmit: SubmitHandler<RecipeSchema> = async (data, event) => {
+  const onSubmit: SubmitHandler<FormSchema> = async (data, event) => {
     event.preventDefault();
 
     const totalTime = mkDuration(data.prepTime)
@@ -351,7 +304,7 @@ const CreateRecipe: FC<
       typeof data.image === 'string' ? null : await toBase64(data.image);
 
     try {
-      const recipeInput = await recipeSchema.parseAsync({
+      const recipeInput = await formSchema.parseAsync({
         ...data,
         totalTime,
         image: imageBlob ? null : data.image,
@@ -409,20 +362,22 @@ const CreateRecipe: FC<
                 )}
               />
             </div>
-            <div className="relative py-9 px-4 border-t-2 bg-white sm:-mt-14 sm:w-with-padding sm:border-2 sm:mx-auto md:mt-0 md:border-none md:w-3/4 md:p-6">
-              <textarea
-                placeholder="Name"
-                rows={1}
-                className={`input font-display font-bold text-h1 p-2 pb-0 w-full mb-4 md:min-h-[4.5rem] ${
-                  formMethods.formState.errors.name ? 'ring-error' : ''
-                }`}
-                {...formMethods.register('name', { required: true })}
-              ></textarea>
-              {formMethods.formState.errors.name && (
-                <p className="text-sm -mt-4 mb-4 font-semibold text-error">
-                  {formMethods.formState.errors.name.message}
-                </p>
-              )}
+            <div className="relative py-9 px-4 border-t-2 bg-white sm:-mt-14 sm:w-with-padding sm:border-2 sm:mx-auto md:mt-0 md:border-none md:w-3/4 md:px-6">
+              <div className="relative mb-8">
+                <textarea
+                  placeholder="Name"
+                  rows={1}
+                  className={`input font-display font-bold text-h1 p-2 pb-0 w-full md:min-h-[4.5rem]  ${
+                    formMethods.formState.errors.name ? 'ring-error' : ''
+                  }`}
+                  {...formMethods.register('name', { required: true })}
+                ></textarea>
+                {formMethods.formState.errors.name && (
+                  <p className="absolute text-sm font-semibold text-error">
+                    {formMethods.formState.errors.name.message}
+                  </p>
+                )}
+              </div>
               <textarea
                 placeholder="Summary"
                 rows={3}
@@ -441,7 +396,7 @@ const CreateRecipe: FC<
                     {...formMethods.register('url')}
                   />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 relative">
                   <label
                     htmlFor="slug"
                     className={`font-display font-bold block ${
@@ -461,7 +416,7 @@ const CreateRecipe: FC<
                     })}
                   />
                   {formMethods.formState.errors.slug && (
-                    <p className="text-sm mt-2 font-semibold text-error">
+                    <p className="absolute text-xs mt-2 font-semibold text-error">
                       {formMethods.formState.errors.slug.message}
                     </p>
                   )}
@@ -469,8 +424,8 @@ const CreateRecipe: FC<
               </div>
             </div>
           </div>
-          <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6">
-            <h2 className="text-grey-500 mb-2">Details</h2>
+          <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:px-6">
+            <h2 className="text-grey-500 mb-6">Details</h2>
             <fieldset name="author">
               <legend className="font-display font-bold">Author</legend>
               <div className="flex flex-col gap-4 md:flex-row mb-4">
@@ -569,15 +524,15 @@ const CreateRecipe: FC<
               )}
             />
           </div>
-          <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6">
-            <h2 className="text-grey-500 mb-2">Ingredients</h2>
+          <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:px-6">
+            <h2 className="text-grey-500 mb-6">Ingredients</h2>
             <IngredientInputs />
           </div>
-          <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6">
-            <h2 className="text-grey-500 mb-2">Instructions</h2>
+          <div className="border-t-2 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:px-6">
+            <h2 className="text-grey-500 mb-6">Instructions</h2>
             <InstructionsInputs />
           </div>
-          <div className="border-t-2 flex flex-col justify-between gap-4 sm:border-2 sm:border-t-0 bg-white py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:p-6 md:flex-row">
+          <div className="border-t-2 flex flex-col justify-between gap-4 sm:border-2 sm:border-t-0 bg-grey-100 py-9 px-4 sm:mx-auto sm:w-with-padding md:w-full md:px-6 md:flex-row">
             <button
               type="reset"
               className="btn-outline"
