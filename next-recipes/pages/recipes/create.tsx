@@ -15,17 +15,80 @@ import {
   useFieldArray,
   Controller
 } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import prisma from '@/lib/prisma';
 import { UnitName } from '@prisma/client';
 import { mkDuration } from '@/utils/duration';
 import { toast } from 'react-toastify';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { z } from 'zod';
 
 type ScrapeInput = {
   url: string;
 };
 
-const INITIAL_STATE: RecipeTypes.RecipeInput = {
+const recipeSchema = z.object({
+  name: z.string().min(1, { message: 'Name cannot be empty' }).trim(),
+  slug: z.string().superRefine(async (value, ctx) => {
+    if (value === '') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Slug field is required'
+      });
+    }
+    const response = await fetch(`/api/recipes/slug/${value}`);
+    if (!response.ok) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Slug in use'
+      });
+    }
+  }),
+  summary: z.string().trim().optional(),
+  image: z.string().optional(),
+  imageBlog: z.string().nullish(),
+  url: z.string().optional(),
+  prepTime: z.string().default('P0H0M'),
+  cookTime: z.string().default('P0H0M'),
+  totalTime: z.string().default('P0H0M'),
+  yields: z.number().nonnegative(),
+  serves: z.string().optional(),
+  tags: z.array(
+    z.object({
+      id: z.string().optional(),
+      name: z.string()
+    })
+  ),
+  courses: z.array(
+    z.object({
+      id: z.string().optional(),
+      name: z.string()
+    })
+  ),
+  ingredients: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        group: z.string().default(''),
+        quantity: z.number().default(0),
+        unit: z.nativeEnum(UnitName).nullable(),
+        note: z.string().optional(),
+        original: z.string().optional()
+      })
+    )
+    .min(1),
+  instructions: z.array(z.string()),
+  author: z
+    .object({
+      website: z.string(),
+      name: z.string()
+    })
+    .optional()
+});
+
+type RecipeSchema = z.infer<typeof recipeSchema>;
+
+const INITIAL_STATE: RecipeSchema = {
   name: '',
   summary: '',
   image: '',
@@ -129,7 +192,9 @@ const IngredientInputs: FC = () => {
             className="input flex-1 sm:flex-auto sm:w-1/12"
             type="number"
             step={0.5}
-            {...register(`ingredients.${index}.quantity` as const)}
+            {...register(`ingredients.${index}.quantity` as const, {
+              valueAsNumber: true
+            })}
           />
           <select
             className="input flex-1 sm:flex-auto sm:w-1/12"
@@ -258,48 +323,42 @@ const InstructionsInputs: FC = () => {
   );
 };
 
-const validSlug = async (slug: string) => {
-  const response = await fetch(`/api/recipes/slug/${slug}`);
-  return response.ok;
-};
-
 const CreateRecipe: FC<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ tags, courses }) => {
-  const methods = useForm<RecipeTypes.RecipeInput>({
-    defaultValues: INITIAL_STATE
+  const formMethods = useForm<RecipeSchema>({
+    defaultValues: INITIAL_STATE,
+    // resolver: zodResolver(recipeSchema)
+    resolver: async (data, context, options) => {
+      // you can debug your validation schema here
+      console.log('formData', data);
+      console.log(
+        'validation result',
+        await zodResolver(recipeSchema)(data, context, options)
+      );
+      return zodResolver(recipeSchema)(data, context, options);
+    }
   });
 
-  const onSubmit: SubmitHandler<RecipeTypes.RecipeInput> = async (
-    data,
-    event
-  ) => {
-    const ingredients = data.ingredients as RecipeTypes.IngredientInput[];
+  const onSubmit: SubmitHandler<RecipeSchema> = async (data, event) => {
     event.preventDefault();
-    const isValidSlug = await validSlug(data.slug);
-    if (!isValidSlug) {
-      toast.error('Slug in use');
-      methods.setError('slug', { type: 'validate', message: 'Slug in use' });
-      return;
-    }
+
     const totalTime = mkDuration(data.prepTime)
       .add(mkDuration(data.cookTime))
       .toJSON();
 
     const imageBlob =
       typeof data.image === 'string' ? null : await toBase64(data.image);
-    const recipeInput = {
-      ...data,
-      ingredients: ingredients.map(({ unit, quantity, ...rest }) => ({
-        ...rest,
-        unit: unit || null,
-        quantity: parseFloat(quantity) || 0
-      })),
-      totalTime,
-      image: imageBlob ? null : data.image,
-      imageBlob
-    };
+
     try {
+      const recipeInput = await recipeSchema.parseAsync({
+        ...data,
+        totalTime,
+        image: imageBlob ? null : data.image,
+        imageBlob
+      });
+
+      console.log('recipeinput', recipeInput);
       const response = await fetch('/api/recipes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -308,12 +367,12 @@ const CreateRecipe: FC<
       const result = await response.json();
       if (response.ok) {
         toast.success('Recipe created correctly!');
-        methods.reset(INITIAL_STATE);
+        formMethods.reset(INITIAL_STATE);
       } else {
         toast.error(result.error);
         if (result.target) {
           result.target.forEach((field) =>
-            methods.setError(field, { message: result.error })
+            formMethods.setError(field, { message: result.error })
           );
         }
       }
@@ -328,15 +387,15 @@ const CreateRecipe: FC<
         <ScrapeRecipeForm
           setScrapedRecipe={(scraped) => {
             console.log(scraped);
-            methods.reset(scraped);
+            formMethods.reset(scraped);
           }}
           className="layout-container p-4 md:w-with-padding md:px-0 flex gap-2 items-center"
         />
       </div>
-      <FormProvider {...methods}>
+      <FormProvider {...formMethods}>
         <form
           className="layout-container md:w-with-padding md:py-4"
-          onSubmit={methods.handleSubmit(onSubmit)}
+          onSubmit={formMethods.handleSubmit(onSubmit)}
         >
           <div className="relative flex flex-col md:flex-row md:border-2 bg-white">
             <div
@@ -355,20 +414,20 @@ const CreateRecipe: FC<
                 placeholder="Name"
                 rows={1}
                 className={`input font-display font-bold text-h1 p-2 pb-0 w-full mb-4 md:min-h-[4.5rem] ${
-                  methods.formState.errors.name ? 'ring-error' : ''
+                  formMethods.formState.errors.name ? 'ring-error' : ''
                 }`}
-                {...methods.register('name', { required: true })}
+                {...formMethods.register('name', { required: true })}
               ></textarea>
-              {methods.formState.errors.name && (
+              {formMethods.formState.errors.name && (
                 <p className="text-sm -mt-4 mb-4 font-semibold text-error">
-                  {methods.formState.errors.name.message}
+                  {formMethods.formState.errors.name.message}
                 </p>
               )}
               <textarea
                 placeholder="Summary"
                 rows={3}
                 className="input w-full mb-4 md:min-h-[3.5rem]"
-                {...methods.register('summary')}
+                {...formMethods.register('summary')}
               ></textarea>
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1">
@@ -379,14 +438,14 @@ const CreateRecipe: FC<
                     placeholder="Recipe url"
                     className="input w-full"
                     id="url"
-                    {...methods.register('url')}
+                    {...formMethods.register('url')}
                   />
                 </div>
                 <div className="flex-1">
                   <label
                     htmlFor="slug"
                     className={`font-display font-bold block ${
-                      methods.formState.errors.slug ? 'text-error' : ''
+                      formMethods.formState.errors.slug ? 'text-error' : ''
                     }`}
                   >
                     Slug
@@ -395,15 +454,15 @@ const CreateRecipe: FC<
                     id="slug"
                     placeholder="Slug"
                     className={`input w-full ${
-                      methods.formState.errors.slug ? 'ring-error' : ''
+                      formMethods.formState.errors.slug ? 'ring-error' : ''
                     }`}
-                    {...methods.register('slug', {
+                    {...formMethods.register('slug', {
                       required: true
                     })}
                   />
-                  {methods.formState.errors.slug && (
+                  {formMethods.formState.errors.slug && (
                     <p className="text-sm mt-2 font-semibold text-error">
-                      {methods.formState.errors.slug.message}
+                      {formMethods.formState.errors.slug.message}
                     </p>
                   )}
                 </div>
@@ -419,12 +478,12 @@ const CreateRecipe: FC<
                   type="text"
                   className="input flex-1"
                   placeholder="Name"
-                  {...methods.register('author.name')}
+                  {...formMethods.register('author.name')}
                 />
                 <input
                   className="input flex-1"
                   placeholder="Website"
-                  {...methods.register('author.website')}
+                  {...formMethods.register('author.website')}
                 />
               </div>
             </fieldset>
@@ -464,7 +523,7 @@ const CreateRecipe: FC<
                   id="yields"
                   type="number"
                   className="input w-full"
-                  {...methods.register('yields', { required: true })}
+                  {...formMethods.register('yields', { valueAsNumber: true })}
                 />
               </div>
               <div className="flex-1">
@@ -478,7 +537,7 @@ const CreateRecipe: FC<
                   id="servings"
                   className="input w-full"
                   placeholder="2 people"
-                  {...methods.register('serves')}
+                  {...formMethods.register('serves')}
                 />
               </div>
             </div>
@@ -524,7 +583,7 @@ const CreateRecipe: FC<
               className="btn-outline"
               onClick={(e) => {
                 e.preventDefault();
-                methods.reset(INITIAL_STATE);
+                formMethods.reset(INITIAL_STATE);
               }}
             >
               Reset

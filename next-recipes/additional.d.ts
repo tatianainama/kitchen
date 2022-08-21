@@ -25,6 +25,7 @@ export namespace RecipeTypes {
 
   export type ScrapedRecipe = Prisma.RecipeCreateInput & {
     ingredients: IngredientInput[];
+    instructions?: string[];
     tags?: Prisma.TagCreateInput[];
     courses?: Prisma.CourseCreateInput[];
     author?: {
